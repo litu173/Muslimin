@@ -46,9 +46,34 @@ class AboutScreen extends StatelessWidget {
               children: [
                 Text(t.aboutBody, style: AppText.body.copyWith(height: 1.6)),
                 const SizedBox(height: Gap.xl),
-                TextButton(
-                  onPressed: () => showTerms(context),
-                  child: Text(t.termsAndConditions),
+                Text(t.credits, style: AppText.subtitle),
+                const SizedBox(height: Gap.s),
+                Text(
+                  t.fontCredits,
+                  style: AppText.caption.copyWith(height: 1.6),
+                ),
+                const SizedBox(height: Gap.xs),
+                Text(
+                  t.designInspired,
+                  style: AppText.caption.copyWith(color: AppColors.muted),
+                ),
+                const SizedBox(height: Gap.m),
+                Wrap(
+                  spacing: Gap.s,
+                  children: [
+                    TextButton(
+                      onPressed: () => showTerms(context),
+                      child: Text(t.termsAndConditions),
+                    ),
+                    TextButton(
+                      onPressed: () => showLicensePage(
+                        context: context,
+                        applicationName: 'Muslimin',
+                        applicationLegalese: t.fontCredits,
+                      ),
+                      child: Text(t.openSourceLicenses),
+                    ),
+                  ],
                 ),
                 FutureBuilder(
                   future: PackageInfo.fromPlatform(),

@@ -16,6 +16,7 @@ class Wordmark extends StatelessWidget {
       'Muslimin',
       style: TextStyle(
         fontFamily: AppText.displayLatin,
+        fontVariations: AppText.displayVariations,
         fontSize: size,
         height: 1.2,
         color: color,
@@ -45,6 +46,7 @@ class DisplayText extends StatelessWidget {
       style: TextStyle(
         fontFamily: bn ? AppText.displayBangla : AppText.displayLatin,
         fontFamilyFallback: const [AppText.displayLatin, AppText.bangla],
+        fontVariations: bn ? null : AppText.displayVariations,
 
         fontSize: size,
         height: 1.15,

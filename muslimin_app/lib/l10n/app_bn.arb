@@ -330,5 +330,9 @@
   "signInToRegister": "মসজিদ নিবন্ধন করতে সাইন ইন করুন বা অ্যাকাউন্ট খুলুন।",
   "verifyPhoneToContinue": "মসজিদ নিবন্ধন করতে আপনার ফোন নম্বর যাচাই করুন।",
   "accountCreated": "অ্যাকাউন্ট খোলা হয়েছে! {email}-এ যাচাইয়ের লিংক পাঠানো হয়েছে।",
-  "nameRequired": "অনুগ্রহ করে আপনার নাম দিন।"
+  "nameRequired": "অনুগ্রহ করে আপনার নাম দিন।",
+  "credits": "কৃতজ্ঞতা",
+  "fontCredits": "লোগো ও নামাজের নাম: Omnibus-Type-এর Grenze Gotisch। লেখা: Indian Type Foundry ও Jonny Pinhorn-এর Poppins, Indian Type Foundry-এর Hind Siliguri, Black Foundry-এর Galada, খালেদ হোসনির Amiri। সব ফন্ট SIL Open Font License 1.1-এর অধীনে ফ্রি।",
+  "designInspired": "মূল ডিজাইন ফন্ট: Anthonie Van Hayu (ARToni)-এর Hidayatullah।",
+  "openSourceLicenses": "ওপেন-সোর্স লাইসেন্স"
 }

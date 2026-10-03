@@ -26,11 +26,7 @@ class ArchIcon extends StatelessWidget {
       top: Radius.circular(14),
       bottom: Radius.circular(2),
     ),
-    child: const SizedBox(
-      width: 28,
-      height: 36,
-      child: IslamicPattern(opacity: 0.5),
-    ),
+    child: const SizedBox(width: 28, height: 36, child: IslamicPattern()),
   );
 }
 

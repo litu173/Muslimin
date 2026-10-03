@@ -5,12 +5,15 @@ import 'app_colors.dart';
 /// Typography. Poppins is used for Latin text and Hind Siliguri for Bangla –
 /// every style lists both so mixed-language strings (masjid names in English
 /// inside Bangla UI) always render correctly. The display face (prayer name
-/// and logo) is Rakkas / Galada, an open-licence stand-in for the
-/// "Hidayatullah DEMO" face used in Figma.
+/// and logo) is Grenze Gotisch (SIL OFL) / Galada – free, open-licence
+/// stand-ins for "Hidayatullah DEMO", whose demo licence is personal-use only.
 abstract final class AppText {
   static const latin = 'Poppins';
   static const bangla = 'HindSiliguri';
-  static const displayLatin = 'Rakkas';
+  static const displayLatin = 'GrenzeGotisch';
+
+  /// Grenze Gotisch is a variable font; 800 matches the weight of the Figma face.
+  static const displayVariations = [FontVariation('wght', 800)];
   static const displayBangla = 'Galada';
   static const arabic = 'Amiri';
 

@@ -1107,4 +1107,18 @@ class L10nEn extends L10n {
 
   @override
   String get nameRequired => 'Please enter your name.';
+
+  @override
+  String get credits => 'Credits';
+
+  @override
+  String get fontCredits =>
+      'Logo & prayer names: Grenze Gotisch by Omnibus-Type. Text: Poppins by Indian Type Foundry & Jonny Pinhorn, Hind Siliguri by Indian Type Foundry, Galada by Black Foundry, Amiri by Khaled Hosny. All fonts are free under the SIL Open Font License 1.1.';
+
+  @override
+  String get designInspired =>
+      'Original design font: Hidayatullah by Anthonie Van Hayu (ARToni).';
+
+  @override
+  String get openSourceLicenses => 'Open-source licences';
 }

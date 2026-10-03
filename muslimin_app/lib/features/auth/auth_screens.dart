@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/nav.dart';
@@ -35,54 +36,59 @@ class WelcomeScreen extends ConsumerWidget {
       if (ok == true) onDone();
     }
 
-    return Scaffold(
-      backgroundColor: AppColors.ink,
-      body: IslamicPattern(
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(Gap.xl),
-            child: Column(
-              children: [
-                const Spacer(flex: 2),
-                Image.asset('assets/images/onboard_mosque.png', height: 170),
-                const SizedBox(height: Gap.xl),
-                const Wordmark(size: 44),
-                const SizedBox(height: Gap.xl),
-                Text(
-                  t.welcomeTitle,
-                  style: AppText.headline.copyWith(color: AppColors.goldLight),
-                ),
-                const SizedBox(height: Gap.s),
-                Text(
-                  t.welcomeBody,
-                  textAlign: TextAlign.center,
-                  style: AppText.body.copyWith(color: AppColors.cream),
-                ),
-                const Spacer(flex: 3),
-                AppButton(
-                  t.createAccount,
-                  expand: true,
-                  onPressed: () => go(const SignUpScreen()),
-                ),
-                const SizedBox(height: Gap.m),
-                AppButton(
-                  t.signIn,
-                  style: AppButtonStyle.darkOutlined,
-                  expand: true,
-                  onPressed: () => go(const SignInScreen()),
-                ),
-                const SizedBox(height: Gap.s),
-                TextButton(
-                  onPressed: onDone,
-                  child: Text(
-                    t.continueAsGuest,
-                    style: AppText.label.copyWith(
-                      color: AppColors.cream,
-                      decoration: TextDecoration.underline,
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle.light,
+      child: Scaffold(
+        backgroundColor: AppColors.ink,
+        body: IslamicPattern(
+          child: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.all(Gap.xl),
+              child: Column(
+                children: [
+                  const Spacer(flex: 2),
+                  Image.asset('assets/images/onboard_mosque.png', height: 170),
+                  const SizedBox(height: Gap.xl),
+                  const Wordmark(size: 44),
+                  const SizedBox(height: Gap.xl),
+                  Text(
+                    t.welcomeTitle,
+                    style: AppText.headline.copyWith(
+                      color: AppColors.goldLight,
                     ),
                   ),
-                ),
-              ],
+                  const SizedBox(height: Gap.s),
+                  Text(
+                    t.welcomeBody,
+                    textAlign: TextAlign.center,
+                    style: AppText.body.copyWith(color: AppColors.cream),
+                  ),
+                  const Spacer(flex: 3),
+                  AppButton(
+                    t.createAccount,
+                    expand: true,
+                    onPressed: () => go(const SignUpScreen()),
+                  ),
+                  const SizedBox(height: Gap.m),
+                  AppButton(
+                    t.signIn,
+                    style: AppButtonStyle.darkOutlined,
+                    expand: true,
+                    onPressed: () => go(const SignInScreen()),
+                  ),
+                  const SizedBox(height: Gap.s),
+                  TextButton(
+                    onPressed: onDone,
+                    child: Text(
+                      t.continueAsGuest,
+                      style: AppText.label.copyWith(
+                        color: AppColors.cream,
+                        decoration: TextDecoration.underline,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

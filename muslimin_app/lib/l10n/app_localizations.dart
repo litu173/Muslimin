@@ -2082,6 +2082,30 @@ abstract class L10n {
   /// In en, this message translates to:
   /// **'Please enter your name.'**
   String get nameRequired;
+
+  /// No description provided for @credits.
+  ///
+  /// In en, this message translates to:
+  /// **'Credits'**
+  String get credits;
+
+  /// No description provided for @fontCredits.
+  ///
+  /// In en, this message translates to:
+  /// **'Logo & prayer names: Grenze Gotisch by Omnibus-Type. Text: Poppins by Indian Type Foundry & Jonny Pinhorn, Hind Siliguri by Indian Type Foundry, Galada by Black Foundry, Amiri by Khaled Hosny. All fonts are free under the SIL Open Font License 1.1.'**
+  String get fontCredits;
+
+  /// No description provided for @designInspired.
+  ///
+  /// In en, this message translates to:
+  /// **'Original design font: Hidayatullah by Anthonie Van Hayu (ARToni).'**
+  String get designInspired;
+
+  /// No description provided for @openSourceLicenses.
+  ///
+  /// In en, this message translates to:
+  /// **'Open-source licences'**
+  String get openSourceLicenses;
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {

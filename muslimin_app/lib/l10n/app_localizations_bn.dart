@@ -1106,4 +1106,18 @@ class L10nBn extends L10n {
 
   @override
   String get nameRequired => 'অনুগ্রহ করে আপনার নাম দিন।';
+
+  @override
+  String get credits => 'কৃতজ্ঞতা';
+
+  @override
+  String get fontCredits =>
+      'লোগো ও নামাজের নাম: Omnibus-Type-এর Grenze Gotisch। লেখা: Indian Type Foundry ও Jonny Pinhorn-এর Poppins, Indian Type Foundry-এর Hind Siliguri, Black Foundry-এর Galada, খালেদ হোসনির Amiri। সব ফন্ট SIL Open Font License 1.1-এর অধীনে ফ্রি।';
+
+  @override
+  String get designInspired =>
+      'মূল ডিজাইন ফন্ট: Anthonie Van Hayu (ARToni)-এর Hidayatullah।';
+
+  @override
+  String get openSourceLicenses => 'ওপেন-সোর্স লাইসেন্স';
 }

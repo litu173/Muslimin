@@ -83,6 +83,8 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
+    - assets/patterns/
+    - assets/licenses/
 
   fonts:
     - family: Poppins
@@ -103,9 +105,9 @@ flutter:
           weight: 600
         - asset: assets/fonts/HindSiliguri-Bold.ttf
           weight: 700
-    - family: Rakkas
+    - family: GrenzeGotisch
       fonts:
-        - asset: assets/fonts/Rakkas-Regular.ttf
+        - asset: assets/fonts/GrenzeGotisch-Variable.ttf
     - family: Galada
       fonts:
         - asset: assets/fonts/Galada-Regular.ttf

@@ -18,7 +18,7 @@ val keystoreProperties = Properties().apply {
 
 android {
     namespace = "com.muslimin.muslimin"
-    compileSdk = flutter.compileSdkVersion
+    compileSdk = 37 // permission_handler_android needs 37+
     ndkVersion = flutter.ndkVersion
 
     compileOptions {

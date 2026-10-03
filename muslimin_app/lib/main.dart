@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -29,8 +30,29 @@ Future<Backend> _initBackend() async {
   }
 }
 
+/// Bundled fonts are SIL Open Font License; their licence texts ship with the
+/// app and appear on the "Open-source licences" page (About screen).
+void _registerFontLicenses() {
+  const fonts = {
+    'Grenze Gotisch': 'grenzegotisch',
+    'Poppins': 'poppins',
+    'Hind Siliguri': 'hindsiliguri',
+    'Galada': 'galada',
+    'Amiri': 'amiri',
+  };
+  LicenseRegistry.addLicense(() async* {
+    for (final e in fonts.entries) {
+      final text = await rootBundle.loadString(
+        'assets/licenses/OFL-${e.value}.txt',
+      );
+      yield LicenseEntryWithLineBreaks(['${e.key} font'], text);
+    }
+  });
+}
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  _registerFontLicenses();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   final results = await Future.wait([Prefs.load(), _initBackend()]);
   await NotificationService.instance.init();

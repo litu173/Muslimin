@@ -536,5 +536,9 @@
         "type": "String"
       }
     }
-  }
+  },
+  "credits": "Credits",
+  "fontCredits": "Logo & prayer names: Grenze Gotisch by Omnibus-Type. Text: Poppins by Indian Type Foundry & Jonny Pinhorn, Hind Siliguri by Indian Type Foundry, Galada by Black Foundry, Amiri by Khaled Hosny. All fonts are free under the SIL Open Font License 1.1.",
+  "designInspired": "Original design font: Hidayatullah by Anthonie Van Hayu (ARToni).",
+  "openSourceLicenses": "Open-source licences"
 }
