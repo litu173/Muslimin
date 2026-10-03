@@ -539,5 +539,24 @@
   "designInspired": "Original design font: Hidayatullah by Anthonie Van Hayu (ARToni).",
   "openSourceLicenses": "Open-source licences",
   "continueWithGoogle": "Continue with Google",
-  "orDivider": "or"
+  "orDivider": "or",
+  "onb3Title": "Prayer Times & Reminders",
+  "onb3Body": "Accurate prayer times for your location, and a reminder before every jamat at the masjids you follow.",
+  "appVersion": "App version",
+  "checkingUpdates": "Checking for updates…",
+  "upToDate": "You have the latest version.",
+  "updateAvailable": "New version {version} is available",
+  "downloadLatestApk": "Download latest APK",
+  "updateApkHint": "Open the downloaded file to install it over this version. Your settings are kept.",
+  "updateIosButton": "How to update on iPhone",
+  "updateCheckFailed": "Couldn’t check for updates. Check your internet connection.",
+  "releaseNotes": "Release notes",
+  "@updateAvailable": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "selectAll": "Select all"
 }

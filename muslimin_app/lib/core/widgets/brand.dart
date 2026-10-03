@@ -1,5 +1,3 @@
-import 'dart:math' as math;
-
 import 'package:flutter/material.dart';
 
 import '../theme/app_text.dart';
@@ -75,7 +73,7 @@ class BetaBadge extends StatelessWidget {
       'BETA',
       style: TextStyle(
         fontFamily: AppText.latin,
-        fontSize: 10,
+        fontSize: 12,
         fontWeight: FontWeight.w600,
         letterSpacing: 1.2,
         color: color,
@@ -85,8 +83,8 @@ class BetaBadge extends StatelessWidget {
   );
 }
 
-/// The splash wordmark: letters rise in one after another on a wave, then a
-/// gentle ripple runs through the word. Driven by [progress] (0..1).
+/// The splash wordmark: letters rise in one after another on a wave and then
+/// stay still. Driven by [progress] (0..1).
 class WavyWordmark extends StatelessWidget {
   const WavyWordmark({
     super.key,
@@ -117,18 +115,10 @@ class WavyWordmark extends StatelessWidget {
               final start = i / n * (1 - entrySpan) * 0.9;
               final t = ((progress - start) / entrySpan).clamp(0.0, 1.0);
               final eased = Curves.easeOutBack.transform(t);
-              // Ripple after all letters have landed.
-              final ripplePhase = ((progress - 0.62) / 0.38).clamp(0.0, 1.0);
-              final ripple = ripplePhase == 0 || ripplePhase == 1
-                  ? 0.0
-                  : math.sin((ripplePhase * 2 - i / n) * math.pi * 2) *
-                        (1 - ripplePhase) *
-                        size *
-                        0.12;
               return Opacity(
                 opacity: Curves.easeOut.transform(t),
                 child: Transform.translate(
-                  offset: Offset(0, (1 - eased) * size * 0.7 + ripple),
+                  offset: Offset(0, (1 - eased) * size * 0.7),
                   child: Text(
                     letters[i],
                     style: TextStyle(

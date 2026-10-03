@@ -2100,6 +2100,78 @@ abstract class L10n {
   /// In en, this message translates to:
   /// **'or'**
   String get orDivider;
+
+  /// No description provided for @onb3Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Prayer Times & Reminders'**
+  String get onb3Title;
+
+  /// No description provided for @onb3Body.
+  ///
+  /// In en, this message translates to:
+  /// **'Accurate prayer times for your location, and a reminder before every jamat at the masjids you follow.'**
+  String get onb3Body;
+
+  /// No description provided for @appVersion.
+  ///
+  /// In en, this message translates to:
+  /// **'App version'**
+  String get appVersion;
+
+  /// No description provided for @checkingUpdates.
+  ///
+  /// In en, this message translates to:
+  /// **'Checking for updates…'**
+  String get checkingUpdates;
+
+  /// No description provided for @upToDate.
+  ///
+  /// In en, this message translates to:
+  /// **'You have the latest version.'**
+  String get upToDate;
+
+  /// No description provided for @updateAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'New version {version} is available'**
+  String updateAvailable(String version);
+
+  /// No description provided for @downloadLatestApk.
+  ///
+  /// In en, this message translates to:
+  /// **'Download latest APK'**
+  String get downloadLatestApk;
+
+  /// No description provided for @updateApkHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Open the downloaded file to install it over this version. Your settings are kept.'**
+  String get updateApkHint;
+
+  /// No description provided for @updateIosButton.
+  ///
+  /// In en, this message translates to:
+  /// **'How to update on iPhone'**
+  String get updateIosButton;
+
+  /// No description provided for @updateCheckFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn’t check for updates. Check your internet connection.'**
+  String get updateCheckFailed;
+
+  /// No description provided for @releaseNotes.
+  ///
+  /// In en, this message translates to:
+  /// **'Release notes'**
+  String get releaseNotes;
+
+  /// No description provided for @selectAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Select all'**
+  String get selectAll;
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {

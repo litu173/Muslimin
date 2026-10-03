@@ -53,7 +53,7 @@ class _VerseCarouselState extends State<VerseCarousel> {
     return Column(
       children: [
         SizedBox(
-          height: 160,
+          height: 184,
           child: PageView.builder(
             controller: _controller,
             itemCount: verses.length,
@@ -72,25 +72,29 @@ class _VerseCarouselState extends State<VerseCarousel> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      verses[i].$1,
-                      textDirection: TextDirection.rtl,
-                      textAlign: TextAlign.center,
-                      maxLines: 2,
-                      style: const TextStyle(
-                        fontFamily: AppText.arabic,
-                        fontSize: 20,
-                        color: AppColors.ink,
-                        height: 1.4,
+                    // Long ayat scale down to stay on one line.
+                    FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        verses[i].$1,
+                        textDirection: TextDirection.rtl,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          fontFamily: AppText.arabic,
+                          fontSize: 24,
+                          color: AppColors.ink,
+                          height: 1.4,
+                        ),
                       ),
                     ),
                     const SizedBox(height: 6),
                     Text(
                       verses[i].$2,
                       textAlign: TextAlign.center,
-                      maxLines: 2,
+                      maxLines: 3,
                       style: AppText.subtitle.copyWith(
                         color: AppColors.ink,
+                        fontSize: 17,
                         height: 1.25,
                       ),
                     ),

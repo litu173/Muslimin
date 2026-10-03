@@ -15,9 +15,9 @@ import '../../data/models/notice.dart';
 import '../../l10n/app_localizations.dart';
 import '../../state/providers.dart';
 import '../notices/notice_card.dart';
-import '../notifications/notifications_screen.dart';
 import '../prayers/all_prayers_screen.dart';
 import '../registration/registration_flow.dart';
+import 'location_bar.dart';
 import 'masjid_card.dart';
 import 'masjid_list_screen.dart';
 import 'verse_carousel.dart';
@@ -36,9 +36,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final t = L10n.of(context);
-    final f = Fmt.of(context);
-    final settings = ref.watch(settingsProvider);
-    final now = ref.watch(minuteProvider);
     final loc = ref.watch(locationProvider);
     final masjids = ref.watch(nearbyMasjidsProvider);
     final notices = ref.watch(nearbyNoticesProvider);
@@ -53,69 +50,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           onRefresh: () => ref.read(locationProvider.notifier).refresh(),
           child: CustomScrollView(
             slivers: [
-              // ---- date bar
-              SliverToBoxAdapter(
+              // ---- location + date
+              const SliverToBoxAdapter(
                 child: Padding(
-                  padding: const EdgeInsets.fromLTRB(
-                    Gap.xl,
-                    Gap.s,
-                    Gap.s,
-                    Gap.s,
-                  ),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            // Location (tap to refresh), then the date.
-                            InkWell(
-                              onTap: () =>
-                                  ref.read(locationProvider.notifier).refresh(),
-                              child: Row(
-                                children: [
-                                  const Icon(
-                                    Icons.location_on_outlined,
-                                    size: 18,
-                                    color: AppColors.gold,
-                                  ),
-                                  const SizedBox(width: 4),
-                                  Flexible(
-                                    child: Text(
-                                      loc.value?.label ?? t.locating,
-                                      style: AppText.label,
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 4),
-                                  const Icon(
-                                    Icons.refresh_rounded,
-                                    size: 15,
-                                    color: AppColors.muted,
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(height: 2),
-                            Text(
-                              f.headerDate(now, settings.hijriOffset),
-                              style: AppText.caption,
-                            ),
-                          ],
-                        ),
-                      ),
-                      IconButton(
-                        tooltip: t.notifications,
-                        onPressed: () =>
-                            push(context, const NotificationsScreen()),
-                        icon: const Icon(
-                          Icons.notifications_none_rounded,
-                          color: AppColors.ink,
-                        ),
-                      ),
-                    ],
-                  ),
+                  padding: EdgeInsets.fromLTRB(Gap.l, Gap.s, Gap.s, Gap.s),
+                  child: LocationBar(showDate: true),
                 ),
               ),
               const SliverToBoxAdapter(child: PrayerHeader()),
@@ -145,6 +84,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 error: (e, _) => [
                   SliverToBoxAdapter(
                     child: EmptyState(
+                      inCard: true,
                       message: t.somethingWrong,
                       icon: Icons.wifi_off_rounded,
                       action: AppButton(
@@ -159,6 +99,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     ? [
                         SliverToBoxAdapter(
                           child: EmptyState(
+                            inCard: true,
                             message: t.noMasjidNearby,
                             hint: t.noMasjidNearbyHint,
                           ),
@@ -196,7 +137,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 loading: () => [const SliverToBoxAdapter(child: Loader())],
                 error: (_, _) => [
                   SliverToBoxAdapter(
-                    child: EmptyState(message: t.somethingWrong),
+                    child: EmptyState(inCard: true, message: t.somethingWrong),
                   ),
                 ],
                 data: (all) {
@@ -207,6 +148,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     return [
                       SliverToBoxAdapter(
                         child: EmptyState(
+                          inCard: true,
                           message: t.noNotices,
                           icon: Icons.campaign_outlined,
                         ),
@@ -246,7 +188,7 @@ class PrayerHeader extends ConsumerWidget {
     final now = ref.watch(clockProvider).value ?? DateTime.now();
 
     return SizedBox(
-      height: 196,
+      height: 204,
       child: IslamicPattern(
         child: waqt == null
             ? const Center(
@@ -263,7 +205,7 @@ class PrayerHeader extends ConsumerWidget {
                         children: [
                           DisplayText(
                             f.prayer(waqt.prayer),
-                            size: 42,
+                            size: 46,
                             color: AppColors.goldLight,
                           ),
                           const SizedBox(height: 4),
@@ -271,7 +213,7 @@ class PrayerHeader extends ConsumerWidget {
                             f.range(waqt.window.start, waqt.window.end),
                             style: AppText.title.copyWith(
                               color: AppColors.cream,
-                              fontSize: 22,
+                              fontSize: 24,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
@@ -304,7 +246,7 @@ class PrayerHeader extends ConsumerWidget {
                       ),
                     ),
                     CountdownRing(
-                      size: 128,
+                      size: 136,
                       progress: waqt.progress(now),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
@@ -319,7 +261,7 @@ class PrayerHeader extends ConsumerWidget {
                             f.countdown(waqt.remaining(now)),
                             style: AppText.subtitle.copyWith(
                               color: AppColors.goldLight,
-                              fontSize: 22,
+                              fontSize: 24,
                               fontFeatures: const [
                                 FontFeature.tabularFigures(),
                               ],

@@ -15,8 +15,8 @@ import '../admin/admin_panel_screen.dart';
 import '../auth/auth_screens.dart';
 import '../auth/profile_screen.dart';
 import '../home/home_screen.dart';
+import '../home/location_bar.dart';
 import '../masjid/masjid_screen.dart';
-import '../notifications/notifications_screen.dart';
 import '../registration/registration_flow.dart';
 import 'about_screen.dart';
 import 'faq_screen.dart';
@@ -38,10 +38,11 @@ class _MoreScreenState extends ConsumerState<MoreScreen> {
   @override
   Widget build(BuildContext context) {
     final t = L10n.of(context);
-    final loc = ref.watch(locationProvider);
     final user = ref.watch(authProvider).value;
     final mine = ref.watch(myMasjidsProvider).value ?? const <Masjid>[];
+    // Signed-out users already see the "For masjid authorities" card.
     final showBanner =
+        user != null &&
         mine.isEmpty &&
         !_bannerClosed &&
         !ref.read(prefsProvider).authorityBannerHidden;
@@ -51,58 +52,7 @@ class _MoreScreenState extends ConsumerState<MoreScreen> {
         child: ListView(
           padding: const EdgeInsets.fromLTRB(Gap.l, Gap.s, Gap.l, Gap.xxl),
           children: [
-            Row(
-              children: [
-                Expanded(
-                  child: InkWell(
-                    onTap: () => ref.read(locationProvider.notifier).refresh(),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: Gap.s),
-                      child: Row(
-                        children: [
-                          const Icon(
-                            Icons.location_on_outlined,
-                            color: AppColors.ink,
-                          ),
-                          const SizedBox(width: Gap.s),
-                          Flexible(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(t.yourLocation, style: AppText.caption),
-                                Row(
-                                  children: [
-                                    Flexible(
-                                      child: Text(
-                                        loc.value?.label ?? t.locating,
-                                        style: AppText.label,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ),
-                                    const Icon(
-                                      Icons.refresh_rounded,
-                                      size: 16,
-                                      color: AppColors.ink,
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                IconButton(
-                  onPressed: () => push(context, const NotificationsScreen()),
-                  icon: const Icon(
-                    Icons.notifications_none_rounded,
-                    color: AppColors.ink,
-                  ),
-                ),
-              ],
-            ),
+            const LocationBar(),
             const SizedBox(height: Gap.l),
             _AccountCard(),
             const SizedBox(height: Gap.l),

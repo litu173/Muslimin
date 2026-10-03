@@ -1,129 +1,47 @@
-"""Builds assets/patterns/header_pattern.svg from the Figma header pattern.
+"""Builds the pattern SVGs from tool/pattern_tile.svg (the exact Figma tile).
 
-The Figma SVG (360x178) is one 72 x 98.7419 tile repeated 5 x 2 and clipped
-with masks. We keep that single tile (exact Figma paths) and repeat it on a
-larger canvas with <clipPath> (well supported by flutter_svg), so the
-pattern stays a crisp vector on every screen width.
+The Figma repeat unit is 144 x 198: four identical 72 x 99 tiles. Each tile
+is clipped to its own 72 x 99 box and laid out on an exact 72 / 99 grid, so
+repeats meet seamlessly at any size.
+
+Outputs
+  assets/patterns/header_pattern.svg  8 x 3 tiles (576 x 297) for the app
+  ../docs/assets/pattern.svg          2 x 2 tiles (144 x 198) for the website
 """
+import re
 from pathlib import Path
 
-TILE_W, TILE_H = 71.9993, 98.7419
-COLS, ROWS = 8, 3  # 576 x 296 - covers phones and tablets with BoxFit.cover
+ROOT = Path(__file__).resolve().parent.parent
+TILE_W, TILE_H = 72, 99
+OPACITY = 0.16  # as in the Figma header
 
-# Paths of the top-left tile (mask1 group in the Figma export), y in [-9, 89.74].
-TILE = """
-M17.8983 -3.20691L4.67245 14.7979
-M-4.63953 -3.14514L8.35199 14.7361
-M20.3071 -7.04404L34.1146 11.9603
-M18.0404 -3.24396L40.0919 3.92101
-M0.0731201 9.78064L-22.73 17.1898
-M36.0387 7.07999L13.3158 14.4631
-M13.439 9.80383L35.8761 17.0941
-M13.3649 -4.1828V10.2171
-M0.0297852 -4.7464L0.0297845 9.65346
-M35.9954 -16.7133L35.9954 6.94362
-M13.3649 -5.21118L13.3649 10.2172
-M-22.576 7.01361L0.00790633 14.3516
-M13.4019 14.2817V29.1959
-M8.21985 14.3095L17.965 27.7226
-M4.08154 69.8931L17.9513 88.9832
-M-4.63342 34.8154L9.27176 53.9543
-M5.19336 14.2926L-4.57801 27.7417
-M17.9849 34.8586L4.12225 53.9389
-M34.0437 12.1632L20.493 30.8142
-M28.8864 80.5491L20.5122 92.0751
-M20.4492 30.8625L28.8332 42.4021
-M17.991 34.9065L31.3942 39.2615
-M39.5963 20.3208L17.9731 27.3466
-M31.3939 84.1608L17.9536 88.5278
-M13.4327 28.8551L-0.0497308 33.2359
-M13.4327 90.1041L-0.0497308 94.4848
-M31.3693 46.5491L9.26319 53.7318
-M0.00512695 56.6523L-22.6586 64.0162
-M13.3401 56.5797L36.0259 63.9508
-M-18.512 46.2326L4.13863 53.5922
-M35.4889 59.4271L13.3526 66.6196
-M4.06921 69.8591L-18.0199 77.0363
-M9.30078 69.7186L31.8353 77.0405
-M-22.5698 59.4379L-0.0701043 66.7485
-M-0.0443115 28.8551L13.4382 33.2359
-M-0.0443115 90.1041L13.4382 94.4848
-M28.9851 42.5623L15.1896 61.5502
-M15.4895 61.5966L29.2479 80.5333
-M0.0297852 14.2817V29.1959
-M13.3649 32.8451L13.3649 56.502
-M35.9954 16.7153L35.9954 40.3722
-M35.9954 44.4862L35.9954 59.4003
-M35.9954 64.0286L35.9954 78.9427
-M35.9954 82.5425L35.9954 106.199
-M-0.00720215 32.8451L-0.00720316 56.502
-M13.3649 66.7879L13.3649 89.9305
-M-0.00720215 66.7879L-0.00720316 89.9305
-M-4.59631 88.9135L9.27344 69.8235
-M67.3595 -3.14514L80.351 14.7361
-M67.4584 -3.20538L45.2909 3.99725
-M72.0784 9.78064L49.2753 17.1898
-M31.4062 -15.197L45.2497 3.85697
-M53.8455 -15.0163L40.1256 3.86751
-M72.0352 -4.7464L72.0352 9.65346
-M49.4045 -16.5759L49.4045 7.08104
-M64.9753 -6.86957L51.0474 12.3007
-M49.4292 7.01361L72.0132 14.3516
-M67.3657 34.8154L81.2709 53.9543
-M51.0969 12.086L65.1939 31.4889
-M39.7383 20.2112L53.9002 39.7034
-M77.1924 14.2926L67.421 27.7417
-M53.833 46.1214L31.4416 76.9406
-M85.438 28.8551L71.9555 33.2359
-M67.5139 34.8525L54.0314 39.2332
-M49.5219 40.5209L35.9745 44.9227
-M72.0104 56.6523L49.3466 64.0162
-M35.9769 40.4406L49.4143 44.8067
-M45.3157 20.4505L31.3804 39.3519
-M31.5175 46.4349L53.9007 77.2428
-M31.4062 84.0588L45.2497 103.113
-M53.4872 46.2326L76.1378 53.5922
-M45.291 20.4521L67.9416 27.8117
-M76.0684 69.8591L53.9793 77.0363
-M49.3119 78.395L36.0458 82.7054
-M49.4292 59.4379L71.9289 66.7485
-M71.9548 28.8551L85.4373 33.2359
-M64.7531 31.2068L56.1191 43.0904
-M70.1266 61.7186L56.4447 80.5501
-M53.8455 84.2395L40.1256 103.123
-M56.069 42.5576L70.0386 61.6447
-M72.0352 14.2817V29.1959
-M71.9918 32.8451L71.9918 56.502
-M49.3304 16.8527L49.3304 40.5096
-M71.9918 66.7879L71.9918 89.9305
-M49.3922 64.166L49.3922 78.5658
-M49.4169 44.6237L49.4169 59.5378
-M49.4045 82.6799L49.4045 106.337
-M67.4027 88.9135L81.2725 69.8235
-M56.5137 80.6896L65.0587 92.4507
-M53.9813 84.38L67.6452 88.8197
-M35.9769 78.4969L49.2506 82.8098
-""".split("\n")
+tile = (ROOT / "tool/pattern_tile.svg").read_text()
+paths = "\n".join(re.findall(r"<path [^>]+/>", tile))
 
-paths = [p.strip() for p in TILE if p.strip()]
-# Row 0 starts at y=-9 exactly like the Figma frame (top 9px is cropped).
-tile_d = " ".join(paths)
-w, h = TILE_W * COLS, TILE_H * ROWS
 
-out = [
-    f'<svg width="{w:.2f}" height="{h:.2f}" viewBox="0 0 {w:.2f} {h:.2f}" fill="none" xmlns="http://www.w3.org/2000/svg">',
-    "<defs>",
-    f'<clipPath id="t"><rect x="0" y="-9" width="{TILE_W}" height="{TILE_H}"/></clipPath>',
-    f'<g id="tile" clip-path="url(#t)"><path d="{tile_d}" stroke="#BB8907"/></g>',
-    "</defs>",
-    '<g opacity="0.16">',
-]
-for r in range(ROWS):
-    for c in range(COLS):
-        out.append(f'<use href="#tile" x="{c * TILE_W:.4f}" y="{r * TILE_H:.4f}"/>')
-out += ["</g>", "</svg>"]
+def build(cols: int, rows: int) -> str:
+    w, h = TILE_W * cols, TILE_H * rows
+    out = [
+        f'<svg width="{w}" height="{h}" viewBox="0 0 {w} {h}" fill="none" xmlns="http://www.w3.org/2000/svg">',
+        "<defs>",
+        f'<clipPath id="c"><rect width="{TILE_W}" height="{TILE_H}"/></clipPath>',
+        f'<g id="t" clip-path="url(#c)">\n{paths}\n</g>',
+        "</defs>",
+        f'<g opacity="{OPACITY}">',
+    ]
+    for r in range(rows):
+        for c in range(cols):
+            out.append(f'<use href="#t" x="{c * TILE_W}" y="{r * TILE_H}"/>')
+    out += ["</g>", "</svg>", ""]
+    return "\n".join(out)
 
-dst = Path(__file__).resolve().parent.parent / "assets/patterns/header_pattern.svg"
-dst.parent.mkdir(parents=True, exist_ok=True)
-dst.write_text("\n".join(out) + "\n")
-print(dst, len(paths), "paths per tile")
+
+targets = {
+    ROOT / "assets/patterns/header_pattern.svg": (8, 3),
+    ROOT.parent / "docs/assets/pattern.svg": (2, 2),
+}
+for path, (c, r) in targets.items():
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(build(c, r))
+    print(path.relative_to(ROOT.parent), f"{c * TILE_W}x{r * TILE_H}")
+print(len(re.findall(r"<path ", paths)), "paths per tile")

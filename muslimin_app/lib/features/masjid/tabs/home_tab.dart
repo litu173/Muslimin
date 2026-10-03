@@ -126,7 +126,10 @@ class _Row extends StatelessWidget {
     padding: const EdgeInsets.symmetric(vertical: 11),
     child: Row(
       children: [
-        SizedBox(width: 64, child: Text(label, style: AppText.label)),
+        ConstrainedBox(
+          constraints: const BoxConstraints(minWidth: 96),
+          child: Text(label, style: AppText.label),
+        ),
         if (now)
           Text(nowLabel!, style: AppText.label.copyWith(color: AppColors.gold)),
         const Spacer(),

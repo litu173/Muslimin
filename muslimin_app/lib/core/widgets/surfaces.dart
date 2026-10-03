@@ -230,6 +230,7 @@ class EmptyState extends StatelessWidget {
     this.hint,
     this.icon = Icons.mosque_outlined,
     this.action,
+    this.inCard = false,
   });
 
   final String message;
@@ -237,22 +238,25 @@ class EmptyState extends StatelessWidget {
   final IconData icon;
   final Widget? action;
 
+  /// In a feed (Home) the message sits in a full-width card with the page
+  /// gutter, like the masjid and notice cards around it.
+  final bool inCard;
+
   @override
-  Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.symmetric(horizontal: Gap.xxl, vertical: Gap.xxl),
-    child: Column(
+  Widget build(BuildContext context) {
+    final content = Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         Container(
-          width: 64,
-          height: 64,
-          decoration: const BoxDecoration(
-            color: AppColors.card,
+          width: inCard ? 52 : 64,
+          height: inCard ? 52 : 64,
+          decoration: BoxDecoration(
+            color: inCard ? AppColors.cream : AppColors.card,
             shape: BoxShape.circle,
           ),
-          child: Icon(icon, color: AppColors.gold, size: 30),
+          child: Icon(icon, color: AppColors.gold, size: inCard ? 26 : 30),
         ),
-        const SizedBox(height: Gap.l),
+        const SizedBox(height: Gap.m),
         Text(message, style: AppText.label, textAlign: TextAlign.center),
         if (hint != null) ...[
           const SizedBox(height: Gap.s),
@@ -264,8 +268,33 @@ class EmptyState extends StatelessWidget {
         ],
         if (action != null) ...[const SizedBox(height: Gap.l), action!],
       ],
-    ),
-  );
+    );
+    if (inCard) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: Gap.page),
+        child: SizedBox(
+          width: double.infinity,
+          child: AppCard(
+            padding: const EdgeInsets.symmetric(
+              horizontal: Gap.xl,
+              vertical: Gap.xl,
+            ),
+            child: content,
+          ),
+        ),
+      );
+    }
+    // Full-screen use: centred both ways in whatever space it gets.
+    return Center(
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(
+          horizontal: Gap.xxl,
+          vertical: Gap.xxl,
+        ),
+        child: content,
+      ),
+    );
+  }
 }
 
 class Loader extends StatelessWidget {

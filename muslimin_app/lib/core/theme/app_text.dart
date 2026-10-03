@@ -7,6 +7,7 @@ import 'app_colors.dart';
 /// inside Bangla UI) always render correctly. The display face (prayer name
 /// and logo) is Grenze Gotisch (SIL OFL) / Galada – free, open-licence
 /// stand-ins for "Hidayatullah DEMO", whose demo licence is personal-use only.
+/// Scale: Figma sizes +~20%, rounded (base body text 16).
 abstract final class AppText {
   static const latin = 'Poppins';
   static const bangla = 'HindSiliguri';
@@ -29,24 +30,24 @@ abstract final class AppText {
         letterSpacing: -0.32 * size / 16,
       );
 
-  /// 20 / Bold – screen titles ("Create Masjid Profile", onboarding titles).
-  static final headline = _base(20, FontWeight.w700, 26);
+  /// 24 / Bold – screen titles ("Create Masjid Profile", onboarding titles).
+  static final headline = _base(24, FontWeight.w700, 31);
 
-  /// 18 / Bold – masjid name in the dark header.
-  static final title = _base(18, FontWeight.w700, 24);
+  /// 22 / Bold – masjid name in the dark header.
+  static final title = _base(22, FontWeight.w700, 28);
 
-  /// 16 / Medium – card titles, section headers.
-  static final subtitle = _base(16, FontWeight.w500, 22);
+  /// 19 / Medium – card titles, section headers.
+  static final subtitle = _base(19, FontWeight.w500, 26);
 
-  /// 14 / Medium – list labels, prayer rows, buttons.
-  static final label = _base(14, FontWeight.w500, 20);
+  /// 16 / Medium – list labels, prayer rows, buttons.
+  static final label = _base(16, FontWeight.w500, 23);
 
-  /// 14 / Regular – body copy.
-  static final body = _base(14, FontWeight.w400, 20);
+  /// 16 / Regular – body copy.
+  static final body = _base(16, FontWeight.w400, 23);
 
-  /// 12 / Regular – meta lines (walk time, dates).
-  static final caption = _base(12, FontWeight.w400, 18);
+  /// 14 / Regular – meta lines (walk time, dates).
+  static final caption = _base(14, FontWeight.w400, 20);
 
-  /// 10 / Regular – "Last updated …".
-  static final micro = _base(10, FontWeight.w400, 16);
+  /// 12 / Regular – "Last updated …".
+  static final micro = _base(12, FontWeight.w400, 18);
 }

@@ -129,7 +129,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                                   t.tagline,
                                   style: const TextStyle(
                                     color: Colors.white,
-                                    fontSize: 16,
+                                    fontSize: 19,
                                   ),
                                 ),
                                 if (kBeta) ...[

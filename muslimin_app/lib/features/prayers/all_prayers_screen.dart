@@ -34,7 +34,7 @@ class AllPrayersScreen extends ConsumerWidget {
           children: [
             Text(
               t.allPrayers,
-              style: AppText.subtitle.copyWith(color: cream, fontSize: 18),
+              style: AppText.subtitle.copyWith(color: cream, fontSize: 22),
             ),
             if (loc != null)
               Text(

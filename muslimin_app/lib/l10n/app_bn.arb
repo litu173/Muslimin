@@ -333,5 +333,17 @@
   "designInspired": "মূল ডিজাইন ফন্ট: Anthonie Van Hayu (ARToni)-এর Hidayatullah।",
   "openSourceLicenses": "ওপেন-সোর্স লাইসেন্স",
   "continueWithGoogle": "Google দিয়ে চালিয়ে যান",
-  "orDivider": "অথবা"
+  "orDivider": "অথবা",
+  "onb3Title": "নামাজের সময় ও রিমাইন্ডার",
+  "onb3Body": "আপনার লোকেশন অনুযায়ী সঠিক নামাজের সময়, আর ফলো করা মসজিদের প্রতিটি জামাতের আগে রিমাইন্ডার।",
+  "appVersion": "অ্যাপ ভার্সন",
+  "checkingUpdates": "আপডেট খোঁজা হচ্ছে…",
+  "upToDate": "আপনার কাছে সর্বশেষ ভার্সন আছে।",
+  "updateAvailable": "নতুন ভার্সন {version} এসেছে",
+  "downloadLatestApk": "সর্বশেষ APK ডাউনলোড করুন",
+  "updateApkHint": "ডাউনলোড হওয়া ফাইলটি খুলে এই ভার্সনের উপর ইনস্টল করুন। আপনার সেটিংস থেকে যাবে।",
+  "updateIosButton": "আইফোনে কীভাবে আপডেট করবেন",
+  "updateCheckFailed": "আপডেট খোঁজা যায়নি। ইন্টারনেট সংযোগ দেখুন।",
+  "releaseNotes": "রিলিজ নোট",
+  "selectAll": "সবগুলো নির্বাচন করুন"
 }

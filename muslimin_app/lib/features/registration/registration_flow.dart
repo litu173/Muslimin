@@ -401,6 +401,24 @@ class _RegistrationFlowState extends ConsumerState<RegistrationFlow> {
     children: [
       Text(t.userAuthBody, style: AppText.body),
       const SizedBox(height: Gap.l),
+      // "Select all" toggles every statement at once.
+      InkWell(
+        onTap: () {
+          final all = !_rules.every((r) => r);
+          setState(() => _rules.fillRange(0, _rules.length, all));
+        },
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          child: Row(
+            children: [
+              TickCircle(checked: _rules.every((r) => r)),
+              const SizedBox(width: Gap.s + 2),
+              Text(t.selectAll, style: AppText.label),
+            ],
+          ),
+        ),
+      ),
+      const Divider(),
       for (final (i, rule) in [t.rule1, t.rule2, t.rule3, t.rule4].indexed)
         InkWell(
           onTap: () => setState(() => _rules[i] = !_rules[i]),

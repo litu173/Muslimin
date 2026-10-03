@@ -7,7 +7,7 @@ import '../theme/app_colors.dart';
 
 /// The geometric pattern from the Figma file (gold lines at 16% on deep
 /// green). `assets/patterns/header_pattern.svg` is the exact Figma tile
-/// repeated 8 x 3 (see `tool/build_pattern.py`); here it is laid out at 1:1
+/// repeated 8 x 3 on its exact 72 x 99 grid (see `tool/build_pattern.py`); here it is laid out at 1:1
 /// Figma scale and repeated as needed, so it covers any width or height and
 /// stays a crisp vector.
 class IslamicPattern extends StatelessWidget {
@@ -16,8 +16,8 @@ class IslamicPattern extends StatelessWidget {
   final Widget? child;
   final Color color;
 
-  static const _w = 575.99;
-  static const _h = 296.23;
+  static const _w = 576.0; // 8 x 72
+  static const _h = 297.0; // 3 x 99
 
   @override
   Widget build(BuildContext context) => ClipRect(

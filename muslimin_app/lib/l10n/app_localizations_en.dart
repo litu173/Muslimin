@@ -1117,4 +1117,45 @@ class L10nEn extends L10n {
 
   @override
   String get orDivider => 'or';
+
+  @override
+  String get onb3Title => 'Prayer Times & Reminders';
+
+  @override
+  String get onb3Body =>
+      'Accurate prayer times for your location, and a reminder before every jamat at the masjids you follow.';
+
+  @override
+  String get appVersion => 'App version';
+
+  @override
+  String get checkingUpdates => 'Checking for updates…';
+
+  @override
+  String get upToDate => 'You have the latest version.';
+
+  @override
+  String updateAvailable(String version) {
+    return 'New version $version is available';
+  }
+
+  @override
+  String get downloadLatestApk => 'Download latest APK';
+
+  @override
+  String get updateApkHint =>
+      'Open the downloaded file to install it over this version. Your settings are kept.';
+
+  @override
+  String get updateIosButton => 'How to update on iPhone';
+
+  @override
+  String get updateCheckFailed =>
+      'Couldn’t check for updates. Check your internet connection.';
+
+  @override
+  String get releaseNotes => 'Release notes';
+
+  @override
+  String get selectAll => 'Select all';
 }

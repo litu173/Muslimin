@@ -1116,4 +1116,44 @@ class L10nBn extends L10n {
 
   @override
   String get orDivider => 'অথবা';
+
+  @override
+  String get onb3Title => 'নামাজের সময় ও রিমাইন্ডার';
+
+  @override
+  String get onb3Body =>
+      'আপনার লোকেশন অনুযায়ী সঠিক নামাজের সময়, আর ফলো করা মসজিদের প্রতিটি জামাতের আগে রিমাইন্ডার।';
+
+  @override
+  String get appVersion => 'অ্যাপ ভার্সন';
+
+  @override
+  String get checkingUpdates => 'আপডেট খোঁজা হচ্ছে…';
+
+  @override
+  String get upToDate => 'আপনার কাছে সর্বশেষ ভার্সন আছে।';
+
+  @override
+  String updateAvailable(String version) {
+    return 'নতুন ভার্সন $version এসেছে';
+  }
+
+  @override
+  String get downloadLatestApk => 'সর্বশেষ APK ডাউনলোড করুন';
+
+  @override
+  String get updateApkHint =>
+      'ডাউনলোড হওয়া ফাইলটি খুলে এই ভার্সনের উপর ইনস্টল করুন। আপনার সেটিংস থেকে যাবে।';
+
+  @override
+  String get updateIosButton => 'আইফোনে কীভাবে আপডেট করবেন';
+
+  @override
+  String get updateCheckFailed => 'আপডেট খোঁজা যায়নি। ইন্টারনেট সংযোগ দেখুন।';
+
+  @override
+  String get releaseNotes => 'রিলিজ নোট';
+
+  @override
+  String get selectAll => 'সবগুলো নির্বাচন করুন';
 }

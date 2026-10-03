@@ -58,6 +58,8 @@ flutter run --dart-define=DEMO=true
 
 ## Making a release
 
+Android users can also update from inside the app: *More → About the App → App version* checks the latest GitHub release and offers the new APK.
+
 The landing page always links to `releases/latest/download/Muslimin.apk` and `Muslimin-iOS.ipa`, so publishing a new GitHub release updates the website automatically.
 
 ```bash

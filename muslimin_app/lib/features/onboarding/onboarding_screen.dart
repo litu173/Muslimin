@@ -5,7 +5,13 @@ import '../../core/nav.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text.dart';
 import '../../core/widgets/buttons.dart';
+import '../../core/theme/app_colors.dart';
+import '../../core/widgets/brand.dart';
+import '../../core/widgets/countdown_ring.dart';
+import '../../core/widgets/islamic_pattern.dart';
 import '../../core/widgets/surfaces.dart';
+import '../../core/utils/format.dart';
+import '../../data/models/prayer.dart';
 import '../../l10n/app_localizations.dart';
 import '../../state/providers.dart';
 import '../permissions/permission_gate.dart';
@@ -29,9 +35,18 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   @override
   Widget build(BuildContext context) {
     final t = L10n.of(context);
-    final pages = [
-      ('assets/images/onboard_mosque.png', t.onb1Title, t.onb1Body),
-      ('assets/images/onboard_megaphone.png', t.onb2Title, t.onb2Body),
+    final pages = <(Widget, String, String)>[
+      (
+        Image.asset('assets/images/onboard_mosque.png', height: 220),
+        t.onb1Title,
+        t.onb1Body,
+      ),
+      (
+        Image.asset('assets/images/onboard_megaphone.png', height: 220),
+        t.onb2Title,
+        t.onb2Body,
+      ),
+      (const _PrayerIllustration(), t.onb3Title, t.onb3Body),
     ];
     final last = _index == pages.length - 1;
 
@@ -46,7 +61,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                   itemCount: pages.length,
                   onPageChanged: (i) => setState(() => _index = i),
                   itemBuilder: (_, i) => OnboardingPage(
-                    image: pages[i].$1,
+                    illustration: pages[i].$1,
                     title: pages[i].$2,
                     body: pages[i].$3,
                   ),
@@ -85,12 +100,12 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
 class OnboardingPage extends StatelessWidget {
   const OnboardingPage({
     super.key,
-    required this.image,
+    required this.illustration,
     required this.title,
     required this.body,
   });
 
-  final String image;
+  final Widget illustration;
   final String title;
   final String body;
 
@@ -104,7 +119,7 @@ class OnboardingPage extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset(image, height: 220, fit: BoxFit.contain),
+              SizedBox(height: 220, child: Center(child: illustration)),
               const SizedBox(height: Gap.xxl * 2),
               Text(title, style: AppText.headline, textAlign: TextAlign.center),
               const SizedBox(height: Gap.m),
@@ -115,4 +130,43 @@ class OnboardingPage extends StatelessWidget {
       ),
     ),
   );
+}
+
+/// Third onboarding illustration, built from the app's own pieces: the
+/// patterned header and countdown ring.
+class _PrayerIllustration extends StatelessWidget {
+  const _PrayerIllustration();
+
+  @override
+  Widget build(BuildContext context) {
+    final f = Fmt.of(context);
+    return ClipOval(
+      child: SizedBox.square(
+        dimension: 210,
+        child: IslamicPattern(
+          child: Center(
+            child: CountdownRing(
+              size: 160,
+              progress: 0.35,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  DisplayText(
+                    f.prayer(Prayer.dhuhr),
+                    size: 34,
+                    color: AppColors.goldLight,
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    f.digits('03:50:31'),
+                    style: AppText.subtitle.copyWith(color: AppColors.cream),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }
