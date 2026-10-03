@@ -8,6 +8,7 @@ class AppUser {
     this.phone = '',
     this.emailVerified = false,
     this.role = UserRole.user,
+    this.hasPassword = true,
   });
 
   final String uid;
@@ -19,6 +20,9 @@ class AppUser {
   final String phone;
   final bool emailVerified;
   final UserRole role;
+
+  /// False for accounts that only sign in with Google (no password to change).
+  final bool hasPassword;
 
   bool get isSuperAdmin => role == UserRole.superAdmin;
   bool get hasPhone => phone.isNotEmpty;
@@ -34,5 +38,6 @@ class AppUser {
         phone: phone ?? this.phone,
         emailVerified: emailVerified ?? this.emailVerified,
         role: role,
+        hasPassword: hasPassword,
       );
 }

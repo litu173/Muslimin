@@ -8,7 +8,6 @@ import '../../core/widgets/buttons.dart';
 import '../../core/widgets/surfaces.dart';
 import '../../l10n/app_localizations.dart';
 import '../../state/providers.dart';
-import '../auth/auth_screens.dart';
 import '../permissions/permission_gate.dart';
 
 class OnboardingScreen extends ConsumerStatefulWidget {
@@ -24,16 +23,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
 
   void _finish() {
     ref.read(prefsProvider).onboardingDone = true;
-    final nav = Navigator.of(context);
-    pushReplacement(
-      context,
-      WelcomeScreen(
-        onDone: () => nav.pushAndRemoveUntil(
-          MaterialPageRoute(builder: (_) => const PermissionGate()),
-          (_) => false,
-        ),
-      ),
-    );
+    pushReplacement(context, const PermissionGate());
   }
 
   @override

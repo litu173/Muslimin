@@ -225,7 +225,9 @@ class _ReviewCardState extends ConsumerState<_ReviewCard> {
           const Divider(),
           kv(
             t.phone,
-            m.ownerPhone,
+            m.phoneVerified
+                ? m.ownerPhone
+                : '${m.ownerPhone}  (${t.notVerified})',
             onTap: () => launchUrl(Uri.parse('tel:${m.ownerPhone}')),
           ),
           kv(t.nid, m.nid),

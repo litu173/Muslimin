@@ -150,12 +150,39 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
   Future<void> _delete() async {
     final t = L10n.of(context);
-    final pw = await _askPassword(
-      title: t.deleteAccount,
-      body: t.deleteAccountBody,
-      action: t.delete,
-    );
-    if (pw == null || pw.isEmpty || !mounted) return;
+    final user = ref.read(backendProvider).currentUser;
+    String? pw;
+    if (user?.hasPassword ?? true) {
+      pw = await _askPassword(
+        title: t.deleteAccount,
+        body: t.deleteAccountBody,
+        action: t.delete,
+      );
+      if (pw == null || pw.isEmpty || !mounted) return;
+    } else {
+      final ok = await showDialog<bool>(
+        context: context,
+        builder: (d) => AlertDialog(
+          backgroundColor: AppColors.cream,
+          title: Text(t.deleteAccount, style: AppText.subtitle),
+          content: Text(t.deleteAccountBody, style: AppText.body),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(d, false),
+              child: Text(t.cancel),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(d, true),
+              child: Text(
+                t.delete,
+                style: const TextStyle(color: AppColors.danger),
+              ),
+            ),
+          ],
+        ),
+      );
+      if (ok != true || !mounted) return;
+    }
     try {
       await ref.read(backendProvider).deleteAccount(password: pw);
       if (!mounted) return;
@@ -277,12 +304,14 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             ),
             child: Column(
               children: [
-                _Action(
-                  icon: Icons.lock_reset_rounded,
-                  label: t.changePassword,
-                  onTap: _changePassword,
-                ),
-                const Divider(),
+                if (user.hasPassword) ...[
+                  _Action(
+                    icon: Icons.lock_reset_rounded,
+                    label: t.changePassword,
+                    onTap: _changePassword,
+                  ),
+                  const Divider(),
+                ],
                 _Action(
                   icon: Icons.logout_rounded,
                   label: t.signOut,

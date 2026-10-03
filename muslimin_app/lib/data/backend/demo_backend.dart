@@ -252,6 +252,27 @@ class DemoBackend implements Backend {
   }
 
   @override
+  Future<AppUser?> signInWithGoogle() async {
+    await Future<void>.delayed(const Duration(milliseconds: 500));
+    const email = 'google.user@gmail.com';
+    _accounts.putIfAbsent(
+      email,
+      () => (
+        '',
+        const AppUser(
+          uid: 'demo_google',
+          email: email,
+          name: 'Google User',
+          emailVerified: true,
+          hasPassword: false,
+        ),
+      ),
+    );
+    _setUser(_accounts[email]!.$2);
+    return _user;
+  }
+
+  @override
   Future<void> sendPasswordReset(String email) async {
     await Future<void>.delayed(const Duration(milliseconds: 400));
   }
@@ -283,9 +304,9 @@ class DemoBackend implements Backend {
   }
 
   @override
-  Future<void> deleteAccount({required String password}) async {
+  Future<void> deleteAccount({String? password}) async {
     final u = _requireUser();
-    if (_accounts[u.email]!.$1 != password) {
+    if (u.hasPassword && _accounts[u.email]!.$1 != password) {
       throw BackendException('invalid-credential');
     }
     _accounts.remove(u.email);

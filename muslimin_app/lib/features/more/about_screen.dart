@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
+import '../../core/config.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text.dart';
@@ -29,6 +30,10 @@ class AboutScreen extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     const Wordmark(size: 40),
+                    if (kBeta) ...[
+                      const SizedBox(height: 6),
+                      const BetaBadge(),
+                    ],
                     const SizedBox(height: 6),
                     Text(
                       t.tagline,
@@ -68,7 +73,7 @@ class AboutScreen extends StatelessWidget {
                     TextButton(
                       onPressed: () => showLicensePage(
                         context: context,
-                        applicationName: 'Muslimin',
+                        applicationName: kAppName,
                         applicationLegalese: t.fontCredits,
                       ),
                       child: Text(t.openSourceLicenses),

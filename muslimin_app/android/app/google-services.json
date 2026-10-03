@@ -12,7 +12,20 @@
           "package_name": "com.muslimin.muslimin"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "171155844004-vt3phbbsr7mp5uucfqooqhfg8g6q7abo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.muslimin.muslimin",
+            "certificate_hash": "90450fd46af9bb2ceb84874b578c548bc4900659"
+          }
+        },
+        {
+          "client_id": "171155844004-vtfmadmt5ugcg5cpun4dtu5nlubp3ics.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCslIrMD6zubAHEUAqC_8Ia4cvxd2evB6Y"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "171155844004-vtfmadmt5ugcg5cpun4dtu5nlubp3ics.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "171155844004-32nhpo7i0qv54o4rhe2chnr5afci7mt3.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.muslimin.muslimin"
+              }
+            }
+          ]
         }
       }
     }

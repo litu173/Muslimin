@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/config.dart';
 import '../../core/nav.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
@@ -112,7 +113,11 @@ class _RegistrationFlowState extends ConsumerState<RegistrationFlow> {
       return;
     }
     final user = ref.read(backendProvider).currentUser;
-    _go(user != null && user.hasPhone ? _Step.details : _Step.phone);
+    _go(
+      user != null && (user.hasPhone || !kRequirePhoneOtp)
+          ? _Step.details
+          : _Step.phone,
+    );
   }
 
   // ------------------------------------------------------------- phone/otp
@@ -256,7 +261,7 @@ class _RegistrationFlowState extends ConsumerState<RegistrationFlow> {
     setState(() => _termsError = _agreed ? null : t.mustAgreeTerms);
     if (!ok || !_agreed) return;
     final user = ref.read(backendProvider).currentUser;
-    if (user == null || !user.hasPhone) {
+    if (user == null || (kRequirePhoneOtp && !user.hasPhone)) {
       _go(_Step.rules);
       return;
     }
@@ -276,7 +281,8 @@ class _RegistrationFlowState extends ConsumerState<RegistrationFlow> {
               lng: _fix!.lng,
               status: MasjidStatus.pending,
               ownerUid: user.uid,
-              ownerPhone: user.phone,
+              ownerPhone: user.hasPhone ? user.phone : _e164 ?? '',
+              phoneVerified: user.hasPhone,
               nid: _nid.text.trim(),
               submitterRole: _role!,
               locationAccuracyM: _fix!.accuracy,
@@ -626,6 +632,20 @@ class _RegistrationFlowState extends ConsumerState<RegistrationFlow> {
               style: AppText.label,
             ),
           ),
+          if (!(ref.read(backendProvider).currentUser?.hasPhone ?? false)) ...[
+            FieldLabel(t.yourMobile),
+            TextFormField(
+              controller: _phone,
+              keyboardType: TextInputType.phone,
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+                LengthLimitingTextInputFormatter(11),
+              ],
+              style: AppText.label,
+              decoration: const InputDecoration(hintText: '01XXXXXXXXX'),
+              validator: (_) => _e164 == null ? t.invalidPhone : null,
+            ),
+          ],
           AppTextField(
             label: t.nidNumber,
             controller: _nid,

@@ -1,4 +1,6 @@
-# Muslimin — Masjid jamat times
+# Muslimin Beta — Masjid jamat times
+
+> **Public beta.** During the beta any signed-in account can register a masjid without SMS verification. The phone number is typed in and marked *not verified* for the admin. Set `kBeta = false` in `muslimin_app/lib/core/config.dart` for the stable release, which also needs Phone auth on the Blaze plan.
 
 Free Android and iPhone app, in English and Bangla. It shows the masjids near you with each masjid's own jamat times, reminds you before jamat and shows masjid notices. Masjid authorities register their own masjid, and an admin verifies every profile before it goes public.
 
@@ -16,8 +18,8 @@ Muslimin/
 | Who | How | Can do |
 |---|---|---|
 | Guest | No sign-in | Browse nearby masjids, follow them, get reminders and notices |
-| Account | Email + password (sign up, sign in, forgot password, change password, delete account) | Same as guest, plus followed masjids and reminders are saved in the cloud and synced across phones |
-| Masjid authority | Account + phone verified by OTP + registration rules | Manage their masjid's jamat, maktab, staff, live link and notices (after approval) |
+| Account | Email + password or **Google** (sign up, sign in, forgot password, change password, delete account) | Same as guest, plus followed masjids and reminders are saved in the cloud and synced across phones |
+| Masjid authority | Account + phone (OTP-verified, or typed during beta) + registration rules | Manage their masjid's jamat, maktab, staff, live link and notices (after approval) |
 | Super admin | `users/{uid}.role = "superAdmin"` set in the Firestore console | Approve, reject, suspend or restore masjids |
 
 Data lives in **Firebase**, project `muslimin-app-bd`, with Firestore in `asia-south1`:
@@ -33,7 +35,7 @@ firebase deploy --only firestore
 ```
 
 ### One-time console steps
-1. **Authentication → Get started → enable Email/Password**. Password-reset and verification emails are sent by Firebase. You can edit the templates under *Authentication → Templates*.
+1. **Authentication**: Email/Password and Google are enabled. Password-reset and verification emails are sent by Firebase. You can edit the templates under *Authentication → Templates*.
 2. **Phone sign-in** (OTP for masjid authorities) and **Cloud Functions** (push notifications for notices) need the **Blaze** (pay-as-you-go) plan. Both have a free monthly allowance. After upgrading, enable *Phone* in Authentication and deploy the functions:
    ```bash
    cd firebase/functions && npm install

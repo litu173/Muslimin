@@ -2,9 +2,12 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:geoflutterfire_plus/geoflutterfire_plus.dart';
 
 import '../../core/utils/geo.dart';
+import '../../firebase_options.dart';
 import '../models/app_user.dart';
 import '../models/hm.dart';
 import '../models/masjid.dart';
@@ -72,6 +75,7 @@ class FirebaseBackend implements Backend {
     phone: u.phoneNumber ?? '',
     emailVerified: u.emailVerified,
     role: doc?['role'] == 'superAdmin' ? UserRole.superAdmin : UserRole.user,
+    hasPassword: u.providerData.any((p) => p.providerId == 'password'),
   );
 
   /// Firebase error code -> our code (the UI localises these).
@@ -144,6 +148,47 @@ class FirebaseBackend implements Backend {
         return _waitForUser();
       });
 
+  /// OAuth "Web client" from google-services.json – Google must issue the
+  /// ID token for this audience so Firebase accepts it.
+  static const _googleServerClientId =
+      '171155844004-vtfmadmt5ugcg5cpun4dtu5nlubp3ics.apps.googleusercontent.com';
+  bool _googleReady = false;
+
+  Future<OAuthCredential?> _googleCredential() async {
+    final gs = GoogleSignIn.instance;
+    if (!_googleReady) {
+      await gs.initialize(
+        clientId: defaultTargetPlatform == TargetPlatform.iOS
+            ? DefaultFirebaseOptions.ios.iosClientId
+            : null,
+        serverClientId: _googleServerClientId,
+      );
+      _googleReady = true;
+    }
+    try {
+      final account = await gs.authenticate();
+      return GoogleAuthProvider.credential(
+        idToken: account.authentication.idToken,
+      );
+    } on GoogleSignInException catch (e) {
+      if (e.code == GoogleSignInExceptionCode.canceled) return null;
+      throw BackendException('google-failed', e.description);
+    }
+  }
+
+  @override
+  Future<AppUser?> signInWithGoogle() => _guard(() async {
+    _current = null;
+    if (kIsWeb) {
+      await _auth.signInWithPopup(GoogleAuthProvider());
+      return _waitForUser();
+    }
+    final cred = await _googleCredential();
+    if (cred == null) return null;
+    await _auth.signInWithCredential(cred);
+    return _waitForUser();
+  });
+
   @override
   Future<void> sendPasswordReset(String email) =>
       _guard(() => _auth.sendPasswordResetEmail(email: email.trim()));
@@ -186,15 +231,24 @@ class FirebaseBackend implements Backend {
   });
 
   @override
-  Future<void> deleteAccount({required String password}) => _guard(() async {
-    await _reauth(password);
+  Future<void> deleteAccount({String? password}) => _guard(() async {
+    if (password != null) {
+      await _reauth(password);
+    } else {
+      final cred = await _googleCredential();
+      if (cred == null) throw BackendException('cancelled');
+      await _auth.currentUser!.reauthenticateWithCredential(cred);
+    }
     final u = _auth.currentUser!;
     await _userDoc(u.uid).delete();
     await u.delete();
   });
 
   @override
-  Future<void> signOut() => _auth.signOut();
+  Future<void> signOut() async {
+    if (_googleReady) await GoogleSignIn.instance.signOut();
+    await _auth.signOut();
+  }
 
   @override
   Future<String> sendOtp(String phoneE164) {

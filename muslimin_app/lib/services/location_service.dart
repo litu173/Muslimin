@@ -73,11 +73,15 @@ class LocationService {
       final marks = await _geocoding.placemarkFromCoordinates(lat, lng);
       if (marks.isEmpty) return _coords(lat, lng);
       final p = marks.first;
+      String? first(List<String?> xs) => xs.firstWhere(
+        (x) => x != null && x.trim().isNotEmpty,
+        orElse: () => null,
+      );
       final parts = <String?>[
-        p.subLocality,
-        p.locality ?? p.subAdministrativeArea,
+        first([p.subLocality, p.thoroughfare, p.name]),
+        first([p.locality, p.subAdministrativeArea, p.administrativeArea]),
         p.country,
-      ].where((s) => s != null && s.trim().isNotEmpty).cast<String>().toList();
+      ].whereType<String>().where((s) => s.trim().isNotEmpty).toSet().toList();
       return parts.isEmpty ? _coords(lat, lng) : parts.join(', ');
     } catch (_) {
       return _coords(lat, lng);

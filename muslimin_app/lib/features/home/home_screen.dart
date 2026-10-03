@@ -65,9 +65,44 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   child: Row(
                     children: [
                       Expanded(
-                        child: Text(
-                          f.headerDate(now, settings.hijriOffset),
-                          style: AppText.caption,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Location (tap to refresh), then the date.
+                            InkWell(
+                              onTap: () =>
+                                  ref.read(locationProvider.notifier).refresh(),
+                              child: Row(
+                                children: [
+                                  const Icon(
+                                    Icons.location_on_outlined,
+                                    size: 18,
+                                    color: AppColors.gold,
+                                  ),
+                                  const SizedBox(width: 4),
+                                  Flexible(
+                                    child: Text(
+                                      loc.value?.label ?? t.locating,
+                                      style: AppText.label,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 4),
+                                  const Icon(
+                                    Icons.refresh_rounded,
+                                    size: 15,
+                                    color: AppColors.muted,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(height: 2),
+                            Text(
+                              f.headerDate(now, settings.hijriOffset),
+                              style: AppText.caption,
+                            ),
+                          ],
                         ),
                       ),
                       IconButton(
@@ -211,7 +246,7 @@ class PrayerHeader extends ConsumerWidget {
     final now = ref.watch(clockProvider).value ?? DateTime.now();
 
     return SizedBox(
-      height: 178,
+      height: 196,
       child: IslamicPattern(
         child: waqt == null
             ? const Center(
@@ -228,13 +263,16 @@ class PrayerHeader extends ConsumerWidget {
                         children: [
                           DisplayText(
                             f.prayer(waqt.prayer),
+                            size: 42,
                             color: AppColors.goldLight,
                           ),
                           const SizedBox(height: 4),
                           Text(
                             f.range(waqt.window.start, waqt.window.end),
-                            style: AppText.subtitle.copyWith(
+                            style: AppText.title.copyWith(
                               color: AppColors.cream,
+                              fontSize: 22,
+                              fontWeight: FontWeight.w500,
                             ),
                           ),
                           const SizedBox(height: Gap.s),
@@ -266,6 +304,7 @@ class PrayerHeader extends ConsumerWidget {
                       ),
                     ),
                     CountdownRing(
+                      size: 128,
                       progress: waqt.progress(now),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
@@ -280,7 +319,7 @@ class PrayerHeader extends ConsumerWidget {
                             f.countdown(waqt.remaining(now)),
                             style: AppText.subtitle.copyWith(
                               color: AppColors.goldLight,
-                              fontSize: 18,
+                              fontSize: 22,
                               fontFeatures: const [
                                 FontFeature.tabularFigures(),
                               ],

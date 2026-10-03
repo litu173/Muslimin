@@ -932,20 +932,10 @@ class L10nBn extends L10n {
   String get masjidNameBn => 'মসজিদের নাম বাংলায় (ঐচ্ছিক)';
 
   @override
-  String get welcomeTitle => 'আসসালামু আলাইকুম';
-
-  @override
-  String get welcomeBody =>
-      'ফলো করা মসজিদ সংরক্ষণ, সব ডিভাইসে রিমাইন্ডার সিঙ্ক এবং মসজিদ নিবন্ধনের জন্য একটি ফ্রি অ্যাকাউন্ট খুলুন।';
-
-  @override
   String get createAccount => 'অ্যাকাউন্ট খুলুন';
 
   @override
   String get signIn => 'সাইন ইন';
-
-  @override
-  String get continueAsGuest => 'অতিথি হিসেবে চালিয়ে যান';
 
   @override
   String get fullName => 'পূর্ণ নাম';
@@ -1032,11 +1022,11 @@ class L10nBn extends L10n {
   String get myAccount => 'আমার অ্যাকাউন্ট';
 
   @override
-  String get signInPrompt => 'সাইন ইন করুন বা অ্যাকাউন্ট খুলুন';
+  String get signInPrompt => 'মসজিদ কর্তৃপক্ষের জন্য';
 
   @override
   String get signInPromptBody =>
-      'ফলো করা মসজিদ সংরক্ষণ করুন এবং সব ডিভাইসে রিমাইন্ডার সিঙ্ক করুন।';
+      'মসজিদ নিবন্ধন ও পরিচালনা করতে সাইন ইন করুন বা অ্যাকাউন্ট খুলুন। সাধারণ ব্যবহারকারীদের অ্যাকাউন্ট লাগবে না।';
 
   @override
   String get profile => 'প্রোফাইল';
@@ -1120,4 +1110,10 @@ class L10nBn extends L10n {
 
   @override
   String get openSourceLicenses => 'ওপেন-সোর্স লাইসেন্স';
+
+  @override
+  String get continueWithGoogle => 'Google দিয়ে চালিয়ে যান';
+
+  @override
+  String get orDivider => 'অথবা';
 }

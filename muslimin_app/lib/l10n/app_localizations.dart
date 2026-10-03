@@ -1771,18 +1771,6 @@ abstract class L10n {
   /// **'Masjid Name in Bangla (optional)'**
   String get masjidNameBn;
 
-  /// No description provided for @welcomeTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Assalamu Alaikum'**
-  String get welcomeTitle;
-
-  /// No description provided for @welcomeBody.
-  ///
-  /// In en, this message translates to:
-  /// **'Create a free account to save the masjids you follow, sync reminders across devices and register your masjid.'**
-  String get welcomeBody;
-
   /// No description provided for @createAccount.
   ///
   /// In en, this message translates to:
@@ -1794,12 +1782,6 @@ abstract class L10n {
   /// In en, this message translates to:
   /// **'Sign In'**
   String get signIn;
-
-  /// No description provided for @continueAsGuest.
-  ///
-  /// In en, this message translates to:
-  /// **'Continue as guest'**
-  String get continueAsGuest;
 
   /// No description provided for @fullName.
   ///
@@ -1954,13 +1936,13 @@ abstract class L10n {
   /// No description provided for @signInPrompt.
   ///
   /// In en, this message translates to:
-  /// **'Sign in or create an account'**
+  /// **'For masjid authorities'**
   String get signInPrompt;
 
   /// No description provided for @signInPromptBody.
   ///
   /// In en, this message translates to:
-  /// **'Save followed masjids and sync reminders on all your devices.'**
+  /// **'Sign in or create an account to register and manage your masjid. Regular users don\'t need an account.'**
   String get signInPromptBody;
 
   /// No description provided for @profile.
@@ -2106,6 +2088,18 @@ abstract class L10n {
   /// In en, this message translates to:
   /// **'Open-source licences'**
   String get openSourceLicenses;
+
+  /// No description provided for @continueWithGoogle.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue with Google'**
+  String get continueWithGoogle;
+
+  /// No description provided for @orDivider.
+  ///
+  /// In en, this message translates to:
+  /// **'or'**
+  String get orDivider;
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {

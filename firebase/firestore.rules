@@ -49,7 +49,12 @@ service cloud.firestore {
       allow create: if signedIn()
         && request.resource.data.ownerUid == request.auth.uid
         && request.resource.data.status == 'pending'
-        && request.resource.data.ownerPhone == request.auth.token.phone_number
+        // Verified phone (SMS OTP) – or, during the public beta, a typed BD
+        // mobile number that the admin sees flagged as not verified.
+        && ((request.resource.data.phoneVerified == true
+              && request.resource.data.ownerPhone == request.auth.token.phone_number)
+            || (request.resource.data.phoneVerified == false
+              && request.resource.data.ownerPhone.matches('^[+]8801[3-9][0-9]{8}$')))
         && request.resource.data.name is string
         && request.resource.data.name.size() >= 3
         && request.resource.data.name.size() <= 80
@@ -61,7 +66,7 @@ service cloud.firestore {
       // Owners maintain day-to-day info; status & verification fields are locked.
       allow update: if (isOwner(resource.data)
           && resource.data.status in ['approved', 'pending']
-          && unchanged(['status', 'ownerUid', 'ownerPhone', 'nid', 'geo',
+          && unchanged(['status', 'ownerUid', 'ownerPhone', 'phoneVerified', 'nid', 'geo',
                         'reviewedBy', 'reviewedAt', 'rejectionReason', 'createdAt']))
         || isSuperAdmin();
 

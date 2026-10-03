@@ -279,11 +279,8 @@
   "deadlineLabel": "শেষ তারিখ",
   "startingDateLabel": "শুরুর তারিখ",
   "masjidNameBn": "মসজিদের নাম বাংলায় (ঐচ্ছিক)",
-  "welcomeTitle": "আসসালামু আলাইকুম",
-  "welcomeBody": "ফলো করা মসজিদ সংরক্ষণ, সব ডিভাইসে রিমাইন্ডার সিঙ্ক এবং মসজিদ নিবন্ধনের জন্য একটি ফ্রি অ্যাকাউন্ট খুলুন।",
   "createAccount": "অ্যাকাউন্ট খুলুন",
   "signIn": "সাইন ইন",
-  "continueAsGuest": "অতিথি হিসেবে চালিয়ে যান",
   "fullName": "পূর্ণ নাম",
   "email": "ইমেইল",
   "password": "পাসওয়ার্ড",
@@ -309,8 +306,8 @@
   "errPhoneInUse": "এই ফোন নম্বরটি অন্য একটি অ্যাকাউন্টের সাথে যুক্ত।",
   "errUserDisabled": "এই অ্যাকাউন্টটি বন্ধ করা হয়েছে। সাপোর্টে যোগাযোগ করুন।",
   "myAccount": "আমার অ্যাকাউন্ট",
-  "signInPrompt": "সাইন ইন করুন বা অ্যাকাউন্ট খুলুন",
-  "signInPromptBody": "ফলো করা মসজিদ সংরক্ষণ করুন এবং সব ডিভাইসে রিমাইন্ডার সিঙ্ক করুন।",
+  "signInPrompt": "মসজিদ কর্তৃপক্ষের জন্য",
+  "signInPromptBody": "মসজিদ নিবন্ধন ও পরিচালনা করতে সাইন ইন করুন বা অ্যাকাউন্ট খুলুন। সাধারণ ব্যবহারকারীদের অ্যাকাউন্ট লাগবে না।",
   "profile": "প্রোফাইল",
   "emailNotVerified": "ইমেইল যাচাই হয়নি",
   "emailVerified": "ইমেইল যাচাইকৃত",
@@ -334,5 +331,7 @@
   "credits": "কৃতজ্ঞতা",
   "fontCredits": "লোগো ও নামাজের নাম: Omnibus-Type-এর Grenze Gotisch। লেখা: Indian Type Foundry ও Jonny Pinhorn-এর Poppins, Indian Type Foundry-এর Hind Siliguri, Black Foundry-এর Galada, খালেদ হোসনির Amiri। সব ফন্ট SIL Open Font License 1.1-এর অধীনে ফ্রি।",
   "designInspired": "মূল ডিজাইন ফন্ট: Anthonie Van Hayu (ARToni)-এর Hidayatullah।",
-  "openSourceLicenses": "ওপেন-সোর্স লাইসেন্স"
+  "openSourceLicenses": "ওপেন-সোর্স লাইসেন্স",
+  "continueWithGoogle": "Google দিয়ে চালিয়ে যান",
+  "orDivider": "অথবা"
 }

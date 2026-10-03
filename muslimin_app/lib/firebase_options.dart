@@ -62,13 +62,14 @@ class DefaultFirebaseOptions {
     projectId: 'muslimin-app-bd',
     storageBucket: 'muslimin-app-bd.firebasestorage.app',
   );
-
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyAubnLinSNbI7SZDX_BhPgjDrErcfwt0fs',
     appId: '1:171155844004:ios:d412649afcd6cf683e2f31',
     messagingSenderId: '171155844004',
     projectId: 'muslimin-app-bd',
     storageBucket: 'muslimin-app-bd.firebasestorage.app',
+    androidClientId: '171155844004-vt3phbbsr7mp5uucfqooqhfg8g6q7abo.apps.googleusercontent.com',
+    iosClientId: '171155844004-32nhpo7i0qv54o4rhe2chnr5afci7mt3.apps.googleusercontent.com',
     iosBundleId: 'com.muslimin.muslimin',
   );
 }

@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'core/config.dart';
 import 'core/nav.dart';
 import 'core/theme/app_theme.dart';
 import 'features/masjid/masjid_screen.dart';
@@ -33,7 +34,7 @@ class _MusliminAppState extends ConsumerState<MusliminApp> {
     ref.watch(reminderSyncProvider);
 
     return MaterialApp(
-      title: 'Muslimin',
+      title: kAppName,
       debugShowCheckedModeBanner: false,
       navigatorKey: navigatorKey,
       locale: locale,

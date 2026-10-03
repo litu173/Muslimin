@@ -61,6 +61,7 @@ class Masjid {
     required this.status,
     required this.ownerUid,
     this.ownerPhone = '',
+    this.phoneVerified = true,
     this.nid = '',
     this.submitterRole = SubmitterRole.committee,
     this.locationAccuracyM = 0,
@@ -88,6 +89,9 @@ class Masjid {
   final MasjidStatus status;
   final String ownerUid;
   final String ownerPhone;
+
+  /// False for beta registrations that skipped SMS OTP.
+  final bool phoneVerified;
   final String nid;
   final SubmitterRole submitterRole;
   final double locationAccuracyM;
@@ -157,6 +161,7 @@ class Masjid {
     status: status ?? this.status,
     ownerUid: ownerUid,
     ownerPhone: ownerPhone,
+    phoneVerified: phoneVerified,
     nid: nid,
     submitterRole: submitterRole,
     locationAccuracyM: locationAccuracyM,
@@ -212,6 +217,7 @@ class Masjid {
         MasjidStatus.values.asNameMap()[m['status']] ?? MasjidStatus.pending,
     ownerUid: (m['ownerUid'] ?? '') as String,
     ownerPhone: (m['ownerPhone'] ?? '') as String,
+    phoneVerified: (m['phoneVerified'] ?? true) as bool,
     nid: (m['nid'] ?? '') as String,
     submitterRole:
         SubmitterRole.values.asNameMap()[m['submitterRole']] ??
@@ -239,6 +245,7 @@ class Masjid {
     'status': status.name,
     'ownerUid': ownerUid,
     'ownerPhone': ownerPhone,
+    'phoneVerified': phoneVerified,
     'nid': nid,
     'submitterRole': submitterRole.name,
     'locationAccuracyM': locationAccuracyM,

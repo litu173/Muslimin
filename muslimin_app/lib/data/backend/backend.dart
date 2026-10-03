@@ -31,6 +31,9 @@ abstract class Backend {
     required String password,
   });
   Future<AppUser> signIn({required String email, required String password});
+
+  /// Google sign-in. Returns null when the user closes the Google sheet.
+  Future<AppUser?> signInWithGoogle();
   Future<void> sendPasswordReset(String email);
   Future<void> sendEmailVerification();
 
@@ -44,7 +47,8 @@ abstract class Backend {
 
   /// Permanently deletes the account and its profile document (required by
   /// App Store & Play policies).
-  Future<void> deleteAccount({required String password});
+  /// [password] is null for Google-only accounts (they re-confirm with Google).
+  Future<void> deleteAccount({String? password});
   Future<void> signOut();
 
   // ---- Phone verification (masjid authorities) ----

@@ -457,11 +457,8 @@
   "deadlineLabel": "Deadline",
   "startingDateLabel": "Starting Date",
   "masjidNameBn": "Masjid Name in Bangla (optional)",
-  "welcomeTitle": "Assalamu Alaikum",
-  "welcomeBody": "Create a free account to save the masjids you follow, sync reminders across devices and register your masjid.",
   "createAccount": "Create Account",
   "signIn": "Sign In",
-  "continueAsGuest": "Continue as guest",
   "fullName": "Full Name",
   "email": "Email",
   "password": "Password",
@@ -487,8 +484,8 @@
   "errPhoneInUse": "This phone number is already linked to another account.",
   "errUserDisabled": "This account has been disabled. Please contact support.",
   "myAccount": "My Account",
-  "signInPrompt": "Sign in or create an account",
-  "signInPromptBody": "Save followed masjids and sync reminders on all your devices.",
+  "signInPrompt": "For masjid authorities",
+  "signInPromptBody": "Sign in or create an account to register and manage your masjid. Regular users don't need an account.",
   "profile": "Profile",
   "emailNotVerified": "Email not verified",
   "emailVerified": "Email verified",
@@ -540,5 +537,7 @@
   "credits": "Credits",
   "fontCredits": "Logo & prayer names: Grenze Gotisch by Omnibus-Type. Text: Poppins by Indian Type Foundry & Jonny Pinhorn, Hind Siliguri by Indian Type Foundry, Galada by Black Foundry, Amiri by Khaled Hosny. All fonts are free under the SIL Open Font License 1.1.",
   "designInspired": "Original design font: Hidayatullah by Anthonie Van Hayu (ARToni).",
-  "openSourceLicenses": "Open-source licences"
+  "openSourceLicenses": "Open-source licences",
+  "continueWithGoogle": "Continue with Google",
+  "orDivider": "or"
 }

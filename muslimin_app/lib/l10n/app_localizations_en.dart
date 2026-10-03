@@ -933,20 +933,10 @@ class L10nEn extends L10n {
   String get masjidNameBn => 'Masjid Name in Bangla (optional)';
 
   @override
-  String get welcomeTitle => 'Assalamu Alaikum';
-
-  @override
-  String get welcomeBody =>
-      'Create a free account to save the masjids you follow, sync reminders across devices and register your masjid.';
-
-  @override
   String get createAccount => 'Create Account';
 
   @override
   String get signIn => 'Sign In';
-
-  @override
-  String get continueAsGuest => 'Continue as guest';
 
   @override
   String get fullName => 'Full Name';
@@ -1033,11 +1023,11 @@ class L10nEn extends L10n {
   String get myAccount => 'My Account';
 
   @override
-  String get signInPrompt => 'Sign in or create an account';
+  String get signInPrompt => 'For masjid authorities';
 
   @override
   String get signInPromptBody =>
-      'Save followed masjids and sync reminders on all your devices.';
+      'Sign in or create an account to register and manage your masjid. Regular users don\'t need an account.';
 
   @override
   String get profile => 'Profile';
@@ -1121,4 +1111,10 @@ class L10nEn extends L10n {
 
   @override
   String get openSourceLicenses => 'Open-source licences';
+
+  @override
+  String get continueWithGoogle => 'Continue with Google';
+
+  @override
+  String get orDivider => 'or';
 }

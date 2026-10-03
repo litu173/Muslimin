@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../core/nav.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text.dart';
-import '../../core/widgets/brand.dart';
 import '../../core/widgets/buttons.dart';
 import '../../core/widgets/form_fields.dart';
-import '../../core/widgets/islamic_pattern.dart';
 import '../../core/widgets/surfaces.dart';
 import '../../l10n/app_localizations.dart';
 import '../../state/providers.dart';
@@ -20,81 +18,6 @@ Future<bool> requireSignIn(BuildContext context, WidgetRef ref) async {
   if (ref.read(backendProvider).currentUser != null) return true;
   final ok = await push<bool>(context, const SignInScreen());
   return ok == true;
-}
-
-/// Shown once after onboarding: create account, sign in, or browse as guest.
-class WelcomeScreen extends ConsumerWidget {
-  const WelcomeScreen({super.key, required this.onDone});
-
-  final VoidCallback onDone;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final t = L10n.of(context);
-    Future<void> go(Widget page) async {
-      final ok = await push<bool>(context, page);
-      if (ok == true) onDone();
-    }
-
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: SystemUiOverlayStyle.light,
-      child: Scaffold(
-        backgroundColor: AppColors.ink,
-        body: IslamicPattern(
-          child: SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.all(Gap.xl),
-              child: Column(
-                children: [
-                  const Spacer(flex: 2),
-                  Image.asset('assets/images/onboard_mosque.png', height: 170),
-                  const SizedBox(height: Gap.xl),
-                  const Wordmark(size: 44),
-                  const SizedBox(height: Gap.xl),
-                  Text(
-                    t.welcomeTitle,
-                    style: AppText.headline.copyWith(
-                      color: AppColors.goldLight,
-                    ),
-                  ),
-                  const SizedBox(height: Gap.s),
-                  Text(
-                    t.welcomeBody,
-                    textAlign: TextAlign.center,
-                    style: AppText.body.copyWith(color: AppColors.cream),
-                  ),
-                  const Spacer(flex: 3),
-                  AppButton(
-                    t.createAccount,
-                    expand: true,
-                    onPressed: () => go(const SignUpScreen()),
-                  ),
-                  const SizedBox(height: Gap.m),
-                  AppButton(
-                    t.signIn,
-                    style: AppButtonStyle.darkOutlined,
-                    expand: true,
-                    onPressed: () => go(const SignInScreen()),
-                  ),
-                  const SizedBox(height: Gap.s),
-                  TextButton(
-                    onPressed: onDone,
-                    child: Text(
-                      t.continueAsGuest,
-                      style: AppText.label.copyWith(
-                        color: AppColors.cream,
-                        decoration: TextDecoration.underline,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
 }
 
 /// Shared frame for the auth forms (same card as the registration screens).
@@ -320,6 +243,8 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
               loading: _busy,
               onPressed: _submit,
             ),
+            const OrDivider(),
+            GoogleSignInButton(onSignedIn: () => Navigator.pop(context, true)),
             if (demo) ...[
               const SizedBox(height: Gap.m),
               Text(
@@ -435,6 +360,8 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
               loading: _busy,
               onPressed: _submit,
             ),
+            const OrDivider(),
+            GoogleSignInButton(onSignedIn: () => Navigator.pop(context, true)),
             _SwitchLink(
               question: t.haveAccount,
               action: t.signIn,
@@ -536,4 +463,106 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
       ),
     );
   }
+}
+
+/// "Continue with Google" – white pill with the Google mark. Pops/finishes
+/// with `true` on success; shows a friendly error otherwise.
+class GoogleSignInButton extends ConsumerStatefulWidget {
+  const GoogleSignInButton({
+    super.key,
+    required this.onSignedIn,
+    this.dark = false,
+  });
+
+  final VoidCallback onSignedIn;
+
+  /// On dark backgrounds (Welcome) the button gets no border.
+  final bool dark;
+
+  @override
+  ConsumerState<GoogleSignInButton> createState() => _GoogleSignInButtonState();
+}
+
+class _GoogleSignInButtonState extends ConsumerState<GoogleSignInButton> {
+  bool _busy = false;
+
+  Future<void> _go() async {
+    final t = L10n.of(context);
+    setState(() => _busy = true);
+    try {
+      final u = await ref.read(backendProvider).signInWithGoogle();
+      if (u == null || !mounted) return;
+      toast(context, t.welcomeUser(u.displayName));
+      widget.onSignedIn();
+    } catch (e) {
+      if (mounted) toast(context, authErrorText(t, e));
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final t = L10n.of(context);
+    return SizedBox(
+      width: double.infinity,
+      child: Material(
+        color: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(Radii.button),
+          side: widget.dark
+              ? BorderSide.none
+              : const BorderSide(color: AppColors.divider),
+        ),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(Radii.button),
+          onTap: _busy ? null : _go,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 11),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _busy
+                    ? const SizedBox.square(
+                        dimension: 18,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      )
+                    : SvgPicture.asset(
+                        'assets/icons/google.svg',
+                        width: 18,
+                        height: 18,
+                      ),
+                const SizedBox(width: Gap.m),
+                Text(t.continueWithGoogle, style: AppText.label),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class OrDivider extends StatelessWidget {
+  const OrDivider({super.key, this.color = AppColors.muted});
+
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) => Padding(
+    padding: const EdgeInsets.symmetric(vertical: Gap.l),
+    child: Row(
+      children: [
+        Expanded(child: Divider(color: color.withValues(alpha: 0.4))),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: Gap.m),
+          child: Text(
+            L10n.of(context).orDivider,
+            style: AppText.caption.copyWith(color: color),
+          ),
+        ),
+        Expanded(child: Divider(color: color.withValues(alpha: 0.4))),
+      ],
+    ),
+  );
 }
