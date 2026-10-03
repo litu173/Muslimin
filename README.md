@@ -1,0 +1,93 @@
+# Muslimin — Masjid jamat times
+
+Free Android and iPhone app, in English and Bangla. It shows the masjids near you with each masjid's own jamat times, reminds you before jamat and shows masjid notices. Masjid authorities register their own masjid, and an admin verifies every profile before it goes public.
+
+**Website & downloads:** https://litu173.github.io/Muslimin/
+
+```
+Muslimin/
+├── muslimin_app/   Flutter app (Android, iOS, and a web build for the admin panel)
+├── firebase/       Firestore rules + indexes, Cloud Functions (push for notices)
+└── docs/           Landing page (GitHub Pages) with download links + QR code
+```
+
+## Accounts
+
+| Who | How | Can do |
+|---|---|---|
+| Guest | No sign-in | Browse nearby masjids, follow them, get reminders and notices |
+| Account | Email + password (sign up, sign in, forgot password, change password, delete account) | Same as guest, plus followed masjids and reminders are saved in the cloud and synced across phones |
+| Masjid authority | Account + phone verified by OTP + registration rules | Manage their masjid's jamat, maktab, staff, live link and notices (after approval) |
+| Super admin | `users/{uid}.role = "superAdmin"` set in the Firestore console | Approve, reject, suspend or restore masjids |
+
+Data lives in **Firebase**, project `muslimin-app-bd`, with Firestore in `asia-south1`:
+* `users/{uid}` holds name, email, phone, role, follows and FCM tokens. A user can read and write only their own document and can't change their own role.
+* `masjids/{id}` is readable by everyone once approved. Pending profiles are visible only to the owner and admins.
+* `notices/{id}` is public to read. Only the approved masjid's owner can write.
+
+The rules are in [`firebase/firestore.rules`](firebase/firestore.rules). Deploy them with:
+
+```bash
+cd firebase
+firebase deploy --only firestore
+```
+
+### One-time console steps
+1. **Authentication → Get started → enable Email/Password**. Password-reset and verification emails are sent by Firebase. You can edit the templates under *Authentication → Templates*.
+2. **Phone sign-in** (OTP for masjid authorities) and **Cloud Functions** (push notifications for notices) need the **Blaze** (pay-as-you-go) plan. Both have a free monthly allowance. After upgrading, enable *Phone* in Authentication and deploy the functions:
+   ```bash
+   cd firebase/functions && npm install
+   cd .. && firebase deploy --only functions
+   ```
+3. Make yourself admin: sign up in the app, then in *Firestore → users → your uid* set `role` to `superAdmin`.
+4. iOS push and phone auth: upload an APNs key in *Project settings → Cloud Messaging*.
+
+## Run locally
+
+```bash
+cd muslimin_app
+flutter run                        # uses the real Firebase project
+flutter run --dart-define=DEMO=true
+```
+
+`DEMO=true` uses offline sample data. In demo mode:
+* Accounts: `demo@muslimin.app` / `demo1234` (owns a masjid) and `admin@muslimin.app` / `admin1234` (super admin)
+* OTP code: `123456`
+
+## Making a release
+
+The landing page always links to `releases/latest/download/Muslimin.apk` and `Muslimin-iOS.ipa`, so publishing a new GitHub release updates the website automatically.
+
+```bash
+cd muslimin_app
+flutter build apk --release
+flutter build ios --release --no-codesign
+cd build/ios/iphoneos && mkdir -p Payload && cp -r Runner.app Payload/ && zip -qr Muslimin-iOS.ipa Payload && cd -
+cp build/app/outputs/flutter-apk/app-release.apk Muslimin.apk
+gh release create v1.0.1 Muslimin.apk build/ios/iphoneos/Muslimin-iOS.ipa --title "Muslimin v1.0.1" --notes "…"
+```
+
+* **Android signing:** `android/key.properties` and `android/app/upload-keystore.jks` exist only on the build machine and are git-ignored. **Back them up.** Without them you can't publish updates that install over the existing app.
+* **iOS:** the IPA is unsigned and is meant for sideloading (AltStore or Sideloadly). Public iPhone distribution needs an Apple Developer account and the App Store or TestFlight. Once it's live, point `IOS_URL` in `docs/index.html` to the App Store link.
+
+## Design system
+
+The tokens come from the Figma file and live in `lib/core/theme/`:
+
+| Token | Value |
+|---|---|
+| ink | `#002828` |
+| gold | `#BB8907` |
+| goldLight | `#FFC940` |
+| cream | `#F3EED5` |
+| card | `#FFFDF5` |
+| teal | `#74C5B3` |
+
+Other values:
+* Radius: 20 for cards, 7 for buttons.
+* Fonts: Poppins (Latin), Hind Siliguri (Bangla), Rakkas (wordmark and prayer names, an open-licence stand-in for "Hidayatullah DEMO").
+
+## Notes
+* Prayer times use the Karachi method with Hanafi Asr. Users can change both in Settings.
+* The Bangla hadith and ayah translations should be reviewed by a scholar.
+* Jamat reminders are local, repeating notifications, so they work offline and cover up to 5 followed masjids (the iOS limit is 64 pending notifications).

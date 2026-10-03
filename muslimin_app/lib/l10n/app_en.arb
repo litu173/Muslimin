@@ -1,0 +1,540 @@
+{
+  "@@locale": "en",
+  "appName": "Muslimin",
+  "tagline": "A day of a Muslim ummah",
+  "next": "Next",
+  "skip": "Skip",
+  "cancel": "Cancel",
+  "getStarted": "Get Started",
+  "create": "Create",
+  "update": "Update",
+  "edit": "Edit",
+  "post": "Post",
+  "save": "Save",
+  "select": "Select",
+  "retry": "Retry",
+  "close": "Close",
+  "delete": "Delete",
+  "done": "Done",
+  "viewAll": "View All",
+  "viewDetails": "View Details",
+  "dontShowAgain": "Don't Show Again",
+  "share": "Share",
+  "addNew": "Add New",
+  "now": "Now",
+  "selected": "Selected",
+  "home": "Home",
+  "more": "More",
+  "loading": "Loading…",
+  "somethingWrong": "Something went wrong. Please try again.",
+  "onb1Title": "Share Jamat Time",
+  "onb1Body": "People nearby will be able to view masjid jamat time in this app.",
+  "onb2Title": "Post Masjid Notice",
+  "onb2Body": "People can find masjid notice in this app which will help them to get involve in different occasion.",
+  "permTitle": "Allow access to continue",
+  "permBody": "Muslimin needs your location to find the masjids around you, and notifications to remind you before jamat.",
+  "permLocation": "Location",
+  "permLocationBody": "Find the nearest masjids and calculate accurate prayer times.",
+  "permNotification": "Notifications",
+  "permNotificationBody": "Jamat reminders and notices from masjids you follow.",
+  "permAllow": "Allow",
+  "permGranted": "Allowed",
+  "permOpenSettings": "Open Settings",
+  "permLocationServiceOff": "Please turn on location (GPS) on your phone.",
+  "permDeniedForever": "Permission was denied. Please enable it from Settings.",
+  "permContinue": "Continue",
+  "timeLeft": "Time left",
+  "startsIn": "Starts in",
+  "allPrayers": "All Prayers",
+  "nearestMasjid": "Nearest Masjid",
+  "noMasjidNearby": "No verified masjid found near you yet.",
+  "noMasjidNearbyHint": "Know a masjid authority? Ask them to register the masjid in Muslimin.",
+  "minWalk": "{minutes} min walk",
+  "@minWalk": {
+    "placeholders": {
+      "minutes": {
+        "type": "String"
+      }
+    }
+  },
+  "kmAway": "{km} km away",
+  "@kmAway": {
+    "placeholders": {
+      "km": {
+        "type": "String"
+      }
+    }
+  },
+  "jamatNotSet": "Jamat time not set",
+  "nextJamat": "Next jamat",
+  "notice": "Notice",
+  "notices": "Notices",
+  "noNotices": "No notices yet.",
+  "all": "All",
+  "authorityTitle": "Masjid Authorities",
+  "authorityBody": "Register your masjid & let Muslims nearby discover in this app.",
+  "yourLocation": "Your Location",
+  "locating": "Locating…",
+  "useCurrentLocation": "Use current location",
+  "searchMasjid": "Search masjid",
+  "nearbyMasjids": "Nearby Masjids",
+  "fajr": "Fajr",
+  "sunrise": "Sunrise",
+  "dhuhr": "Duhr",
+  "asr": "Asr",
+  "maghrib": "Maghrib",
+  "isha": "Isha",
+  "jumuah": "Jum'ah",
+  "forbiddenTime": "Forbidden Time",
+  "forbiddenInfo": "Salah is not offered during these times: while the sun is rising, at its zenith and while it is setting.",
+  "morning": "Morning",
+  "noon": "Noon",
+  "evening": "Evening",
+  "naflPrayers": "Nafl Prayers",
+  "tahajjud": "Tahajjud",
+  "duha": "Salatul Duha",
+  "tahajjudHadith": "Allah's Messenger (ﷺ) said, \"Our Lord, the Blessed, the Superior, comes every night down on the nearest Heaven to us when the last third of the night remains, saying: 'Is there anyone to invoke Me, so that I may respond to invocation? Is there anyone to ask Me, so that I may grant him his request? Is there anyone seeking My forgiveness, so that I may forgive him?'\"",
+  "tahajjudSource": "Sahih al-Bukhari 1145",
+  "duhaHadith1": "Abu Hurairah said: \"My friend, the Messenger of Allah (ﷺ) advised me to do three things: fasting three days of every month, praying the duha prayer, and praying the witr prayer before I sleep.\"",
+  "duhaSource1": "Sahih al-Bukhari & Muslim",
+  "duhaHadith2": "Nu'aym ibn Hammar reported: The Messenger of Allah (ﷺ) said, \"Allah Almighty says: O son of Adam, do not be frustrated to perform four cycles of prayer for me at the beginning of your day. I will suffice you for the rest of it.\"",
+  "duhaSource2": "Sunan Abi Dawud 1289",
+  "calcMethodNote": "Times are calculated for your location. Jamat times are set by each masjid.",
+  "following": "Following",
+  "follow": "Follow",
+  "tabHome": "Home",
+  "tabNotice": "Notice",
+  "tabLive": "Live",
+  "tabAbout": "About",
+  "jamatTime": "Jamat Time",
+  "maktabTime": "Maktab Time",
+  "lastUpdated": "Last updated {when}",
+  "@lastUpdated": {
+    "placeholders": {
+      "when": {
+        "type": "String"
+      }
+    }
+  },
+  "today": "Today",
+  "yesterday": "Yesterday",
+  "daysAgo": "{count} days ago",
+  "@daysAgo": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "khatib": "Khatib",
+  "imam": "Imam",
+  "muazzin": "Moazzin",
+  "contact": "Contact: {phone}",
+  "@contact": {
+    "placeholders": {
+      "phone": {
+        "type": "String"
+      }
+    }
+  },
+  "notAdded": "Not added yet",
+  "jamatReminder": "Jamat Reminder",
+  "notifyBefore": "Notify before",
+  "minsBefore": "{minutes} mins",
+  "@minsBefore": {
+    "placeholders": {
+      "minutes": {
+        "type": "String"
+      }
+    }
+  },
+  "reminderOff": "Turn off reminder",
+  "reminderSet": "You will be reminded {minutes} minutes before each jamat.",
+  "@reminderSet": {
+    "placeholders": {
+      "minutes": {
+        "type": "String"
+      }
+    }
+  },
+  "followedToast": "You are now following {name}.",
+  "@followedToast": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "directions": "Directions",
+  "liveNow": "Live now",
+  "noLive": "No live session right now",
+  "noLiveHint": "When the masjid streams a khutbah or bayan, it will appear here.",
+  "watchLive": "Watch live",
+  "liveLink": "Live stream link (YouTube / Facebook)",
+  "liveToggle": "We are live now",
+  "maktabDays": "Maktab days",
+  "weekdaysShort": "Sat,Sun,Mon,Tue,Wed,Thu,Fri",
+  "weekdaysLong": "Saturday,Sunday,Monday,Tuesday,Wednesday,Thursday,Friday",
+  "dayRange": "{from} ~ {to}",
+  "@dayRange": {
+    "placeholders": {
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      }
+    }
+  },
+  "tapToSet": "Set",
+  "khatibName": "Khatib Name",
+  "imamName": "Imam Name",
+  "muazzinName": "Moazzin Name",
+  "contactNumber": "Contact Number",
+  "updated": "Updated successfully",
+  "writeNotice": "Write Notice",
+  "selectCategory": "Select Category",
+  "deleteNoticeQ": "Delete this notice?",
+  "catJanaza": "Janaza",
+  "catRecruitment": "Recruitment",
+  "catQuran": "Quran Class",
+  "catQuranShort": "Quran",
+  "catMahfil": "Mahfil",
+  "catTalim": "Talim",
+  "catTafsir": "Tafsir",
+  "catGeneral": "General",
+  "janazaNotice": "Janaza Notice",
+  "noticeFormTitle": "{category} Notice",
+  "@noticeFormTitle": {
+    "placeholders": {
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "enterCarefully": "Please enter below information carefully.",
+  "personName": "Person Name",
+  "fathersName": "Father's Name",
+  "diedOn": "Died On",
+  "address": "Address",
+  "janazaTime": "Janaza Time",
+  "janazaDate": "Janaza Date",
+  "noticeTitle": "Title",
+  "noticeDetails": "Details",
+  "date": "Date",
+  "time": "Time",
+  "deadline": "Deadline: {date}",
+  "@deadline": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "startingDate": "Starting Date: {date}",
+  "@startingDate": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "timeAndDate": "Time & Date: {value}",
+  "@timeAndDate": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "janazaOf": "Janaza of {name}",
+  "@janazaOf": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "sonOf": "Son/Daughter of {name}",
+  "@sonOf": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "noticePosted": "Notice posted",
+  "required": "Required",
+  "userAuth": "User Authentication",
+  "userAuthBody": "Please read & agree if below meets.",
+  "rule1": "I am a masjid committee member or masjid khadem/moazzin/imam",
+  "rule2": "I am able to update masjid jamat time regularly",
+  "rule3": "I understand the benefit of this app",
+  "rule4": "I am physically inside the masjid right now",
+  "agreeAll": "Please confirm all the statements to continue.",
+  "registration": "Registration",
+  "verifyMobile": "Verify your mobile number",
+  "yourMobile": "Your Mobile Number",
+  "otpWillBeSent": "One Time Password (OTP) will be sent to this phone number for verification",
+  "getOtp": "Get OTP",
+  "invalidPhone": "Enter a valid Bangladeshi mobile number (01XXXXXXXXX).",
+  "verification": "Verification",
+  "typeOtp": "Please type the OTP code sent to your phone number",
+  "otp": "One Time Password (OTP)",
+  "didntGetOtp": "Didn't get the OTP?",
+  "resendCode": "Resend Code",
+  "resendIn": "Resend in {seconds}s",
+  "@resendIn": {
+    "placeholders": {
+      "seconds": {
+        "type": "String"
+      }
+    }
+  },
+  "verify": "Verify",
+  "invalidOtp": "The code is not correct. Please try again.",
+  "demoOtpHint": "Demo mode: use code 123456",
+  "createMasjidProfile": "Create Masjid Profile",
+  "stayInside": "Stay inside of the masjid & enter below information carefully.",
+  "masjidName": "Masjid Name",
+  "district": "District",
+  "thana": "Thana / Upazila",
+  "latLng": "Latitude & Longitude",
+  "load": "Load",
+  "reload": "Reload",
+  "stayInsideLoading": "Stay inside of the masjid during loading.",
+  "accuracy": "Accuracy ±{meters} m",
+  "@accuracy": {
+    "placeholders": {
+      "meters": {
+        "type": "String"
+      }
+    }
+  },
+  "accuracyTooLow": "Location is not accurate enough (±{meters} m). Move to an open area inside the masjid and reload.",
+  "@accuracyTooLow": {
+    "placeholders": {
+      "meters": {
+        "type": "String"
+      }
+    }
+  },
+  "loadLocationFirst": "Please load the masjid location.",
+  "nidNumber": "Your NID Number",
+  "invalidNid": "NID must be 10, 13 or 17 digits.",
+  "yourRole": "Your Role",
+  "roleCommittee": "Committee member",
+  "roleKhadem": "Khadem",
+  "roleMuazzin": "Moazzin",
+  "roleImam": "Imam",
+  "roleKhatib": "Khatib",
+  "agreeTermsPrefix": "I've read & I agree to the ",
+  "termsAndConditions": "Terms & Conditions",
+  "mustAgreeTerms": "Please agree to the Terms & Conditions.",
+  "duplicateFound": "A masjid named \"{name}\" is already registered at this location. If you are its authority, please contact support.",
+  "@duplicateFound": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "limitReached": "You can have at most {count} masjid profiles.",
+  "@limitReached": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "submittedTitle": "Submitted for review",
+  "submittedBody": "Jazakallahu khairan! Your masjid profile will be visible to everyone after our team verifies it. You will get a notification when it is approved.",
+  "backToHome": "Back to Home",
+  "termsBody": "1. Only masjid committee members, imam, khatib, moazzin or khadem may create a masjid profile.\n2. The profile must be created from inside the masjid so its location is correct.\n3. Your NID and phone number are used only for verification and are never shown publicly.\n4. Jamat times and notices must be accurate and kept up to date.\n5. Notices must be related to masjid activities. Political, commercial or hateful content is not allowed.\n6. A profile stays hidden until it is verified by the Muslimin team. Profiles with false information will be removed.",
+  "statusPending": "Pending review",
+  "statusApproved": "Approved",
+  "statusRejected": "Rejected",
+  "statusSuspended": "Suspended",
+  "pendingBanner": "This profile is waiting for verification. Only you can see it.",
+  "rejectedBanner": "This profile was not approved: {reason}",
+  "@rejectedBanner": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "myMasjids": "My Masjids",
+  "registerMasjid": "Register a Masjid",
+  "appSettings": "App Settings",
+  "faq": "FAQ",
+  "aboutApp": "About the App",
+  "shareApp": "Share this app",
+  "shareAppBody": "This app might help your family & friends as well. Please share.",
+  "shareText": "Find jamat times of masjids near you with Muslimin: {url}",
+  "@shareText": {
+    "placeholders": {
+      "url": {
+        "type": "String"
+      }
+    }
+  },
+  "language": "Language",
+  "calcMethod": "Prayer time calculation",
+  "asrMethod": "Asr calculation",
+  "hanafi": "Hanafi",
+  "shafi": "Shafi'i / Maliki / Hanbali",
+  "hijriAdjust": "Hijri date adjustment",
+  "days": "{count} days",
+  "@days": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "defaultReminder": "Default jamat reminder",
+  "signOut": "Sign out",
+  "signedInAs": "Signed in as {phone}",
+  "@signedInAs": {
+    "placeholders": {
+      "phone": {
+        "type": "String"
+      }
+    }
+  },
+  "version": "Version {v}",
+  "@version": {
+    "placeholders": {
+      "v": {
+        "type": "String"
+      }
+    }
+  },
+  "aboutBody": "Muslimin helps Muslims find the jamat times of the masjids around them. Every masjid profile is created by its own authority and verified by our team before it becomes public.",
+  "faqQ1": "Where do the jamat times come from?",
+  "faqA1": "Each masjid's authority sets and updates its own jamat times. Prayer start times are calculated for your location.",
+  "faqQ2": "Why is location mandatory?",
+  "faqA2": "Location is used to show masjids near you and to calculate accurate prayer times. It is never shared with anyone.",
+  "faqQ3": "How can I add my masjid?",
+  "faqA3": "Go to More → Register a Masjid. You must be a committee member, imam, moazzin, khatib or khadem, and you must be inside the masjid while registering.",
+  "faqQ4": "Why is my masjid not visible?",
+  "faqA4": "New profiles are verified by our team before they become public. This usually takes 1–2 days.",
+  "faqQ5": "How do jamat reminders work?",
+  "faqA5": "Open a masjid and tap the bell on Jamat Time. You will be notified 15, 30 or 45 minutes before each jamat, even when the app is closed.",
+  "notifications": "Notifications",
+  "noNotifications": "Follow masjids to see their notices here.",
+  "adminPanel": "Admin Panel",
+  "adminPending": "Pending",
+  "adminApproved": "Approved",
+  "adminRejected": "Rejected",
+  "approve": "Approve",
+  "reject": "Reject",
+  "suspend": "Suspend",
+  "restore": "Restore",
+  "rejectReason": "Reason for rejection",
+  "submittedBy": "Submitted by",
+  "phone": "Phone",
+  "nid": "NID",
+  "role": "Role",
+  "location": "Location",
+  "openInMaps": "Open in Maps",
+  "submittedOn": "Submitted on",
+  "nothingHere": "Nothing here",
+  "approvedToast": "Masjid approved",
+  "rejectedToast": "Masjid rejected",
+  "verifiedChecklist": "Before approving, call the submitter and check the location on the map.",
+  "verse1Ar": "وَاسْتَعِينُوا بِالصَّبْرِ وَالصَّلَاةِ",
+  "verse1": "And seek help in patience and prayer",
+  "verse1Ref": "Al-Baqarah 45",
+  "verse2Ar": "إِنَّ الصَّلَاةَ كَانَتْ عَلَى الْمُؤْمِنِينَ كِتَابًا مَّوْقُوتًا",
+  "verse2": "Indeed, prayer has been decreed upon the believers at specified times",
+  "verse2Ref": "An-Nisa 103",
+  "verse3Ar": "حَافِظُوا عَلَى الصَّلَوَاتِ وَالصَّلَاةِ الْوُسْطَىٰ",
+  "verse3": "Guard strictly the prayers, especially the middle prayer",
+  "verse3Ref": "Al-Baqarah 238",
+  "hijriMonths": "Muharram,Safar,Rabi al-Awwal,Rabi al-Thani,Jumada al-Ula,Jumada al-Thani,Rajab,Sha'ban,Ramadan,Shawwal,Dhul Qa'dah,Dhul Hijjah",
+  "deadlineLabel": "Deadline",
+  "startingDateLabel": "Starting Date",
+  "masjidNameBn": "Masjid Name in Bangla (optional)",
+  "welcomeTitle": "Assalamu Alaikum",
+  "welcomeBody": "Create a free account to save the masjids you follow, sync reminders across devices and register your masjid.",
+  "createAccount": "Create Account",
+  "signIn": "Sign In",
+  "continueAsGuest": "Continue as guest",
+  "fullName": "Full Name",
+  "email": "Email",
+  "password": "Password",
+  "confirmPassword": "Confirm Password",
+  "forgotPassword": "Forgot password?",
+  "noAccount": "Don't have an account?",
+  "haveAccount": "Already have an account?",
+  "signUpBody": "Create your account to follow masjids and keep your settings safe.",
+  "signInBody": "Welcome back! Sign in to continue.",
+  "resetPassword": "Reset Password",
+  "resetBody": "Enter the email you signed up with. We will send you a link to set a new password.",
+  "sendResetLink": "Send Reset Link",
+  "resetSent": "A password reset link has been sent to {email}. Please check your inbox (and spam folder).",
+  "backToSignIn": "Back to Sign In",
+  "invalidEmail": "Enter a valid email address.",
+  "passwordTooShort": "Password must be at least 6 characters.",
+  "passwordsDontMatch": "Passwords don't match.",
+  "errEmailInUse": "An account already exists with this email. Try signing in.",
+  "errInvalidCredential": "Email or password is incorrect.",
+  "errWeakPassword": "Please choose a stronger password (at least 6 characters).",
+  "errTooManyRequests": "Too many attempts. Please wait a few minutes and try again.",
+  "errNetwork": "No internet connection. Please try again.",
+  "errPhoneInUse": "This phone number is already linked to another account.",
+  "errUserDisabled": "This account has been disabled. Please contact support.",
+  "myAccount": "My Account",
+  "signInPrompt": "Sign in or create an account",
+  "signInPromptBody": "Save followed masjids and sync reminders on all your devices.",
+  "profile": "Profile",
+  "emailNotVerified": "Email not verified",
+  "emailVerified": "Email verified",
+  "resendVerification": "Send verification email",
+  "verificationSent": "Verification email sent to {email}.",
+  "iVerified": "I've verified",
+  "changePassword": "Change Password",
+  "currentPassword": "Current Password",
+  "newPassword": "New Password",
+  "passwordChanged": "Password changed successfully.",
+  "deleteAccount": "Delete Account",
+  "deleteAccountBody": "This permanently deletes your account and saved data. Masjid profiles you manage will stay but you will lose access. Enter your password to confirm.",
+  "accountDeleted": "Your account has been deleted.",
+  "phoneNumber": "Phone",
+  "notVerified": "Not verified",
+  "welcomeUser": "Welcome, {name}!",
+  "signInToRegister": "Please sign in or create an account to register a masjid.",
+  "verifyPhoneToContinue": "Verify your phone number to register a masjid.",
+  "accountCreated": "Account created! We sent a verification link to {email}.",
+  "nameRequired": "Please enter your name.",
+  "@resetSent": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "@verificationSent": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "@welcomeUser": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "@accountCreated": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "171155844004",
+    "project_id": "muslimin-app-bd",
+    "storage_bucket": "muslimin-app-bd.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:171155844004:android:56d1ee3a4498a0d93e2f31",
+        "android_client_info": {
+          "package_name": "com.muslimin.muslimin"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCslIrMD6zubAHEUAqC_8Ia4cvxd2evB6Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

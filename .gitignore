@@ -1,0 +1,11 @@
+.DS_Store
+.idea/
+.vscode/
+firebase/functions/node_modules/
+firebase/.firebase/
+firebase/*.log
+*.log
+# Release signing (never commit)
+**/key.properties
+**/*.jks
+**/*.keystore

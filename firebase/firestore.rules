@@ -1,0 +1,85 @@
+rules_version = '2';
+
+// Muslimin – Firestore security rules
+//
+// Roles
+//   * Anyone (even signed-out)  : read APPROVED masjids and their notices.
+//   * Signed-in account         : email/password; manages its own users/{uid} profile.
+//   * Account + verified phone  : create a masjid profile -> always starts as `pending`.
+//   * Masjid owner              : edit their own masjid's times/staff/live link and post notices,
+//                                 but can never change `status`, `ownerUid` or verification data.
+//   * Super admin               : users/{uid}.role == 'superAdmin' (set manually in the console),
+//                                 approves / rejects / suspends masjids.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() { return request.auth != null; }
+    function userDoc() { return get(/databases/$(database)/documents/users/$(request.auth.uid)); }
+    function isSuperAdmin() {
+      return signedIn()
+        && exists(/databases/$(database)/documents/users/$(request.auth.uid))
+        && userDoc().data.role == 'superAdmin';
+    }
+    function isOwner(masjid) { return signedIn() && masjid.ownerUid == request.auth.uid; }
+    function unchanged(keys) { return !request.resource.data.diff(resource.data).affectedKeys().hasAny(keys); }
+
+    // Account profiles: name, email, phone, followed masjids, FCM tokens.
+    match /users/{uid} {
+      function isSelf() { return signedIn() && request.auth.uid == uid; }
+      function validProfile() {
+        return request.resource.data.keys().hasOnly(
+                 ['name', 'email', 'phone', 'role', 'createdAt', 'follows', 'fcmTokens'])
+          && (!('name' in request.resource.data) || request.resource.data.name is string
+              && request.resource.data.name.size() <= 80);
+      }
+
+      allow read: if isSelf() || isSuperAdmin();
+      // Users can create their own profile but never promote themselves.
+      allow create: if isSelf() && request.resource.data.role == 'user' && validProfile();
+      allow update: if (isSelf() && unchanged(['role', 'createdAt']) && validProfile()) || isSuperAdmin();
+      allow delete: if isSelf() || isSuperAdmin();
+    }
+
+    match /masjids/{masjidId} {
+      allow read: if resource.data.status == 'approved'
+        || isOwner(resource.data)
+        || isSuperAdmin();
+
+      // Rule-set for creating a masjid profile (mirrors the in-app checks).
+      allow create: if signedIn()
+        && request.resource.data.ownerUid == request.auth.uid
+        && request.resource.data.status == 'pending'
+        && request.resource.data.ownerPhone == request.auth.token.phone_number
+        && request.resource.data.name is string
+        && request.resource.data.name.size() >= 3
+        && request.resource.data.name.size() <= 80
+        && request.resource.data.nid.matches('^[0-9]{10}$|^[0-9]{13}$|^[0-9]{17}$')
+        && request.resource.data.agreedToTerms == true
+        && request.resource.data.locationAccuracyM <= 50
+        && request.resource.data.geo.geopoint is latlng;
+
+      // Owners maintain day-to-day info; status & verification fields are locked.
+      allow update: if (isOwner(resource.data)
+          && resource.data.status in ['approved', 'pending']
+          && unchanged(['status', 'ownerUid', 'ownerPhone', 'nid', 'geo',
+                        'reviewedBy', 'reviewedAt', 'rejectionReason', 'createdAt']))
+        || isSuperAdmin();
+
+      allow delete: if isSuperAdmin();
+    }
+
+    match /notices/{noticeId} {
+      function masjid(id) { return get(/databases/$(database)/documents/masjids/$(id)).data; }
+
+      allow read: if true;
+      allow create: if signedIn()
+        && masjid(request.resource.data.masjidId).ownerUid == request.auth.uid
+        && masjid(request.resource.data.masjidId).status == 'approved'
+        && request.resource.data.title is string
+        && request.resource.data.title.size() > 0;
+      allow update, delete: if (signedIn()
+          && masjid(resource.data.masjidId).ownerUid == request.auth.uid)
+        || isSuperAdmin();
+    }
+  }
+}

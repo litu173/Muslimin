@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Muslimin – Masjid Jamat Times</title>
+  <meta name="description" content="Jamat times of the masjids near you, reminders before every jamat and masjid notices. Free for Android and iPhone, in Bangla and English." />
+  <meta property="og:title" content="Muslimin – Masjid Jamat Times" />
+  <meta property="og:description" content="Never miss a jamat at your masjid. Free for Android and iPhone." />
+  <meta property="og:image" content="https://litu173.github.io/Muslimin/assets/home-en.jpg" />
+  <meta name="theme-color" content="#002828" />
+  <link rel="icon" href="assets/mosque.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Rakkas&family=Hind+Siliguri:wght@400;500;600&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    :root {
+      --ink: #002828; --ink-deep: #011815; --gold: #BB8907; --gold-light: #FFC940;
+      --cream: #F3EED5; --card: #FFFDF5; --teal: #74C5B3;
+      --radius: 20px; --btn: 7px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: Poppins, "Hind Siliguri", system-ui, sans-serif; background: var(--cream); color: var(--ink); line-height: 1.55; overflow-x: hidden; }
+    body.bn { font-family: "Hind Siliguri", Poppins, system-ui, sans-serif; }
+    img { max-width: 100%; display: block; }
+    a { color: inherit; }
+    .wrap { max-width: 1120px; margin: 0 auto; padding: 0 16px; }
+
+    /* ---------- pattern ---------- */
+    .pattern { position: relative; background: var(--ink); color: var(--cream); overflow: hidden; }
+    .pattern::before { content: ""; position: absolute; inset: 0; opacity: .5; pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='72' height='72' viewBox='0 0 72 72'%3E%3Cg fill='none' stroke='%23FFC940' stroke-opacity='.10'%3E%3Cpath d='M36 6l6.5 13.3L56 15l-4.3 13.5L65 36l-13.3 6.5L56 57l-13.5-4.3L36 66l-6.5-13.3L15 57l4.3-14.5L6 36l13.3-6.5L15 15l14.5 4.3z'/%3E%3Ccircle cx='36' cy='36' r='6'/%3E%3C/g%3E%3C/svg%3E"); }
+
+    /* ---------- nav ---------- */
+    nav { display: flex; justify-content: space-between; align-items: center; padding: 18px 0; position: relative; z-index: 2; }
+    .logo { font-family: Rakkas, serif; font-size: 32px; color: #fff; text-decoration: none; letter-spacing: .5px; }
+    .nav-right { display: flex; gap: 10px; align-items: center; }
+    .nav-link { color: var(--cream); text-decoration: none; font-size: 14px; opacity: .85; }
+    .nav-link:hover { opacity: 1; }
+    .pill { background: transparent; border: 1px solid var(--gold-light); color: var(--gold-light); border-radius: 20px;
+      padding: 6px 16px; font: inherit; font-size: 13px; cursor: pointer; }
+
+    /* ---------- hero ---------- */
+    .hero-grid { display: grid; grid-template-columns: 1.15fr .85fr; gap: 48px; align-items: center; padding: 40px 0 88px; position: relative; z-index: 1; }
+    .eyebrow { display: inline-flex; gap: 8px; align-items: center; color: var(--gold-light); font-size: 13px; font-weight: 500;
+      border: 1px solid rgba(255,201,64,.35); border-radius: 20px; padding: 4px 12px; margin-bottom: 18px; }
+    h1 { font-size: clamp(32px, 5.2vw, 54px); line-height: 1.1; margin-bottom: 18px; font-weight: 700; }
+    h1 span { color: var(--gold-light); }
+    .lead { font-size: 17px; opacity: .9; margin-bottom: 30px; max-width: 540px; }
+    .store-btns { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+    .store { display: inline-flex; align-items: center; gap: 12px; padding: 12px 20px; border-radius: 12px; text-decoration: none;
+      min-width: 200px; transition: transform .15s ease, box-shadow .15s ease; }
+    .store:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,.25); }
+    .store svg { width: 28px; height: 28px; flex: none; }
+    .store small { display: block; font-size: 11px; opacity: .85; line-height: 1.2; }
+    .store b { display: block; font-size: 16px; font-weight: 600; line-height: 1.25; }
+    .store.android { background: var(--gold); color: #fff; }
+    .store.ios { background: transparent; color: var(--gold-light); border: 1px solid var(--gold-light); }
+    .fine { font-size: 12.5px; opacity: .7; }
+    .fine a { color: var(--gold-light); }
+
+    .phone { justify-self: center; position: relative; width: min(300px, 80vw); }
+    .phone .frame { border-radius: 38px; padding: 10px; background: #0c0c0c; box-shadow: 0 30px 60px rgba(0,0,0,.45), 0 0 0 1px rgba(255,255,255,.06); }
+    .phone img { border-radius: 30px; }
+    .qr-float { position: absolute; left: -110px; bottom: 30px; background: var(--card); color: var(--ink); border-radius: 18px;
+      padding: 14px; width: 168px; text-align: center; box-shadow: 0 16px 40px rgba(0,0,0,.35); }
+    .qr-float p { font-size: 12px; font-weight: 500; margin-top: 8px; line-height: 1.3; }
+    .qr-box { background: #fff; border-radius: 10px; padding: 8px; display: flex; justify-content: center; }
+    .qr-box img, .qr-box canvas { width: 124px !important; height: 124px !important; }
+
+    /* ---------- sections ---------- */
+    section { padding: 80px 0; }
+    .section-title { text-align: center; max-width: 640px; margin: 0 auto 40px; }
+    .section-title h2 { font-size: clamp(26px, 3.6vw, 36px); line-height: 1.2; margin-bottom: 10px; }
+    .section-title p { opacity: .8; }
+    .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .card { background: var(--card); border-radius: var(--radius); padding: 26px; }
+    .icon { width: 48px; height: 48px; border-radius: 50%; background: var(--cream); display: grid; place-items: center; margin-bottom: 16px; }
+    .icon svg { width: 24px; height: 24px; stroke: var(--gold); fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    .card h3 { font-size: 17px; font-weight: 600; margin-bottom: 6px; }
+    .card p { font-size: 14.5px; opacity: .8; }
+
+    .shots { display: flex; gap: 22px; justify-content: center; flex-wrap: wrap; }
+    .shot { width: 230px; text-align: center; }
+    .shot .frame { border-radius: 30px; padding: 8px; background: #0c0c0c; box-shadow: 0 16px 36px rgba(0,40,40,.25); }
+    .shot img { border-radius: 23px; }
+    .shot span { display: block; margin-top: 12px; font-size: 14px; font-weight: 500; }
+
+    /* ---------- download ---------- */
+    .download { border-radius: 28px; padding: 44px; display: grid; grid-template-columns: 1fr auto; gap: 40px; align-items: center; }
+    .download h2 { font-size: clamp(26px, 3.4vw, 34px); margin-bottom: 10px; }
+    .steps { margin: 22px 0 26px; display: grid; gap: 10px; }
+    .step { display: flex; gap: 12px; align-items: flex-start; font-size: 14.5px; }
+    .step i { font-style: normal; flex: none; width: 26px; height: 26px; border-radius: 50%; background: var(--gold); color: #fff;
+      display: grid; place-items: center; font-size: 13px; font-weight: 600; }
+    .qr-big { background: var(--card); color: var(--ink); border-radius: 22px; padding: 22px; text-align: center; width: 260px; }
+    .qr-big .qr-box img, .qr-big .qr-box canvas { width: 196px !important; height: 196px !important; }
+    .qr-big h3 { font-size: 16px; margin-top: 12px; }
+    .qr-big p { font-size: 13px; opacity: .75; }
+
+    .tabs { display: inline-flex; background: rgba(255,255,255,.08); border-radius: 30px; padding: 4px; margin-bottom: 4px; }
+    .tabs button { background: none; border: 0; color: var(--cream); font: inherit; font-size: 14px; padding: 8px 18px; border-radius: 26px; cursor: pointer; }
+    .tabs button.on { background: var(--gold); color: #fff; }
+
+    /* ---------- authority + faq ---------- */
+    .authority { background: var(--gold); color: #fff; border-radius: 24px; padding: 34px; display: flex; justify-content: space-between;
+      align-items: center; gap: 24px; flex-wrap: wrap; }
+    .authority h3 { font-size: 22px; margin-bottom: 6px; }
+    .authority ul { margin: 12px 0 0 18px; font-size: 14.5px; opacity: .95; }
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 22px; border-radius: var(--btn);
+      font-weight: 500; font-size: 15px; text-decoration: none; }
+    .btn.cream { background: var(--cream); color: var(--gold); }
+
+    details { background: var(--card); border-radius: 16px; padding: 18px 22px; margin-bottom: 10px; }
+    summary { cursor: pointer; font-weight: 500; list-style: none; display: flex; justify-content: space-between; gap: 12px; }
+    summary::after { content: "+"; color: var(--gold); font-size: 20px; line-height: 1; }
+    details[open] summary::after { content: "–"; }
+    details p { margin-top: 10px; opacity: .85; font-size: 14.5px; }
+
+    footer { padding: 36px 0 44px; font-size: 13.5px; }
+    footer .row { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; align-items: center; position: relative; z-index: 1; }
+    footer a { color: var(--gold-light); text-decoration: none; margin-left: 16px; }
+
+    @media (max-width: 880px) {
+      .hero-grid { grid-template-columns: 1fr; padding: 16px 0 64px; gap: 40px; }
+      .qr-float { display: none; }
+      .grid3 { grid-template-columns: 1fr; }
+      .download { grid-template-columns: 1fr; padding: 28px 20px; }
+      .qr-big { justify-self: center; }
+      .nav-link { display: none; }
+      .store { flex: 1 1 100%; }
+      section { padding: 60px 0; }
+    }
+  </style>
+</head>
+<body>
+  <!-- ============ HERO ============ -->
+  <header class="pattern">
+    <div class="wrap">
+      <nav>
+        <a class="logo" href="#">Muslimin</a>
+        <div class="nav-right">
+          <a class="nav-link" href="#features" data-i18n="navFeatures">Features</a>
+          <a class="nav-link" href="#download" data-i18n="navDownload">Download</a>
+          <button class="pill" id="langBtn">বাংলা</button>
+        </div>
+      </nav>
+      <div class="hero-grid">
+        <div>
+          <div class="eyebrow">☪ <span data-i18n="eyebrow">Free · Bangla & English</span></div>
+          <h1 data-i18n="h1">Never miss a <span>jamat</span> at your masjid</h1>
+          <p class="lead" data-i18n="lead">See the jamat times of the masjids around you, get a reminder before every jamat and stay up to date with masjid notices — janaza, talim, Quran classes and more.</p>
+          <div class="store-btns">
+            <a class="store android" id="apkBtn" href="#">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.6 9.48l1.84-3.18a.38.38 0 10-.66-.38l-1.86 3.22a11.4 11.4 0 00-9.84 0L5.22 5.92a.38.38 0 10-.66.38L6.4 9.48A10.8 10.8 0 001 18h22a10.8 10.8 0 00-5.4-8.52zM7 15.25a1.25 1.25 0 110-2.5 1.25 1.25 0 010 2.5zm10 0a1.25 1.25 0 110-2.5 1.25 1.25 0 010 2.5z"/></svg>
+              <span><small data-i18n="getFor">Download for</small><b>Android</b></span>
+            </a>
+            <a class="store ios" id="iosBtn" href="#">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.37 12.6c-.02-2.28 1.86-3.37 1.94-3.43-1.06-1.55-2.7-1.76-3.28-1.78-1.4-.14-2.73.82-3.44.82-.71 0-1.8-.8-2.96-.78-1.52.02-2.93.89-3.71 2.25-1.58 2.75-.4 6.82 1.14 9.05.75 1.09 1.65 2.32 2.83 2.28 1.13-.05 1.56-.74 2.93-.74 1.37 0 1.75.74 2.95.71 1.22-.02 1.99-1.11 2.74-2.21.86-1.27 1.22-2.49 1.24-2.56-.03-.01-2.37-.91-2.38-3.61zM14.12 5.9c.62-.76 1.05-1.81.93-2.86-.9.04-1.99.6-2.64 1.36-.58.67-1.09 1.74-.95 2.77 1 .08 2.03-.51 2.66-1.27z"/></svg>
+              <span><small data-i18n="getFor">Download for</small><b>iPhone</b></span>
+            </a>
+          </div>
+          <p class="fine"><span id="verText">Latest version</span> · <a href="#install" data-i18n="howInstall">How to install</a></p>
+        </div>
+        <div class="phone">
+          <div class="frame"><img id="heroShot" src="assets/home-en.jpg" alt="Muslimin home screen showing the current prayer and nearest masjids" /></div>
+          <div class="qr-float">
+            <div class="qr-box" id="qrSmall"></div>
+            <p data-i18n="scanShort">Scan with your phone camera to download</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============ FEATURES ============ -->
+  <section id="features">
+    <div class="wrap">
+      <div class="section-title">
+        <h2 data-i18n="featTitle">Everything for your daily salah</h2>
+        <p data-i18n="featSub">Built with masjid committees, for the people who pray there.</p>
+      </div>
+      <div class="grid3">
+        <div class="card">
+          <div class="icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
+          <h3 data-i18n="f1">Jamat times nearby</h3>
+          <p data-i18n="f1d">Masjids around you sorted by walking time, each with its own jamat time — set by the masjid itself.</p>
+        </div>
+        <div class="card">
+          <div class="icon"><svg viewBox="0 0 24 24"><path d="M6 8a6 6 0 1112 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 003.4 0"/></svg></div>
+          <h3 data-i18n="f2">Jamat reminders</h3>
+          <p data-i18n="f2d">Follow your masjid and get notified 15, 30 or 45 minutes before every jamat — even when the app is closed.</p>
+        </div>
+        <div class="card">
+          <div class="icon"><svg viewBox="0 0 24 24"><path d="M3 11l18-8-8 18-2-8-8-2z"/></svg></div>
+          <h3 data-i18n="f3">Masjid notices</h3>
+          <p data-i18n="f3d">Janaza, talim, Quran classes, mahfil and recruitment notices from verified masjids only.</p>
+        </div>
+        <div class="card">
+          <div class="icon"><svg viewBox="0 0 24 24"><path d="M12 3a6 6 0 009 9 9 9 0 11-9-9z"/></svg></div>
+          <h3 data-i18n="f4">Prayer & forbidden times</h3>
+          <p data-i18n="f4d">Accurate waqt for your location with a live countdown, forbidden times, Tahajjud and Duha.</p>
+        </div>
+        <div class="card">
+          <div class="icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0116 0"/></svg></div>
+          <h3 data-i18n="f5">Your account, synced</h3>
+          <p data-i18n="f5d">Create a free account to keep followed masjids and reminders on every phone. Reset your password anytime.</p>
+        </div>
+        <div class="card">
+          <div class="icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg></div>
+          <h3 data-i18n="f6">Verified masjids</h3>
+          <p data-i18n="f6d">Every masjid profile is created from inside the masjid and checked by our team before it goes public.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SCREENS ============ -->
+  <section style="padding-top:0">
+    <div class="wrap">
+      <div class="section-title">
+        <h2 data-i18n="shotsTitle">Simple, calm and beautiful</h2>
+        <p data-i18n="shotsSub">Designed in the colours of the masjid — and fully in Bangla.</p>
+      </div>
+      <div class="shots">
+        <div class="shot"><div class="frame"><img src="assets/home-en.jpg" alt="Home screen" loading="lazy" /></div><span data-i18n="s1">Today's prayers</span></div>
+        <div class="shot"><div class="frame"><img src="assets/masjid.jpg" alt="Masjid profile with jamat times" loading="lazy" /></div><span data-i18n="s2">Masjid jamat times</span></div>
+        <div class="shot"><div class="frame"><img src="assets/home-bn.jpg" alt="Home screen in Bangla" loading="lazy" /></div><span data-i18n="s3">সম্পূর্ণ বাংলায়</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ DOWNLOAD ============ -->
+  <section id="download" style="padding-top:0">
+    <div class="wrap">
+      <div class="download pattern">
+        <div style="position:relative; z-index:1">
+          <h2 data-i18n="dlTitle">Download Muslimin</h2>
+          <p style="opacity:.85" data-i18n="dlSub">Free. No ads. Works on Android 6+ and iPhone (iOS 15+).</p>
+          <div id="install" style="margin-top:22px">
+            <div class="tabs" role="tablist">
+              <button class="on" data-tab="android">Android</button>
+              <button data-tab="ios">iPhone</button>
+            </div>
+            <div class="steps" data-panel="android">
+              <div class="step"><i>1</i><span data-i18n="a1">Tap “Download for Android” or scan the QR code.</span></div>
+              <div class="step"><i>2</i><span data-i18n="a2">Open the downloaded Muslimin.apk.</span></div>
+              <div class="step"><i>3</i><span data-i18n="a3">If asked, allow “Install unknown apps” for your browser, then tap Install.</span></div>
+              <div class="step"><i>4</i><span data-i18n="a4">Open Muslimin and allow location & notifications.</span></div>
+            </div>
+            <div class="steps" data-panel="ios" hidden>
+              <div class="step"><i>1</i><span data-i18n="i1">The App Store version is on its way, in sha Allah.</span></div>
+              <div class="step"><i>2</i><span data-i18n="i2">Until then, download Muslimin-iOS.ipa and install it with AltStore or Sideloadly from your computer.</span></div>
+              <div class="step"><i>3</i><span data-i18n="i3">On the iPhone go to Settings → General → VPN & Device Management and trust the developer.</span></div>
+            </div>
+          </div>
+          <div class="store-btns">
+            <a class="store android" id="apkBtn2" href="#">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <span><small>Android</small><b>Muslimin.apk</b></span>
+            </a>
+            <a class="store ios" id="iosBtn2" href="#">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <span><small>iPhone</small><b>Muslimin-iOS.ipa</b></span>
+            </a>
+          </div>
+          <p class="fine"><span data-i18n="allReleases">All versions & release notes:</span> <a id="releasesLink" href="#">GitHub Releases</a></p>
+        </div>
+        <div class="qr-big">
+          <div class="qr-box" id="qrBig"></div>
+          <h3 data-i18n="scan">Scan to download</h3>
+          <p data-i18n="scanSub">Open your phone camera and point it at the code. Android downloads the app, iPhone opens the install guide.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ AUTHORITY ============ -->
+  <section style="padding-top:0">
+    <div class="wrap">
+      <div class="authority">
+        <div>
+          <h3 data-i18n="authTitle">Are you a masjid authority?</h3>
+          <p data-i18n="authSub">Register your masjid in the app so Muslims nearby can find your jamat times and notices.</p>
+          <ul>
+            <li data-i18n="r1">Committee members, imam, khatib, moazzin or khadem can register</li>
+            <li data-i18n="r2">Register from inside the masjid with a verified phone number</li>
+            <li data-i18n="r3">Your masjid goes live after our team verifies it</li>
+          </ul>
+        </div>
+        <a class="btn cream" href="#download" data-i18n="authBtn">Get the app</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FAQ ============ -->
+  <section style="padding-top:0">
+    <div class="wrap" style="max-width:760px">
+      <div class="section-title"><h2 data-i18n="faqTitle">Questions</h2></div>
+      <details><summary data-i18n="q1">Is Muslimin free?</summary><p data-i18n="qa1">Yes. Muslimin is completely free, with no ads.</p></details>
+      <details><summary data-i18n="q2">Do I need an account?</summary><p data-i18n="qa2">No — you can browse as a guest. A free account keeps your followed masjids and reminders safe and synced across phones. Masjid authorities need an account to register a masjid.</p></details>
+      <details><summary data-i18n="q3">I forgot my password.</summary><p data-i18n="qa3">On the Sign In screen tap “Forgot password?”, enter your email and we will send you a reset link.</p></details>
+      <details><summary data-i18n="q4">Why does the app need my location?</summary><p data-i18n="qa4">To show the masjids near you and calculate accurate prayer times. Your location stays on your phone.</p></details>
+      <details><summary data-i18n="q5">Android says the app is from an unknown source.</summary><p data-i18n="qa5">That is normal for apps downloaded outside the Play Store. The APK is signed by us and published on our official GitHub page.</p></details>
+    </div>
+  </section>
+
+  <footer class="pattern">
+    <div class="wrap row">
+      <div><span class="logo" style="font-size:24px">Muslimin</span> <span style="opacity:.7">© <span id="yr"></span></span></div>
+      <div><a href="privacy.html" data-i18n="privacy">Privacy Policy</a><a href="https://github.com/litu173/Muslimin">GitHub</a></div>
+    </div>
+  </footer>
+
+  <script>
+    // ---- Download links (GitHub Releases "latest" always points to the newest build) ----
+    const REPO = "litu173/Muslimin";
+    const ANDROID_URL = `https://github.com/${REPO}/releases/latest/download/Muslimin.apk`;
+    const IOS_URL = `https://github.com/${REPO}/releases/latest/download/Muslimin-iOS.ipa`;
+    const PAGE_URL = "https://litu173.github.io/Muslimin/";
+    const QR_URL = PAGE_URL + "?get=1";
+
+    for (const id of ["apkBtn", "apkBtn2"]) document.getElementById(id).href = ANDROID_URL;
+    document.getElementById("iosBtn").href = "#install";
+    document.getElementById("iosBtn").addEventListener("click", () => selectTab("ios"));
+    document.getElementById("iosBtn2").href = IOS_URL;
+    document.getElementById("releasesLink").href = `https://github.com/${REPO}/releases`;
+    document.getElementById("yr").textContent = new Date().getFullYear();
+
+    // QR code → this page with ?get=1, which sends phones straight to the right download.
+    if (window.QRCode) {
+      new QRCode(document.getElementById("qrSmall"), { text: QR_URL, width: 256, height: 256, colorDark: "#002828", colorLight: "#ffffff" });
+      new QRCode(document.getElementById("qrBig"), { text: QR_URL, width: 400, height: 400, colorDark: "#002828", colorLight: "#ffffff" });
+    }
+    const ua = navigator.userAgent;
+    if (new URLSearchParams(location.search).has("get")) {
+      if (/android/i.test(ua)) location.href = ANDROID_URL;
+      else if (/iphone|ipad|ipod/i.test(ua)) { selectTab("ios"); location.hash = "#install"; }
+    }
+    if (/iphone|ipad|ipod/i.test(ua)) selectTab("ios");
+
+    // Show the latest version number from GitHub.
+    fetch(`https://api.github.com/repos/${REPO}/releases/latest`).then(r => r.ok ? r.json() : null).then(r => {
+      if (r && r.tag_name) document.getElementById("verText").textContent = (isBn ? "সর্বশেষ ভার্সন " : "Latest version ") + r.tag_name;
+    }).catch(() => {});
+
+    function selectTab(name) {
+      document.querySelectorAll(".tabs button").forEach(b => b.classList.toggle("on", b.dataset.tab === name));
+      document.querySelectorAll("[data-panel]").forEach(p => p.hidden = p.dataset.panel !== name);
+    }
+    document.querySelectorAll(".tabs button").forEach(b => b.addEventListener("click", () => selectTab(b.dataset.tab)));
+
+    // ---- Bangla / English ----
+    const bn = {
+      navFeatures: "ফিচার", navDownload: "ডাউনলোড", eyebrow: "ফ্রি · বাংলা ও ইংরেজি",
+      h1: "আপনার মসজিদের <span>জামাত</span> আর মিস নয়",
+      lead: "আশেপাশের মসজিদের জামাতের সময় দেখুন, প্রতিটি জামাতের আগে রিমাইন্ডার পান এবং মসজিদের নোটিশ জানুন — জানাজা, তালিম, কুরআন ক্লাসসহ আরও অনেক কিছু।",
+      getFor: "ডাউনলোড করুন", howInstall: "কীভাবে ইনস্টল করবেন", scanShort: "ফোনের ক্যামেরা দিয়ে স্ক্যান করে ডাউনলোড করুন",
+      featTitle: "প্রতিদিনের নামাজের সবকিছু", featSub: "মসজিদ কমিটির সাথে মিলে, মুসল্লিদের জন্য তৈরি।",
+      f1: "কাছের মসজিদের জামাত", f1d: "হাঁটার দূরত্ব অনুযায়ী সাজানো মসজিদ, প্রতিটির নিজস্ব জামাতের সময় — মসজিদ নিজেই দেয়।",
+      f2: "জামাত রিমাইন্ডার", f2d: "মসজিদ ফলো করুন, প্রতিটি জামাতের ১৫, ৩০ বা ৪৫ মিনিট আগে নোটিফিকেশন পান — অ্যাপ বন্ধ থাকলেও।",
+      f3: "মসজিদের নোটিশ", f3d: "শুধু যাচাইকৃত মসজিদ থেকে জানাজা, তালিম, কুরআন ক্লাস, মাহফিল ও নিয়োগ বিজ্ঞপ্তি।",
+      f4: "নামাজ ও নিষিদ্ধ সময়", f4d: "আপনার লোকেশন অনুযায়ী সঠিক ওয়াক্ত, লাইভ কাউন্টডাউন, নিষিদ্ধ সময়, তাহাজ্জুদ ও দুহা।",
+      f5: "আপনার অ্যাকাউন্ট, সিঙ্কড", f5d: "ফ্রি অ্যাকাউন্ট খুলুন — ফলো করা মসজিদ ও রিমাইন্ডার সব ফোনে থাকবে। যেকোনো সময় পাসওয়ার্ড রিসেট করুন।",
+      f6: "যাচাইকৃত মসজিদ", f6d: "প্রতিটি মসজিদ প্রোফাইল মসজিদের ভেতর থেকে তৈরি হয় এবং প্রকাশের আগে আমাদের টিম যাচাই করে।",
+      shotsTitle: "সহজ, শান্ত ও সুন্দর", shotsSub: "মসজিদের রঙে ডিজাইন — সম্পূর্ণ বাংলায়।",
+      s1: "আজকের নামাজ", s2: "মসজিদের জামাতের সময়", s3: "সম্পূর্ণ বাংলায়",
+      dlTitle: "মুসলিমীন ডাউনলোড করুন", dlSub: "ফ্রি। কোনো বিজ্ঞাপন নেই। অ্যান্ড্রয়েড ৬+ ও আইফোন (iOS ১৫+)।",
+      a1: "“Download for Android” চাপুন অথবা QR কোড স্ক্যান করুন।", a2: "ডাউনলোড হওয়া Muslimin.apk খুলুন।",
+      a3: "চাইলে ব্রাউজারের জন্য “Install unknown apps” চালু করে Install চাপুন।", a4: "মুসলিমীন খুলুন এবং লোকেশন ও নোটিফিকেশনের অনুমতি দিন।",
+      i1: "অ্যাপ স্টোর ভার্সন শীঘ্রই আসছে, ইনশাআল্লাহ।", i2: "ততদিন Muslimin-iOS.ipa ডাউনলোড করে কম্পিউটার থেকে AltStore বা Sideloadly দিয়ে ইনস্টল করুন।",
+      i3: "আইফোনে Settings → General → VPN & Device Management-এ গিয়ে ডেভেলপারকে trust করুন।",
+      allReleases: "সব ভার্সন ও রিলিজ নোট:", scan: "স্ক্যান করে ডাউনলোড", scanSub: "ফোনের ক্যামেরা খুলে কোডের দিকে ধরুন। অ্যান্ড্রয়েডে অ্যাপ ডাউনলোড হবে, আইফোনে ইনস্টল গাইড খুলবে।",
+      authTitle: "আপনি কি মসজিদ কর্তৃপক্ষ?", authSub: "অ্যাপে আপনার মসজিদ নিবন্ধন করুন, যাতে আশেপাশের মুসলিমরা জামাতের সময় ও নোটিশ পান।",
+      r1: "কমিটির সদস্য, ইমাম, খতিব, মুয়াজ্জিন বা খাদেম নিবন্ধন করতে পারবেন", r2: "যাচাইকৃত ফোন নম্বর দিয়ে মসজিদের ভেতর থেকে নিবন্ধন করুন", r3: "আমাদের টিম যাচাই করার পর মসজিদ প্রকাশ হবে",
+      authBtn: "অ্যাপ নিন", faqTitle: "জিজ্ঞাসা",
+      q1: "মুসলিমীন কি ফ্রি?", qa1: "হ্যাঁ। মুসলিমীন সম্পূর্ণ ফ্রি, কোনো বিজ্ঞাপন নেই।",
+      q2: "অ্যাকাউন্ট লাগবে কি?", qa2: "না — অতিথি হিসেবেও ব্যবহার করা যায়। ফ্রি অ্যাকাউন্ট থাকলে ফলো করা মসজিদ ও রিমাইন্ডার সব ফোনে সংরক্ষিত থাকে। মসজিদ নিবন্ধনের জন্য অ্যাকাউন্ট লাগবে।",
+      q3: "পাসওয়ার্ড ভুলে গেছি।", qa3: "সাইন ইন স্ক্রিনে “পাসওয়ার্ড ভুলে গেছেন?” চাপুন, ইমেইল দিন — রিসেট লিংক পাঠানো হবে।",
+      q4: "অ্যাপের লোকেশন কেন লাগে?", qa4: "কাছের মসজিদ দেখাতে ও সঠিক নামাজের সময় হিসাব করতে। আপনার লোকেশন ফোনেই থাকে।",
+      q5: "অ্যান্ড্রয়েড বলছে অ্যাপটি অজানা উৎস থেকে।", qa5: "প্লে স্টোরের বাইরে থেকে ডাউনলোড করলে এটা স্বাভাবিক। APK আমাদের সাইন করা এবং অফিসিয়াল GitHub পেজে প্রকাশিত।",
+      privacy: "প্রাইভেসি পলিসি"
+    };
+    const en = {};
+    document.querySelectorAll("[data-i18n]").forEach(el => en[el.dataset.i18n] = el.innerHTML);
+    let isBn = false;
+    function setLang(b) {
+      isBn = b;
+      const dict = b ? bn : en;
+      document.querySelectorAll("[data-i18n]").forEach(el => { if (dict[el.dataset.i18n]) el.innerHTML = dict[el.dataset.i18n]; });
+      document.documentElement.lang = b ? "bn" : "en";
+      document.body.classList.toggle("bn", b);
+      document.getElementById("langBtn").textContent = b ? "English" : "বাংলা";
+      document.getElementById("heroShot").src = b ? "assets/home-bn.jpg" : "assets/home-en.jpg";
+      try { localStorage.setItem("lang", b ? "bn" : "en"); } catch (e) {}
+    }
+    document.getElementById("langBtn").onclick = () => setLang(!isBn);
+    let saved = null;
+    try { saved = localStorage.getItem("lang"); } catch (e) {}
+    if (saved === "bn" || (!saved && (navigator.language || "").startsWith("bn"))) setLang(true);
+  </script>
+</body>
+</html>
