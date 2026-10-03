@@ -14,6 +14,7 @@ import '../../core/utils/format.dart';
 import '../../data/models/prayer.dart';
 import '../../l10n/app_localizations.dart';
 import '../../state/providers.dart';
+import '../auth/welcome_screen.dart';
 import '../permissions/permission_gate.dart';
 
 class OnboardingScreen extends ConsumerStatefulWidget {
@@ -29,7 +30,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
 
   void _finish() {
     ref.read(prefsProvider).onboardingDone = true;
-    pushReplacement(context, const PermissionGate());
+    pushReplacement(context, const AuthGate(child: PermissionGate()));
   }
 
   @override

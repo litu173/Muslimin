@@ -417,6 +417,25 @@ class DemoBackend implements Backend {
   }
 
   @override
+  Future<void> updateInfo(
+    String id, {
+    required String name,
+    required String nameBn,
+    required String district,
+    required String thana,
+    required String address,
+  }) async => _patch(
+    id,
+    (m) => m.copyWith(
+      name: name,
+      nameBn: nameBn,
+      district: district,
+      thana: thana,
+      address: address,
+    ),
+  );
+
+  @override
   Future<void> updateJamat(String id, Map<Prayer, HM> jamat) async => _patch(
     id,
     (m) => m.copyWith(jamat: jamat, jamatUpdatedAt: DateTime.now()),

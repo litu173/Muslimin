@@ -77,6 +77,16 @@ abstract class Backend {
 
   /// Creates a masjid profile in `pending` state and returns its id.
   Future<String> createMasjid(Masjid draft);
+
+  /// Name, Bangla name and address details given at registration.
+  Future<void> updateInfo(
+    String id, {
+    required String name,
+    required String nameBn,
+    required String district,
+    required String thana,
+    required String address,
+  });
   Future<void> updateJamat(String id, Map<Prayer, HM> jamat);
   Future<void> updateMaktab(String id, Maktab maktab);
   Future<void> updateStaff(String id, Map<StaffRole, StaffMember> staff);

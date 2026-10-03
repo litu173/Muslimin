@@ -9,6 +9,7 @@ import '../../core/widgets/brand.dart';
 import '../../l10n/app_localizations.dart';
 import '../../services/notification_service.dart';
 import '../../state/providers.dart';
+import '../auth/welcome_screen.dart';
 import '../onboarding/onboarding_screen.dart';
 import '../permissions/permission_gate.dart';
 
@@ -57,7 +58,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
       PageRouteBuilder(
         transitionDuration: const Duration(milliseconds: 500),
         pageBuilder: (_, _, _) => prefs.onboardingDone
-            ? const PermissionGate()
+            ? const AuthGate(child: PermissionGate())
             : const OnboardingScreen(),
         transitionsBuilder: (_, a, _, child) =>
             FadeTransition(opacity: a, child: child),

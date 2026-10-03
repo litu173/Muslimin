@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/nav.dart';
+import '../../../core/utils/live_link.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/app_text.dart';
@@ -97,10 +97,7 @@ class _MasjidLiveTabState extends ConsumerState<MasjidLiveTab> {
                 AppButton(
                   t.watchLive,
                   icon: Icons.play_arrow_rounded,
-                  onPressed: () => launchUrl(
-                    Uri.parse(m.liveUrl!),
-                    mode: LaunchMode.externalApplication,
-                  ),
+                  onPressed: () => openLiveStream(m.liveUrl!),
                 ),
               ],
             ),

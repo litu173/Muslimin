@@ -1158,4 +1158,36 @@ class L10nEn extends L10n {
 
   @override
   String get selectAll => 'Select all';
+
+  @override
+  String get welcomeTitle => 'Assalamu Alaikum';
+
+  @override
+  String get welcomeBody =>
+      'Sign in to follow your masjids, get jamat reminders and keep everything synced across your phones.';
+
+  @override
+  String get continueAsGuest => 'Continue as guest';
+
+  @override
+  String get editMasjidInfo => 'Edit Masjid Info';
+
+  @override
+  String get editMasjidInfoBody =>
+      'Update the details shown on your masjid profile.';
+
+  @override
+  String get followedMasjids => 'Followed Masjids';
+
+  @override
+  String get noFollowed => 'You are not following any masjid yet.';
+
+  @override
+  String get noFollowedHint =>
+      'Open a masjid and tap Follow to see it here and get its notices.';
+
+  @override
+  String reminderBadge(String minutes) {
+    return 'Reminder $minutes min';
+  }
 }

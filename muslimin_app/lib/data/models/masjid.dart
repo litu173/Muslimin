@@ -137,6 +137,7 @@ class Masjid {
 
   Masjid copyWith({
     String? name,
+    String? nameBn,
     String? address,
     String? district,
     String? thana,
@@ -152,7 +153,7 @@ class Masjid {
   }) => Masjid(
     id: id,
     name: name ?? this.name,
-    nameBn: nameBn,
+    nameBn: nameBn ?? this.nameBn,
     address: address ?? this.address,
     district: district ?? this.district,
     thana: thana ?? this.thana,

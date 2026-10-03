@@ -111,7 +111,9 @@ class FirebaseBackend implements Backend {
 
   @override
   Stream<AppUser?> authState() async* {
-    yield _current;
+    // A stored session is still being restored: wait for it instead of
+    // briefly reporting "signed out".
+    if (!(_auth.currentUser != null && _current == null)) yield _current;
     yield* _users.stream;
   }
 
@@ -425,6 +427,23 @@ class FirebaseBackend implements Backend {
     });
     return ref.id;
   }
+
+  @override
+  Future<void> updateInfo(
+    String id, {
+    required String name,
+    required String nameBn,
+    required String district,
+    required String thana,
+    required String address,
+  }) => _masjids.doc(id).update({
+    'name': name,
+    'nameLower': name.toLowerCase(),
+    'nameBn': nameBn,
+    'district': district,
+    'thana': thana,
+    'address': address,
+  });
 
   @override
   Future<void> updateJamat(String id, Map<Prayer, HM> jamat) =>

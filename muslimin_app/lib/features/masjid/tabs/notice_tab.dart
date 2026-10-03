@@ -14,7 +14,6 @@ import '../../../l10n/app_localizations.dart';
 import '../../../state/providers.dart';
 import '../../notices/notice_card.dart';
 import '../../notices/notice_form_screen.dart';
-import '../masjid_screen.dart';
 
 class MasjidNoticeTab extends ConsumerWidget {
   const MasjidNoticeTab({
@@ -54,9 +53,6 @@ class MasjidNoticeTab extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final t = L10n.of(context);
     final f = Fmt.of(context);
-    ref.listen(masjidEditRequestProvider, (_, next) {
-      if (next.$1 == 1 && canEdit) _write(context);
-    });
     final notices = ref.watch(noticesProvider(masjid.id));
     final now = ref.watch(minuteProvider);
 

@@ -9,3 +9,4 @@ firebase/*.log
 **/key.properties
 **/*.jks
 **/*.keystore
+.claude/

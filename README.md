@@ -17,7 +17,7 @@ Muslimin/
 
 | Who | How | Can do |
 |---|---|---|
-| Guest | No sign-in | Browse nearby masjids, follow them, get reminders and notices |
+| User | Signs in after onboarding with email or Google (required by default; set `kRequireAccount = false` in `lib/core/config.dart` to allow guests) | Browse nearby masjids, follow them (More → Followed Masjids), get reminders and notices |
 | Account | Email + password or **Google** (sign up, sign in, forgot password, change password, delete account) | Same as guest, plus followed masjids and reminders are saved in the cloud and synced across phones |
 | Masjid authority | Account + phone (OTP-verified, or typed during beta) + registration rules | Manage their masjid's jamat, maktab, staff, live link and notices (after approval) |
 | Super admin | `users/{uid}.role = "superAdmin"` set in the Firestore console | Approve, reject, suspend or restore masjids |

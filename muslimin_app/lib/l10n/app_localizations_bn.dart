@@ -1156,4 +1156,36 @@ class L10nBn extends L10n {
 
   @override
   String get selectAll => 'সবগুলো নির্বাচন করুন';
+
+  @override
+  String get welcomeTitle => 'আসসালামু আলাইকুম';
+
+  @override
+  String get welcomeBody =>
+      'আপনার মসজিদ ফলো করতে, জামাত রিমাইন্ডার পেতে এবং সব ফোনে সিঙ্ক রাখতে সাইন ইন করুন।';
+
+  @override
+  String get continueAsGuest => 'অতিথি হিসেবে চালিয়ে যান';
+
+  @override
+  String get editMasjidInfo => 'মসজিদের তথ্য এডিট';
+
+  @override
+  String get editMasjidInfoBody =>
+      'মসজিদ প্রোফাইলে দেখানো তথ্যগুলো আপডেট করুন।';
+
+  @override
+  String get followedMasjids => 'ফলো করা মসজিদ';
+
+  @override
+  String get noFollowed => 'আপনি এখনো কোনো মসজিদ ফলো করেননি।';
+
+  @override
+  String get noFollowedHint =>
+      'মসজিদ খুলে ফলো চাপুন — এখানে দেখা যাবে এবং নোটিশ পাবেন।';
+
+  @override
+  String reminderBadge(String minutes) {
+    return 'রিমাইন্ডার $minutes মিনিট';
+  }
 }

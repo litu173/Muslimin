@@ -20,6 +20,7 @@ import '../masjid/masjid_screen.dart';
 import '../registration/registration_flow.dart';
 import 'about_screen.dart';
 import 'faq_screen.dart';
+import 'followed_masjids_screen.dart';
 import 'settings_screen.dart';
 
 /// Public download page – update once the website is live.
@@ -75,6 +76,14 @@ class _MoreScreenState extends ConsumerState<MoreScreen> {
               ),
               child: Column(
                 children: [
+                  _MenuRow(
+                    icon: Icons.favorite_border_rounded,
+
+                    label: t.followedMasjids,
+
+                    onTap: () => push(context, const FollowedMasjidsScreen()),
+                  ),
+                  const Divider(),
                   _MenuRow(
                     icon: Icons.settings_outlined,
                     label: t.appSettings,

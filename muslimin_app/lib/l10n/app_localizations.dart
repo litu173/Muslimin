@@ -2172,6 +2172,60 @@ abstract class L10n {
   /// In en, this message translates to:
   /// **'Select all'**
   String get selectAll;
+
+  /// No description provided for @welcomeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Assalamu Alaikum'**
+  String get welcomeTitle;
+
+  /// No description provided for @welcomeBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in to follow your masjids, get jamat reminders and keep everything synced across your phones.'**
+  String get welcomeBody;
+
+  /// No description provided for @continueAsGuest.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue as guest'**
+  String get continueAsGuest;
+
+  /// No description provided for @editMasjidInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Masjid Info'**
+  String get editMasjidInfo;
+
+  /// No description provided for @editMasjidInfoBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Update the details shown on your masjid profile.'**
+  String get editMasjidInfoBody;
+
+  /// No description provided for @followedMasjids.
+  ///
+  /// In en, this message translates to:
+  /// **'Followed Masjids'**
+  String get followedMasjids;
+
+  /// No description provided for @noFollowed.
+  ///
+  /// In en, this message translates to:
+  /// **'You are not following any masjid yet.'**
+  String get noFollowed;
+
+  /// No description provided for @noFollowedHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Open a masjid and tap Follow to see it here and get its notices.'**
+  String get noFollowedHint;
+
+  /// No description provided for @reminderBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminder {minutes} min'**
+  String reminderBadge(String minutes);
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {

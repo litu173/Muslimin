@@ -55,9 +55,6 @@ class _MasjidAboutTabState extends ConsumerState<MasjidAboutTab> {
 
   @override
   Widget build(BuildContext context) {
-    ref.listen(masjidEditRequestProvider, (_, next) {
-      if (next.$1 == 3 && widget.canEdit) setState(() => _editing = true);
-    });
     if (_editing) {
       return _StaffEditor(
         masjid: widget.masjid,

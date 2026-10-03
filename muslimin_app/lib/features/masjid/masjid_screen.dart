@@ -16,6 +16,7 @@ import '../../data/models/masjid.dart';
 import '../../l10n/app_localizations.dart';
 import '../../state/follows.dart';
 import '../../state/providers.dart';
+import 'edit_masjid_info_screen.dart';
 import 'tabs/about_tab.dart';
 import 'tabs/home_tab.dart';
 import 'tabs/live_tab.dart';
@@ -194,37 +195,45 @@ class _Header extends ConsumerWidget {
                         ),
                       ],
                       const SizedBox(height: Gap.m),
-                      canEdit
-                          ? AppButton(
+                      Wrap(
+                        spacing: Gap.s,
+                        runSpacing: Gap.s,
+                        children: [
+                          AppButton(
+                            following ? t.following : t.follow,
+                            icon: following
+                                ? Icons.check_rounded
+                                : Icons.add_rounded,
+                            style: following
+                                ? AppButtonStyle.darkOutlined
+                                : AppButtonStyle.filled,
+                            pill: true,
+                            dense: true,
+                            onPressed: () async {
+                              final n = ref.read(followsProvider.notifier);
+                              if (following) {
+                                await n.unfollow(masjid.id);
+                              } else {
+                                await n.follow(masjid);
+                                if (context.mounted) {
+                                  toast(context, t.followedToast(masjid.name));
+                                }
+                              }
+                            },
+                          ),
+                          if (canEdit)
+                            AppButton(
                               t.edit,
+                              icon: Icons.edit_outlined,
                               style: AppButtonStyle.darkOutlined,
                               dense: true,
-                              onPressed: () => ref
-                                  .read(masjidEditRequestProvider.notifier)
-                                  .request(tabs.index),
-                            )
-                          : AppButton(
-                              following ? t.following : t.follow,
-                              style: following
-                                  ? AppButtonStyle.darkOutlined
-                                  : AppButtonStyle.filled,
-                              pill: true,
-                              dense: true,
-                              onPressed: () async {
-                                final n = ref.read(followsProvider.notifier);
-                                if (following) {
-                                  await n.unfollow(masjid.id);
-                                } else {
-                                  await n.follow(masjid);
-                                  if (context.mounted) {
-                                    toast(
-                                      context,
-                                      t.followedToast(masjid.name),
-                                    );
-                                  }
-                                }
-                              },
+                              onPressed: () => push(
+                                context,
+                                EditMasjidInfoScreen(masjid: masjid),
+                              ),
                             ),
+                        ],
+                      ),
                     ],
                   ),
                 ),
@@ -244,19 +253,6 @@ class _Header extends ConsumerWidget {
     );
   }
 }
-
-/// The header "Edit" pill asks the visible tab to enter edit mode.
-class EditRequest extends Notifier<(int, int)> {
-  @override
-  (int, int) build() => (-1, 0);
-
-  void request(int tab) => state = (tab, state.$2 + 1);
-}
-
-/// (tab index, counter) – tabs listen and enter edit mode when it changes.
-final masjidEditRequestProvider = NotifierProvider<EditRequest, (int, int)>(
-  EditRequest.new,
-);
 
 class _TabBarDelegate extends SliverPersistentHeaderDelegate {
   _TabBarDelegate(this.controller, this.t);

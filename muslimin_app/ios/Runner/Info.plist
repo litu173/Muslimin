@@ -33,6 +33,8 @@
 		<string>https</string>
 		<string>tel</string>
 		<string>comgooglemaps</string>
+		<string>youtube</string>
+		<string>fb</string>
 	</array>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>

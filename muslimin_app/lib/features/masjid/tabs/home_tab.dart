@@ -15,7 +15,6 @@ import '../../../data/models/prayer.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../state/follows.dart';
 import '../../../state/providers.dart';
-import '../masjid_screen.dart';
 
 Future<HM?> pickTime(BuildContext context, HM? initial) async {
   final r = await showTimePicker(
@@ -43,9 +42,6 @@ class _MasjidHomeTabState extends ConsumerState<MasjidHomeTab> {
 
   @override
   Widget build(BuildContext context) {
-    ref.listen(masjidEditRequestProvider, (_, next) {
-      if (next.$1 == 0 && widget.canEdit) setState(() => _editJamat = true);
-    });
     return ListView(
       padding: const EdgeInsets.fromLTRB(Gap.l, Gap.xl, Gap.l, Gap.xxl),
       children: [

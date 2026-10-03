@@ -11,3 +11,7 @@ const kBeta = true;
 const kRequirePhoneOtp = !kBeta;
 
 const kAppName = kBeta ? 'Muslimin Beta' : 'Muslimin';
+
+/// Everyone signs in (email or Google) after onboarding. Set to false to show
+/// a "Continue as guest" option on the Welcome screen instead.
+const kRequireAccount = true;

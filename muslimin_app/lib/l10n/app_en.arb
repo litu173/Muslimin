@@ -558,5 +558,21 @@
       }
     }
   },
-  "selectAll": "Select all"
+  "selectAll": "Select all",
+  "welcomeTitle": "Assalamu Alaikum",
+  "welcomeBody": "Sign in to follow your masjids, get jamat reminders and keep everything synced across your phones.",
+  "continueAsGuest": "Continue as guest",
+  "editMasjidInfo": "Edit Masjid Info",
+  "editMasjidInfoBody": "Update the details shown on your masjid profile.",
+  "followedMasjids": "Followed Masjids",
+  "noFollowed": "You are not following any masjid yet.",
+  "noFollowedHint": "Open a masjid and tap Follow to see it here and get its notices.",
+  "reminderBadge": "Reminder {minutes} min",
+  "@reminderBadge": {
+    "placeholders": {
+      "minutes": {
+        "type": "String"
+      }
+    }
+  }
 }

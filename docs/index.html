@@ -8,6 +8,7 @@
   <meta property="og:title" content="Muslimin – Masjid Jamat Times" />
   <meta property="og:description" content="Never miss a jamat at your masjid. Free for Android and iPhone." />
   <meta property="og:image" content="https://litu173.github.io/Muslimin/assets/home-en.jpg" />
+  <link rel="preload" as="image" href="assets/home-bn.jpg" />
   <meta name="theme-color" content="#002828" />
   <link rel="icon" href="assets/mosque.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -170,7 +171,7 @@
           <p class="fine"><span id="verText">Latest version</span> · <a href="#install" data-i18n="howInstall">How to install</a></p>
         </div>
         <div class="phone">
-          <div class="frame"><img id="heroShot" src="assets/home-en.jpg" alt="Muslimin home screen showing the current prayer and nearest masjids" /></div>
+          <div class="frame"><img id="heroShot" data-shot="home" src="assets/home-en.jpg" alt="Muslimin home screen showing the current prayer and nearest masjids" /></div>
           <div class="qr-float">
             <div class="qr-box" id="qrSmall"></div>
             <p data-i18n="scanShort">Scan with your phone camera to download</p>
@@ -230,9 +231,9 @@
         <p data-i18n="shotsSub">Designed in the colours of the masjid — and fully in Bangla.</p>
       </div>
       <div class="shots">
-        <div class="shot"><div class="frame"><img src="assets/home-en.jpg" alt="Home screen" loading="lazy" /></div><span data-i18n="s1">Today's prayers</span></div>
-        <div class="shot"><div class="frame"><img src="assets/masjid.jpg" alt="Masjid profile with jamat times" loading="lazy" /></div><span data-i18n="s2">Masjid jamat times</span></div>
-        <div class="shot"><div class="frame"><img src="assets/home-bn.jpg" alt="Home screen in Bangla" loading="lazy" /></div><span data-i18n="s3">সম্পূর্ণ বাংলায়</span></div>
+        <div class="shot"><div class="frame"><img data-shot="home" src="assets/home-en.jpg" alt="Home screen" loading="lazy" /></div><span data-i18n="s1">Today's prayers</span></div>
+        <div class="shot"><div class="frame"><img data-shot="masjid" src="assets/masjid-en.jpg" alt="Masjid profile with jamat times" loading="lazy" /></div><span data-i18n="s2">Masjid jamat times</span></div>
+        <div class="shot"><div class="frame"><img data-shot="prayers" src="assets/prayers-en.jpg" alt="All prayer and forbidden times" loading="lazy" /></div><span data-i18n="s3">Prayer &amp; forbidden times</span></div>
       </div>
     </div>
   </section>
@@ -348,8 +349,13 @@
     if (/iphone|ipad|ipod/i.test(ua)) selectTab("ios");
 
     // Show the latest version number from GitHub.
+    let latestTag = null;
+    const showVersion = () => {
+      document.getElementById("verText").textContent =
+        (isBn ? "সর্বশেষ ভার্সন " : "Latest version ") + (latestTag || "");
+    };
     fetch(`https://api.github.com/repos/${REPO}/releases/latest`).then(r => r.ok ? r.json() : null).then(r => {
-      if (r && r.tag_name) document.getElementById("verText").textContent = (isBn ? "সর্বশেষ ভার্সন " : "Latest version ") + r.tag_name;
+      if (r && r.tag_name) { latestTag = r.tag_name; showVersion(); }
     }).catch(() => {});
 
     function selectTab(name) {
@@ -372,7 +378,7 @@
       f5: "আপনার অ্যাকাউন্ট, সিঙ্কড", f5d: "ফ্রি অ্যাকাউন্ট খুলুন — ফলো করা মসজিদ ও রিমাইন্ডার সব ফোনে থাকবে। যেকোনো সময় পাসওয়ার্ড রিসেট করুন।",
       f6: "যাচাইকৃত মসজিদ", f6d: "প্রতিটি মসজিদ প্রোফাইল মসজিদের ভেতর থেকে তৈরি হয় এবং প্রকাশের আগে আমাদের টিম যাচাই করে।",
       shotsTitle: "সহজ, শান্ত ও সুন্দর", shotsSub: "মসজিদের রঙে ডিজাইন — সম্পূর্ণ বাংলায়।",
-      s1: "আজকের নামাজ", s2: "মসজিদের জামাতের সময়", s3: "সম্পূর্ণ বাংলায়",
+      s1: "আজকের নামাজ", s2: "মসজিদের জামাতের সময়", s3: "নামাজ ও নিষিদ্ধ সময়",
       dlTitle: "মুসলিমীন বেটা ডাউনলোড করুন", dlSub: "ফ্রি। কোনো বিজ্ঞাপন নেই। অ্যান্ড্রয়েড ৬+ ও আইফোন (iOS ১৫+)। এটি বেটা সংস্করণ — আপনার মতামত আমাদের উন্নত করতে সাহায্য করবে।",
       a1: "“Download for Android” চাপুন অথবা QR কোড স্ক্যান করুন।", a2: "ডাউনলোড হওয়া Muslimin.apk খুলুন।",
       a3: "চাইলে ব্রাউজারের জন্য “Install unknown apps” চালু করে Install চাপুন।", a4: "মুসলিমীন খুলুন এবং লোকেশন ও নোটিফিকেশনের অনুমতি দিন।",
@@ -399,7 +405,9 @@
       document.documentElement.lang = b ? "bn" : "en";
       document.body.classList.toggle("bn", b);
       document.getElementById("langBtn").textContent = b ? "English" : "বাংলা";
-      document.getElementById("heroShot").src = b ? "assets/home-bn.jpg" : "assets/home-en.jpg";
+      if (typeof latestTag !== "undefined" && latestTag) showVersion();
+      // Every screenshot has an English and a Bangla version.
+      document.querySelectorAll("img[data-shot]").forEach(img => img.src = `assets/${img.dataset.shot}-${b ? "bn" : "en"}.jpg`);
       try { localStorage.setItem("lang", b ? "bn" : "en"); } catch (e) {}
     }
     document.getElementById("langBtn").onclick = () => setLang(!isBn);
