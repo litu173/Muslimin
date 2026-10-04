@@ -8,6 +8,7 @@ import '../../../core/theme/app_text.dart';
 import '../../../core/utils/format.dart';
 import '../../../core/widgets/buttons.dart';
 import '../../../core/widgets/gold_sheet.dart';
+import '../../../core/widgets/refresh.dart';
 import '../../../core/widgets/surfaces.dart';
 import '../../../data/models/hm.dart';
 import '../../../data/models/masjid.dart';
@@ -15,6 +16,7 @@ import '../../../data/models/prayer.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../state/follows.dart';
 import '../../../state/providers.dart';
+import '../time_board_scan.dart';
 
 Future<HM?> pickTime(BuildContext context, HM? initial) async {
   final r = await showTimePicker(
@@ -42,7 +44,8 @@ class _MasjidHomeTabState extends ConsumerState<MasjidHomeTab> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
+    return RefreshList(
+      onRefresh: () => refreshAll(ref),
       padding: const EdgeInsets.fromLTRB(Gap.l, Gap.xl, Gap.l, Gap.xxl),
       children: [
         _editJamat
@@ -222,15 +225,26 @@ class _JamatCard extends ConsumerWidget {
 }
 
 class _TimePill extends StatelessWidget {
-  const _TimePill({required this.text, required this.onTap});
+  const _TimePill({
+    required this.text,
+    required this.onTap,
+    this.highlight = false,
+  });
 
   final String text;
   final VoidCallback onTap;
 
+  /// Gold outline for a value filled in from a scanned photo.
+  final bool highlight;
+
   @override
   Widget build(BuildContext context) => Material(
-    color: AppColors.pill,
-    borderRadius: BorderRadius.circular(Radii.pill),
+    color: highlight ? AppColors.gold.withValues(alpha: 0.12) : AppColors.pill,
+    shape: StadiumBorder(
+      side: highlight
+          ? BorderSide(color: AppColors.gold, width: 1.2)
+          : BorderSide.none,
+    ),
     child: InkWell(
       borderRadius: BorderRadius.circular(Radii.pill),
       onTap: onTap,
@@ -257,6 +271,20 @@ class _JamatEditor extends ConsumerStatefulWidget {
 class _JamatEditorState extends ConsumerState<_JamatEditor> {
   late final Map<Prayer, HM> _jamat = {...widget.masjid.jamat};
   bool _saving = false;
+
+  /// Prayers whose time came from a scanned photo (highlighted for review).
+  final _fromPhoto = <Prayer>{};
+
+  Future<void> _scan() async {
+    final read = await scanTimeBoard(context);
+    if (read == null || !mounted) return;
+    setState(() {
+      _jamat.addAll(read);
+      _fromPhoto
+        ..clear()
+        ..addAll(read.keys);
+    });
+  }
 
   Future<void> _save() async {
     setState(() => _saving = true);
@@ -288,6 +316,72 @@ class _JamatEditorState extends ConsumerState<_JamatEditor> {
                 : t.lastUpdated(
                     f.relativeDays(widget.masjid.jamatUpdatedAt!, now),
                   ),
+            trailing: CircleIconButton(
+              icon: Icons.photo_camera_outlined,
+              active: true,
+              tooltip: t.scanBoard,
+              onTap: _scan,
+            ),
+          ),
+          const SizedBox(height: Gap.m),
+          // Two ways to update: scan the board, or tap each time below.
+          AnimatedSwitcher(
+            duration: const Duration(milliseconds: 300),
+            child: _fromPhoto.isEmpty
+                ? InkWell(
+                    key: const ValueKey('hint'),
+                    borderRadius: BorderRadius.circular(Radii.button),
+                    onTap: _scan,
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(Gap.m),
+                      decoration: BoxDecoration(
+                        color: AppColors.gold.withValues(alpha: 0.08),
+                        borderRadius: BorderRadius.circular(Radii.button),
+                        border: Border.all(
+                          color: AppColors.gold.withValues(alpha: 0.35),
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.auto_awesome_rounded,
+                            color: AppColors.gold,
+                            size: 20,
+                          ),
+                          const SizedBox(width: Gap.s),
+                          Expanded(
+                            child: Text(
+                              t.scanBoardHint,
+                              style: AppText.caption,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                : Container(
+                    key: const ValueKey('review'),
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(Gap.m),
+                    decoration: BoxDecoration(
+                      color: AppColors.success.withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(Radii.button),
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.check_circle_outline_rounded,
+                          color: AppColors.success,
+                          size: 20,
+                        ),
+                        const SizedBox(width: Gap.s),
+                        Expanded(
+                          child: Text(t.scanReview, style: AppText.caption),
+                        ),
+                      ],
+                    ),
+                  ),
           ),
           const SizedBox(height: Gap.s),
           for (final p in Prayer.values) ...[
@@ -296,11 +390,26 @@ class _JamatEditorState extends ConsumerState<_JamatEditor> {
               child: Row(
                 children: [
                   Expanded(child: Text(f.prayer(p), style: AppText.label)),
+                  if (_fromPhoto.contains(p))
+                    Padding(
+                      padding: const EdgeInsets.only(right: Gap.s),
+                      child: Icon(
+                        Icons.auto_awesome_rounded,
+                        size: 16,
+                        color: AppColors.gold,
+                      ),
+                    ),
                   _TimePill(
                     text: _jamat[p] == null ? t.tapToSet : f.hm(_jamat[p]!),
+                    highlight: _fromPhoto.contains(p),
                     onTap: () async {
                       final v = await pickTime(context, _jamat[p]);
-                      if (v != null) setState(() => _jamat[p] = v);
+                      if (v != null) {
+                        setState(() {
+                          _jamat[p] = v;
+                          _fromPhoto.remove(p);
+                        });
+                      }
                     },
                   ),
                 ],

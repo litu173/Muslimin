@@ -1232,4 +1232,218 @@ class L10nEn extends L10n {
   String jamatLine(String prayer, String time) {
     return '$prayer Jamat $time';
   }
+
+  @override
+  String get scanBoard => 'Scan time board';
+
+  @override
+  String get scanBoardHint =>
+      'Snap the masjid\'s time board and all jamat times fill in by themselves — or tap a time to set it manually.';
+
+  @override
+  String get takePhoto => 'Take a photo';
+
+  @override
+  String get chooseGallery => 'Choose from gallery';
+
+  @override
+  String get scanStage1 => 'Looking at the time board…';
+
+  @override
+  String get scanStage2 => 'Reading the digits…';
+
+  @override
+  String get scanStage3 => 'Matching Fajr to Isha…';
+
+  @override
+  String get scanStage4 => 'Checking Jum\'ah…';
+
+  @override
+  String scanFound(String count) {
+    return 'Found $count times';
+  }
+
+  @override
+  String get scanFailed =>
+      'Couldn\'t read this photo. Try a clear, straight photo of the board, or enter the times manually.';
+
+  @override
+  String get enterManually => 'Enter manually';
+
+  @override
+  String get scanReview =>
+      'Times filled in from the photo (marked ✦). Check them, then tap Update.';
+
+  @override
+  String get tabRead => 'Read';
+
+  @override
+  String get readQuran => 'Read Quran';
+
+  @override
+  String get journeySub => 'Your journey through all 114 surahs';
+
+  @override
+  String surahsProgress(String done) {
+    return '$done of 114 surahs';
+  }
+
+  @override
+  String get versesRead => 'verses read';
+
+  @override
+  String get phasesDone => 'phases done';
+
+  @override
+  String get continueReading => 'Continue';
+
+  @override
+  String get startReading => 'Start reading';
+
+  @override
+  String phaseN(String n) {
+    return 'Phase $n';
+  }
+
+  @override
+  String versesN(String n) {
+    return '$n verses';
+  }
+
+  @override
+  String get completed => 'Completed';
+
+  @override
+  String get locked => 'Locked';
+
+  @override
+  String ayahOf(String n, String total) {
+    return 'Ayah $n of $total';
+  }
+
+  @override
+  String unlockHint(String surah) {
+    return 'Finish $surah to unlock this surah.';
+  }
+
+  @override
+  String get quizUnlockHint =>
+      'Read every surah of this phase to unlock its quiz.';
+
+  @override
+  String phaseQuiz(String n) {
+    return 'Phase $n quiz';
+  }
+
+  @override
+  String get quizOptional => 'Optional · test what you read';
+
+  @override
+  String bestScore(String score) {
+    return 'Best $score%';
+  }
+
+  @override
+  String get makki => 'Makki';
+
+  @override
+  String get madani => 'Madani';
+
+  @override
+  String get loadingSurah => 'Getting the surah…';
+
+  @override
+  String get completeSurah => 'I\'ve finished this surah';
+
+  @override
+  String get nextSurah => 'Next surah';
+
+  @override
+  String surahDone(String name) {
+    return 'MashaAllah! You finished Surah $name.';
+  }
+
+  @override
+  String nextUnlocked(String name) {
+    return '$name is now unlocked.';
+  }
+
+  @override
+  String get takeQuiz => 'Take the phase quiz';
+
+  @override
+  String get later => 'Later';
+
+  @override
+  String get wordByWord => 'Word by word';
+
+  @override
+  String get quranSource =>
+      'Text & word-by-word: quran.com · Translation: Saheeh International';
+
+  @override
+  String get startHere => 'START';
+
+  @override
+  String get quizWordMeaning => 'What does this word mean?';
+
+  @override
+  String get quizAyahMeaning => 'What does this ayah mean?';
+
+  @override
+  String get quizWhichSurah => 'Which surah is this ayah from?';
+
+  @override
+  String quizRevealed(String name) {
+    return 'Where was Surah $name revealed?';
+  }
+
+  @override
+  String get makkah => 'Makkah';
+
+  @override
+  String get madinah => 'Madinah';
+
+  @override
+  String quizVerses(String name) {
+    return 'How many verses are in Surah $name?';
+  }
+
+  @override
+  String quizNameMeans(String name) {
+    return 'What does the name “$name” mean?';
+  }
+
+  @override
+  String get kindVocabulary => 'VOCABULARY';
+
+  @override
+  String get kindMeaning => 'MEANING';
+
+  @override
+  String get kindSurah => 'WHICH SURAH';
+
+  @override
+  String get kindFacts => 'SURAH FACTS';
+
+  @override
+  String get quizCorrect => 'Correct — MashaAllah!';
+
+  @override
+  String get quizWrong => 'Not quite — the right answer is highlighted.';
+
+  @override
+  String get continueBtn => 'Continue';
+
+  @override
+  String quizScore(String score) {
+    return 'You scored $score%';
+  }
+
+  @override
+  String get quizDoneBody =>
+      'Quizzes are optional — they help you remember what you read.';
+
+  @override
+  String get quizLoading => 'Preparing your quiz…';
 }

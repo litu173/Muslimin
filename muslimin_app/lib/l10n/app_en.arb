@@ -596,5 +596,166 @@
         "type": "String"
       }
     }
-  }
+  },
+  "scanBoard": "Scan time board",
+  "scanBoardHint": "Snap the masjid's time board and all jamat times fill in by themselves — or tap a time to set it manually.",
+  "takePhoto": "Take a photo",
+  "chooseGallery": "Choose from gallery",
+  "scanStage1": "Looking at the time board…",
+  "scanStage2": "Reading the digits…",
+  "scanStage3": "Matching Fajr to Isha…",
+  "scanStage4": "Checking Jum'ah…",
+  "scanFound": "Found {count} times",
+  "scanFailed": "Couldn't read this photo. Try a clear, straight photo of the board, or enter the times manually.",
+  "enterManually": "Enter manually",
+  "scanReview": "Times filled in from the photo (marked ✦). Check them, then tap Update.",
+  "@scanFound": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "tabRead": "Read",
+  "readQuran": "Read Quran",
+  "journeySub": "Your journey through all 114 surahs",
+  "surahsProgress": "{done} of 114 surahs",
+  "@surahsProgress": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      }
+    }
+  },
+  "versesRead": "verses read",
+  "phasesDone": "phases done",
+  "continueReading": "Continue",
+  "startReading": "Start reading",
+  "phaseN": "Phase {n}",
+  "@phaseN": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "versesN": "{n} verses",
+  "@versesN": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "completed": "Completed",
+  "locked": "Locked",
+  "ayahOf": "Ayah {n} of {total}",
+  "@ayahOf": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "unlockHint": "Finish {surah} to unlock this surah.",
+  "@unlockHint": {
+    "placeholders": {
+      "surah": {
+        "type": "String"
+      }
+    }
+  },
+  "quizUnlockHint": "Read every surah of this phase to unlock its quiz.",
+  "phaseQuiz": "Phase {n} quiz",
+  "@phaseQuiz": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "quizOptional": "Optional · test what you read",
+  "bestScore": "Best {score}%",
+  "@bestScore": {
+    "placeholders": {
+      "score": {
+        "type": "String"
+      }
+    }
+  },
+  "makki": "Makki",
+  "madani": "Madani",
+  "loadingSurah": "Getting the surah…",
+  "completeSurah": "I've finished this surah",
+  "nextSurah": "Next surah",
+  "surahDone": "MashaAllah! You finished Surah {name}.",
+  "@surahDone": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "nextUnlocked": "{name} is now unlocked.",
+  "@nextUnlocked": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "takeQuiz": "Take the phase quiz",
+  "later": "Later",
+  "wordByWord": "Word by word",
+  "quranSource": "Text & word-by-word: quran.com · Translation: Saheeh International",
+  "startHere": "START",
+  "quizWordMeaning": "What does this word mean?",
+  "quizAyahMeaning": "What does this ayah mean?",
+  "quizWhichSurah": "Which surah is this ayah from?",
+  "quizRevealed": "Where was Surah {name} revealed?",
+  "@quizRevealed": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "makkah": "Makkah",
+  "madinah": "Madinah",
+  "quizVerses": "How many verses are in Surah {name}?",
+  "@quizVerses": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "quizNameMeans": "What does the name “{name}” mean?",
+  "@quizNameMeans": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "kindVocabulary": "VOCABULARY",
+  "kindMeaning": "MEANING",
+  "kindSurah": "WHICH SURAH",
+  "kindFacts": "SURAH FACTS",
+  "quizCorrect": "Correct — MashaAllah!",
+  "quizWrong": "Not quite — the right answer is highlighted.",
+  "continueBtn": "Continue",
+  "quizScore": "You scored {score}%",
+  "@quizScore": {
+    "placeholders": {
+      "score": {
+        "type": "String"
+      }
+    }
+  },
+  "quizDoneBody": "Quizzes are optional — they help you remember what you read.",
+  "quizLoading": "Preparing your quiz…"
 }

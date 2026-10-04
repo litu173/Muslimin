@@ -10,6 +10,7 @@ import '../../../core/utils/format.dart';
 import '../../../core/widgets/buttons.dart';
 import '../../../core/widgets/form_fields.dart';
 import '../../../core/widgets/islamic_pattern.dart';
+import '../../../core/widgets/refresh.dart';
 import '../../../core/widgets/surfaces.dart';
 import '../../../data/models/masjid.dart';
 import '../../../l10n/app_localizations.dart';
@@ -67,7 +68,8 @@ class _MasjidAboutTabState extends ConsumerState<MasjidAboutTab> {
     return Column(
       children: [
         Expanded(
-          child: ListView(
+          child: RefreshList(
+            onRefresh: () => refreshAll(ref),
             padding: const EdgeInsets.fromLTRB(Gap.l, Gap.s, Gap.l, Gap.xxl),
             children: [
               for (final r in StaffRole.values) ...[

@@ -53,6 +53,16 @@ class Prefs {
   set follows(Map<String, Map<String, dynamic>> v) =>
       _p.setString('follows', jsonEncode(v));
 
+  /// Quran reading journey (Read tab): finished surahs, last position and
+  /// best quiz score per phase – stored on the phone.
+  Map<String, dynamic> get quranProgress {
+    final raw = _p.getString('quranProgress');
+    return raw == null ? {} : jsonDecode(raw) as Map<String, dynamic>;
+  }
+
+  set quranProgress(Map<String, dynamic> v) =>
+      _p.setString('quranProgress', jsonEncode(v));
+
   /// Cached last location so the home screen renders instantly.
   ({double lat, double lng, String label})? get lastLocation {
     final raw = _p.getString('lastLocation');

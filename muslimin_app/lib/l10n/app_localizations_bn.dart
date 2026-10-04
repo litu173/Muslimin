@@ -55,7 +55,7 @@ class L10nBn extends L10n {
   String get delete => 'মুছে ফেলুন';
 
   @override
-  String get done => 'সম্পন্ন';
+  String get done => 'শেষ';
 
   @override
   String get viewAll => 'সব দেখুন';
@@ -1230,4 +1230,217 @@ class L10nBn extends L10n {
   String jamatLine(String prayer, String time) {
     return '$prayer জামাত $time';
   }
+
+  @override
+  String get scanBoard => 'টাইম বোর্ড স্ক্যান';
+
+  @override
+  String get scanBoardHint =>
+      'মসজিদের টাইম বোর্ডের ছবি তুলুন, সব জামাতের সময় নিজে থেকেই বসে যাবে — অথবা সময়ে চাপ দিয়ে নিজে ঠিক করুন।';
+
+  @override
+  String get takePhoto => 'ছবি তুলুন';
+
+  @override
+  String get chooseGallery => 'গ্যালারি থেকে নিন';
+
+  @override
+  String get scanStage1 => 'টাইম বোর্ড দেখছি…';
+
+  @override
+  String get scanStage2 => 'সংখ্যাগুলো পড়ছি…';
+
+  @override
+  String get scanStage3 => 'ফজর থেকে এশা মিলিয়ে দেখছি…';
+
+  @override
+  String get scanStage4 => 'জুম\'আর সময় দেখছি…';
+
+  @override
+  String scanFound(String count) {
+    return '$countটি সময় পাওয়া গেছে';
+  }
+
+  @override
+  String get scanFailed =>
+      'ছবিটি পড়া যায়নি। বোর্ডের পরিষ্কার, সোজা ছবি তুলে আবার চেষ্টা করুন, অথবা নিজে সময় দিন।';
+
+  @override
+  String get enterManually => 'নিজে দিন';
+
+  @override
+  String get scanReview =>
+      'ছবি থেকে সময় বসানো হয়েছে (✦ চিহ্নিত)। যাচাই করে আপডেট চাপুন।';
+
+  @override
+  String get tabRead => 'পড়ুন';
+
+  @override
+  String get readQuran => 'কুরআন পড়ুন';
+
+  @override
+  String get journeySub => '১১৪টি সূরা জুড়ে আপনার যাত্রা';
+
+  @override
+  String surahsProgress(String done) {
+    return '১১৪টির মধ্যে $doneটি সূরা';
+  }
+
+  @override
+  String get versesRead => 'আয়াত পড়া হয়েছে';
+
+  @override
+  String get phasesDone => 'ধাপ সম্পন্ন';
+
+  @override
+  String get continueReading => 'চালিয়ে যান';
+
+  @override
+  String get startReading => 'পড়া শুরু করুন';
+
+  @override
+  String phaseN(String n) {
+    return 'ধাপ $n';
+  }
+
+  @override
+  String versesN(String n) {
+    return '$n আয়াত';
+  }
+
+  @override
+  String get completed => 'সম্পন্ন';
+
+  @override
+  String get locked => 'লক করা';
+
+  @override
+  String ayahOf(String n, String total) {
+    return 'আয়াত $n / $total';
+  }
+
+  @override
+  String unlockHint(String surah) {
+    return 'এই সূরা খুলতে আগে $surah শেষ করুন।';
+  }
+
+  @override
+  String get quizUnlockHint => 'কুইজ খুলতে এই ধাপের সব সূরা পড়ুন।';
+
+  @override
+  String phaseQuiz(String n) {
+    return 'ধাপ $n কুইজ';
+  }
+
+  @override
+  String get quizOptional => 'ঐচ্ছিক · যা পড়েছেন তা যাচাই করুন';
+
+  @override
+  String bestScore(String score) {
+    return 'সেরা $score%';
+  }
+
+  @override
+  String get makki => 'মাক্কী';
+
+  @override
+  String get madani => 'মাদানী';
+
+  @override
+  String get loadingSurah => 'সূরা আনা হচ্ছে…';
+
+  @override
+  String get completeSurah => 'এই সূরা পড়া শেষ';
+
+  @override
+  String get nextSurah => 'পরের সূরা';
+
+  @override
+  String surahDone(String name) {
+    return 'মাশাআল্লাহ! আপনি সূরা $name পড়া শেষ করেছেন।';
+  }
+
+  @override
+  String nextUnlocked(String name) {
+    return '$name এখন খোলা।';
+  }
+
+  @override
+  String get takeQuiz => 'ধাপের কুইজ দিন';
+
+  @override
+  String get later => 'পরে';
+
+  @override
+  String get wordByWord => 'শব্দে শব্দে';
+
+  @override
+  String get quranSource =>
+      'টেক্সট ও শব্দার্থ: quran.com · অনুবাদ: তাইসীরুল কুরআন';
+
+  @override
+  String get startHere => 'শুরু';
+
+  @override
+  String get quizWordMeaning => 'এই শব্দের অর্থ কী?';
+
+  @override
+  String get quizAyahMeaning => 'এই আয়াতের অর্থ কী?';
+
+  @override
+  String get quizWhichSurah => 'এই আয়াতটি কোন সূরার?';
+
+  @override
+  String quizRevealed(String name) {
+    return 'সূরা $name কোথায় নাযিল হয়েছে?';
+  }
+
+  @override
+  String get makkah => 'মক্কা';
+
+  @override
+  String get madinah => 'মদিনা';
+
+  @override
+  String quizVerses(String name) {
+    return 'সূরা $name-এ কয়টি আয়াত আছে?';
+  }
+
+  @override
+  String quizNameMeans(String name) {
+    return '“$name” নামের অর্থ কী?';
+  }
+
+  @override
+  String get kindVocabulary => 'শব্দভান্ডার';
+
+  @override
+  String get kindMeaning => 'অর্থ';
+
+  @override
+  String get kindSurah => 'কোন সূরা';
+
+  @override
+  String get kindFacts => 'সূরার তথ্য';
+
+  @override
+  String get quizCorrect => 'সঠিক — মাশাআল্লাহ!';
+
+  @override
+  String get quizWrong => 'হয়নি — সঠিক উত্তরটি চিহ্নিত করা হলো।';
+
+  @override
+  String get continueBtn => 'চালিয়ে যান';
+
+  @override
+  String quizScore(String score) {
+    return 'আপনার স্কোর $score%';
+  }
+
+  @override
+  String get quizDoneBody =>
+      'কুইজ ঐচ্ছিক — যা পড়েছেন তা মনে রাখতে সাহায্য করে।';
+
+  @override
+  String get quizLoading => 'কুইজ তৈরি হচ্ছে…';
 }

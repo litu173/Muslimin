@@ -12,7 +12,6 @@ import '../../core/utils/format.dart';
 import '../../core/utils/geo.dart';
 import '../../core/widgets/buttons.dart';
 import '../../core/widgets/islamic_pattern.dart';
-import '../../core/widgets/refresh.dart';
 import '../../core/widgets/surfaces.dart';
 import '../../data/models/masjid.dart';
 import '../../l10n/app_localizations.dart';
@@ -73,38 +72,39 @@ class _MasjidScreenState extends ConsumerState<MasjidScreen>
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.light,
       child: Scaffold(
-        body: NestedScrollView(
-          headerSliverBuilder: (_, _) => [
-            PullToRefresh(onRefresh: () => refreshAll(ref)),
-            SliverToBoxAdapter(
-              child: _Header(masjid: masjid, canEdit: canEdit, tabs: _tabs),
+        // Header and tabs stay fixed; only the tab content scrolls (and
+        // pulls to refresh) underneath.
+        body: Column(
+          children: [
+            _Header(masjid: masjid, canEdit: canEdit, tabs: _tabs),
+            SizedBox(
+              height: 44,
+              child: _TabBarDelegate(_tabs, t).build(context, 0, false),
             ),
-            SliverPersistentHeader(
-              pinned: true,
-              delegate: _TabBarDelegate(_tabs, t),
+            Expanded(
+              child: Column(
+                children: [
+                  if (isOwner && masjid.status != MasjidStatus.approved)
+                    _StatusBanner(masjid: masjid),
+                  Expanded(
+                    child: TabBarView(
+                      controller: _tabs,
+                      children: [
+                        MasjidHomeTab(masjid: masjid, canEdit: canEdit),
+                        MasjidNoticeTab(
+                          masjid: masjid,
+                          canEdit:
+                              canEdit && masjid.status == MasjidStatus.approved,
+                        ),
+                        MasjidLiveTab(masjid: masjid, canEdit: canEdit),
+                        MasjidAboutTab(masjid: masjid, canEdit: canEdit),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
-          body: Column(
-            children: [
-              if (isOwner && masjid.status != MasjidStatus.approved)
-                _StatusBanner(masjid: masjid),
-              Expanded(
-                child: TabBarView(
-                  controller: _tabs,
-                  children: [
-                    MasjidHomeTab(masjid: masjid, canEdit: canEdit),
-                    MasjidNoticeTab(
-                      masjid: masjid,
-                      canEdit:
-                          canEdit && masjid.status == MasjidStatus.approved,
-                    ),
-                    MasjidLiveTab(masjid: masjid, canEdit: canEdit),
-                    MasjidAboutTab(masjid: masjid, canEdit: canEdit),
-                  ],
-                ),
-              ),
-            ],
-          ),
         ),
       ),
     );

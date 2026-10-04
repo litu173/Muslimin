@@ -2298,6 +2298,366 @@ abstract class L10n {
   /// In en, this message translates to:
   /// **'{prayer} Jamat {time}'**
   String jamatLine(String prayer, String time);
+
+  /// No description provided for @scanBoard.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan time board'**
+  String get scanBoard;
+
+  /// No description provided for @scanBoardHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Snap the masjid\'s time board and all jamat times fill in by themselves — or tap a time to set it manually.'**
+  String get scanBoardHint;
+
+  /// No description provided for @takePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Take a photo'**
+  String get takePhoto;
+
+  /// No description provided for @chooseGallery.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose from gallery'**
+  String get chooseGallery;
+
+  /// No description provided for @scanStage1.
+  ///
+  /// In en, this message translates to:
+  /// **'Looking at the time board…'**
+  String get scanStage1;
+
+  /// No description provided for @scanStage2.
+  ///
+  /// In en, this message translates to:
+  /// **'Reading the digits…'**
+  String get scanStage2;
+
+  /// No description provided for @scanStage3.
+  ///
+  /// In en, this message translates to:
+  /// **'Matching Fajr to Isha…'**
+  String get scanStage3;
+
+  /// No description provided for @scanStage4.
+  ///
+  /// In en, this message translates to:
+  /// **'Checking Jum\'ah…'**
+  String get scanStage4;
+
+  /// No description provided for @scanFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Found {count} times'**
+  String scanFound(String count);
+
+  /// No description provided for @scanFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t read this photo. Try a clear, straight photo of the board, or enter the times manually.'**
+  String get scanFailed;
+
+  /// No description provided for @enterManually.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter manually'**
+  String get enterManually;
+
+  /// No description provided for @scanReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Times filled in from the photo (marked ✦). Check them, then tap Update.'**
+  String get scanReview;
+
+  /// No description provided for @tabRead.
+  ///
+  /// In en, this message translates to:
+  /// **'Read'**
+  String get tabRead;
+
+  /// No description provided for @readQuran.
+  ///
+  /// In en, this message translates to:
+  /// **'Read Quran'**
+  String get readQuran;
+
+  /// No description provided for @journeySub.
+  ///
+  /// In en, this message translates to:
+  /// **'Your journey through all 114 surahs'**
+  String get journeySub;
+
+  /// No description provided for @surahsProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'{done} of 114 surahs'**
+  String surahsProgress(String done);
+
+  /// No description provided for @versesRead.
+  ///
+  /// In en, this message translates to:
+  /// **'verses read'**
+  String get versesRead;
+
+  /// No description provided for @phasesDone.
+  ///
+  /// In en, this message translates to:
+  /// **'phases done'**
+  String get phasesDone;
+
+  /// No description provided for @continueReading.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get continueReading;
+
+  /// No description provided for @startReading.
+  ///
+  /// In en, this message translates to:
+  /// **'Start reading'**
+  String get startReading;
+
+  /// No description provided for @phaseN.
+  ///
+  /// In en, this message translates to:
+  /// **'Phase {n}'**
+  String phaseN(String n);
+
+  /// No description provided for @versesN.
+  ///
+  /// In en, this message translates to:
+  /// **'{n} verses'**
+  String versesN(String n);
+
+  /// No description provided for @completed.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
+  String get completed;
+
+  /// No description provided for @locked.
+  ///
+  /// In en, this message translates to:
+  /// **'Locked'**
+  String get locked;
+
+  /// No description provided for @ayahOf.
+  ///
+  /// In en, this message translates to:
+  /// **'Ayah {n} of {total}'**
+  String ayahOf(String n, String total);
+
+  /// No description provided for @unlockHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Finish {surah} to unlock this surah.'**
+  String unlockHint(String surah);
+
+  /// No description provided for @quizUnlockHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Read every surah of this phase to unlock its quiz.'**
+  String get quizUnlockHint;
+
+  /// No description provided for @phaseQuiz.
+  ///
+  /// In en, this message translates to:
+  /// **'Phase {n} quiz'**
+  String phaseQuiz(String n);
+
+  /// No description provided for @quizOptional.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional · test what you read'**
+  String get quizOptional;
+
+  /// No description provided for @bestScore.
+  ///
+  /// In en, this message translates to:
+  /// **'Best {score}%'**
+  String bestScore(String score);
+
+  /// No description provided for @makki.
+  ///
+  /// In en, this message translates to:
+  /// **'Makki'**
+  String get makki;
+
+  /// No description provided for @madani.
+  ///
+  /// In en, this message translates to:
+  /// **'Madani'**
+  String get madani;
+
+  /// No description provided for @loadingSurah.
+  ///
+  /// In en, this message translates to:
+  /// **'Getting the surah…'**
+  String get loadingSurah;
+
+  /// No description provided for @completeSurah.
+  ///
+  /// In en, this message translates to:
+  /// **'I\'ve finished this surah'**
+  String get completeSurah;
+
+  /// No description provided for @nextSurah.
+  ///
+  /// In en, this message translates to:
+  /// **'Next surah'**
+  String get nextSurah;
+
+  /// No description provided for @surahDone.
+  ///
+  /// In en, this message translates to:
+  /// **'MashaAllah! You finished Surah {name}.'**
+  String surahDone(String name);
+
+  /// No description provided for @nextUnlocked.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} is now unlocked.'**
+  String nextUnlocked(String name);
+
+  /// No description provided for @takeQuiz.
+  ///
+  /// In en, this message translates to:
+  /// **'Take the phase quiz'**
+  String get takeQuiz;
+
+  /// No description provided for @later.
+  ///
+  /// In en, this message translates to:
+  /// **'Later'**
+  String get later;
+
+  /// No description provided for @wordByWord.
+  ///
+  /// In en, this message translates to:
+  /// **'Word by word'**
+  String get wordByWord;
+
+  /// No description provided for @quranSource.
+  ///
+  /// In en, this message translates to:
+  /// **'Text & word-by-word: quran.com · Translation: Saheeh International'**
+  String get quranSource;
+
+  /// No description provided for @startHere.
+  ///
+  /// In en, this message translates to:
+  /// **'START'**
+  String get startHere;
+
+  /// No description provided for @quizWordMeaning.
+  ///
+  /// In en, this message translates to:
+  /// **'What does this word mean?'**
+  String get quizWordMeaning;
+
+  /// No description provided for @quizAyahMeaning.
+  ///
+  /// In en, this message translates to:
+  /// **'What does this ayah mean?'**
+  String get quizAyahMeaning;
+
+  /// No description provided for @quizWhichSurah.
+  ///
+  /// In en, this message translates to:
+  /// **'Which surah is this ayah from?'**
+  String get quizWhichSurah;
+
+  /// No description provided for @quizRevealed.
+  ///
+  /// In en, this message translates to:
+  /// **'Where was Surah {name} revealed?'**
+  String quizRevealed(String name);
+
+  /// No description provided for @makkah.
+  ///
+  /// In en, this message translates to:
+  /// **'Makkah'**
+  String get makkah;
+
+  /// No description provided for @madinah.
+  ///
+  /// In en, this message translates to:
+  /// **'Madinah'**
+  String get madinah;
+
+  /// No description provided for @quizVerses.
+  ///
+  /// In en, this message translates to:
+  /// **'How many verses are in Surah {name}?'**
+  String quizVerses(String name);
+
+  /// No description provided for @quizNameMeans.
+  ///
+  /// In en, this message translates to:
+  /// **'What does the name “{name}” mean?'**
+  String quizNameMeans(String name);
+
+  /// No description provided for @kindVocabulary.
+  ///
+  /// In en, this message translates to:
+  /// **'VOCABULARY'**
+  String get kindVocabulary;
+
+  /// No description provided for @kindMeaning.
+  ///
+  /// In en, this message translates to:
+  /// **'MEANING'**
+  String get kindMeaning;
+
+  /// No description provided for @kindSurah.
+  ///
+  /// In en, this message translates to:
+  /// **'WHICH SURAH'**
+  String get kindSurah;
+
+  /// No description provided for @kindFacts.
+  ///
+  /// In en, this message translates to:
+  /// **'SURAH FACTS'**
+  String get kindFacts;
+
+  /// No description provided for @quizCorrect.
+  ///
+  /// In en, this message translates to:
+  /// **'Correct — MashaAllah!'**
+  String get quizCorrect;
+
+  /// No description provided for @quizWrong.
+  ///
+  /// In en, this message translates to:
+  /// **'Not quite — the right answer is highlighted.'**
+  String get quizWrong;
+
+  /// No description provided for @continueBtn.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get continueBtn;
+
+  /// No description provided for @quizScore.
+  ///
+  /// In en, this message translates to:
+  /// **'You scored {score}%'**
+  String quizScore(String score);
+
+  /// No description provided for @quizDoneBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Quizzes are optional — they help you remember what you read.'**
+  String get quizDoneBody;
+
+  /// No description provided for @quizLoading.
+  ///
+  /// In en, this message translates to:
+  /// **'Preparing your quiz…'**
+  String get quizLoading;
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {

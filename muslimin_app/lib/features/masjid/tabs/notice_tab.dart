@@ -7,6 +7,7 @@ import '../../../core/theme/app_text.dart';
 import '../../../core/utils/format.dart';
 import '../../../core/widgets/buttons.dart';
 import '../../../core/widgets/gold_sheet.dart';
+import '../../../core/widgets/refresh.dart';
 import '../../../core/widgets/surfaces.dart';
 import '../../../data/models/masjid.dart';
 import '../../../data/models/notice.dart';
@@ -80,7 +81,8 @@ class MasjidNoticeTab extends ConsumerWidget {
                     )
                     .add(n);
               }
-              return ListView(
+              return RefreshList(
+                onRefresh: () => refreshAll(ref),
                 padding: const EdgeInsets.fromLTRB(
                   Gap.l,
                   Gap.s,

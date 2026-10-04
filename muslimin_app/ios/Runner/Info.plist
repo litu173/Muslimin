@@ -15,6 +15,10 @@
 			</array>
 		</dict>
 	</array>
+	<key>NSCameraUsageDescription</key>
+	<string>Take a photo of the masjid's salat time board to fill in the jamat times.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Choose a photo of the masjid's salat time board to fill in the jamat times.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Muslimin uses your location to show the masjids near you and to calculate accurate prayer times.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>

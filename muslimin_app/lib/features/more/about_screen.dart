@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -11,28 +12,59 @@ import '../../core/utils/format.dart';
 import '../../core/widgets/brand.dart';
 import '../../core/widgets/islamic_pattern.dart';
 import '../../core/widgets/buttons.dart';
+import '../../core/widgets/refresh.dart';
 import '../../core/widgets/surfaces.dart';
 import '../../l10n/app_localizations.dart';
 import '../../services/update_service.dart';
 import '../registration/registration_flow.dart' show showTerms;
 
-class AboutScreen extends StatelessWidget {
+class AboutScreen extends StatefulWidget {
   const AboutScreen({super.key});
+
+  @override
+  State<AboutScreen> createState() => _AboutScreenState();
+}
+
+class _AboutScreenState extends State<AboutScreen> {
+  /// Bumped by pull-to-refresh so the version card checks GitHub again.
+  int _check = 0;
+
+  Future<void> _refresh() async {
+    setState(() => _check++);
+    await Future<void>.delayed(const Duration(milliseconds: 700));
+  }
 
   @override
   Widget build(BuildContext context) {
     final t = L10n.of(context);
-    return Scaffold(
-      appBar: AppBar(title: Text(t.aboutApp)),
-      body: ListView(
-        children: [
-          SizedBox(
-            height: 180,
-            child: IslamicPattern(
-              child: Center(
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle.light,
+      child: Scaffold(
+        body: Column(
+          children: [
+            // Patterned header behind the status bar, like a masjid profile.
+            IslamicPattern(
+              child: Padding(
+                padding: EdgeInsets.only(
+                  top: MediaQuery.of(context).padding.top,
+                  bottom: Gap.xl,
+                ),
                 child: Column(
-                  mainAxisSize: MainAxisSize.min,
                   children: [
+                    Row(
+                      children: [
+                        BackButton(color: AppColors.onHeader),
+                        Expanded(
+                          child: Text(
+                            t.aboutApp,
+                            style: AppText.subtitle.copyWith(
+                              color: AppColors.onHeader,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: Gap.s),
                     const Wordmark(size: 40),
                     if (kBeta) ...[
                       const SizedBox(height: 6),
@@ -47,49 +79,61 @@ class AboutScreen extends StatelessWidget {
                 ),
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(Gap.xl),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(t.aboutBody, style: AppText.body.copyWith(height: 1.6)),
-                const SizedBox(height: Gap.xl),
-                Text(t.credits, style: AppText.subtitle),
-                const SizedBox(height: Gap.s),
-                Text(
-                  t.fontCredits,
-                  style: AppText.caption.copyWith(height: 1.6),
-                ),
-                const SizedBox(height: Gap.xs),
-                Text(
-                  t.designInspired,
-                  style: AppText.caption.copyWith(color: AppColors.muted),
-                ),
-                const SizedBox(height: Gap.m),
-                Wrap(
-                  spacing: Gap.s,
-                  children: [
-                    TextButton(
-                      onPressed: () => showTerms(context),
-                      child: Text(t.termsAndConditions),
+            Expanded(
+              child: RefreshList(
+                onRefresh: _refresh,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(Gap.xl),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          t.aboutBody,
+                          style: AppText.body.copyWith(height: 1.6),
+                        ),
+                        const SizedBox(height: Gap.xl),
+                        Text(t.credits, style: AppText.subtitle),
+                        const SizedBox(height: Gap.s),
+                        Text(
+                          t.fontCredits,
+                          style: AppText.caption.copyWith(height: 1.6),
+                        ),
+                        const SizedBox(height: Gap.xs),
+                        Text(
+                          t.designInspired,
+                          style: AppText.caption.copyWith(
+                            color: AppColors.muted,
+                          ),
+                        ),
+                        const SizedBox(height: Gap.m),
+                        Wrap(
+                          spacing: Gap.s,
+                          children: [
+                            TextButton(
+                              onPressed: () => showTerms(context),
+                              child: Text(t.termsAndConditions),
+                            ),
+                            TextButton(
+                              onPressed: () => showLicensePage(
+                                context: context,
+                                applicationName: kAppName,
+                                applicationLegalese: t.fontCredits,
+                              ),
+                              child: Text(t.openSourceLicenses),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: Gap.m),
+                        _VersionCard(key: ValueKey(_check)),
+                      ],
                     ),
-                    TextButton(
-                      onPressed: () => showLicensePage(
-                        context: context,
-                        applicationName: kAppName,
-                        applicationLegalese: t.fontCredits,
-                      ),
-                      child: Text(t.openSourceLicenses),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: Gap.m),
-                const _VersionCard(),
-              ],
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -98,7 +142,7 @@ class AboutScreen extends StatelessWidget {
 /// Installed version + "update available" with a direct APK download
 /// (Android) or the install guide (iPhone). Data: latest GitHub release.
 class _VersionCard extends StatefulWidget {
-  const _VersionCard();
+  const _VersionCard({super.key});
 
   @override
   State<_VersionCard> createState() => _VersionCardState();

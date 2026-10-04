@@ -8,6 +8,7 @@ import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/app_text.dart';
 import '../../../core/widgets/buttons.dart';
 import '../../../core/widgets/form_fields.dart';
+import '../../../core/widgets/refresh.dart';
 import '../../../core/widgets/surfaces.dart';
 import '../../../data/models/masjid.dart';
 import '../../../l10n/app_localizations.dart';
@@ -59,7 +60,8 @@ class _MasjidLiveTabState extends ConsumerState<MasjidLiveTab> {
   Widget build(BuildContext context) {
     final t = L10n.of(context);
     final m = widget.masjid;
-    return ListView(
+    return RefreshList(
+      onRefresh: () => refreshAll(ref),
       padding: const EdgeInsets.all(Gap.l),
       children: [
         if (m.isLive && (m.liveUrl?.isNotEmpty ?? false))
