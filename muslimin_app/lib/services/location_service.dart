@@ -7,12 +7,16 @@ class UserLocation {
     required this.lng,
     required this.label,
     this.accuracy = 0,
+    this.fromMap = false,
   });
 
   final double lat;
   final double lng;
   final String label;
   final double accuracy;
+
+  /// Chosen on the map (no GPS accuracy) rather than measured on site.
+  final bool fromMap;
 }
 
 class LocationService {
@@ -64,7 +68,7 @@ class LocationService {
       lat: best.latitude,
       lng: best.longitude,
       accuracy: best.accuracy,
-      label: '',
+      label: await labelFor(best.latitude, best.longitude),
     );
   }
 

@@ -543,7 +543,7 @@ class L10nEn extends L10n {
   String get rule3 => 'I understand the benefit of this app';
 
   @override
-  String get rule4 => 'I am physically inside the masjid right now';
+  String get rule4 => 'I will mark the exact location of the masjid';
 
   @override
   String get agreeAll => 'Please confirm all the statements to continue.';
@@ -602,7 +602,7 @@ class L10nEn extends L10n {
 
   @override
   String get stayInside =>
-      'Stay inside of the masjid & enter below information carefully.';
+      'Enter the details below carefully. You can set the location from inside the masjid or on the map.';
 
   @override
   String get masjidName => 'Masjid Name';
@@ -636,7 +636,7 @@ class L10nEn extends L10n {
   }
 
   @override
-  String get loadLocationFirst => 'Please load the masjid location.';
+  String get loadLocationFirst => 'Please set the masjid location.';
 
   @override
   String get nidNumber => 'Your NID Number';
@@ -1171,7 +1171,7 @@ class L10nEn extends L10n {
 
   @override
   String get editMasjidInfoBody =>
-      'Update the details shown on your masjid profile. To correct the location, stand inside the masjid and tap Reload.';
+      'Update the details shown on your masjid profile, including its location (GPS at the masjid or chosen on the map).';
 
   @override
   String get followedMasjids => 'Followed Masjids';
@@ -1948,4 +1948,58 @@ class L10nEn extends L10n {
 
   @override
   String get previousSurah => 'Previous surah';
+
+  @override
+  String get pickOnMapTitle => 'Choose on map';
+
+  @override
+  String get mapSearchHint => 'Search a masjid or area';
+
+  @override
+  String get useMyLocation => 'My location';
+
+  @override
+  String get mapPickHint =>
+      'Move the map so the pin sits on the masjid, tap a spot, or tap a masjid icon.';
+
+  @override
+  String get mapMoving => 'Finding the place…';
+
+  @override
+  String get useThisLocation => 'Use this location';
+
+  @override
+  String get masjidLocation => 'Masjid location';
+
+  @override
+  String get chooseLocationWay => 'Choose one way to set the exact location:';
+
+  @override
+  String get atTheMasjid => 'I\'m at the masjid';
+
+  @override
+  String get atTheMasjidBody =>
+      'Use your phone\'s GPS. Stay inside the masjid while it loads.';
+
+  @override
+  String get onTheMap => 'Choose on map';
+
+  @override
+  String get onTheMapBody =>
+      'Point to the masjid on the map, or tap one already shown.';
+
+  @override
+  String get locFromMap => 'Chosen on map';
+
+  @override
+  String get locFromGps => 'GPS';
+
+  @override
+  String get locSaved => 'Saved location';
+
+  @override
+  String get useGpsInstead => 'Use GPS';
+
+  @override
+  String get adjustOnMap => 'Adjust on map';
 }

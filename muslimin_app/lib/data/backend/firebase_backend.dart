@@ -437,10 +437,12 @@ class FirebaseBackend implements Backend {
     required String thana,
     required String address,
     (double, double, double)? location,
+    String? locationSource,
   }) => _masjids.doc(id).update({
     if (location != null) ...{
       'geo': GeoFirePoint(GeoPoint(location.$1, location.$2)).data,
       'locationAccuracyM': location.$3,
+      'locationSource': locationSource ?? 'gps',
     },
     'name': name,
     'nameLower': name.toLowerCase(),

@@ -425,10 +425,12 @@ class DemoBackend implements Backend {
     required String thana,
     required String address,
     (double, double, double)? location,
+    String? locationSource,
   }) async => _patch(
     id,
     (m) => m.copyWith(
       location: location,
+      locationSource: locationSource,
       name: name,
       nameBn: nameBn,
       district: district,

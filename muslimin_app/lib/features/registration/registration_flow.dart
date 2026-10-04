@@ -19,6 +19,7 @@ import '../../data/bd_districts.dart';
 import '../../data/models/masjid.dart';
 import '../../l10n/app_localizations.dart';
 import 'location_field.dart';
+import 'map_picker_screen.dart';
 import '../../services/location_service.dart';
 import '../../state/providers.dart';
 import '../auth/auth_screens.dart';
@@ -206,6 +207,22 @@ class _RegistrationFlowState extends ConsumerState<RegistrationFlow> {
     }
   }
 
+  /// Location chosen on the map – a masjid tapped there also fills in the
+  /// English or Bangla name if it is still empty.
+  Future<void> _pickOnMap() async {
+    final picked = await pickOnMap(context, initial: _fix);
+    if (picked == null || !mounted) return;
+    setState(() {
+      _fix = picked;
+      _locError = null;
+      final label = picked.label;
+      if (label.isNotEmpty && !label.contains(',')) {
+        final field = RegExp('[ঀ-৿]').hasMatch(label) ? _nameBn : _name;
+        if (field.text.trim().isEmpty) field.text = label;
+      }
+    });
+  }
+
   static String _norm(String s) => s
       .toLowerCase()
       .replaceAll(RegExp(r'[^a-z0-9ঀ-৿]'), '')
@@ -221,7 +238,8 @@ class _RegistrationFlowState extends ConsumerState<RegistrationFlow> {
       setState(() => _locError = t.loadLocationFirst);
       return;
     }
-    if (_fix!.accuracy > kRequiredAccuracyM) {
+    // The accuracy rule only applies to a GPS fix taken at the masjid.
+    if (!_fix!.fromMap && _fix!.accuracy > kRequiredAccuracyM) {
       setState(
         () => _locError = t.accuracyTooLow(f.digits(_fix!.accuracy.round())),
       );
@@ -286,7 +304,8 @@ class _RegistrationFlowState extends ConsumerState<RegistrationFlow> {
               phoneVerified: user.hasPhone,
               nid: _nid.text.trim(),
               submitterRole: _role!,
-              locationAccuracyM: _fix!.accuracy,
+              locationAccuracyM: _fix!.fromMap ? 0 : _fix!.accuracy,
+              locationSource: _fix!.fromMap ? 'map' : 'gps',
             ),
           );
       _go(_Step.done);
@@ -574,7 +593,8 @@ class _RegistrationFlowState extends ConsumerState<RegistrationFlow> {
             fix: _fix,
             loading: _locating,
             error: _locError,
-            onLoad: _loadLocation,
+            onUseGps: _loadLocation,
+            onPickMap: _pickOnMap,
           ),
         ],
       ),

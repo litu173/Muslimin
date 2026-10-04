@@ -89,6 +89,7 @@ abstract class Backend {
 
     /// New GPS fix (lat, lng, accuracy in m); null keeps the location.
     (double, double, double)? location,
+    String? locationSource,
   });
   Future<void> updateJamat(String id, Map<Prayer, HM> jamat);
   Future<void> updateMaktab(String id, Maktab maktab);

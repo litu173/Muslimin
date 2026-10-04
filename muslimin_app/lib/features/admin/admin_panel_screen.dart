@@ -236,7 +236,7 @@ class _ReviewCardState extends ConsumerState<_ReviewCard> {
           kv(t.role, _role(t, m.submitterRole)),
           kv(
             t.location,
-            '${m.lat.toStringAsFixed(5)}, ${m.lng.toStringAsFixed(5)}  (±${m.locationAccuracyM.round()} m)',
+            '${m.lat.toStringAsFixed(5)}, ${m.lng.toStringAsFixed(5)}  ${m.locationSource == 'map' ? '(map pin)' : '(GPS ±${m.locationAccuracyM.round()} m)'}',
             onTap: () => launchUrl(
               Uri.parse('https://maps.google.com/?q=${m.lat},${m.lng}'),
               mode: LaunchMode.externalApplication,

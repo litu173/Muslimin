@@ -15,6 +15,7 @@ import '../../l10n/app_localizations.dart';
 import '../../services/location_service.dart';
 import '../../state/providers.dart';
 import '../registration/location_field.dart';
+import '../registration/map_picker_screen.dart';
 
 /// Owner/admin edit of the details entered at registration, including the
 /// location (re-captured from inside the masjid, like at registration).
@@ -47,10 +48,21 @@ class _EditMasjidInfoScreenState extends ConsumerState<EditMasjidInfoScreen> {
     lng: widget.masjid.lng,
     label: '',
     accuracy: widget.masjid.locationAccuracyM,
+    fromMap: widget.masjid.locationSource == 'map',
   );
   bool _moved = false;
   bool _locating = false;
   String? _locError;
+
+  Future<void> _pickOnMap() async {
+    final picked = await pickOnMap(context, initial: _fix);
+    if (picked == null || !mounted) return;
+    setState(() {
+      _fix = picked;
+      _moved = true;
+      _locError = null;
+    });
+  }
 
   Future<void> _loadLocation() async {
     setState(() {
@@ -82,7 +94,7 @@ class _EditMasjidInfoScreenState extends ConsumerState<EditMasjidInfoScreen> {
   Future<void> _save() async {
     final t = L10n.of(context);
     if (!_form.currentState!.validate()) return;
-    if (_moved && _fix.accuracy > kRequiredAccuracyM) {
+    if (_moved && !_fix.fromMap && _fix.accuracy > kRequiredAccuracyM) {
       final f = Fmt.of(context);
       setState(
         () => _locError = t.accuracyTooLow(f.digits(_fix.accuracy.round())),
@@ -100,7 +112,10 @@ class _EditMasjidInfoScreenState extends ConsumerState<EditMasjidInfoScreen> {
             district: _district ?? '',
             thana: _thana.text.trim(),
             address: _address.text.trim(),
-            location: _moved ? (_fix.lat, _fix.lng, _fix.accuracy) : null,
+            location: _moved
+                ? (_fix.lat, _fix.lng, _fix.fromMap ? 0 : _fix.accuracy)
+                : null,
+            locationSource: _fix.fromMap ? 'map' : 'gps',
           );
       if (!mounted) return;
       toast(context, t.updated);
@@ -170,7 +185,8 @@ class _EditMasjidInfoScreenState extends ConsumerState<EditMasjidInfoScreen> {
                         fix: _fix,
                         loading: _locating,
                         error: _locError,
-                        onLoad: _loadLocation,
+                        onUseGps: _loadLocation,
+                        onPickMap: _pickOnMap,
                       ),
                     ],
                   ),

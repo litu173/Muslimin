@@ -440,6 +440,7 @@ class _TopBar extends StatelessWidget {
         ),
       );
     }
+
     return IslamicPattern(
       child: Padding(
         padding: EdgeInsets.only(

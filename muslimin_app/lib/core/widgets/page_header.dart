@@ -32,6 +32,8 @@ class AppSearchField extends StatelessWidget {
       controller: controller,
       onChanged: onChanged,
       autofocus: autofocus,
+      autocorrect: false,
+      enableSuggestions: false,
       textInputAction: TextInputAction.search,
       style: AppText.body.copyWith(color: AppColors.ink),
       decoration: InputDecoration(

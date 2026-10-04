@@ -543,7 +543,7 @@ class L10nBn extends L10n {
   String get rule3 => 'আমি এই অ্যাপের উপকারিতা বুঝি';
 
   @override
-  String get rule4 => 'আমি এই মুহূর্তে মসজিদের ভেতরে আছি';
+  String get rule4 => 'আমি মসজিদের সঠিক লোকেশন চিহ্নিত করব';
 
   @override
   String get agreeAll => 'এগিয়ে যেতে সবগুলো শর্তে সম্মতি দিন।';
@@ -601,7 +601,7 @@ class L10nBn extends L10n {
 
   @override
   String get stayInside =>
-      'মসজিদের ভেতরে থাকুন এবং নিচের তথ্যগুলো সাবধানে দিন।';
+      'নিচের তথ্যগুলো সাবধানে দিন। লোকেশন মসজিদের ভেতর থেকে বা ম্যাপ থেকে দিতে পারেন।';
 
   @override
   String get masjidName => 'মসজিদের নাম';
@@ -635,7 +635,7 @@ class L10nBn extends L10n {
   }
 
   @override
-  String get loadLocationFirst => 'অনুগ্রহ করে মসজিদের লোকেশন লোড করুন।';
+  String get loadLocationFirst => 'মসজিদের লোকেশন দিন।';
 
   @override
   String get nidNumber => 'আপনার এনআইডি নম্বর';
@@ -1169,7 +1169,7 @@ class L10nBn extends L10n {
 
   @override
   String get editMasjidInfoBody =>
-      'মসজিদ প্রোফাইলে দেখানো তথ্যগুলো আপডেট করুন। লোকেশন ঠিক করতে মসজিদের ভিতরে দাঁড়িয়ে রিলোড চাপুন।';
+      'মসজিদ প্রোফাইলের তথ্য আপডেট করুন, লোকেশনসহ (মসজিদে GPS দিয়ে বা ম্যাপ থেকে)।';
 
   @override
   String get followedMasjids => 'ফলো করা মসজিদ';
@@ -1930,4 +1930,59 @@ class L10nBn extends L10n {
 
   @override
   String get previousSurah => 'আগের সূরা';
+
+  @override
+  String get pickOnMapTitle => 'ম্যাপে বেছে নিন';
+
+  @override
+  String get mapSearchHint => 'মসজিদ বা এলাকা খুঁজুন';
+
+  @override
+  String get useMyLocation => 'আমার লোকেশন';
+
+  @override
+  String get mapPickHint =>
+      'পিনটি মসজিদের ওপর আনতে ম্যাপ সরান, কোনো জায়গায় চাপ দিন, অথবা মসজিদের আইকনে চাপ দিন।';
+
+  @override
+  String get mapMoving => 'জায়গাটি খোঁজা হচ্ছে…';
+
+  @override
+  String get useThisLocation => 'এই লোকেশন ব্যবহার করুন';
+
+  @override
+  String get masjidLocation => 'মসজিদের লোকেশন';
+
+  @override
+  String get chooseLocationWay =>
+      'সঠিক লোকেশন দিতে যেকোনো একটি উপায় বেছে নিন:';
+
+  @override
+  String get atTheMasjid => 'আমি মসজিদে আছি';
+
+  @override
+  String get atTheMasjidBody =>
+      'ফোনের GPS ব্যবহার করুন। লোড হওয়া পর্যন্ত মসজিদের ভেতরে থাকুন।';
+
+  @override
+  String get onTheMap => 'ম্যাপে বেছে নিন';
+
+  @override
+  String get onTheMapBody =>
+      'ম্যাপে মসজিদটি চিহ্নিত করুন, বা দেখানো মসজিদে চাপ দিন।';
+
+  @override
+  String get locFromMap => 'ম্যাপ থেকে নেওয়া';
+
+  @override
+  String get locFromGps => 'GPS';
+
+  @override
+  String get locSaved => 'সংরক্ষিত লোকেশন';
+
+  @override
+  String get useGpsInstead => 'GPS ব্যবহার';
+
+  @override
+  String get adjustOnMap => 'ম্যাপে ঠিক করুন';
 }

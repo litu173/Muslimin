@@ -1072,7 +1072,7 @@ abstract class L10n {
   /// No description provided for @rule4.
   ///
   /// In en, this message translates to:
-  /// **'I am physically inside the masjid right now'**
+  /// **'I will mark the exact location of the masjid'**
   String get rule4;
 
   /// No description provided for @agreeAll.
@@ -1180,7 +1180,7 @@ abstract class L10n {
   /// No description provided for @stayInside.
   ///
   /// In en, this message translates to:
-  /// **'Stay inside of the masjid & enter below information carefully.'**
+  /// **'Enter the details below carefully. You can set the location from inside the masjid or on the map.'**
   String get stayInside;
 
   /// No description provided for @masjidName.
@@ -1240,7 +1240,7 @@ abstract class L10n {
   /// No description provided for @loadLocationFirst.
   ///
   /// In en, this message translates to:
-  /// **'Please load the masjid location.'**
+  /// **'Please set the masjid location.'**
   String get loadLocationFirst;
 
   /// No description provided for @nidNumber.
@@ -2194,7 +2194,7 @@ abstract class L10n {
   /// No description provided for @editMasjidInfoBody.
   ///
   /// In en, this message translates to:
-  /// **'Update the details shown on your masjid profile. To correct the location, stand inside the masjid and tap Reload.'**
+  /// **'Update the details shown on your masjid profile, including its location (GPS at the masjid or chosen on the map).'**
   String get editMasjidInfoBody;
 
   /// No description provided for @followedMasjids.
@@ -3540,6 +3540,108 @@ abstract class L10n {
   /// In en, this message translates to:
   /// **'Previous surah'**
   String get previousSurah;
+
+  /// No description provided for @pickOnMapTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose on map'**
+  String get pickOnMapTitle;
+
+  /// No description provided for @mapSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search a masjid or area'**
+  String get mapSearchHint;
+
+  /// No description provided for @useMyLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'My location'**
+  String get useMyLocation;
+
+  /// No description provided for @mapPickHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Move the map so the pin sits on the masjid, tap a spot, or tap a masjid icon.'**
+  String get mapPickHint;
+
+  /// No description provided for @mapMoving.
+  ///
+  /// In en, this message translates to:
+  /// **'Finding the place…'**
+  String get mapMoving;
+
+  /// No description provided for @useThisLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Use this location'**
+  String get useThisLocation;
+
+  /// No description provided for @masjidLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Masjid location'**
+  String get masjidLocation;
+
+  /// No description provided for @chooseLocationWay.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose one way to set the exact location:'**
+  String get chooseLocationWay;
+
+  /// No description provided for @atTheMasjid.
+  ///
+  /// In en, this message translates to:
+  /// **'I\'m at the masjid'**
+  String get atTheMasjid;
+
+  /// No description provided for @atTheMasjidBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Use your phone\'s GPS. Stay inside the masjid while it loads.'**
+  String get atTheMasjidBody;
+
+  /// No description provided for @onTheMap.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose on map'**
+  String get onTheMap;
+
+  /// No description provided for @onTheMapBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Point to the masjid on the map, or tap one already shown.'**
+  String get onTheMapBody;
+
+  /// No description provided for @locFromMap.
+  ///
+  /// In en, this message translates to:
+  /// **'Chosen on map'**
+  String get locFromMap;
+
+  /// No description provided for @locFromGps.
+  ///
+  /// In en, this message translates to:
+  /// **'GPS'**
+  String get locFromGps;
+
+  /// No description provided for @locSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved location'**
+  String get locSaved;
+
+  /// No description provided for @useGpsInstead.
+  ///
+  /// In en, this message translates to:
+  /// **'Use GPS'**
+  String get useGpsInstead;
+
+  /// No description provided for @adjustOnMap.
+  ///
+  /// In en, this message translates to:
+  /// **'Adjust on map'**
+  String get adjustOnMap;
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {

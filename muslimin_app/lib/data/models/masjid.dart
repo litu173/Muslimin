@@ -65,6 +65,7 @@ class Masjid {
     this.nid = '',
     this.submitterRole = SubmitterRole.committee,
     this.locationAccuracyM = 0,
+    this.locationSource = 'gps',
     this.jamat = const {},
     this.jamatUpdatedAt,
     this.maktab = const Maktab(),
@@ -95,6 +96,9 @@ class Masjid {
   final String nid;
   final SubmitterRole submitterRole;
   final double locationAccuracyM;
+
+  /// How the location was set: 'gps' (on site) or 'map' (pinned on a map).
+  final String locationSource;
   final Map<Prayer, HM> jamat;
   final DateTime? jamatUpdatedAt;
   final Maktab maktab;
@@ -153,6 +157,7 @@ class Masjid {
 
     /// (lat, lng, accuracy in m).
     (double, double, double)? location,
+    String? locationSource,
   }) => Masjid(
     id: id,
     name: name ?? this.name,
@@ -169,6 +174,7 @@ class Masjid {
     nid: nid,
     submitterRole: submitterRole,
     locationAccuracyM: location?.$3 ?? locationAccuracyM,
+    locationSource: locationSource ?? this.locationSource,
     jamat: jamat ?? this.jamat,
     jamatUpdatedAt: jamatUpdatedAt ?? this.jamatUpdatedAt,
     maktab: maktab ?? this.maktab,
@@ -227,6 +233,7 @@ class Masjid {
         SubmitterRole.values.asNameMap()[m['submitterRole']] ??
         SubmitterRole.committee,
     locationAccuracyM: ((m['locationAccuracyM'] ?? 0) as num).toDouble(),
+    locationSource: (m['locationSource'] as String?) ?? 'gps',
     jamat: jamatFromMap((m['jamat'] as Map?)?.cast<String, dynamic>()),
     jamatUpdatedAt: jamatUpdatedAt,
     maktab: Maktab.fromMap((m['maktab'] as Map?)?.cast<String, dynamic>()),
@@ -253,6 +260,7 @@ class Masjid {
     'nid': nid,
     'submitterRole': submitterRole.name,
     'locationAccuracyM': locationAccuracyM,
+    'locationSource': locationSource,
     'agreedToTerms': true,
     'jamat': jamatToMap(jamat),
     'maktab': maktab.toMap(),
