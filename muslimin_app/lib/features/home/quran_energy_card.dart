@@ -228,9 +228,8 @@ class _EnergyBar extends StatelessWidget {
 }
 
 /// An open Quran resting on a rehal (the crossed wooden stand, like the
-/// Maktab icon). Unlit until you read; as you read, a fan of light rises
-/// from the open pages, sways gently and grows, and motes of light float up
-/// out of the book – more of them the more you read.
+/// Maktab icon). As you read, motes of light float up out of the book –
+/// more of them the more you read.
 class _QuranLightPainter extends CustomPainter {
   _QuranLightPainter({
     required this.energy,
@@ -249,8 +248,6 @@ class _QuranLightPainter extends CustomPainter {
     final w = s.width, h = s.height;
     final light = dark ? const Color(0xFFFFE3A0) : const Color(0xFFEFB43A);
     final lit = energy.clamp(0.0, 1.0);
-    final extra = (energy - 1).clamp(0.0, 1.0);
-    final breathe = 0.5 + 0.5 * math.sin(t * 2 * math.pi * 3);
 
     // Whole scene a little smaller, so the rehal sits inside the card.
     canvas.save();
@@ -263,76 +260,6 @@ class _QuranLightPainter extends CustomPainter {
     final spineTop = Offset(cx, h * 0.56);
     final spineBot = Offset(cx, h * 0.66);
     final source = spineTop.translate(0, -2); // where the light comes from
-
-    // --- Fan of rays rising from the open pages.
-    if (lit > 0) {
-      const rays = 9;
-      final reach = h * (0.55 + 0.25 * lit + 0.15 * extra);
-      for (var i = 0; i < rays; i++) {
-        // Spread across the upper half (-75° … +75° from straight up),
-        // swaying slowly.
-        final base = (i / (rays - 1) - 0.5) * 2.6;
-        final sway = 0.08 * math.sin(t * 2 * math.pi + i * 0.9);
-        final a = -math.pi / 2 + base * 0.58 + sway;
-        final flick = 0.7 + 0.3 * math.sin(t * 2 * math.pi * 2 + i * 1.3);
-        final len = reach * flick * (1 - 0.25 * (base.abs() / 1.3));
-        final spread = 0.03 + 0.015 * lit;
-        final p = Path()
-          ..moveTo(source.dx, source.dy)
-          ..lineTo(
-            source.dx + len * math.cos(a - spread),
-            source.dy + len * math.sin(a - spread),
-          )
-          ..lineTo(
-            source.dx + len * math.cos(a + spread),
-            source.dy + len * math.sin(a + spread),
-          )
-          ..close();
-        final shader = RadialGradient(
-          colors: [
-            light.withValues(alpha: (0.5 * lit + 0.15 * extra) * flick),
-            light.withValues(alpha: 0),
-          ],
-        ).createShader(Rect.fromCircle(center: source, radius: len));
-        // Soft beam…
-        canvas.drawPath(
-          p,
-          Paint()
-            ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 2)
-            ..shader = shader,
-        );
-        // …with a bright core line.
-        canvas.drawLine(
-          source,
-          Offset(
-            source.dx + len * 0.85 * math.cos(a),
-            source.dy + len * 0.85 * math.sin(a),
-          ),
-          Paint()
-            ..strokeWidth = 1
-            ..shader = shader,
-        );
-      }
-      // Soft glow over the pages, breathing.
-      final gr = bookW * (0.55 + 0.15 * breathe * lit + 0.2 * extra);
-      canvas.drawCircle(
-        source.translate(0, -h * 0.04),
-        gr,
-        Paint()
-          ..shader =
-              RadialGradient(
-                colors: [
-                  light.withValues(alpha: (0.38 + 0.14 * breathe) * lit),
-                  light.withValues(alpha: 0),
-                ],
-              ).createShader(
-                Rect.fromCircle(
-                  center: source.translate(0, -h * 0.04),
-                  radius: gr,
-                ),
-              ),
-      );
-    }
 
     // --- Rehal: two crossed boards (X) with a pivot pin.
     const wood = Color(0xFFB8862B);
