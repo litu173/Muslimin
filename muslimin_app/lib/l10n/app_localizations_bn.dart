@@ -1225,4 +1225,9 @@ class L10nBn extends L10n {
   @override
   String get signOutBody =>
       'এই ফোনে ফলো করা মসজিদ দেখতে ও জামাতের রিমাইন্ডার পেতে আবার সাইন ইন করতে হবে।';
+
+  @override
+  String jamatLine(String prayer, String time) {
+    return '$prayer জামাত $time';
+  }
 }

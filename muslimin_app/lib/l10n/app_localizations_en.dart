@@ -1227,4 +1227,9 @@ class L10nEn extends L10n {
   @override
   String get signOutBody =>
       'You will need to sign in again to see your followed masjids and get jamat reminders on this phone.';
+
+  @override
+  String jamatLine(String prayer, String time) {
+    return '$prayer Jamat $time';
+  }
 }

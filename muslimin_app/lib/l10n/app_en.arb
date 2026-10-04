@@ -585,5 +585,16 @@
   "pullToRefresh": "Pull down to refresh",
   "verifyAutoCheck": "Open the link we emailed you — this page updates by itself once you're verified.",
   "signOutTitle": "Sign out?",
-  "signOutBody": "You will need to sign in again to see your followed masjids and get jamat reminders on this phone."
+  "signOutBody": "You will need to sign in again to see your followed masjids and get jamat reminders on this phone.",
+  "jamatLine": "{prayer} Jamat {time}",
+  "@jamatLine": {
+    "placeholders": {
+      "prayer": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  }
 }

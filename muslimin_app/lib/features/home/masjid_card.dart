@@ -37,7 +37,7 @@ class MasjidCard extends ConsumerWidget {
       title: masjid.displayName(f.isBn),
       line: next == null
           ? t.jamatNotSet
-          : '${f.prayer(next.prayer)} · ${f.timePeriod(next.at)}',
+          : t.jamatLine(f.prayer(next.prayer), f.timeUpper(next.at)),
       meta: meta,
       onTap: () =>
           push(context, MasjidScreen(masjidId: masjid.id, initial: masjid)),

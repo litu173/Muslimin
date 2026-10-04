@@ -133,7 +133,7 @@ final reminderSyncProvider = Provider<void>((ref) {
       prayerName: f.prayer,
       body: (prayer, minutes, _) => locale.languageCode == 'bn'
           ? '$prayer-এর জামাত ${f.digits(minutes)} মিনিট পর'
-          : '$prayer jamat in $minutes minutes',
+          : '$prayer Jamat in $minutes minutes',
     ),
   );
 });

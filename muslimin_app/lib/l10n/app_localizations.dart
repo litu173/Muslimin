@@ -2292,6 +2292,12 @@ abstract class L10n {
   /// In en, this message translates to:
   /// **'You will need to sign in again to see your followed masjids and get jamat reminders on this phone.'**
   String get signOutBody;
+
+  /// No description provided for @jamatLine.
+  ///
+  /// In en, this message translates to:
+  /// **'{prayer} Jamat {time}'**
+  String jamatLine(String prayer, String time);
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {
