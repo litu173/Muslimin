@@ -91,10 +91,7 @@ class _MasjidAboutTabState extends ConsumerState<MasjidAboutTab> {
               AppCard(
                 child: Row(
                   children: [
-                    const Icon(
-                      Icons.location_on_outlined,
-                      color: AppColors.gold,
-                    ),
+                    Icon(Icons.location_on_outlined, color: AppColors.gold),
                     const SizedBox(width: Gap.m),
                     Expanded(
                       child: Text(

@@ -86,6 +86,9 @@ abstract class Backend {
     required String district,
     required String thana,
     required String address,
+
+    /// New GPS fix (lat, lng, accuracy in m); null keeps the location.
+    (double, double, double)? location,
   });
   Future<void> updateJamat(String id, Map<Prayer, HM> jamat);
   Future<void> updateMaktab(String id, Maktab maktab);

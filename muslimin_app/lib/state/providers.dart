@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../data/backend/backend.dart';
@@ -29,6 +29,7 @@ class AppSettings {
     required this.calcMethod,
     required this.hijriOffset,
     required this.defaultReminder,
+    this.themeMode = ThemeMode.system,
   });
 
   final Locale locale;
@@ -36,6 +37,7 @@ class AppSettings {
   final String calcMethod;
   final int hijriOffset;
   final int defaultReminder;
+  final ThemeMode themeMode;
 
   AppSettings copyWith({
     Locale? locale,
@@ -43,12 +45,14 @@ class AppSettings {
     String? calcMethod,
     int? hijriOffset,
     int? defaultReminder,
+    ThemeMode? themeMode,
   }) => AppSettings(
     locale: locale ?? this.locale,
     madhab: madhab ?? this.madhab,
     calcMethod: calcMethod ?? this.calcMethod,
     hijriOffset: hijriOffset ?? this.hijriOffset,
     defaultReminder: defaultReminder ?? this.defaultReminder,
+    themeMode: themeMode ?? this.themeMode,
   );
 }
 
@@ -66,6 +70,7 @@ class SettingsNotifier extends Notifier<AppSettings> {
       calcMethod: p.calcMethod,
       hijriOffset: p.hijriOffset,
       defaultReminder: p.defaultReminder,
+      themeMode: ThemeMode.values.asNameMap()[p.themeMode] ?? ThemeMode.system,
     );
   }
 
@@ -87,6 +92,11 @@ class SettingsNotifier extends Notifier<AppSettings> {
   void setHijriOffset(int v) {
     _p.hijriOffset = v;
     state = state.copyWith(hijriOffset: v);
+  }
+
+  void setThemeMode(ThemeMode m) {
+    _p.themeMode = m.name;
+    state = state.copyWith(themeMode: m);
   }
 
   void setDefaultReminder(int v) {
@@ -230,3 +240,18 @@ final nearbyNoticesProvider = Provider<AsyncValue<List<Notice>>>((ref) {
     error: AsyncError.new,
   );
 });
+
+/// Pull-to-refresh on any page: re-reads the location and re-subscribes the
+/// masjid / notice streams (they keep showing old data while reloading).
+Future<void> refreshAll(WidgetRef ref) async {
+  ref.invalidate(nearbyMasjidsProvider);
+  ref.invalidate(myMasjidsProvider);
+  ref.invalidate(masjidProvider);
+  ref.invalidate(noticesProvider);
+  ref.invalidate(masjidsByStatusProvider);
+  await Future.wait([
+    ref.read(locationProvider.notifier).refresh(),
+    // Keep the spinner up long enough to read as "refreshed".
+    Future<void>.delayed(const Duration(milliseconds: 700)),
+  ]);
+}

@@ -1102,7 +1102,7 @@ class L10nBn extends L10n {
 
   @override
   String get fontCredits =>
-      'লোগো ও নামাজের নাম: Omnibus-Type-এর Grenze Gotisch। লেখা: Indian Type Foundry ও Jonny Pinhorn-এর Poppins, Indian Type Foundry-এর Hind Siliguri, Black Foundry-এর Galada, খালেদ হোসনির Amiri। সব ফন্ট SIL Open Font License 1.1-এর অধীনে ফ্রি।';
+      'লোগো ও ইংরেজি নামাজের নাম: Muslimin ডিজাইনের লেটারিং, Anthonie Van Hayu (ARToni)-এর Hidayatullah অবলম্বনে। ফন্ট: Omnibus-Type-এর Grenze Gotisch, Indian Type Foundry ও Jonny Pinhorn-এর Poppins, Indian Type Foundry-এর Hind Siliguri, Ek Type-এর Anek Bangla (বাংলা সংখ্যা), Black Foundry-এর Galada, খালেদ হোসনির Amiri। সব ফন্ট SIL Open Font License 1.1-এর অধীনে ফ্রি।';
 
   @override
   String get designInspired =>
@@ -1172,7 +1172,7 @@ class L10nBn extends L10n {
 
   @override
   String get editMasjidInfoBody =>
-      'মসজিদ প্রোফাইলে দেখানো তথ্যগুলো আপডেট করুন।';
+      'মসজিদ প্রোফাইলে দেখানো তথ্যগুলো আপডেট করুন। লোকেশন ঠিক করতে মসজিদের ভিতরে দাঁড়িয়ে রিলোড চাপুন।';
 
   @override
   String get followedMasjids => 'ফলো করা মসজিদ';
@@ -1198,4 +1198,23 @@ class L10nBn extends L10n {
   @override
   String get noMyMasjidsHint =>
       'কমিটির সদস্য, ইমাম, খতিব, মুয়াজ্জিন বা খাদেম তাঁদের মসজিদ নিবন্ধন করতে পারবেন। প্রকাশের আগে আমাদের টিম যাচাই করে।';
+
+  @override
+  String get appearance => 'থিম';
+
+  @override
+  String get themeSystem => 'সিস্টেম';
+
+  @override
+  String get themeLight => 'লাইট';
+
+  @override
+  String get themeDark => 'ডার্ক';
+
+  @override
+  String get appearanceHint =>
+      'ফজর ও এশার সময় ডার্ক মোড চোখের জন্য আরামদায়ক।';
+
+  @override
+  String get pullToRefresh => 'রিফ্রেশ করতে নিচে টানুন';
 }

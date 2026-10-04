@@ -36,7 +36,8 @@
 
     /* ---------- nav ---------- */
     nav { display: flex; justify-content: space-between; align-items: center; padding: 18px 0; position: relative; z-index: 2; }
-    .logo { font-family: 'Grenze Gotisch', serif; font-weight: 800; font-size: 32px; color: #fff; text-decoration: none; letter-spacing: .5px; }
+    .logo { display: inline-flex; align-items: center; text-decoration: none; }
+    .logo img { height: 34px; width: auto; display: block; }
     .beta { font-family: Poppins, sans-serif; font-size: 10px; font-weight: 600; letter-spacing: 1.2px; color: var(--gold-light);
       border: 1px solid var(--gold-light); border-radius: 20px; padding: 2px 8px; vertical-align: middle; margin-left: 6px; }
     .nav-right { display: flex; gap: 10px; align-items: center; }
@@ -146,7 +147,7 @@
   <header class="pattern">
     <div class="wrap">
       <nav>
-        <a class="logo" href="#">Muslimin <span class="beta">BETA</span></a>
+        <a class="logo" href="#"><img src="assets/logo.svg" alt="Muslimin" width="134" height="34" /> <span class="beta">BETA</span></a>
         <div class="nav-right">
           <a class="nav-link" href="#features" data-i18n="navFeatures">Features</a>
           <a class="nav-link" href="#download" data-i18n="navDownload">Download</a>
@@ -315,10 +316,10 @@
 
   <footer class="pattern">
     <div class="wrap row">
-      <div><span class="logo" style="font-size:24px">Muslimin</span> <span style="opacity:.7">© <span id="yr"></span></span></div>
+      <div><span class="logo"><img src="assets/logo.svg" alt="Muslimin" style="height:26px" /></span> <span style="opacity:.7">© <span id="yr"></span></span></div>
       <div><a href="privacy.html" data-i18n="privacy">Privacy Policy</a><a href="https://github.com/litu173/Muslimin">GitHub</a></div>
     </div>
-    <div class="wrap credits" data-i18n="credits">Fonts: <a href="https://github.com/Omnibus-Type/Grenze-Gotisch">Grenze Gotisch</a> by Omnibus-Type, Poppins &amp; Hind Siliguri by Indian Type Foundry, Galada by Black Foundry, Amiri by Khaled Hosny — all under the SIL Open Font License. Original design typeface: Hidayatullah by Anthonie Van Hayu (ARToni).</div>
+    <div class="wrap credits" data-i18n="credits">Fonts: <a href="https://github.com/Omnibus-Type/Grenze-Gotisch">Grenze Gotisch</a> by Omnibus-Type, Poppins &amp; Hind Siliguri by Indian Type Foundry, Anek Bangla by Ek Type, Galada by Black Foundry, Amiri by Khaled Hosny — all under the SIL Open Font License. Original design typeface: Hidayatullah by Anthonie Van Hayu (ARToni).</div>
   </footer>
 
   <script>

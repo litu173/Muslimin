@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/theme/app_spacing.dart';
+import '../../core/widgets/refresh.dart';
 import '../../core/widgets/surfaces.dart';
 import '../../l10n/app_localizations.dart';
 import '../../state/follows.dart';
@@ -32,7 +33,8 @@ class NotificationsScreen extends ConsumerWidget {
                       message: t.noNotices,
                       icon: Icons.campaign_outlined,
                     )
-                  : ListView.separated(
+                  : RefreshList.separated(
+                      onRefresh: () => refreshAll(ref),
                       padding: const EdgeInsets.all(Gap.l),
                       itemCount: list.length,
                       separatorBuilder: (_, _) => const SizedBox(height: 10),

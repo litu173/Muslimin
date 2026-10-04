@@ -66,8 +66,13 @@ service cloud.firestore {
       // Owners maintain day-to-day info; status & verification fields are locked.
       allow update: if (isOwner(resource.data)
           && resource.data.status in ['approved', 'pending']
-          && unchanged(['status', 'ownerUid', 'ownerPhone', 'phoneVerified', 'nid', 'geo',
-                        'reviewedBy', 'reviewedAt', 'rejectionReason', 'createdAt']))
+          && unchanged(['status', 'ownerUid', 'ownerPhone', 'phoneVerified', 'nid',
+                        'reviewedBy', 'reviewedAt', 'rejectionReason', 'createdAt'])
+          // The location may be re-captured from inside the masjid with an
+          // accurate GPS fix (Edit masjid info → Reload).
+          && (unchanged(['geo', 'locationAccuracyM'])
+            || (request.resource.data.locationAccuracyM <= 50
+              && request.resource.data.geo.geopoint is latlng)))
         || isSuperAdmin();
 
       allow delete: if isSuperAdmin();

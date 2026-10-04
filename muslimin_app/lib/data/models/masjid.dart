@@ -150,6 +150,9 @@ class Masjid {
     bool? isLive,
     String? rejectionReason,
     DateTime? reviewedAt,
+
+    /// (lat, lng, accuracy in m).
+    (double, double, double)? location,
   }) => Masjid(
     id: id,
     name: name ?? this.name,
@@ -157,15 +160,15 @@ class Masjid {
     address: address ?? this.address,
     district: district ?? this.district,
     thana: thana ?? this.thana,
-    lat: lat,
-    lng: lng,
+    lat: location?.$1 ?? lat,
+    lng: location?.$2 ?? lng,
     status: status ?? this.status,
     ownerUid: ownerUid,
     ownerPhone: ownerPhone,
     phoneVerified: phoneVerified,
     nid: nid,
     submitterRole: submitterRole,
-    locationAccuracyM: locationAccuracyM,
+    locationAccuracyM: location?.$3 ?? locationAccuracyM,
     jamat: jamat ?? this.jamat,
     jamatUpdatedAt: jamatUpdatedAt ?? this.jamatUpdatedAt,
     maktab: maktab ?? this.maktab,

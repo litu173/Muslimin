@@ -6,20 +6,25 @@ import 'app_spacing.dart';
 import 'app_text.dart';
 
 abstract final class AppTheme {
-  static ThemeData light(Locale locale) {
+  /// Builds the theme for the active palette ([AppColors.dark]).
+  static ThemeData build(Locale locale) {
     final isBn = locale.languageCode == 'bn';
-    final family = isBn ? AppText.bangla : AppText.latin;
-    final fallback = AppText.fallbackFor(family);
+    final family = isBn ? AppText.banglaDigits : AppText.latin;
+    final fallback = isBn
+        ? const [AppText.bangla, AppText.latin]
+        : AppText.fallbackFor(family);
 
     final base = ThemeData(
       useMaterial3: true,
+      brightness: AppColors.dark ? Brightness.dark : Brightness.light,
       fontFamily: family,
       fontFamilyFallback: fallback,
       scaffoldBackgroundColor: AppColors.cream,
       colorScheme: ColorScheme.fromSeed(
         seedColor: AppColors.gold,
+        brightness: AppColors.dark ? Brightness.dark : Brightness.light,
         primary: AppColors.gold,
-        onPrimary: Colors.white,
+        onPrimary: AppColors.onGold,
         secondary: AppColors.ink,
         surface: AppColors.card,
         onSurface: AppColors.ink,
@@ -33,14 +38,17 @@ abstract final class AppTheme {
         displayColor: AppColors.ink,
         fontFamily: family,
       ),
-      appBarTheme: const AppBarTheme(
-        backgroundColor: AppColors.ink,
-        foregroundColor: AppColors.cream,
+      cardColor: AppColors.card,
+      dialogTheme: DialogThemeData(backgroundColor: AppColors.card),
+      popupMenuTheme: PopupMenuThemeData(color: AppColors.card),
+      appBarTheme: AppBarTheme(
+        backgroundColor: AppColors.header,
+        foregroundColor: AppColors.onHeader,
         elevation: 0,
         centerTitle: false,
         systemOverlayStyle: SystemUiOverlayStyle.light,
       ),
-      dividerTheme: const DividerThemeData(
+      dividerTheme: DividerThemeData(
         color: AppColors.divider,
         thickness: 1,
         space: 1,
@@ -67,17 +75,17 @@ abstract final class AppTheme {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(Radii.field),
-          borderSide: const BorderSide(color: AppColors.gold, width: 1.2),
+          borderSide: BorderSide(color: AppColors.gold, width: 1.2),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(Radii.field),
-          borderSide: const BorderSide(color: AppColors.danger),
+          borderSide: BorderSide(color: AppColors.danger),
         ),
       ),
       snackBarTheme: SnackBarThemeData(
-        backgroundColor: AppColors.ink,
+        backgroundColor: AppColors.header,
         contentTextStyle: AppText.body.copyWith(
-          color: AppColors.cream,
+          color: AppColors.onHeader,
           fontFamily: family,
         ),
         behavior: SnackBarBehavior.floating,
@@ -91,17 +99,15 @@ abstract final class AppTheme {
         hourMinuteColor: AppColors.cream,
         dayPeriodColor: AppColors.goldLight.withValues(alpha: 0.4),
       ),
-      datePickerTheme: const DatePickerThemeData(
+      datePickerTheme: DatePickerThemeData(
         backgroundColor: AppColors.card,
-        headerBackgroundColor: AppColors.ink,
-        headerForegroundColor: AppColors.cream,
+        headerBackgroundColor: AppColors.header,
+        headerForegroundColor: AppColors.onHeader,
       ),
       bottomSheetTheme: const BottomSheetThemeData(
         backgroundColor: Colors.transparent,
       ),
-      progressIndicatorTheme: const ProgressIndicatorThemeData(
-        color: AppColors.gold,
-      ),
+      progressIndicatorTheme: ProgressIndicatorThemeData(color: AppColors.gold),
     );
   }
 }

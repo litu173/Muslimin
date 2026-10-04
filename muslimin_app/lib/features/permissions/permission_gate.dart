@@ -175,7 +175,7 @@ class _PermissionRow extends StatelessWidget {
         Container(
           width: 44,
           height: 44,
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             color: AppColors.cream,
             shape: BoxShape.circle,
           ),
@@ -197,7 +197,7 @@ class _PermissionRow extends StatelessWidget {
             ? Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(
+                  Icon(
                     Icons.check_circle_rounded,
                     color: AppColors.success,
                     size: 18,

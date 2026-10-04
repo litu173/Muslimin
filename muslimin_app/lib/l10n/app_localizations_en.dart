@@ -1103,7 +1103,7 @@ class L10nEn extends L10n {
 
   @override
   String get fontCredits =>
-      'Logo & prayer names: Grenze Gotisch by Omnibus-Type. Text: Poppins by Indian Type Foundry & Jonny Pinhorn, Hind Siliguri by Indian Type Foundry, Galada by Black Foundry, Amiri by Khaled Hosny. All fonts are free under the SIL Open Font License 1.1.';
+      'Logo & English prayer names: lettering from the Muslimin design, based on Hidayatullah by Anthonie Van Hayu (ARToni). Fonts: Grenze Gotisch by Omnibus-Type, Poppins by Indian Type Foundry & Jonny Pinhorn, Hind Siliguri by Indian Type Foundry, Anek Bangla (Bangla digits) by Ek Type, Galada by Black Foundry, Amiri by Khaled Hosny. All fonts are free under the SIL Open Font License 1.1.';
 
   @override
   String get designInspired =>
@@ -1174,7 +1174,7 @@ class L10nEn extends L10n {
 
   @override
   String get editMasjidInfoBody =>
-      'Update the details shown on your masjid profile.';
+      'Update the details shown on your masjid profile. To correct the location, stand inside the masjid and tap Reload.';
 
   @override
   String get followedMasjids => 'Followed Masjids';
@@ -1200,4 +1200,23 @@ class L10nEn extends L10n {
   @override
   String get noMyMasjidsHint =>
       'Committee members, imam, khatib, moazzin or khadem can register their masjid. Our team verifies it before it goes public.';
+
+  @override
+  String get appearance => 'Appearance';
+
+  @override
+  String get themeSystem => 'System';
+
+  @override
+  String get themeLight => 'Light';
+
+  @override
+  String get themeDark => 'Dark';
+
+  @override
+  String get appearanceHint =>
+      'Dark mode is easier on the eyes at Fajr and Isha.';
+
+  @override
+  String get pullToRefresh => 'Pull down to refresh';
 }

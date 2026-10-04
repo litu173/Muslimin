@@ -18,6 +18,7 @@ import '../../data/backend/backend.dart';
 import '../../data/bd_districts.dart';
 import '../../data/models/masjid.dart';
 import '../../l10n/app_localizations.dart';
+import 'location_field.dart';
 import '../../services/location_service.dart';
 import '../../state/providers.dart';
 import '../auth/auth_screens.dart';
@@ -401,7 +402,23 @@ class _RegistrationFlowState extends ConsumerState<RegistrationFlow> {
     children: [
       Text(t.userAuthBody, style: AppText.body),
       const SizedBox(height: Gap.l),
-      // "Select all" toggles every statement at once.
+      for (final (i, rule) in [t.rule1, t.rule2, t.rule3, t.rule4].indexed)
+        InkWell(
+          onTap: () => setState(() => _rules[i] = !_rules[i]),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TickCircle(checked: _rules[i]),
+                const SizedBox(width: Gap.s + 2),
+                Expanded(child: Text(rule, style: AppText.body)),
+              ],
+            ),
+          ),
+        ),
+      const Divider(),
+      // "Select all" (last in the list) toggles every statement at once.
       InkWell(
         onTap: () {
           final all = !_rules.every((r) => r);
@@ -418,22 +435,6 @@ class _RegistrationFlowState extends ConsumerState<RegistrationFlow> {
           ),
         ),
       ),
-      const Divider(),
-      for (final (i, rule) in [t.rule1, t.rule2, t.rule3, t.rule4].indexed)
-        InkWell(
-          onTap: () => setState(() => _rules[i] = !_rules[i]),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                TickCircle(checked: _rules[i]),
-                const SizedBox(width: Gap.s + 2),
-                Expanded(child: Text(rule, style: AppText.body)),
-              ],
-            ),
-          ),
-        ),
       if (!_rules.every((r) => r))
         Padding(
           padding: const EdgeInsets.only(top: Gap.s),
@@ -569,49 +570,11 @@ class _RegistrationFlowState extends ConsumerState<RegistrationFlow> {
           ),
           AppTextField(label: t.thana, controller: _thana, validator: req),
           AppTextField(label: t.address, controller: _address, validator: req),
-          FieldLabel(t.latLng),
-          if (_fix != null)
-            Container(
-              width: double.infinity,
-              margin: const EdgeInsets.only(bottom: Gap.s),
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-              decoration: BoxDecoration(
-                color: AppColors.field,
-                borderRadius: BorderRadius.circular(Radii.field),
-              ),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      '${f.digits(_fix!.lat.toStringAsFixed(6))}, ${f.digits(_fix!.lng.toStringAsFixed(6))}',
-                      style: AppText.label,
-                    ),
-                  ),
-                  Text(
-                    t.accuracy(f.digits(_fix!.accuracy.round())),
-                    style: AppText.caption.copyWith(
-                      color: _fix!.accuracy <= kRequiredAccuracyM
-                          ? AppColors.success
-                          : AppColors.danger,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          AppButton(
-            _fix == null ? t.load : t.reload,
-            style: AppButtonStyle.outlined,
-            expand: true,
+          LocationField(
+            fix: _fix,
             loading: _locating,
-            icon: Icons.my_location_rounded,
-            onPressed: _loadLocation,
-          ),
-          const SizedBox(height: Gap.s),
-          Text(
-            _locError ?? t.stayInsideLoading,
-            style: AppText.caption.copyWith(
-              color: _locError == null ? AppColors.ink : AppColors.danger,
-            ),
+            error: _locError,
+            onLoad: _loadLocation,
           ),
         ],
       ),
@@ -702,7 +665,7 @@ class _RegistrationFlowState extends ConsumerState<RegistrationFlow> {
                         TextSpan(text: t.agreeTermsPrefix),
                         TextSpan(
                           text: t.termsAndConditions,
-                          style: const TextStyle(color: AppColors.gold),
+                          style: TextStyle(color: AppColors.gold),
                           recognizer: TapGestureRecognizer()
                             ..onTap = () => showTerms(context),
                         ),
@@ -740,7 +703,7 @@ Future<void> showTerms(BuildContext context) {
     isScrollControlled: true,
     useSafeArea: true,
     builder: (ctx) => Container(
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         color: AppColors.card,
         borderRadius: BorderRadius.vertical(top: Radius.circular(Radii.sheet)),
       ),

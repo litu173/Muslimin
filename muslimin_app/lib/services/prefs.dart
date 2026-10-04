@@ -18,6 +18,10 @@ class Prefs {
   set localeCode(String? v) =>
       v == null ? _p.remove('locale') : _p.setString('locale', v);
 
+  /// 'system' | 'light' | 'dark'.
+  String get themeMode => _p.getString('themeMode') ?? 'system';
+  set themeMode(String v) => _p.setString('themeMode', v);
+
   bool get authorityBannerHidden =>
       _p.getBool('authorityBannerHidden') ?? false;
   set authorityBannerHidden(bool v) => _p.setBool('authorityBannerHidden', v);

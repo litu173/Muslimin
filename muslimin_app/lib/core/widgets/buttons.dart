@@ -36,13 +36,13 @@ class AppButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final (bg, fg, border) = switch (style) {
-      AppButtonStyle.filled => (AppColors.gold, Colors.white, null),
+      AppButtonStyle.filled => (AppColors.gold, AppColors.onGold, null),
       AppButtonStyle.outlined => (
         Colors.transparent,
         AppColors.gold,
         AppColors.gold,
       ),
-      AppButtonStyle.light => (AppColors.cream, AppColors.gold, null),
+      AppButtonStyle.light => (AppColors.onHeader, AppColors.gold, null),
       AppButtonStyle.darkOutlined => (
         Colors.transparent,
         AppColors.goldLight,
@@ -152,7 +152,7 @@ class CircleIconButton extends StatelessWidget {
           child: Icon(
             icon,
             size: 20,
-            color: active ? Colors.white : AppColors.gold,
+            color: active ? AppColors.onGold : AppColors.gold,
           ),
         ),
       ),

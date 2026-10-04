@@ -10,6 +10,7 @@ import '../../core/widgets/surfaces.dart';
 import '../../data/models/hm.dart';
 import '../../data/models/notice.dart';
 import '../../l10n/app_localizations.dart';
+import '../masjid/follow_badge.dart';
 import '../masjid/masjid_screen.dart';
 
 class NoticeIcon extends StatelessWidget {
@@ -84,7 +85,7 @@ Future<void> showNoticeDetails(
     isScrollControlled: true,
     useSafeArea: true,
     builder: (ctx) => Container(
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         color: AppColors.card,
         borderRadius: BorderRadius.vertical(top: Radius.circular(Radii.sheet)),
       ),
@@ -155,10 +156,10 @@ Future<void> showNoticeDetails(
               },
               child: Row(
                 children: [
-                  const MasjidBadge(size: 32),
+                  FollowBadge(masjidId: n.masjidId, size: 32),
                   const SizedBox(width: Gap.m),
                   Expanded(child: Text(n.masjidName, style: AppText.label)),
-                  const Icon(Icons.chevron_right_rounded, color: AppColors.ink),
+                  Icon(Icons.chevron_right_rounded, color: AppColors.ink),
                 ],
               ),
             ),

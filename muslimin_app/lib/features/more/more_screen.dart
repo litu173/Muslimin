@@ -7,6 +7,7 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text.dart';
 import '../../core/widgets/buttons.dart';
+import '../../core/widgets/refresh.dart';
 import '../../core/widgets/surfaces.dart';
 import '../../data/models/masjid.dart';
 import '../../l10n/app_localizations.dart';
@@ -49,7 +50,8 @@ class _MoreScreenState extends ConsumerState<MoreScreen> {
 
     return Scaffold(
       body: SafeArea(
-        child: ListView(
+        child: RefreshList(
+          onRefresh: () => refreshAll(ref),
           padding: const EdgeInsets.fromLTRB(Gap.l, Gap.s, Gap.l, Gap.xxl),
           children: [
             const LocationBar(),
@@ -142,7 +144,7 @@ class _MenuRow extends StatelessWidget {
           Icon(icon, color: AppColors.gold, size: 22),
           const SizedBox(width: Gap.l),
           Expanded(child: Text(label, style: AppText.body)),
-          const Icon(Icons.chevron_right_rounded, color: AppColors.ink),
+          Icon(Icons.chevron_right_rounded, color: AppColors.ink),
         ],
       ),
     ),
@@ -156,10 +158,10 @@ class _ShareCard extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(Radii.card),
-        gradient: const LinearGradient(
+        gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [AppColors.card, Color(0x00FFFDF5)],
+          colors: [AppColors.card, AppColors.card.withValues(alpha: 0)],
         ),
       ),
       padding: const EdgeInsets.all(Gap.l),
@@ -222,7 +224,7 @@ class _AccountCard extends ConsumerWidget {
         children: [
           CircleAvatar(
             radius: 22,
-            backgroundColor: AppColors.ink,
+            backgroundColor: AppColors.header,
             child: Text(
               user.displayName.characters.first.toUpperCase(),
               style: AppText.subtitle.copyWith(color: AppColors.goldLight),
@@ -243,12 +245,8 @@ class _AccountCard extends ConsumerWidget {
             ),
           ),
           if (!user.emailVerified)
-            const Icon(
-              Icons.error_outline_rounded,
-              color: AppColors.gold,
-              size: 20,
-            ),
-          const Icon(Icons.chevron_right_rounded, color: AppColors.ink),
+            Icon(Icons.error_outline_rounded, color: AppColors.gold, size: 20),
+          Icon(Icons.chevron_right_rounded, color: AppColors.ink),
         ],
       ),
     );

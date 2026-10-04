@@ -65,11 +65,7 @@ class _RingPainter extends CustomPainter {
           startAngle: 0,
           endAngle: math.pi * 2,
           transform: const GradientRotation(-math.pi / 2),
-          colors: const [
-            AppColors.goldLight,
-            AppColors.gold,
-            Color(0x00BB8907),
-          ],
+          colors: [AppColors.goldLight, AppColors.gold, Color(0x00BB8907)],
           stops: [0, remaining * 0.7, remaining],
         ).createShader(rect),
     );

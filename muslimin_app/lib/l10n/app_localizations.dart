@@ -2074,7 +2074,7 @@ abstract class L10n {
   /// No description provided for @fontCredits.
   ///
   /// In en, this message translates to:
-  /// **'Logo & prayer names: Grenze Gotisch by Omnibus-Type. Text: Poppins by Indian Type Foundry & Jonny Pinhorn, Hind Siliguri by Indian Type Foundry, Galada by Black Foundry, Amiri by Khaled Hosny. All fonts are free under the SIL Open Font License 1.1.'**
+  /// **'Logo & English prayer names: lettering from the Muslimin design, based on Hidayatullah by Anthonie Van Hayu (ARToni). Fonts: Grenze Gotisch by Omnibus-Type, Poppins by Indian Type Foundry & Jonny Pinhorn, Hind Siliguri by Indian Type Foundry, Anek Bangla (Bangla digits) by Ek Type, Galada by Black Foundry, Amiri by Khaled Hosny. All fonts are free under the SIL Open Font License 1.1.'**
   String get fontCredits;
 
   /// No description provided for @designInspired.
@@ -2200,7 +2200,7 @@ abstract class L10n {
   /// No description provided for @editMasjidInfoBody.
   ///
   /// In en, this message translates to:
-  /// **'Update the details shown on your masjid profile.'**
+  /// **'Update the details shown on your masjid profile. To correct the location, stand inside the masjid and tap Reload.'**
   String get editMasjidInfoBody;
 
   /// No description provided for @followedMasjids.
@@ -2244,6 +2244,42 @@ abstract class L10n {
   /// In en, this message translates to:
   /// **'Committee members, imam, khatib, moazzin or khadem can register their masjid. Our team verifies it before it goes public.'**
   String get noMyMasjidsHint;
+
+  /// No description provided for @appearance.
+  ///
+  /// In en, this message translates to:
+  /// **'Appearance'**
+  String get appearance;
+
+  /// No description provided for @themeSystem.
+  ///
+  /// In en, this message translates to:
+  /// **'System'**
+  String get themeSystem;
+
+  /// No description provided for @themeLight.
+  ///
+  /// In en, this message translates to:
+  /// **'Light'**
+  String get themeLight;
+
+  /// No description provided for @themeDark.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark'**
+  String get themeDark;
+
+  /// No description provided for @appearanceHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark mode is easier on the eyes at Fajr and Isha.'**
+  String get appearanceHint;
+
+  /// No description provided for @pullToRefresh.
+  ///
+  /// In en, this message translates to:
+  /// **'Pull down to refresh'**
+  String get pullToRefresh;
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {

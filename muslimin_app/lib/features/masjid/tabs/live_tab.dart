@@ -64,7 +64,7 @@ class _MasjidLiveTabState extends ConsumerState<MasjidLiveTab> {
       children: [
         if (m.isLive && (m.liveUrl?.isNotEmpty ?? false))
           AppCard(
-            color: AppColors.ink,
+            color: AppColors.header,
             padding: const EdgeInsets.all(Gap.xl),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -91,7 +91,7 @@ class _MasjidLiveTabState extends ConsumerState<MasjidLiveTab> {
                 const SizedBox(height: Gap.s),
                 Text(
                   m.name,
-                  style: AppText.body.copyWith(color: AppColors.cream),
+                  style: AppText.body.copyWith(color: AppColors.onHeader),
                 ),
                 const SizedBox(height: Gap.l),
                 AppButton(

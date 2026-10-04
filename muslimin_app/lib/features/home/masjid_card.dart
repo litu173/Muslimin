@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/nav.dart';
-import '../../core/theme/app_colors.dart';
 import '../../core/utils/format.dart';
 import '../../core/utils/geo.dart';
 import '../../core/widgets/surfaces.dart';
 import '../../data/models/masjid.dart';
 import '../../l10n/app_localizations.dart';
 import '../../state/providers.dart';
+import '../masjid/follow_badge.dart';
 import '../masjid/masjid_screen.dart';
 
 /// "Diluroad Chhata Masjid · 1:15 pm · 5 min walk"
@@ -33,9 +33,7 @@ class MasjidCard extends ConsumerWidget {
     }
 
     return InfoTile(
-      leading: MasjidBadge(
-        color: index.isOdd ? AppColors.tealDark : AppColors.gold,
-      ),
+      leading: FollowBadge(masjidId: masjid.id),
       title: masjid.displayName(f.isBn),
       line: next == null
           ? t.jamatNotSet

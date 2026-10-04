@@ -6,6 +6,7 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text.dart';
 import '../../core/widgets/buttons.dart';
+import '../../core/widgets/refresh.dart';
 import '../../core/widgets/surfaces.dart';
 import '../../data/models/masjid.dart';
 import '../../l10n/app_localizations.dart';
@@ -29,7 +30,8 @@ class ManageMasjidsScreen extends ConsumerWidget {
         error: (_, _) => EmptyState(message: t.somethingWrong),
         data: (list) => list.isEmpty
             ? EmptyState(message: t.noMyMasjids, hint: t.noMyMasjidsHint)
-            : ListView.separated(
+            : RefreshList.separated(
+                onRefresh: () => refreshAll(ref),
                 padding: const EdgeInsets.all(Gap.l),
                 itemCount: list.length,
                 separatorBuilder: (_, _) => const SizedBox(height: Gap.m),
@@ -61,58 +63,37 @@ class MyMasjidCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = L10n.of(context);
     final (label, color) = switch (masjid.status) {
-      MasjidStatus.approved => (t.statusApproved, Colors.white),
-      MasjidStatus.pending => (t.statusPending, AppColors.ink),
+      MasjidStatus.approved => (t.statusApproved, AppColors.success),
+      MasjidStatus.pending => (t.statusPending, AppColors.gold),
       MasjidStatus.rejected => (t.statusRejected, AppColors.danger),
       MasjidStatus.suspended => (t.statusSuspended, AppColors.danger),
     };
-    return Material(
-      color: AppColors.gold,
-      borderRadius: BorderRadius.circular(Radii.card),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(Radii.card),
-        onTap: () =>
-            push(context, MasjidScreen(masjidId: masjid.id, initial: masjid)),
-        child: Padding(
-          padding: const EdgeInsets.all(Gap.l),
-          child: Row(
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Flexible(
-                          child: Text(
-                            masjid.displayName(
-                              Localizations.localeOf(context).languageCode ==
-                                  'bn',
-                            ),
-                            style: AppText.subtitle.copyWith(
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: Gap.s),
-                        if (masjid.status != MasjidStatus.approved)
-                          StatusPill(label: label, color: color),
-                      ],
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      masjid.fullAddress,
-                      style: AppText.body.copyWith(
-                        color: Colors.white.withValues(alpha: 0.85),
-                      ),
-                    ),
-                  ],
+    final bn = Localizations.localeOf(context).languageCode == 'bn';
+    return AppCard(
+      padding: const EdgeInsets.all(Gap.l),
+      onTap: () =>
+          push(context, MasjidScreen(masjidId: masjid.id, initial: masjid)),
+      child: Row(
+        children: [
+          const MasjidBadge(),
+          const SizedBox(width: Gap.m),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(masjid.displayName(bn), style: AppText.subtitle),
+                const SizedBox(height: 2),
+                Text(
+                  masjid.fullAddress,
+                  style: AppText.caption.copyWith(color: AppColors.muted),
                 ),
-              ),
-              const Icon(Icons.chevron_right_rounded, color: Colors.white),
-            ],
+                const SizedBox(height: Gap.s),
+                StatusPill(label: label, color: color),
+              ],
+            ),
           ),
-        ),
+          Icon(Icons.chevron_right_rounded, color: AppColors.muted),
+        ],
       ),
     );
   }

@@ -64,7 +64,7 @@ class SettingsScreen extends ConsumerWidget {
             side: BorderSide.none,
             shape: const StadiumBorder(),
             labelStyle: AppText.caption.copyWith(
-              color: i.$1 == selected ? Colors.white : AppColors.ink,
+              color: i.$1 == selected ? AppColors.onGold : AppColors.ink,
             ),
             onSelected: (_) => onTap(i.$1),
           ),
@@ -82,6 +82,28 @@ class SettingsScreen extends ConsumerWidget {
               [(const Locale('bn'), 'বাংলা'), (const Locale('en'), 'English')],
               s.locale,
               n.setLocale,
+            ),
+          ),
+          section(
+            t.appearance,
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                chips(
+                  [
+                    (ThemeMode.system, t.themeSystem),
+                    (ThemeMode.light, t.themeLight),
+                    (ThemeMode.dark, t.themeDark),
+                  ],
+                  s.themeMode,
+                  n.setThemeMode,
+                ),
+                const SizedBox(height: Gap.s),
+                Text(
+                  t.appearanceHint,
+                  style: AppText.caption.copyWith(color: AppColors.muted),
+                ),
+              ],
             ),
           ),
           section(

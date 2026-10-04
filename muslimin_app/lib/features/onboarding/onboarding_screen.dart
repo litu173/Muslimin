@@ -152,15 +152,16 @@ class _PrayerIllustration extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  DisplayText(
-                    f.prayer(Prayer.dhuhr),
+                  PrayerNameArt(
+                    prayer: Prayer.dhuhr,
+                    label: f.prayer(Prayer.dhuhr),
                     size: 34,
                     color: AppColors.goldLight,
                   ),
                   const SizedBox(height: 2),
                   Text(
                     f.digits('03:50:31'),
-                    style: AppText.subtitle.copyWith(color: AppColors.cream),
+                    style: AppText.subtitle.copyWith(color: AppColors.onHeader),
                   ),
                 ],
               ),

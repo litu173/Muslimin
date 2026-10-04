@@ -11,6 +11,14 @@ import 'app_colors.dart';
 abstract final class AppText {
   static const latin = 'Poppins';
   static const bangla = 'HindSiliguri';
+
+  /// Bangla digits (০-৯ and ':') only, cut from Anek Bangla (SIL OFL) by
+  /// tool/build_bangla_digits.py. It is listed first for Bangla UI so every
+  /// time and number uses it, while letters fall through to Hind Siliguri.
+  /// The design asks for Li Ador Noirrit, but Lipighor's free licence forbids
+  /// redistributing the font file inside an app; swap it in here (and in
+  /// pubspec.yaml) once a licence/permission from Lipighor is in place.
+  static const banglaDigits = 'BanglaDigits';
   static const displayLatin = 'GrenzeGotisch';
 
   /// Grenze Gotisch is a variable font; 800 matches the weight of the Figma face.
@@ -31,23 +39,23 @@ abstract final class AppText {
       );
 
   /// 24 / Bold – screen titles ("Create Masjid Profile", onboarding titles).
-  static final headline = _base(24, FontWeight.w700, 31);
+  static TextStyle get headline => _base(24, FontWeight.w700, 31);
 
   /// 22 / Bold – masjid name in the dark header.
-  static final title = _base(22, FontWeight.w700, 28);
+  static TextStyle get title => _base(22, FontWeight.w700, 28);
 
   /// 19 / Medium – card titles, section headers.
-  static final subtitle = _base(19, FontWeight.w500, 26);
+  static TextStyle get subtitle => _base(19, FontWeight.w500, 26);
 
   /// 16 / Medium – list labels, prayer rows, buttons.
-  static final label = _base(16, FontWeight.w500, 23);
+  static TextStyle get label => _base(16, FontWeight.w500, 23);
 
   /// 16 / Regular – body copy.
-  static final body = _base(16, FontWeight.w400, 23);
+  static TextStyle get body => _base(16, FontWeight.w400, 23);
 
   /// 14 / Regular – meta lines (walk time, dates).
-  static final caption = _base(14, FontWeight.w400, 20);
+  static TextStyle get caption => _base(14, FontWeight.w400, 20);
 
   /// 12 / Regular – "Last updated …".
-  static final micro = _base(12, FontWeight.w400, 18);
+  static TextStyle get micro => _base(12, FontWeight.w400, 18);
 }

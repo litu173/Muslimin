@@ -34,7 +34,7 @@ class _AuthGateState extends ConsumerState<AuthGate> {
     if (!kRequireAccount && _guest) return widget.child;
     final auth = ref.watch(authProvider);
     if (auth.isLoading && !auth.hasValue) {
-      return const Scaffold(backgroundColor: AppColors.ink, body: Loader());
+      return Scaffold(backgroundColor: AppColors.header, body: Loader());
     }
     if (auth.value != null) return widget.child;
     return WelcomeScreen(onGuest: () => setState(() => _guest = true));
@@ -53,7 +53,7 @@ class WelcomeScreen extends ConsumerWidget {
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.light,
       child: Scaffold(
-        backgroundColor: AppColors.ink,
+        backgroundColor: AppColors.header,
         body: IslamicPattern(
           child: SafeArea(
             child: Padding(
@@ -76,7 +76,7 @@ class WelcomeScreen extends ConsumerWidget {
                   Text(
                     t.welcomeBody,
                     textAlign: TextAlign.center,
-                    style: AppText.body.copyWith(color: AppColors.cream),
+                    style: AppText.body.copyWith(color: AppColors.onHeader),
                   ),
                   const Spacer(flex: 3),
                   // The gate rebuilds by itself once signed in.
@@ -101,7 +101,7 @@ class WelcomeScreen extends ConsumerWidget {
                       child: Text(
                         t.continueAsGuest,
                         style: AppText.label.copyWith(
-                          color: AppColors.cream,
+                          color: AppColors.onHeader,
                           decoration: TextDecoration.underline,
                         ),
                       ),

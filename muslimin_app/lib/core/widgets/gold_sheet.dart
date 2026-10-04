@@ -26,8 +26,8 @@ Future<T?> showGoldSheet<T>(
     context: context,
     useSafeArea: true,
     builder: (ctx) => Container(
-      decoration: const BoxDecoration(
-        color: AppColors.gold,
+      decoration: BoxDecoration(
+        color: AppColors.goldSurface,
         borderRadius: BorderRadius.vertical(top: Radius.circular(Radii.sheet)),
       ),
       padding: EdgeInsets.fromLTRB(

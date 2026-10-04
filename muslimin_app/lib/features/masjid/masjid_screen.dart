@@ -12,12 +12,14 @@ import '../../core/utils/format.dart';
 import '../../core/utils/geo.dart';
 import '../../core/widgets/buttons.dart';
 import '../../core/widgets/islamic_pattern.dart';
+import '../../core/widgets/refresh.dart';
 import '../../core/widgets/surfaces.dart';
 import '../../data/models/masjid.dart';
 import '../../l10n/app_localizations.dart';
 import '../../state/follows.dart';
 import '../../state/providers.dart';
 import 'edit_masjid_info_screen.dart';
+import 'follow_badge.dart';
 import 'tabs/about_tab.dart';
 import 'tabs/home_tab.dart';
 import 'tabs/live_tab.dart';
@@ -73,6 +75,7 @@ class _MasjidScreenState extends ConsumerState<MasjidScreen>
       child: Scaffold(
         body: NestedScrollView(
           headerSliverBuilder: (_, _) => [
+            PullToRefresh(onRefresh: () => refreshAll(ref)),
             SliverToBoxAdapter(
               child: _Header(masjid: masjid, canEdit: canEdit, tabs: _tabs),
             ),
@@ -140,12 +143,12 @@ class _Header extends ConsumerWidget {
           children: [
             Row(
               children: [
-                const BackButton(color: AppColors.cream),
+                BackButton(color: AppColors.onHeader),
                 const Spacer(),
                 PopupMenuButton<String>(
-                  icon: const Icon(
+                  icon: Icon(
                     Icons.more_horiz_rounded,
-                    color: AppColors.cream,
+                    color: AppColors.onHeader,
                   ),
                   color: AppColors.card,
                   onSelected: (v) {
@@ -172,7 +175,7 @@ class _Header extends ConsumerWidget {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const MasjidBadge(),
+                  FollowBadge(masjidId: masjid.id),
                   const SizedBox(width: Gap.l),
                   Expanded(
                     child: Column(
@@ -180,19 +183,23 @@ class _Header extends ConsumerWidget {
                       children: [
                         Text(
                           masjid.displayName(f.isBn),
-                          style: AppText.title.copyWith(color: AppColors.cream),
+                          style: AppText.title.copyWith(
+                            color: AppColors.onHeader,
+                          ),
                         ),
                         const SizedBox(height: 4),
                         Text(
                           masjid.fullAddress,
-                          style: AppText.body.copyWith(color: AppColors.cream),
+                          style: AppText.body.copyWith(
+                            color: AppColors.onHeader,
+                          ),
                         ),
                         if (walk != null && walk.isNotEmpty) ...[
                           const SizedBox(height: 4),
                           Text(
                             walk,
                             style: AppText.caption.copyWith(
-                              color: AppColors.cream.withValues(alpha: 0.8),
+                              color: AppColors.onHeader.withValues(alpha: 0.8),
                             ),
                           ),
                         ],
@@ -245,9 +252,9 @@ class _Header extends ConsumerWidget {
                   IconButton(
                     tooltip: t.directions,
                     onPressed: () => openDirections(masjid),
-                    icon: const Icon(
+                    icon: Icon(
                       Icons.explore_outlined,
-                      color: AppColors.cream,
+                      color: AppColors.onHeader,
                     ),
                   ),
                 ],
@@ -277,7 +284,7 @@ class _TabBarDelegate extends SliverPersistentHeaderDelegate {
     double shrinkOffset,
     bool overlapsContent,
   ) => Container(
-    color: Colors.white,
+    color: AppColors.card,
     child: TabBar(
       controller: controller,
       labelColor: AppColors.ink,
@@ -290,7 +297,7 @@ class _TabBarDelegate extends SliverPersistentHeaderDelegate {
       ),
       dividerColor: Colors.transparent,
       indicatorSize: TabBarIndicatorSize.label,
-      indicator: const UnderlineTabIndicator(
+      indicator: UnderlineTabIndicator(
         borderSide: BorderSide(color: AppColors.gold, width: 3),
         borderRadius: BorderRadius.vertical(top: Radius.circular(3)),
         insets: EdgeInsets.symmetric(horizontal: 8),

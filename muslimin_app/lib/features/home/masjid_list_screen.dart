@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
+import '../../core/widgets/refresh.dart';
 import '../../core/widgets/surfaces.dart';
 import '../../l10n/app_localizations.dart';
 import '../../state/providers.dart';
@@ -33,10 +34,7 @@ class _MasjidListScreenState extends ConsumerState<MasjidListScreen> {
               onChanged: (v) => setState(() => _q = v.trim().toLowerCase()),
               decoration: InputDecoration(
                 hintText: t.searchMasjid,
-                prefixIcon: const Icon(
-                  Icons.search_rounded,
-                  color: AppColors.ink,
-                ),
+                prefixIcon: Icon(Icons.search_rounded, color: AppColors.ink),
               ),
             ),
           ),
@@ -61,7 +59,8 @@ class _MasjidListScreenState extends ConsumerState<MasjidListScreen> {
                     hint: t.noMasjidNearbyHint,
                   );
                 }
-                return ListView.separated(
+                return RefreshList.separated(
+                  onRefresh: () => refreshAll(ref),
                   padding: const EdgeInsets.fromLTRB(Gap.l, 0, Gap.l, Gap.xxl),
                   itemCount: list.length,
                   separatorBuilder: (_, _) => const SizedBox(height: 10),

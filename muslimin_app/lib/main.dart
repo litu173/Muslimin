@@ -39,6 +39,7 @@ void _registerFontLicenses() {
     'Hind Siliguri': 'hindsiliguri',
     'Galada': 'galada',
     'Amiri': 'amiri',
+    'Anek Bangla (Bangla digits)': 'anekbangla',
   };
   LicenseRegistry.addLicense(() async* {
     for (final e in fonts.entries) {

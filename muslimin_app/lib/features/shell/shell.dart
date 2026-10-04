@@ -26,11 +26,13 @@ class _ShellState extends State<Shell> {
         children: const [HomeScreen(), MoreScreen()],
       ),
       bottomNavigationBar: DecoratedBox(
-        decoration: const BoxDecoration(
-          color: Colors.white,
+        decoration: BoxDecoration(
+          color: AppColors.card,
           boxShadow: [
             BoxShadow(
-              color: Color(0x0F002828),
+              color: AppColors.dark
+                  ? const Color(0x66000000)
+                  : const Color(0x0F002828),
               blurRadius: 12,
               offset: Offset(0, -2),
             ),

@@ -89,6 +89,7 @@ The tokens come from the Figma file and live in `lib/core/theme/`:
 
 Other values:
 * Radius: 20 for cards, 7 for buttons.
+* Dark mode: *More → App Settings → Appearance* (System / Light / Dark). Every token in `app_colors.dart` has a light and a dark value.
 * Fonts: Poppins (Latin), Hind Siliguri (Bangla), Grenze Gotisch at weight 800 (wordmark and prayer names) and Galada (Bangla prayer names).
 
 ## Credits
@@ -100,8 +101,13 @@ Fonts bundled with the app are free under the [SIL Open Font License 1.1](https:
 | [Grenze Gotisch](https://github.com/Omnibus-Type/Grenze-Gotisch) | Logo and prayer names | Omnibus-Type (Renata Polastri, Pablo Cosgaya) |
 | [Poppins](https://github.com/itfoundry/Poppins) | Latin text | Indian Type Foundry, Jonny Pinhorn |
 | [Hind Siliguri](https://github.com/itfoundry/hind-siliguri) | Bangla text | Indian Type Foundry |
+| [Anek Bangla](https://github.com/EkType/Anek) | Bangla digits (times, dates) – cut to `BanglaDigits` by `tool/build_bangla_digits.py` | Ek Type |
 | [Galada](https://fonts.google.com/specimen/Galada) | Bangla prayer names | Black Foundry |
 | [Amiri](https://github.com/aliftype/amiri) | Quranic ayat | Khaled Hosny |
+
+The design asks for **Li Ador Noirrit** (Lipighor) for Bangla times. Lipighor's free licence does not allow redistributing the font file, which bundling it in an app would do, so Anek Bangla is used until Lipighor grants permission (admin@lipighor.com); then replace the `BanglaDigits` files.
+
+The logo and English prayer names are vector artwork from the design (`assets/brand`, `assets/prayers`).
 
 The Figma design uses **Hidayatullah** by Anthonie Van Hayu (ARToni). Its free DEMO version is licensed for personal use only, so the app uses Grenze Gotisch instead. To use the original, buy a licence from [MyFonts](https://www.myfonts.com/collections/hidayatullah-font-artoni) and replace the `GrenzeGotisch` family in `pubspec.yaml` and `lib/core/theme/app_text.dart`.
 

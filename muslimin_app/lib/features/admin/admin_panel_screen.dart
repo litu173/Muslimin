@@ -9,6 +9,7 @@ import '../../core/theme/app_text.dart';
 import '../../core/utils/format.dart';
 import '../../core/widgets/buttons.dart';
 import '../../core/widgets/form_fields.dart';
+import '../../core/widgets/refresh.dart';
 import '../../core/widgets/surfaces.dart';
 import '../../data/models/masjid.dart';
 import '../../l10n/app_localizations.dart';
@@ -37,7 +38,7 @@ class AdminPanelScreen extends ConsumerWidget {
             isScrollable: true,
             tabAlignment: TabAlignment.start,
             labelColor: AppColors.goldLight,
-            unselectedLabelColor: AppColors.cream,
+            unselectedLabelColor: AppColors.onHeader,
             indicatorColor: AppColors.goldLight,
             dividerColor: Colors.transparent,
             tabs: [
@@ -85,7 +86,8 @@ class _Queue extends ConsumerWidget {
           error: (e, _) => EmptyState(message: '${t.somethingWrong}\n$e'),
           data: (list) => list.isEmpty
               ? EmptyState(message: t.nothingHere, icon: Icons.inbox_outlined)
-              : ListView.separated(
+              : RefreshList.separated(
+                  onRefresh: () => refreshAll(ref),
                   padding: const EdgeInsets.all(Gap.l),
                   itemCount: list.length,
                   separatorBuilder: (_, _) => const SizedBox(height: 10),

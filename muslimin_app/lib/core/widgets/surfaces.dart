@@ -42,7 +42,9 @@ class SheetCard extends StatelessWidget {
   Widget build(BuildContext context) => Container(
     margin: const EdgeInsets.all(Gap.l),
     decoration: BoxDecoration(
-      color: Colors.white.withValues(alpha: 0.46),
+      color: AppColors.dark
+          ? AppColors.card
+          : Colors.white.withValues(alpha: 0.46),
       borderRadius: BorderRadius.circular(Radii.card),
     ),
     child: child,
@@ -51,17 +53,17 @@ class SheetCard extends StatelessWidget {
 
 /// Eight-point-star masjid badge (gold by default, teal for alternation).
 class MasjidBadge extends StatelessWidget {
-  const MasjidBadge({super.key, this.size = 40, this.color = AppColors.gold});
+  const MasjidBadge({super.key, this.size = 40, this.color});
 
   final double size;
-  final Color color;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) => SvgPicture.asset(
     'assets/icons/masjid_badge.svg',
     width: size,
     height: size,
-    colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
+    colorFilter: ColorFilter.mode(color ?? AppColors.gold, BlendMode.srcIn),
   );
 }
 
@@ -214,7 +216,7 @@ class AppChip extends StatelessWidget {
         child: Text(
           label,
           style: AppText.caption.copyWith(
-            color: selected ? Colors.white : AppColors.ink,
+            color: selected ? AppColors.onGold : AppColors.ink,
           ),
         ),
       ),

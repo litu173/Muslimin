@@ -96,7 +96,7 @@ class AppDropdown<T> extends StatelessWidget {
         menuMaxHeight: 360,
         borderRadius: BorderRadius.circular(Radii.field),
         dropdownColor: AppColors.card,
-        icon: const Icon(
+        icon: Icon(
           Icons.arrow_drop_down_rounded,
           color: AppColors.ink,
           size: 28,
@@ -153,7 +153,7 @@ class PickerField extends StatelessWidget {
           borderRadius: BorderRadius.circular(Radii.field),
           side: error == null
               ? BorderSide.none
-              : const BorderSide(color: AppColors.danger),
+              : BorderSide(color: AppColors.danger),
         ),
         child: InkWell(
           borderRadius: BorderRadius.circular(Radii.field),

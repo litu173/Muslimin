@@ -5,6 +5,7 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text.dart';
 import '../../core/utils/format.dart';
+import '../../core/widgets/refresh.dart';
 import '../../core/widgets/surfaces.dart';
 import '../../data/models/prayer.dart';
 import '../../l10n/app_localizations.dart';
@@ -22,10 +23,10 @@ class AllPrayersScreen extends ConsumerWidget {
     final day = ref.watch(todayTimesProvider);
     final waqt = ref.watch(waqtProvider);
     final loc = ref.watch(locationProvider).value;
-    final cream = AppColors.cream;
+    final cream = AppColors.onHeader;
 
     return Scaffold(
-      backgroundColor: AppColors.ink,
+      backgroundColor: AppColors.header,
       appBar: AppBar(
         toolbarHeight: 68,
         title: Column(
@@ -55,7 +56,8 @@ class AllPrayersScreen extends ConsumerWidget {
       ),
       body: day == null
           ? const Loader()
-          : ListView(
+          : RefreshList(
+              onRefresh: () => refreshAll(ref),
               children: [
                 for (final e in day.windows.entries) ...[
                   Padding(
@@ -120,7 +122,7 @@ class AllPrayersScreen extends ConsumerWidget {
                           Tooltip(
                             triggerMode: TooltipTriggerMode.tap,
                             message: t.forbiddenInfo,
-                            child: const Icon(
+                            child: Icon(
                               Icons.info_outline_rounded,
                               color: AppColors.ink,
                               size: 20,
@@ -222,7 +224,7 @@ class _NaflBlock extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const cream = AppColors.cream;
+    final cream = AppColors.onHeader;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

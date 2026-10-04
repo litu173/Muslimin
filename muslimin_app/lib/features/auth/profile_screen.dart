@@ -8,6 +8,7 @@ import '../../core/theme/app_text.dart';
 import '../../core/utils/format.dart';
 import '../../core/widgets/buttons.dart';
 import '../../core/widgets/form_fields.dart';
+import '../../core/widgets/refresh.dart';
 import '../../core/widgets/surfaces.dart';
 import '../../data/models/app_user.dart';
 import '../../l10n/app_localizations.dart';
@@ -80,10 +81,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           TextButton(onPressed: () => Navigator.pop(d), child: Text(t.cancel)),
           TextButton(
             onPressed: () => Navigator.pop(d, c.text),
-            child: Text(
-              action,
-              style: const TextStyle(color: AppColors.danger),
-            ),
+            child: Text(action, style: TextStyle(color: AppColors.danger)),
           ),
         ],
       ),
@@ -175,10 +173,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             ),
             TextButton(
               onPressed: () => Navigator.pop(d, true),
-              child: Text(
-                t.delete,
-                style: const TextStyle(color: AppColors.danger),
-              ),
+              child: Text(t.delete, style: TextStyle(color: AppColors.danger)),
             ),
           ],
         ),
@@ -209,7 +204,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
     return Scaffold(
       appBar: AppBar(title: Text(t.profile)),
-      body: ListView(
+      body: RefreshList(
+        onRefresh: () => refreshAll(ref),
         padding: const EdgeInsets.all(Gap.l),
         children: [
           _Header(user: user),
@@ -224,7 +220,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   children: [
                     Row(
                       children: [
-                        const Icon(
+                        Icon(
                           Icons.mark_email_unread_outlined,
                           color: AppColors.gold,
                         ),
@@ -363,7 +359,7 @@ class _Header extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = L10n.of(context);
     return AppCard(
-      color: AppColors.ink,
+      color: AppColors.header,
       child: Row(
         children: [
           CircleAvatar(
@@ -381,12 +377,12 @@ class _Header extends StatelessWidget {
               children: [
                 Text(
                   user.displayName,
-                  style: AppText.subtitle.copyWith(color: AppColors.cream),
+                  style: AppText.subtitle.copyWith(color: AppColors.onHeader),
                 ),
                 Text(
                   user.email,
                   style: AppText.caption.copyWith(
-                    color: AppColors.cream.withValues(alpha: 0.8),
+                    color: AppColors.onHeader.withValues(alpha: 0.8),
                   ),
                 ),
                 const SizedBox(height: 4),
@@ -404,7 +400,7 @@ class _Header extends StatelessWidget {
                     const SizedBox(width: 4),
                     Text(
                       user.emailVerified ? t.emailVerified : t.emailNotVerified,
-                      style: AppText.micro.copyWith(color: AppColors.cream),
+                      style: AppText.micro.copyWith(color: AppColors.onHeader),
                     ),
                   ],
                 ),

@@ -8,13 +8,17 @@ import '../../core/utils/format.dart';
 import '../../core/widgets/buttons.dart';
 import '../../core/widgets/form_fields.dart';
 import '../../core/widgets/surfaces.dart';
+import '../../data/backend/backend.dart' show kRequiredAccuracyM;
 import '../../data/bd_districts.dart';
 import '../../data/models/masjid.dart';
 import '../../l10n/app_localizations.dart';
+import '../../services/location_service.dart';
 import '../../state/providers.dart';
+import '../registration/location_field.dart';
 
-/// Owner/admin edit of the details entered at registration. Location, NID,
-/// phone and status stay locked (they are what the admin verified).
+/// Owner/admin edit of the details entered at registration, including the
+/// location (re-captured from inside the masjid, like at registration).
+/// NID, phone and status stay locked (they are what the admin verified).
 class EditMasjidInfoScreen extends ConsumerStatefulWidget {
   const EditMasjidInfoScreen({super.key, required this.masjid});
 
@@ -37,6 +41,36 @@ class _EditMasjidInfoScreenState extends ConsumerState<EditMasjidInfoScreen> {
       : null;
   bool _saving = false;
 
+  /// Current location; replaced by a fresh GPS fix after "Reload".
+  late UserLocation _fix = UserLocation(
+    lat: widget.masjid.lat,
+    lng: widget.masjid.lng,
+    label: '',
+    accuracy: widget.masjid.locationAccuracyM,
+  );
+  bool _moved = false;
+  bool _locating = false;
+  String? _locError;
+
+  Future<void> _loadLocation() async {
+    setState(() {
+      _locating = true;
+      _locError = null;
+    });
+    try {
+      final fix = await ref.read(locationServiceProvider).preciseFix();
+      if (!mounted) return;
+      setState(() {
+        _fix = fix;
+        _moved = true;
+      });
+    } catch (_) {
+      if (mounted) setState(() => _locError = L10n.of(context).somethingWrong);
+    } finally {
+      if (mounted) setState(() => _locating = false);
+    }
+  }
+
   @override
   void dispose() {
     for (final c in [_name, _nameBn, _thana, _address]) {
@@ -48,6 +82,13 @@ class _EditMasjidInfoScreenState extends ConsumerState<EditMasjidInfoScreen> {
   Future<void> _save() async {
     final t = L10n.of(context);
     if (!_form.currentState!.validate()) return;
+    if (_moved && _fix.accuracy > kRequiredAccuracyM) {
+      final f = Fmt.of(context);
+      setState(
+        () => _locError = t.accuracyTooLow(f.digits(_fix.accuracy.round())),
+      );
+      return;
+    }
     setState(() => _saving = true);
     try {
       await ref
@@ -59,6 +100,7 @@ class _EditMasjidInfoScreenState extends ConsumerState<EditMasjidInfoScreen> {
             district: _district ?? '',
             thana: _thana.text.trim(),
             address: _address.text.trim(),
+            location: _moved ? (_fix.lat, _fix.lng, _fix.accuracy) : null,
           );
       if (!mounted) return;
       toast(context, t.updated);
@@ -123,6 +165,12 @@ class _EditMasjidInfoScreenState extends ConsumerState<EditMasjidInfoScreen> {
                         label: t.address,
                         controller: _address,
                         validator: req,
+                      ),
+                      LocationField(
+                        fix: _fix,
+                        loading: _locating,
+                        error: _locError,
+                        onLoad: _loadLocation,
                       ),
                     ],
                   ),

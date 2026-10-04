@@ -41,7 +41,7 @@ class AboutScreen extends StatelessWidget {
                     const SizedBox(height: 6),
                     Text(
                       t.tagline,
-                      style: AppText.body.copyWith(color: AppColors.cream),
+                      style: AppText.body.copyWith(color: AppColors.onHeader),
                     ),
                   ],
                 ),
@@ -141,10 +141,7 @@ class _VersionCardState extends State<_VersionCard> {
             children: [
               Row(
                 children: [
-                  const Icon(
-                    Icons.system_update_alt_rounded,
-                    color: AppColors.gold,
-                  ),
+                  Icon(Icons.system_update_alt_rounded, color: AppColors.gold),
                   const SizedBox(width: Gap.m),
                   Expanded(child: Text(t.appVersion, style: AppText.subtitle)),
                   if (info != null)

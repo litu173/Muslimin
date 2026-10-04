@@ -44,10 +44,7 @@ class _AuthFrame extends StatelessWidget {
               child: IconButton(
                 padding: EdgeInsets.zero,
                 alignment: Alignment.centerLeft,
-                icon: const Icon(
-                  Icons.arrow_back_rounded,
-                  color: AppColors.ink,
-                ),
+                icon: Icon(Icons.arrow_back_rounded, color: AppColors.ink),
                 onPressed: () => Navigator.pop(context),
               ),
             ),
@@ -436,7 +433,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                 color: AppColors.cream,
                 child: Row(
                   children: [
-                    const Icon(
+                    Icon(
                       Icons.mark_email_read_outlined,
                       color: AppColors.success,
                     ),
@@ -512,7 +509,7 @@ class _GoogleSignInButtonState extends ConsumerState<GoogleSignInButton> {
           borderRadius: BorderRadius.circular(Radii.button),
           side: widget.dark
               ? BorderSide.none
-              : const BorderSide(color: AppColors.divider),
+              : BorderSide(color: AppColors.divider),
         ),
         child: InkWell(
           borderRadius: BorderRadius.circular(Radii.button),
@@ -533,7 +530,13 @@ class _GoogleSignInButtonState extends ConsumerState<GoogleSignInButton> {
                         height: 18,
                       ),
                 const SizedBox(width: Gap.m),
-                Text(t.continueWithGoogle, style: AppText.label),
+                // Google's button is always white with dark text.
+                Text(
+                  t.continueWithGoogle,
+                  style: AppText.label.copyWith(
+                    color: const Color(0xFF1F1F1F),
+                  ),
+                ),
               ],
             ),
           ),
@@ -544,24 +547,32 @@ class _GoogleSignInButtonState extends ConsumerState<GoogleSignInButton> {
 }
 
 class OrDivider extends StatelessWidget {
-  const OrDivider({super.key, this.color = AppColors.muted});
+  const OrDivider({super.key, this.color});
 
-  final Color color;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) => Padding(
     padding: const EdgeInsets.symmetric(vertical: Gap.l),
     child: Row(
       children: [
-        Expanded(child: Divider(color: color.withValues(alpha: 0.4))),
+        Expanded(
+          child: Divider(
+            color: (color ?? AppColors.muted).withValues(alpha: 0.4),
+          ),
+        ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: Gap.m),
           child: Text(
             L10n.of(context).orDivider,
-            style: AppText.caption.copyWith(color: color),
+            style: AppText.caption.copyWith(color: (color ?? AppColors.muted)),
           ),
         ),
-        Expanded(child: Divider(color: color.withValues(alpha: 0.4))),
+        Expanded(
+          child: Divider(
+            color: (color ?? AppColors.muted).withValues(alpha: 0.4),
+          ),
+        ),
       ],
     ),
   );

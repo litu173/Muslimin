@@ -10,6 +10,7 @@ import '../../core/widgets/brand.dart';
 import '../../core/widgets/buttons.dart';
 import '../../core/widgets/countdown_ring.dart';
 import '../../core/widgets/islamic_pattern.dart';
+import '../../core/widgets/refresh.dart';
 import '../../core/widgets/surfaces.dart';
 import '../../data/models/notice.dart';
 import '../../l10n/app_localizations.dart';
@@ -29,9 +30,42 @@ class HomeScreen extends ConsumerStatefulWidget {
   ConsumerState<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends ConsumerState<HomeScreen> {
+class _HomeScreenState extends ConsumerState<HomeScreen>
+    with SingleTickerProviderStateMixin {
   NoticeCategory? _filter;
   bool _bannerClosed = false;
+
+  /// Entrance: body sections slide up and fade in, one after another.
+  late final _intro = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 1100),
+  )..forward();
+
+  @override
+  void dispose() {
+    _intro.dispose();
+    super.dispose();
+  }
+
+  /// Wraps the [i]-th body section in the staggered slide-up entrance.
+  Widget _in(int i, Widget child) {
+    final start = (i * 0.09).clamp(0.0, 0.6);
+    final a = CurvedAnimation(
+      parent: _intro,
+      curve: Interval(start, start + 0.4, curve: Curves.easeOutCubic),
+    );
+    return AnimatedBuilder(
+      animation: a,
+      child: child,
+      builder: (_, child) => Opacity(
+        opacity: a.value,
+        child: Transform.translate(
+          offset: Offset(0, 48 * (1 - a.value)),
+          child: child,
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,137 +73,151 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final loc = ref.watch(locationProvider);
     final masjids = ref.watch(nearbyMasjidsProvider);
     final notices = ref.watch(nearbyNoticesProvider);
+    // Only for users who have not registered a masjid yet.
+    final mine = ref.watch(myMasjidsProvider);
     final showBanner =
-        !_bannerClosed && !ref.read(prefsProvider).authorityBannerHidden;
+        !_bannerClosed &&
+        !ref.read(prefsProvider).authorityBannerHidden &&
+        mine.hasValue &&
+        mine.value!.isEmpty;
 
     return Scaffold(
       body: SafeArea(
         bottom: false,
-        child: RefreshIndicator(
-          color: AppColors.gold,
-          onRefresh: () => ref.read(locationProvider.notifier).refresh(),
-          child: CustomScrollView(
-            slivers: [
-              // ---- location + date
-              const SliverToBoxAdapter(
-                child: Padding(
+        child: CustomScrollView(
+          slivers: [
+            PullToRefresh(onRefresh: () => refreshAll(ref)),
+            // ---- location + date
+            SliverToBoxAdapter(
+              child: _in(
+                0,
+                const Padding(
                   padding: EdgeInsets.fromLTRB(Gap.l, Gap.s, Gap.s, Gap.s),
                   child: LocationBar(showDate: true),
                 ),
               ),
-              const SliverToBoxAdapter(child: PrayerHeader()),
+            ),
+            SliverToBoxAdapter(child: _in(1, const PrayerHeader())),
 
-              // ---- authority banner
-              if (showBanner)
-                SliverToBoxAdapter(
-                  child: Padding(
+            // ---- authority banner
+            if (showBanner)
+              SliverToBoxAdapter(
+                child: _in(
+                  2,
+                  Padding(
                     padding: const EdgeInsets.fromLTRB(Gap.l, Gap.xl, Gap.l, 0),
                     child: AuthorityBanner(
+                      showDontShow: true,
                       onClose: () => setState(() => _bannerClosed = true),
                     ),
                   ),
                 ),
+              ),
 
-              // ---- nearest masjids
-              SliverToBoxAdapter(
-                child: SectionHeader(
+            // ---- nearest masjids
+            SliverToBoxAdapter(
+              child: _in(
+                3,
+                SectionHeader(
                   title: t.nearestMasjid,
                   subtitle: loc.value?.label ?? t.locating,
                   action: t.viewAll,
                   onAction: () => push(context, const MasjidListScreen()),
                 ),
               ),
-              ...masjids.when(
-                loading: () => [const SliverToBoxAdapter(child: Loader())],
-                error: (e, _) => [
-                  SliverToBoxAdapter(
-                    child: EmptyState(
-                      inCard: true,
-                      message: t.somethingWrong,
-                      icon: Icons.wifi_off_rounded,
-                      action: AppButton(
-                        t.retry,
-                        onPressed: () => ref.invalidate(nearbyMasjidsProvider),
-                        dense: true,
-                      ),
+            ),
+            ...masjids.when(
+              loading: () => [const SliverToBoxAdapter(child: Loader())],
+              error: (e, _) => [
+                SliverToBoxAdapter(
+                  child: EmptyState(
+                    inCard: true,
+                    message: t.somethingWrong,
+                    icon: Icons.wifi_off_rounded,
+                    action: AppButton(
+                      t.retry,
+                      onPressed: () => ref.invalidate(nearbyMasjidsProvider),
+                      dense: true,
                     ),
                   ),
-                ],
-                data: (list) => list.isEmpty
-                    ? [
-                        SliverToBoxAdapter(
-                          child: EmptyState(
-                            inCard: true,
-                            message: t.noMasjidNearby,
-                            hint: t.noMasjidNearbyHint,
-                          ),
+                ),
+              ],
+              data: (list) => list.isEmpty
+                  ? [
+                      SliverToBoxAdapter(
+                        child: EmptyState(
+                          inCard: true,
+                          message: t.noMasjidNearby,
+                          hint: t.noMasjidNearbyHint,
                         ),
-                      ]
-                    : [
-                        SliverPadding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: Gap.l,
-                          ),
-                          sliver: SliverList.separated(
-                            itemCount: list.length.clamp(0, 3),
-                            separatorBuilder: (_, _) =>
-                                const SizedBox(height: 10),
-                            itemBuilder: (_, i) =>
-                                MasjidCard(masjid: list[i], index: i),
-                          ),
+                      ),
+                    ]
+                  : [
+                      SliverPadding(
+                        padding: const EdgeInsets.symmetric(horizontal: Gap.l),
+                        sliver: SliverList.separated(
+                          itemCount: list.length.clamp(0, 3),
+                          separatorBuilder: (_, _) =>
+                              const SizedBox(height: 10),
+                          itemBuilder: (_, i) =>
+                              _in(4 + i, MasjidCard(masjid: list[i], index: i)),
                         ),
-                      ],
-              ),
+                      ),
+                    ],
+            ),
 
-              const SliverToBoxAdapter(child: SizedBox(height: Gap.xl)),
-              const SliverToBoxAdapter(child: VerseCarousel()),
+            const SliverToBoxAdapter(child: SizedBox(height: Gap.xl)),
+            SliverToBoxAdapter(child: _in(7, const VerseCarousel())),
 
-              // ---- notices
-              SliverToBoxAdapter(child: SectionHeader(title: t.notice)),
-              SliverToBoxAdapter(
-                child: NoticeFilterBar(
+            // ---- notices
+            SliverToBoxAdapter(child: _in(8, SectionHeader(title: t.notice))),
+            SliverToBoxAdapter(
+              child: _in(
+                8,
+                NoticeFilterBar(
                   selected: _filter,
                   onChanged: (c) => setState(() => _filter = c),
                 ),
               ),
-              const SliverToBoxAdapter(child: SizedBox(height: Gap.l)),
-              ...notices.when(
-                loading: () => [const SliverToBoxAdapter(child: Loader())],
-                error: (_, _) => [
-                  SliverToBoxAdapter(
-                    child: EmptyState(inCard: true, message: t.somethingWrong),
-                  ),
-                ],
-                data: (all) {
-                  final list = _filter == null
-                      ? all
-                      : all.where((n) => n.category == _filter).toList();
-                  if (list.isEmpty) {
-                    return [
-                      SliverToBoxAdapter(
-                        child: EmptyState(
-                          inCard: true,
-                          message: t.noNotices,
-                          icon: Icons.campaign_outlined,
-                        ),
-                      ),
-                    ];
-                  }
+            ),
+            const SliverToBoxAdapter(child: SizedBox(height: Gap.l)),
+            ...notices.when(
+              loading: () => [const SliverToBoxAdapter(child: Loader())],
+              error: (_, _) => [
+                SliverToBoxAdapter(
+                  child: EmptyState(inCard: true, message: t.somethingWrong),
+                ),
+              ],
+              data: (all) {
+                final list = _filter == null
+                    ? all
+                    : all.where((n) => n.category == _filter).toList();
+                if (list.isEmpty) {
                   return [
-                    SliverPadding(
-                      padding: const EdgeInsets.symmetric(horizontal: Gap.l),
-                      sliver: SliverList.separated(
-                        itemCount: list.length,
-                        separatorBuilder: (_, _) => const SizedBox(height: 10),
-                        itemBuilder: (_, i) => NoticeCard(notice: list[i]),
+                    SliverToBoxAdapter(
+                      child: EmptyState(
+                        inCard: true,
+                        message: t.noNotices,
+                        icon: Icons.campaign_outlined,
                       ),
                     ),
                   ];
-                },
-              ),
-              const SliverToBoxAdapter(child: SizedBox(height: Gap.xxl)),
-            ],
-          ),
+                }
+                return [
+                  SliverPadding(
+                    padding: const EdgeInsets.symmetric(horizontal: Gap.l),
+                    sliver: SliverList.separated(
+                      itemCount: list.length,
+                      separatorBuilder: (_, _) => const SizedBox(height: 10),
+                      itemBuilder: (_, i) =>
+                          _in(9 + i, NoticeCard(notice: list[i])),
+                    ),
+                  ),
+                ];
+              },
+            ),
+            const SliverToBoxAdapter(child: SizedBox(height: Gap.xxl)),
+          ],
         ),
       ),
     );
@@ -191,7 +239,7 @@ class PrayerHeader extends ConsumerWidget {
       height: 204,
       child: IslamicPattern(
         child: waqt == null
-            ? const Center(
+            ? Center(
                 child: CircularProgressIndicator(color: AppColors.goldLight),
               )
             : Padding(
@@ -203,16 +251,17 @@ class PrayerHeader extends ConsumerWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          DisplayText(
-                            f.prayer(waqt.prayer),
+                          PrayerNameArt(
+                            prayer: waqt.prayer,
+                            label: f.prayer(waqt.prayer),
                             size: 46,
                             color: AppColors.goldLight,
                           ),
-                          const SizedBox(height: 4),
+                          const SizedBox(height: 10),
                           Text(
                             f.range(waqt.window.start, waqt.window.end),
                             style: AppText.title.copyWith(
-                              color: AppColors.cream,
+                              color: AppColors.onHeader,
                               fontSize: 24,
                               fontWeight: FontWeight.w500,
                             ),
@@ -233,7 +282,7 @@ class PrayerHeader extends ConsumerWidget {
                                     ),
                                   ),
                                   const SizedBox(width: 4),
-                                  const Icon(
+                                  Icon(
                                     Icons.chevron_right_rounded,
                                     color: AppColors.teal,
                                     size: 18,
@@ -290,7 +339,7 @@ class AuthorityBanner extends ConsumerWidget {
     final t = L10n.of(context);
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.gold,
+        color: AppColors.goldSurface,
         borderRadius: BorderRadius.circular(Radii.card),
       ),
       padding: const EdgeInsets.fromLTRB(Gap.l, Gap.l, Gap.l, Gap.l),
@@ -339,10 +388,10 @@ class AuthorityBanner extends ConsumerWidget {
                     },
                   ),
                 ),
-                const SizedBox(width: Gap.l),
+                const SizedBox(width: Gap.m),
               ],
               AppButton(
-                t.viewDetails,
+                t.registerMasjid,
                 style: AppButtonStyle.light,
                 pill: true,
                 onPressed: () => startRegistration(context, ref),

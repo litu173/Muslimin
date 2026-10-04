@@ -42,7 +42,7 @@ class LocationBar extends ConsumerWidget {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Padding(
+                  Padding(
                     padding: EdgeInsets.only(top: 6),
                     child: SizedBox(
                       width: _iconWidth,
@@ -69,7 +69,7 @@ class LocationBar extends ConsumerWidget {
                               ),
                             ),
                             const SizedBox(width: 4),
-                            const Icon(
+                            Icon(
                               Icons.refresh_rounded,
                               size: 16,
                               color: AppColors.ink,
@@ -96,10 +96,7 @@ class LocationBar extends ConsumerWidget {
         IconButton(
           tooltip: t.notifications,
           onPressed: () => push(context, const NotificationsScreen()),
-          icon: const Icon(
-            Icons.notifications_none_rounded,
-            color: AppColors.ink,
-          ),
+          icon: Icon(Icons.notifications_none_rounded, color: AppColors.ink),
         ),
       ],
     );

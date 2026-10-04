@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/utils/format.dart';
+import '../../core/widgets/refresh.dart';
 import '../../core/widgets/surfaces.dart';
 import '../../l10n/app_localizations.dart';
 import '../../state/follows.dart';
@@ -23,7 +24,8 @@ class FollowedMasjidsScreen extends ConsumerWidget {
       appBar: AppBar(title: Text(t.followedMasjids)),
       body: follows.isEmpty
           ? EmptyState(message: t.noFollowed, hint: t.noFollowedHint)
-          : ListView(
+          : RefreshList(
+              onRefresh: () => refreshAll(ref),
               padding: const EdgeInsets.all(Gap.l),
               children: [
                 for (final (i, e) in follows.entries.indexed) ...[

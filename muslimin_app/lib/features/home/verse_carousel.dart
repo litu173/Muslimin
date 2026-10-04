@@ -1,10 +1,12 @@
 import 'dart:async';
+import 'dart:ui' show ImageFilter;
 
 import 'package:flutter/material.dart';
 
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text.dart';
+import '../../core/widgets/islamic_pattern.dart';
 import '../../core/widgets/surfaces.dart';
 import '../../l10n/app_localizations.dart';
 
@@ -76,55 +78,7 @@ class _VerseCarouselState extends State<VerseCarousel> {
                 final v = verses[i % _count];
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: Gap.l),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: AppColors.card,
-                      borderRadius: BorderRadius.circular(Radii.card),
-                      border: Border.all(
-                        color: AppColors.gold.withValues(alpha: 0.25),
-                      ),
-                    ),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: Gap.xl,
-                      vertical: Gap.m,
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        // Long ayat scale down to stay on one line.
-                        FittedBox(
-                          fit: BoxFit.scaleDown,
-                          child: Text(
-                            v.$1,
-                            textDirection: TextDirection.rtl,
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              fontFamily: AppText.arabic,
-                              fontSize: 24,
-                              color: AppColors.gold,
-                              height: 1.4,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 6),
-                        Text(
-                          v.$2,
-                          textAlign: TextAlign.center,
-                          maxLines: 3,
-                          style: AppText.subtitle.copyWith(
-                            color: AppColors.ink,
-                            fontSize: 17,
-                            height: 1.25,
-                          ),
-                        ),
-                        const SizedBox(height: 6),
-                        Text(
-                          v.$3,
-                          style: AppText.micro.copyWith(color: AppColors.muted),
-                        ),
-                      ],
-                    ),
-                  ),
+                  child: _VerseCard(arabic: v.$1, text: v.$2, ref: v.$3),
                 );
               },
             ),
@@ -133,6 +87,109 @@ class _VerseCarouselState extends State<VerseCarousel> {
         const SizedBox(height: Gap.m),
         Dots(count: _count, index: _page % _count),
       ],
+    );
+  }
+}
+
+/// Ayah card: unlike the plain white cards, a warm gold-to-mint gradient with
+/// the header pattern showing through frosted glass.
+class _VerseCard extends StatelessWidget {
+  const _VerseCard({
+    required this.arabic,
+    required this.text,
+    required this.ref,
+  });
+
+  final String arabic;
+  final String text;
+  final String ref;
+
+  @override
+  Widget build(BuildContext context) {
+    final dark = AppColors.dark;
+    final radius = BorderRadius.circular(Radii.card);
+    return ClipRRect(
+      borderRadius: radius,
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          DecoratedBox(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: dark
+                    ? const [Color(0xFF2A2A12), Color(0xFF13241F), Color(0xFF173A33)]
+                    : const [Color(0xFFFFE7A3), Color(0xFFF7F0D8), Color(0xFFCDEBDF)],
+              ),
+            ),
+          ),
+          Opacity(
+            opacity: dark ? 0.9 : 1,
+            child: const IslamicPattern(color: Colors.transparent),
+          ),
+          BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 1.2, sigmaY: 1.2),
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                borderRadius: radius,
+                border: Border.all(
+                  color: AppColors.gold.withValues(alpha: 0.35),
+                ),
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: dark
+                      ? [const Color(0x330B1A18), const Color(0x660B1A18)]
+                      : [const Color(0x59FFFFFF), const Color(0x26FFFFFF)],
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: Gap.xl,
+              vertical: Gap.m,
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // Long ayat scale down to stay on one line.
+                FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    arabic,
+                    textDirection: TextDirection.rtl,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontFamily: AppText.arabic,
+                      fontSize: 24,
+                      color: dark ? AppColors.goldLight : AppColors.gold,
+                      height: 1.4,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  text,
+                  textAlign: TextAlign.center,
+                  maxLines: 3,
+                  style: AppText.subtitle.copyWith(
+                    color: AppColors.ink,
+                    fontSize: 17,
+                    height: 1.25,
+                  ),
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  ref,
+                  style: AppText.micro.copyWith(color: AppColors.muted),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

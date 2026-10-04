@@ -11,10 +11,12 @@ import '../theme/app_colors.dart';
 /// Figma scale and repeated as needed, so it covers any width or height and
 /// stays a crisp vector.
 class IslamicPattern extends StatelessWidget {
-  const IslamicPattern({super.key, this.child, this.color = AppColors.ink});
+  const IslamicPattern({super.key, this.child, this.color});
 
   final Widget? child;
-  final Color color;
+
+  /// Defaults to [AppColors.header].
+  final Color? color;
 
   static const _w = 576.0; // 8 x 72
   static const _h =
@@ -23,7 +25,7 @@ class IslamicPattern extends StatelessWidget {
   @override
   Widget build(BuildContext context) => ClipRect(
     child: DecoratedBox(
-      decoration: BoxDecoration(color: color),
+      decoration: BoxDecoration(color: color ?? AppColors.header),
       child: Stack(
         children: [
           Positioned.fill(
