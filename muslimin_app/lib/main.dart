@@ -38,7 +38,7 @@ void _registerFontLicenses() {
     'Poppins': 'poppins',
     'Hind Siliguri': 'hindsiliguri',
     'Galada': 'galada',
-    'Amiri': 'amiri',
+    'Scheherazade New': 'scheherazadenew',
     'Anek Bangla (Bangla digits)': 'anekbangla',
   };
   LicenseRegistry.addLicense(() async* {

@@ -1696,55 +1696,55 @@ abstract class L10n {
   /// No description provided for @verse1Ar.
   ///
   /// In en, this message translates to:
-  /// **'وَاسْتَعِينُوا بِالصَّبْرِ وَالصَّلَاةِ'**
+  /// **'وَٱسْتَعِينُوا۟ بِٱلصَّبْرِ وَٱلصَّلَوٰةِ'**
   String get verse1Ar;
 
   /// No description provided for @verse1.
   ///
   /// In en, this message translates to:
-  /// **'And seek help in patience and prayer'**
+  /// **'And seek help through patience and prayer'**
   String get verse1;
 
   /// No description provided for @verse1Ref.
   ///
   /// In en, this message translates to:
-  /// **'Al-Baqarah 45'**
+  /// **'Al-Baqarah 2:45'**
   String get verse1Ref;
 
   /// No description provided for @verse2Ar.
   ///
   /// In en, this message translates to:
-  /// **'إِنَّ الصَّلَاةَ كَانَتْ عَلَى الْمُؤْمِنِينَ كِتَابًا مَّوْقُوتًا'**
+  /// **'إِنَّ ٱلصَّلَوٰةَ كَانَتْ عَلَى ٱلْمُؤْمِنِينَ كِتَـٰبًا مَّوْقُوتًا'**
   String get verse2Ar;
 
   /// No description provided for @verse2.
   ///
   /// In en, this message translates to:
-  /// **'Indeed, prayer has been decreed upon the believers at specified times'**
+  /// **'Indeed, prayer has been decreed upon the believers a decree of specified times'**
   String get verse2;
 
   /// No description provided for @verse2Ref.
   ///
   /// In en, this message translates to:
-  /// **'An-Nisa 103'**
+  /// **'An-Nisa\' 4:103'**
   String get verse2Ref;
 
   /// No description provided for @verse3Ar.
   ///
   /// In en, this message translates to:
-  /// **'حَافِظُوا عَلَى الصَّلَوَاتِ وَالصَّلَاةِ الْوُسْطَىٰ'**
+  /// **'حَـٰفِظُوا۟ عَلَى ٱلصَّلَوَٰتِ وَٱلصَّلَوٰةِ ٱلْوُسْطَىٰ'**
   String get verse3Ar;
 
   /// No description provided for @verse3.
   ///
   /// In en, this message translates to:
-  /// **'Guard strictly the prayers, especially the middle prayer'**
+  /// **'Maintain with care the [obligatory] prayers and [in particular] the middle prayer'**
   String get verse3;
 
   /// No description provided for @verse3Ref.
   ///
   /// In en, this message translates to:
-  /// **'Al-Baqarah 238'**
+  /// **'Al-Baqarah 2:238'**
   String get verse3Ref;
 
   /// No description provided for @hijriMonths.
@@ -2068,7 +2068,7 @@ abstract class L10n {
   /// No description provided for @fontCredits.
   ///
   /// In en, this message translates to:
-  /// **'Logo & English prayer names: lettering from the Muslimin design, based on Hidayatullah by Anthonie Van Hayu (ARToni). Fonts: Grenze Gotisch by Omnibus-Type, Poppins by Indian Type Foundry & Jonny Pinhorn, Hind Siliguri by Indian Type Foundry, Anek Bangla (Bangla digits) by Ek Type, Galada by Black Foundry, Amiri by Khaled Hosny. All fonts are free under the SIL Open Font License 1.1.'**
+  /// **'Logo & English prayer names: lettering from the Muslimin design, based on Hidayatullah by Anthonie Van Hayu (ARToni). Fonts: Grenze Gotisch by Omnibus-Type, Poppins by Indian Type Foundry & Jonny Pinhorn, Hind Siliguri by Indian Type Foundry, Anek Bangla (Bangla digits) by Ek Type, Galada by Black Foundry, Scheherazade New by SIL International. All fonts are free under the SIL Open Font License 1.1.'**
   String get fontCredits;
 
   /// No description provided for @designInspired.
@@ -2542,7 +2542,7 @@ abstract class L10n {
   /// No description provided for @quranSource.
   ///
   /// In en, this message translates to:
-  /// **'Text & word-by-word: quran.com · Translation: Saheeh International'**
+  /// **'Mushaf text & word-by-word: quran.com (King Fahd Complex Uthmani script) · Translation: Saheeh International'**
   String get quranSource;
 
   /// No description provided for @startHere.
@@ -2658,6 +2658,792 @@ abstract class L10n {
   /// In en, this message translates to:
   /// **'Preparing your quiz…'**
   String get quizLoading;
+
+  /// No description provided for @tabQuran.
+  ///
+  /// In en, this message translates to:
+  /// **'Quran'**
+  String get tabQuran;
+
+  /// No description provided for @tabDua.
+  ///
+  /// In en, this message translates to:
+  /// **'Dua'**
+  String get tabDua;
+
+  /// No description provided for @specialSurahs.
+  ///
+  /// In en, this message translates to:
+  /// **'Recommended to read'**
+  String get specialSurahs;
+
+  /// No description provided for @chipMulk.
+  ///
+  /// In en, this message translates to:
+  /// **'Al-Mulk'**
+  String get chipMulk;
+
+  /// No description provided for @chipMulkWhen.
+  ///
+  /// In en, this message translates to:
+  /// **'Before sleep'**
+  String get chipMulkWhen;
+
+  /// No description provided for @chipSajdah.
+  ///
+  /// In en, this message translates to:
+  /// **'As-Sajdah'**
+  String get chipSajdah;
+
+  /// No description provided for @chipKahf.
+  ///
+  /// In en, this message translates to:
+  /// **'Al-Kahf'**
+  String get chipKahf;
+
+  /// No description provided for @chipKahfWhen.
+  ///
+  /// In en, this message translates to:
+  /// **'Friday'**
+  String get chipKahfWhen;
+
+  /// No description provided for @chipKursi.
+  ///
+  /// In en, this message translates to:
+  /// **'Ayatul Kursi'**
+  String get chipKursi;
+
+  /// No description provided for @chipKursiWhen.
+  ///
+  /// In en, this message translates to:
+  /// **'After salah & sleep'**
+  String get chipKursiWhen;
+
+  /// No description provided for @chipBaqarahEnd.
+  ///
+  /// In en, this message translates to:
+  /// **'Last 2 of Al-Baqarah'**
+  String get chipBaqarahEnd;
+
+  /// No description provided for @chipNight.
+  ///
+  /// In en, this message translates to:
+  /// **'At night'**
+  String get chipNight;
+
+  /// No description provided for @chipYasin.
+  ///
+  /// In en, this message translates to:
+  /// **'Ya-Sin'**
+  String get chipYasin;
+
+  /// No description provided for @chipQuls.
+  ///
+  /// In en, this message translates to:
+  /// **'3 Quls'**
+  String get chipQuls;
+
+  /// No description provided for @chipQulsWhen.
+  ///
+  /// In en, this message translates to:
+  /// **'Morning & evening'**
+  String get chipQulsWhen;
+
+  /// No description provided for @chipAnytime.
+  ///
+  /// In en, this message translates to:
+  /// **'Any time'**
+  String get chipAnytime;
+
+  /// No description provided for @chipToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get chipToday;
+
+  /// No description provided for @chipTonight.
+  ///
+  /// In en, this message translates to:
+  /// **'Tonight'**
+  String get chipTonight;
+
+  /// No description provided for @revealedMakkah.
+  ///
+  /// In en, this message translates to:
+  /// **'Revealed in Makkah'**
+  String get revealedMakkah;
+
+  /// No description provided for @revealedMadinah.
+  ///
+  /// In en, this message translates to:
+  /// **'Revealed in Madinah'**
+  String get revealedMadinah;
+
+  /// No description provided for @reciter.
+  ///
+  /// In en, this message translates to:
+  /// **'Reciter'**
+  String get reciter;
+
+  /// No description provided for @chooseReciter.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a reciter'**
+  String get chooseReciter;
+
+  /// No description provided for @playAyah.
+  ///
+  /// In en, this message translates to:
+  /// **'Play from this ayah'**
+  String get playAyah;
+
+  /// No description provided for @recitingAyah.
+  ///
+  /// In en, this message translates to:
+  /// **'Ayah {n} of {total}'**
+  String recitingAyah(String n, String total);
+
+  /// No description provided for @audioError.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load the recitation. Check your internet.'**
+  String get audioError;
+
+  /// No description provided for @dailyQuran.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily Quran'**
+  String get dailyQuran;
+
+  /// No description provided for @energy0.
+  ///
+  /// In en, this message translates to:
+  /// **'Your heart is waiting for light today'**
+  String get energy0;
+
+  /// No description provided for @energy1.
+  ///
+  /// In en, this message translates to:
+  /// **'Charging… a few more ayat'**
+  String get energy1;
+
+  /// No description provided for @energy2.
+  ///
+  /// In en, this message translates to:
+  /// **'Almost full — keep going!'**
+  String get energy2;
+
+  /// No description provided for @energy3.
+  ///
+  /// In en, this message translates to:
+  /// **'Full of light — MashaAllah!'**
+  String get energy3;
+
+  /// No description provided for @energy4.
+  ///
+  /// In en, this message translates to:
+  /// **'Shining bright today ✨'**
+  String get energy4;
+
+  /// No description provided for @versesToday.
+  ///
+  /// In en, this message translates to:
+  /// **'{n} / {goal} ayat today'**
+  String versesToday(String n, String goal);
+
+  /// No description provided for @streakDays.
+  ///
+  /// In en, this message translates to:
+  /// **'{n}-day streak'**
+  String streakDays(String n);
+
+  /// No description provided for @readNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Read now'**
+  String get readNow;
+
+  /// No description provided for @keepReading.
+  ///
+  /// In en, this message translates to:
+  /// **'Read more'**
+  String get keepReading;
+
+  /// No description provided for @achievements.
+  ///
+  /// In en, this message translates to:
+  /// **'Achievements'**
+  String get achievements;
+
+  /// No description provided for @achievementsCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{n} of {total} earned'**
+  String achievementsCount(String n, String total);
+
+  /// No description provided for @achievementEarned.
+  ///
+  /// In en, this message translates to:
+  /// **'Earned on {date}'**
+  String achievementEarned(String date);
+
+  /// No description provided for @achievementLocked.
+  ///
+  /// In en, this message translates to:
+  /// **'In progress · {done}/{target}'**
+  String achievementLocked(String done, String target);
+
+  /// No description provided for @achievementUnlocked.
+  ///
+  /// In en, this message translates to:
+  /// **'Achievement unlocked: {name}'**
+  String achievementUnlocked(String name);
+
+  /// No description provided for @ach_bismillah.
+  ///
+  /// In en, this message translates to:
+  /// **'Bismillah'**
+  String get ach_bismillah;
+
+  /// No description provided for @ach_bismillah_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Read your first ayah'**
+  String get ach_bismillah_desc;
+
+  /// No description provided for @ach_fatiha.
+  ///
+  /// In en, this message translates to:
+  /// **'The Opener'**
+  String get ach_fatiha;
+
+  /// No description provided for @ach_fatiha_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete Surah Al-Fatihah'**
+  String get ach_fatiha_desc;
+
+  /// No description provided for @ach_quls.
+  ///
+  /// In en, this message translates to:
+  /// **'Three Quls'**
+  String get ach_quls;
+
+  /// No description provided for @ach_quls_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete Al-Ikhlas, Al-Falaq and An-Nas'**
+  String get ach_quls_desc;
+
+  /// No description provided for @ach_streak3.
+  ///
+  /// In en, this message translates to:
+  /// **'Steady Steps'**
+  String get ach_streak3;
+
+  /// No description provided for @ach_streak3_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Read Quran 3 days in a row'**
+  String get ach_streak3_desc;
+
+  /// No description provided for @ach_streak7.
+  ///
+  /// In en, this message translates to:
+  /// **'Week of Light'**
+  String get ach_streak7;
+
+  /// No description provided for @ach_streak7_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Read Quran 7 days in a row'**
+  String get ach_streak7_desc;
+
+  /// No description provided for @ach_streak30.
+  ///
+  /// In en, this message translates to:
+  /// **'Month of Noor'**
+  String get ach_streak30;
+
+  /// No description provided for @ach_streak30_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Read Quran 30 days in a row'**
+  String get ach_streak30_desc;
+
+  /// No description provided for @ach_verses100.
+  ///
+  /// In en, this message translates to:
+  /// **'Hundred Ayat'**
+  String get ach_verses100;
+
+  /// No description provided for @ach_verses100_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Read 100 ayat'**
+  String get ach_verses100_desc;
+
+  /// No description provided for @ach_verses1000.
+  ///
+  /// In en, this message translates to:
+  /// **'Thousand Ayat'**
+  String get ach_verses1000;
+
+  /// No description provided for @ach_verses1000_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Read 1,000 ayat'**
+  String get ach_verses1000_desc;
+
+  /// No description provided for @ach_kahf.
+  ///
+  /// In en, this message translates to:
+  /// **'Friday Light'**
+  String get ach_kahf;
+
+  /// No description provided for @ach_kahf_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete Al-Kahf on a Friday'**
+  String get ach_kahf_desc;
+
+  /// No description provided for @ach_mulk.
+  ///
+  /// In en, this message translates to:
+  /// **'Night Guardian'**
+  String get ach_mulk;
+
+  /// No description provided for @ach_mulk_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete Al-Mulk at night'**
+  String get ach_mulk_desc;
+
+  /// No description provided for @ach_yasin.
+  ///
+  /// In en, this message translates to:
+  /// **'Ya-Sin'**
+  String get ach_yasin;
+
+  /// No description provided for @ach_yasin_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete Surah Ya-Sin'**
+  String get ach_yasin_desc;
+
+  /// No description provided for @ach_listener.
+  ///
+  /// In en, this message translates to:
+  /// **'Attentive Listener'**
+  String get ach_listener;
+
+  /// No description provided for @ach_listener_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Listen to a whole surah recitation'**
+  String get ach_listener_desc;
+
+  /// No description provided for @ach_quiz100.
+  ///
+  /// In en, this message translates to:
+  /// **'Sharp Mind'**
+  String get ach_quiz100;
+
+  /// No description provided for @ach_quiz100_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Score 100% in a phase quiz'**
+  String get ach_quiz100_desc;
+
+  /// No description provided for @ach_juzamma.
+  ///
+  /// In en, this message translates to:
+  /// **'Juz \'Amma'**
+  String get ach_juzamma;
+
+  /// No description provided for @ach_juzamma_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete all 37 surahs of the 30th juz'**
+  String get ach_juzamma_desc;
+
+  /// No description provided for @ach_phases10.
+  ///
+  /// In en, this message translates to:
+  /// **'Ten Phases'**
+  String get ach_phases10;
+
+  /// No description provided for @ach_phases10_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete 10 phases of the journey'**
+  String get ach_phases10_desc;
+
+  /// No description provided for @ach_khatm.
+  ///
+  /// In en, this message translates to:
+  /// **'Khatm al-Quran'**
+  String get ach_khatm;
+
+  /// No description provided for @ach_khatm_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete all 114 surahs'**
+  String get ach_khatm_desc;
+
+  /// No description provided for @duaHeader.
+  ///
+  /// In en, this message translates to:
+  /// **'A day with the remembrance of Allah'**
+  String get duaHeader;
+
+  /// No description provided for @duaSub.
+  ///
+  /// In en, this message translates to:
+  /// **'From waking up to sleeping — the duas the Prophet ﷺ taught for every moment.'**
+  String get duaSub;
+
+  /// No description provided for @repeatTimes.
+  ///
+  /// In en, this message translates to:
+  /// **'Say {n}×'**
+  String repeatTimes(String n);
+
+  /// No description provided for @duaSource.
+  ///
+  /// In en, this message translates to:
+  /// **'Hisn al-Muslim #{n}'**
+  String duaSource(String n);
+
+  /// No description provided for @duaCredit.
+  ///
+  /// In en, this message translates to:
+  /// **'Duas from Hisn al-Muslim (Fortress of the Muslim) by Sa’id bin Ali al-Qahtani, via its official site hisnmuslim.com.'**
+  String get duaCredit;
+
+  /// No description provided for @nowLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Now'**
+  String get nowLabel;
+
+  /// No description provided for @scene_wake.
+  ///
+  /// In en, this message translates to:
+  /// **'Waking up'**
+  String get scene_wake;
+
+  /// No description provided for @scene_wake_story.
+  ///
+  /// In en, this message translates to:
+  /// **'The day begins with thanks — Allah returned the soul after sleep.'**
+  String get scene_wake_story;
+
+  /// No description provided for @scene_restroom.
+  ///
+  /// In en, this message translates to:
+  /// **'Restroom'**
+  String get scene_restroom;
+
+  /// No description provided for @scene_restroom_story.
+  ///
+  /// In en, this message translates to:
+  /// **'Even the smallest routine begins by seeking Allah’s protection.'**
+  String get scene_restroom_story;
+
+  /// No description provided for @scene_wudu.
+  ///
+  /// In en, this message translates to:
+  /// **'Wudu'**
+  String get scene_wudu;
+
+  /// No description provided for @scene_wudu_story.
+  ///
+  /// In en, this message translates to:
+  /// **'Water on the hands, His name on the tongue — getting ready to stand before Allah.'**
+  String get scene_wudu_story;
+
+  /// No description provided for @scene_dress.
+  ///
+  /// In en, this message translates to:
+  /// **'Getting dressed'**
+  String get scene_dress;
+
+  /// No description provided for @scene_dress_story.
+  ///
+  /// In en, this message translates to:
+  /// **'Every garment is a gift — thank the One who clothed you.'**
+  String get scene_dress_story;
+
+  /// No description provided for @scene_athan.
+  ///
+  /// In en, this message translates to:
+  /// **'The adhan'**
+  String get scene_athan;
+
+  /// No description provided for @scene_athan_story.
+  ///
+  /// In en, this message translates to:
+  /// **'The call rises over the neighbourhood — answer it, then ask for the Prophet ﷺ.'**
+  String get scene_athan_story;
+
+  /// No description provided for @scene_masjid.
+  ///
+  /// In en, this message translates to:
+  /// **'To the masjid'**
+  String get scene_masjid;
+
+  /// No description provided for @scene_masjid_story.
+  ///
+  /// In en, this message translates to:
+  /// **'Each step toward the masjid is light — enter and leave with dua.'**
+  String get scene_masjid_story;
+
+  /// No description provided for @scene_after_salah.
+  ///
+  /// In en, this message translates to:
+  /// **'After salah'**
+  String get scene_after_salah;
+
+  /// No description provided for @scene_after_salah_story.
+  ///
+  /// In en, this message translates to:
+  /// **'Before rushing off, sit a moment with the remembrance after salah.'**
+  String get scene_after_salah_story;
+
+  /// No description provided for @scene_morning.
+  ///
+  /// In en, this message translates to:
+  /// **'Morning adhkar'**
+  String get scene_morning;
+
+  /// No description provided for @scene_morning_story.
+  ///
+  /// In en, this message translates to:
+  /// **'Words that guard you until evening.'**
+  String get scene_morning_story;
+
+  /// No description provided for @scene_eating.
+  ///
+  /// In en, this message translates to:
+  /// **'Breakfast'**
+  String get scene_eating;
+
+  /// No description provided for @scene_eating_story.
+  ///
+  /// In en, this message translates to:
+  /// **'Begin with His name, end with His praise.'**
+  String get scene_eating_story;
+
+  /// No description provided for @scene_leave_home.
+  ///
+  /// In en, this message translates to:
+  /// **'Stepping out'**
+  String get scene_leave_home;
+
+  /// No description provided for @scene_leave_home_story.
+  ///
+  /// In en, this message translates to:
+  /// **'At the door, hand your day over to Allah.'**
+  String get scene_leave_home_story;
+
+  /// No description provided for @scene_travel.
+  ///
+  /// In en, this message translates to:
+  /// **'On the way'**
+  String get scene_travel;
+
+  /// No description provided for @scene_travel_story.
+  ///
+  /// In en, this message translates to:
+  /// **'Bus, rickshaw or car — Allahu Akbar going up, SubhanAllah coming down.'**
+  String get scene_travel_story;
+
+  /// No description provided for @scene_meeting.
+  ///
+  /// In en, this message translates to:
+  /// **'Meeting people'**
+  String get scene_meeting;
+
+  /// No description provided for @scene_meeting_story.
+  ///
+  /// In en, this message translates to:
+  /// **'Spread salam and answer a brother’s sneeze.'**
+  String get scene_meeting_story;
+
+  /// No description provided for @scene_good_news.
+  ///
+  /// In en, this message translates to:
+  /// **'When good things happen'**
+  String get scene_good_news;
+
+  /// No description provided for @scene_good_news_story.
+  ///
+  /// In en, this message translates to:
+  /// **'Joy is a reminder of the Giver — praise Him, and thank the people too.'**
+  String get scene_good_news_story;
+
+  /// No description provided for @scene_hardship.
+  ///
+  /// In en, this message translates to:
+  /// **'When it gets hard'**
+  String get scene_hardship;
+
+  /// No description provided for @scene_hardship_story.
+  ///
+  /// In en, this message translates to:
+  /// **'Worry, difficulty or a plan that failed — turn to Him first.'**
+  String get scene_hardship_story;
+
+  /// No description provided for @scene_patience.
+  ///
+  /// In en, this message translates to:
+  /// **'Loss and patience'**
+  String get scene_patience;
+
+  /// No description provided for @scene_patience_story.
+  ///
+  /// In en, this message translates to:
+  /// **'When something is taken, remember that we belong to Allah.'**
+  String get scene_patience_story;
+
+  /// No description provided for @scene_anger.
+  ///
+  /// In en, this message translates to:
+  /// **'Holding back anger'**
+  String get scene_anger;
+
+  /// No description provided for @scene_anger_story.
+  ///
+  /// In en, this message translates to:
+  /// **'Seek refuge before words you may regret.'**
+  String get scene_anger_story;
+
+  /// No description provided for @scene_pain.
+  ///
+  /// In en, this message translates to:
+  /// **'Pain and sickness'**
+  String get scene_pain;
+
+  /// No description provided for @scene_pain_story.
+  ///
+  /// In en, this message translates to:
+  /// **'For your own pain, and for a friend you visit.'**
+  String get scene_pain_story;
+
+  /// No description provided for @scene_rain.
+  ///
+  /// In en, this message translates to:
+  /// **'When it rains'**
+  String get scene_rain;
+
+  /// No description provided for @scene_rain_story.
+  ///
+  /// In en, this message translates to:
+  /// **'Rain is mercy — ask for it to be beneficial.'**
+  String get scene_rain_story;
+
+  /// No description provided for @scene_home.
+  ///
+  /// In en, this message translates to:
+  /// **'Back home'**
+  String get scene_home;
+
+  /// No description provided for @scene_home_story.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter with His name and greet your family.'**
+  String get scene_home_story;
+
+  /// No description provided for @scene_gathering.
+  ///
+  /// In en, this message translates to:
+  /// **'Leaving a gathering'**
+  String get scene_gathering;
+
+  /// No description provided for @scene_gathering_story.
+  ///
+  /// In en, this message translates to:
+  /// **'Before you stand up, wipe away the slips of the tongue.'**
+  String get scene_gathering_story;
+
+  /// No description provided for @scene_forgiveness.
+  ///
+  /// In en, this message translates to:
+  /// **'Seeking forgiveness'**
+  String get scene_forgiveness;
+
+  /// No description provided for @scene_forgiveness_story.
+  ///
+  /// In en, this message translates to:
+  /// **'The day’s mistakes, washed in istighfar.'**
+  String get scene_forgiveness_story;
+
+  /// No description provided for @scene_sleep.
+  ///
+  /// In en, this message translates to:
+  /// **'Before sleep'**
+  String get scene_sleep;
+
+  /// No description provided for @scene_sleep_story.
+  ///
+  /// In en, this message translates to:
+  /// **'End the day as it began — in His name, under His protection.'**
+  String get scene_sleep_story;
+
+  /// No description provided for @scene_night.
+  ///
+  /// In en, this message translates to:
+  /// **'In the night'**
+  String get scene_night;
+
+  /// No description provided for @scene_night_story.
+  ///
+  /// In en, this message translates to:
+  /// **'If you wake or have a bad dream, He is near.'**
+  String get scene_night_story;
+
+  /// No description provided for @part_dawn.
+  ///
+  /// In en, this message translates to:
+  /// **'Dawn'**
+  String get part_dawn;
+
+  /// No description provided for @part_morning.
+  ///
+  /// In en, this message translates to:
+  /// **'Morning'**
+  String get part_morning;
+
+  /// No description provided for @part_day.
+  ///
+  /// In en, this message translates to:
+  /// **'Day'**
+  String get part_day;
+
+  /// No description provided for @part_evening.
+  ///
+  /// In en, this message translates to:
+  /// **'Evening'**
+  String get part_evening;
+
+  /// No description provided for @part_night.
+  ///
+  /// In en, this message translates to:
+  /// **'Night'**
+  String get part_night;
+
+  /// No description provided for @removeSession.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove'**
+  String get removeSession;
+
+  /// No description provided for @addSession.
+  ///
+  /// In en, this message translates to:
+  /// **'Add {session}'**
+  String addSession(String session);
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {

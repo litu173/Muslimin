@@ -17,12 +17,15 @@ import '../../data/quran/surahs.dart';
 import '../../l10n/app_localizations.dart';
 import '../../state/quran.dart';
 import 'quiz_screen.dart';
+import 'dua_story.dart';
 import 'read_widgets.dart';
 import 'surah_screen.dart';
 
-/// Read tab: the Quran as a journey. Al-Fatiha, then An-Nas back to
-/// Al-Baqarah, grouped into phases; each surah opens after the previous one
-/// is read, and every phase ends with an optional quiz.
+/// Read tab with two parts:
+/// * Quran – recommended surahs, then the whole Quran as a journey
+///   (Al-Fatiha, then An-Nas back to Al-Baqarah) in phases, each ending
+///   with an optional quiz. Every surah is open to read.
+/// * Dua – a day told as a story, with the duas for each moment.
 class ReadScreen extends ConsumerStatefulWidget {
   const ReadScreen({super.key});
 
@@ -71,6 +74,7 @@ double _wave(int step) => math.sin(step * math.pi / 3.2) * 0.62;
 class _ReadScreenState extends ConsumerState<ReadScreen> {
   final _currentKey = GlobalKey();
   bool _scrolled = false;
+  int _tab = 0;
 
   void _scrollToCurrent() {
     final ctx = _currentKey.currentContext;
@@ -84,8 +88,10 @@ class _ReadScreenState extends ConsumerState<ReadScreen> {
     );
   }
 
-  void _open(Surah s) =>
-      push(context, SurahScreen(surah: s)).then((_) => _scrolled = false);
+  void _open(Surah s, {int? ayah}) => push(
+    context,
+    SurahScreen(surah: s, startAyah: ayah),
+  ).then((_) => _scrolled = false);
 
   @override
   Widget build(BuildContext context) {
@@ -100,46 +106,60 @@ class _ReadScreenState extends ConsumerState<ReadScreen> {
       child: Scaffold(
         body: Column(
           children: [
-            _Header(progress: progress, onContinue: _open),
+            _Header(
+              progress: progress,
+              tab: _tab,
+              onTab: (i) => setState(() => _tab = i),
+              onContinue: _open,
+            ),
             Expanded(
-              child: CustomScrollView(
-                slivers: [
-                  PullToRefresh(
-                    onRefresh: () async {
-                      ref.invalidate(quranProgressProvider);
-                      await Future<void>.delayed(
-                        const Duration(milliseconds: 600),
-                      );
-                    },
-                  ),
-                  SliverPadding(
-                    padding: const EdgeInsets.only(bottom: 120),
-                    sliver: SliverList.builder(
-                      itemCount: _items.length,
-                      itemBuilder: (context, i) => switch (_items[i]) {
-                        _PhaseItem(:final phase) => _PhaseHeader(
-                          phase: phase,
-                          progress: progress,
+              child: _tab == 1
+                  ? const DuaStory()
+                  : CustomScrollView(
+                      slivers: [
+                        PullToRefresh(
+                          onRefresh: () async {
+                            ref.invalidate(quranProgressProvider);
+                            await Future<void>.delayed(
+                              const Duration(milliseconds: 600),
+                            );
+                          },
                         ),
-                        _SurahItem(:final surah, :final step) => _SurahNode(
-                          key: surah.id == progress.current?.id
-                              ? _currentKey
-                              : null,
-                          surah: surah,
-                          step: step,
-                          progress: progress,
-                          onOpen: () => _open(surah),
+                        SliverToBoxAdapter(
+                          child: _SpecialSurahs(
+                            onOpen: (s, a) => _open(s, ayah: a),
+                          ),
                         ),
-                        _QuizItem(:final phase, :final step) => _QuizNode(
-                          phase: phase,
-                          step: step,
-                          progress: progress,
+                        const SliverToBoxAdapter(child: _RevelationLegend()),
+                        SliverPadding(
+                          padding: const EdgeInsets.only(bottom: 120),
+                          sliver: SliverList.builder(
+                            itemCount: _items.length,
+                            itemBuilder: (context, i) => switch (_items[i]) {
+                              _PhaseItem(:final phase) => _PhaseHeader(
+                                phase: phase,
+                                progress: progress,
+                              ),
+                              _SurahItem(:final surah, :final step) =>
+                                _SurahNode(
+                                  key: surah.id == progress.current?.id
+                                      ? _currentKey
+                                      : null,
+                                  surah: surah,
+                                  step: step,
+                                  progress: progress,
+                                  onOpen: () => _open(surah),
+                                ),
+                              _QuizItem(:final phase, :final step) => _QuizNode(
+                                phase: phase,
+                                step: step,
+                                progress: progress,
+                              ),
+                            },
+                          ),
                         ),
-                      },
+                      ],
                     ),
-                  ),
-                ],
-              ),
             ),
           ],
         ),
@@ -149,9 +169,16 @@ class _ReadScreenState extends ConsumerState<ReadScreen> {
 }
 
 class _Header extends StatelessWidget {
-  const _Header({required this.progress, required this.onContinue});
+  const _Header({
+    required this.progress,
+    required this.tab,
+    required this.onTab,
+    required this.onContinue,
+  });
 
   final QuranProgress progress;
+  final int tab;
+  final ValueChanged<int> onTab;
   final void Function(Surah) onContinue;
 
   @override
@@ -173,62 +200,322 @@ class _Header extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              t.readQuran,
-              style: AppText.headline.copyWith(color: AppColors.onHeader),
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    tab == 0 ? t.readQuran : t.tabDua,
+                    style: AppText.headline.copyWith(color: AppColors.onHeader),
+                  ),
+                ),
+                _Segmented(
+                  labels: [t.tabQuran, t.tabDua],
+                  index: tab,
+                  onChanged: onTab,
+                ),
+              ],
             ),
             const SizedBox(height: 2),
             Text(
-              t.journeySub,
+              tab == 0 ? t.journeySub : t.duaHeader,
               style: AppText.caption.copyWith(
                 color: AppColors.onHeader.withValues(alpha: 0.75),
               ),
             ),
-            const SizedBox(height: Gap.m),
-            Row(
-              children: [
-                CountdownRing(
-                  size: 76,
-                  progress: done / 114,
-                  child: Text(
-                    '${f.digits((done * 100 / 114).round())}%',
-                    style: AppText.subtitle.copyWith(
-                      color: AppColors.goldLight,
+            if (tab == 0) ...[
+              const SizedBox(height: Gap.m),
+              Row(
+                children: [
+                  CountdownRing(
+                    size: 76,
+                    progress: done / 114,
+                    child: Text(
+                      '${f.digits((done * 100 / 114).round())}%',
+                      style: AppText.subtitle.copyWith(
+                        color: AppColors.goldLight,
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(width: Gap.xl),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        t.surahsProgress(f.digits(done)),
-                        style: AppText.label.copyWith(
-                          color: AppColors.onHeader,
+                  const SizedBox(width: Gap.xl),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          t.surahsProgress(f.digits(done)),
+                          style: AppText.label.copyWith(
+                            color: AppColors.onHeader,
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 4),
-                      _Stat(f.digits(progress.versesRead), t.versesRead),
-                      _Stat(f.digits(phases), t.phasesDone),
-                    ],
+                        const SizedBox(height: 4),
+                        _Stat(f.digits(progress.versesRead), t.versesRead),
+                        _Stat(f.digits(phases), t.phasesDone),
+                      ],
+                    ),
                   ),
+                ],
+              ),
+              if (next != null) ...[
+                const SizedBox(height: Gap.m),
+                AppButton(
+                  resume
+                      ? '${t.continueReading} · ${next.name(f.isBn)} · ${t.ayahOf(f.digits(progress.lastAyah), f.digits(next.verses))}'
+                      : '${t.startReading} · ${next.name(f.isBn)}',
+                  icon: Icons.menu_book_rounded,
+                  expand: true,
+                  onPressed: () => onContinue(next),
                 ),
               ],
-            ),
-            if (next != null) ...[
-              const SizedBox(height: Gap.m),
-              AppButton(
-                resume
-                    ? '${t.continueReading} · ${next.name(f.isBn)} · ${t.ayahOf(f.digits(progress.lastAyah), f.digits(next.verses))}'
-                    : '${t.startReading} · ${next.name(f.isBn)}',
-                icon: Icons.menu_book_rounded,
-                expand: true,
-                onPressed: () => onContinue(next),
-              ),
             ],
           ],
         ),
+      ),
+    );
+  }
+}
+
+/// Pill-shaped two-way switch on the dark header.
+class _Segmented extends StatelessWidget {
+  const _Segmented({
+    required this.labels,
+    required this.index,
+    required this.onChanged,
+  });
+
+  final List<String> labels;
+  final int index;
+  final ValueChanged<int> onChanged;
+
+  @override
+  Widget build(BuildContext context) => Container(
+    padding: const EdgeInsets.all(3),
+    decoration: BoxDecoration(
+      color: Colors.white.withValues(alpha: 0.08),
+      borderRadius: BorderRadius.circular(Radii.pill),
+      border: Border.all(color: AppColors.goldLight.withValues(alpha: 0.3)),
+    ),
+    child: Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        for (final (i, l) in labels.indexed)
+          GestureDetector(
+            onTap: () => onChanged(i),
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+              decoration: BoxDecoration(
+                color: i == index ? AppColors.goldLight : Colors.transparent,
+                borderRadius: BorderRadius.circular(Radii.pill),
+              ),
+              child: Text(
+                l,
+                style: AppText.caption.copyWith(
+                  color: i == index ? AppColors.inkDeep : AppColors.onHeader,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ),
+      ],
+    ),
+  );
+}
+
+/// Surahs the Sunnah encourages reading at particular times; the one that
+/// fits right now (Friday, night, morning/evening) is highlighted.
+class _SpecialSurahs extends StatelessWidget {
+  const _SpecialSurahs({required this.onOpen});
+
+  final void Function(Surah surah, int? ayah) onOpen;
+
+  @override
+  Widget build(BuildContext context) {
+    final t = L10n.of(context);
+    final now = DateTime.now();
+    final night = now.hour >= 18 || now.hour < 4;
+    final friday = now.weekday == DateTime.friday;
+    final dayParts =
+        (now.hour >= 4 && now.hour < 11) || (now.hour >= 15 && now.hour < 19);
+    // (name, when, surah, start ayah, icon, highlight label)
+    final chips = <(String, String, int, int?, IconData, String?)>[
+      (
+        t.chipKahf,
+        t.chipKahfWhen,
+        18,
+        null,
+        Icons.wb_sunny_outlined,
+        friday ? t.chipToday : null,
+      ),
+      (
+        t.chipMulk,
+        t.chipMulkWhen,
+        67,
+        null,
+        Icons.nights_stay_outlined,
+        night ? t.chipTonight : null,
+      ),
+      (
+        t.chipSajdah,
+        t.chipMulkWhen,
+        32,
+        null,
+        Icons.bedtime_outlined,
+        night ? t.chipTonight : null,
+      ),
+      (t.chipKursi, t.chipKursiWhen, 2, 255, Icons.shield_outlined, null),
+      (
+        t.chipBaqarahEnd,
+        t.chipNight,
+        2,
+        285,
+        Icons.auto_awesome_outlined,
+        night ? t.chipTonight : null,
+      ),
+      (
+        t.chipQuls,
+        t.chipQulsWhen,
+        112,
+        null,
+        Icons.brightness_6_outlined,
+        dayParts ? t.chipToday : null,
+      ),
+      (
+        t.chipYasin,
+        t.chipAnytime,
+        36,
+        null,
+        Icons.favorite_border_rounded,
+        null,
+      ),
+    ]..sort((a, b) => (a.$6 == null ? 1 : 0) - (b.$6 == null ? 1 : 0));
+    return Padding(
+      padding: const EdgeInsets.only(top: Gap.l),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: Gap.l),
+            child: Text(t.specialSurahs, style: AppText.label),
+          ),
+          const SizedBox(height: Gap.s),
+          SizedBox(
+            height: 74,
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.symmetric(horizontal: Gap.l),
+              itemCount: chips.length,
+              separatorBuilder: (_, _) => const SizedBox(width: Gap.s),
+              itemBuilder: (_, i) {
+                final c = chips[i];
+                final hot = c.$6 != null;
+                return Material(
+                  color: hot
+                      ? Color.alphaBlend(
+                          AppColors.gold.withValues(alpha: 0.12),
+                          AppColors.card,
+                        )
+                      : AppColors.card,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(Radii.card),
+                    side: BorderSide(
+                      color: hot ? AppColors.gold : AppColors.divider,
+                      width: hot ? 1.4 : 1,
+                    ),
+                  ),
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(Radii.card),
+                    onTap: () => onOpen(kSurahs[c.$3 - 1], c.$4),
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(12, 10, 14, 10),
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 36,
+                            height: 36,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: AppColors.gold.withValues(alpha: 0.12),
+                            ),
+                            child: Icon(c.$5, color: AppColors.gold, size: 20),
+                          ),
+                          const SizedBox(width: 10),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Text(c.$1, style: AppText.label),
+                                  if (hot) ...[
+                                    const SizedBox(width: 6),
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 6,
+                                        vertical: 1,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: AppColors.gold,
+                                        borderRadius: BorderRadius.circular(
+                                          Radii.pill,
+                                        ),
+                                      ),
+                                      child: Text(
+                                        c.$6!,
+                                        style: AppText.micro.copyWith(
+                                          color: AppColors.onGold,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ],
+                              ),
+                              Text(
+                                c.$2,
+                                style: AppText.micro.copyWith(
+                                  color: AppColors.muted,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Key for the Makkah / Madinah emblems on the journey.
+class _RevelationLegend extends StatelessWidget {
+  const _RevelationLegend();
+
+  @override
+  Widget build(BuildContext context) {
+    final t = L10n.of(context);
+    Widget item(bool makki, String label) => Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        RevelationIcon(makki: makki, size: 18),
+        const SizedBox(width: 6),
+        Text(label, style: AppText.micro.copyWith(color: AppColors.muted)),
+      ],
+    );
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(Gap.l, Gap.l, Gap.l, 0),
+      child: Wrap(
+        spacing: Gap.l,
+        runSpacing: Gap.s,
+        children: [
+          item(true, t.revealedMakkah),
+          item(false, t.revealedMadinah),
+        ],
       ),
     );
   }
@@ -269,10 +556,9 @@ class _PhaseHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = L10n.of(context);
     final f = Fmt.of(context);
-    final open = progress.isUnlocked(phase.surahs.first);
     final read = phase.surahs.where((s) => progress.completed.contains(s.id));
     return Opacity(
-      opacity: open ? 1 : 0.55,
+      opacity: 1,
       child: Padding(
         padding: const EdgeInsets.fromLTRB(Gap.xl, Gap.xxl, Gap.xl, Gap.s),
         child: Row(
@@ -428,26 +714,16 @@ class _SurahNodeState extends State<_SurahNode>
     final s = widget.surah;
     final p = widget.progress;
     final done = p.completed.contains(s.id);
-    final open = p.isUnlocked(s);
     final current = _current;
 
     final status = done
         ? t.completed
-        : !open
-        ? t.locked
         : p.lastSurah == s.id
         ? t.ayahOf(f.digits(p.lastAyah), f.digits(s.verses))
         : t.versesN(f.digits(s.verses));
 
     final node = GestureDetector(
-      onTap: () {
-        if (open) {
-          widget.onOpen();
-        } else {
-          final i = kJourney.indexOf(s);
-          toast(context, t.unlockHint(kJourney[i - 1].name(f.isBn)));
-        }
-      },
+      onTap: widget.onOpen,
       child: AnimatedBuilder(
         animation: _pulse,
         builder: (_, child) => Stack(
@@ -469,6 +745,20 @@ class _SurahNodeState extends State<_SurahNode>
                 ),
               ),
             child!,
+            // Makkah / Madinah emblem on the node's shoulder.
+            Positioned(
+              right: -2,
+              bottom: 2,
+              child: Container(
+                padding: const EdgeInsets.all(3),
+                decoration: BoxDecoration(
+                  color: AppColors.card,
+                  shape: BoxShape.circle,
+                  border: Border.all(color: AppColors.divider),
+                ),
+                child: RevelationIcon(makki: s.makki, size: 18),
+              ),
+            ),
           ],
         ),
         child: Container(
@@ -480,47 +770,35 @@ class _SurahNodeState extends State<_SurahNode>
                     colors: [AppColors.goldLight, AppColors.gold],
                   )
                 : null,
-            color: done
-                ? null
-                : open
-                ? AppColors.header
-                : AppColors.card,
+            color: done ? null : AppColors.header,
             shape: StarShapeBorder(
               side: BorderSide(
-                color: done
-                    ? AppColors.gold
-                    : open
-                    ? AppColors.goldLight
-                    : AppColors.divider,
-                width: open && !done ? 2 : 1.4,
+                color: done ? AppColors.gold : AppColors.goldLight,
+                width: !done ? 2 : 1.4,
               ),
             ),
-            shadows: open
-                ? [
-                    BoxShadow(
-                      color: AppColors.gold.withValues(alpha: 0.25),
-                      blurRadius: 14,
-                      offset: const Offset(0, 4),
-                    ),
-                  ]
-                : null,
+            shadows: [
+              BoxShadow(
+                color: AppColors.gold.withValues(alpha: 0.25),
+                blurRadius: 14,
+                offset: const Offset(0, 4),
+              ),
+            ],
           ),
           alignment: Alignment.center,
           padding: const EdgeInsets.all(14),
-          child: open
-              ? FittedBox(
-                  child: Text(
-                    s.nameAr,
-                    textDirection: TextDirection.rtl,
-                    style: TextStyle(
-                      fontFamily: AppText.arabic,
-                      fontSize: 22,
-                      height: 1.3,
-                      color: done ? Colors.white : AppColors.goldLight,
-                    ),
-                  ),
-                )
-              : Icon(Icons.lock_outline_rounded, color: AppColors.muted),
+          child: FittedBox(
+            child: Text(
+              s.nameAr,
+              textDirection: TextDirection.rtl,
+              style: TextStyle(
+                fontFamily: AppText.arabic,
+                fontSize: 22,
+                height: 1.3,
+                color: done ? Colors.white : AppColors.goldLight,
+              ),
+            ),
+          ),
         ),
       ),
     );
@@ -550,12 +828,10 @@ class _SurahNodeState extends State<_SurahNode>
           '${f.digits(s.id)}. ${s.name(f.isBn)}',
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
-          style: AppText.label.copyWith(
-            color: open ? AppColors.ink : AppColors.muted,
-          ),
+          style: AppText.label.copyWith(color: AppColors.ink),
         ),
         Text(
-          s.meaning(f.isBn),
+          '${s.meaning(f.isBn)} · ${s.makki ? t.makki : t.madani}',
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           style: AppText.micro.copyWith(color: AppColors.muted),
@@ -563,11 +839,7 @@ class _SurahNodeState extends State<_SurahNode>
         Text(
           status,
           style: AppText.micro.copyWith(
-            color: done
-                ? AppColors.gold
-                : open
-                ? AppColors.ink
-                : AppColors.muted,
+            color: done ? AppColors.gold : AppColors.ink,
             fontWeight: FontWeight.w600,
           ),
         ),
@@ -578,9 +850,7 @@ class _SurahNodeState extends State<_SurahNode>
       step: widget.step,
       node: node,
       label: label,
-      lineColor: open
-          ? AppColors.gold.withValues(alpha: 0.7)
-          : AppColors.divider,
+      lineColor: AppColors.gold.withValues(alpha: 0.7),
     );
   }
 }
@@ -600,7 +870,6 @@ class _QuizNode extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = L10n.of(context);
     final f = Fmt.of(context);
-    final open = progress.phaseDone(phase);
     final best = progress.quizBest[phase.index];
     final stars = best == null
         ? 0
@@ -611,9 +880,7 @@ class _QuizNode extends StatelessWidget {
               : 1);
 
     final node = GestureDetector(
-      onTap: () => open
-          ? push(context, QuizScreen(phase: phase))
-          : toast(context, t.quizUnlockHint),
+      onTap: () => push(context, QuizScreen(phase: phase)),
       child: Center(
         child: Transform.rotate(
           angle: math.pi / 4,
@@ -621,21 +888,13 @@ class _QuizNode extends StatelessWidget {
             width: 50,
             height: 50,
             decoration: BoxDecoration(
-              color: open
-                  ? AppColors.gold.withValues(alpha: 0.14)
-                  : AppColors.card,
-              border: Border.all(
-                color: open ? AppColors.gold : AppColors.divider,
-                width: 1.6,
-              ),
+              color: AppColors.gold.withValues(alpha: 0.14),
+              border: Border.all(color: AppColors.gold, width: 1.6),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Transform.rotate(
               angle: -math.pi / 4,
-              child: Icon(
-                open ? Icons.star_rounded : Icons.lock_outline_rounded,
-                color: open ? AppColors.gold : AppColors.muted,
-              ),
+              child: Icon(Icons.star_rounded, color: AppColors.gold),
             ),
           ),
         ),
@@ -648,9 +907,7 @@ class _QuizNode extends StatelessWidget {
       children: [
         Text(
           t.phaseQuiz(f.digits(phase.index + 1)),
-          style: AppText.label.copyWith(
-            color: open ? AppColors.ink : AppColors.muted,
-          ),
+          style: AppText.label.copyWith(color: AppColors.ink),
         ),
         Text(
           best == null ? t.quizOptional : t.bestScore(f.digits(best)),
@@ -677,9 +934,7 @@ class _QuizNode extends StatelessWidget {
       label: label,
       nodeSize: 72,
       height: 112,
-      lineColor: open
-          ? AppColors.gold.withValues(alpha: 0.7)
-          : AppColors.divider,
+      lineColor: AppColors.gold.withValues(alpha: 0.7),
     );
   }
 }

@@ -444,15 +444,15 @@
   "approvedToast": "Masjid approved",
   "rejectedToast": "Masjid rejected",
   "verifiedChecklist": "Before approving, call the submitter and check the location on the map.",
-  "verse1Ar": "وَاسْتَعِينُوا بِالصَّبْرِ وَالصَّلَاةِ",
-  "verse1": "And seek help in patience and prayer",
-  "verse1Ref": "Al-Baqarah 45",
-  "verse2Ar": "إِنَّ الصَّلَاةَ كَانَتْ عَلَى الْمُؤْمِنِينَ كِتَابًا مَّوْقُوتًا",
-  "verse2": "Indeed, prayer has been decreed upon the believers at specified times",
-  "verse2Ref": "An-Nisa 103",
-  "verse3Ar": "حَافِظُوا عَلَى الصَّلَوَاتِ وَالصَّلَاةِ الْوُسْطَىٰ",
-  "verse3": "Guard strictly the prayers, especially the middle prayer",
-  "verse3Ref": "Al-Baqarah 238",
+  "verse1Ar": "وَٱسْتَعِينُوا۟ بِٱلصَّبْرِ وَٱلصَّلَوٰةِ",
+  "verse1": "And seek help through patience and prayer",
+  "verse1Ref": "Al-Baqarah 2:45",
+  "verse2Ar": "إِنَّ ٱلصَّلَوٰةَ كَانَتْ عَلَى ٱلْمُؤْمِنِينَ كِتَـٰبًا مَّوْقُوتًا",
+  "verse2": "Indeed, prayer has been decreed upon the believers a decree of specified times",
+  "verse2Ref": "An-Nisa' 4:103",
+  "verse3Ar": "حَـٰفِظُوا۟ عَلَى ٱلصَّلَوَٰتِ وَٱلصَّلَوٰةِ ٱلْوُسْطَىٰ",
+  "verse3": "Maintain with care the [obligatory] prayers and [in particular] the middle prayer",
+  "verse3Ref": "Al-Baqarah 2:238",
   "hijriMonths": "Muharram,Safar,Rabi al-Awwal,Rabi al-Thani,Jumada al-Ula,Jumada al-Thani,Rajab,Sha'ban,Ramadan,Shawwal,Dhul Qa'dah,Dhul Hijjah",
   "deadlineLabel": "Deadline",
   "startingDateLabel": "Starting Date",
@@ -534,7 +534,7 @@
     }
   },
   "credits": "Credits",
-  "fontCredits": "Logo & English prayer names: lettering from the Muslimin design, based on Hidayatullah by Anthonie Van Hayu (ARToni). Fonts: Grenze Gotisch by Omnibus-Type, Poppins by Indian Type Foundry & Jonny Pinhorn, Hind Siliguri by Indian Type Foundry, Anek Bangla (Bangla digits) by Ek Type, Galada by Black Foundry, Amiri by Khaled Hosny. All fonts are free under the SIL Open Font License 1.1.",
+  "fontCredits": "Logo & English prayer names: lettering from the Muslimin design, based on Hidayatullah by Anthonie Van Hayu (ARToni). Fonts: Grenze Gotisch by Omnibus-Type, Poppins by Indian Type Foundry & Jonny Pinhorn, Hind Siliguri by Indian Type Foundry, Anek Bangla (Bangla digits) by Ek Type, Galada by Black Foundry, Scheherazade New by SIL International. All fonts are free under the SIL Open Font License 1.1.",
   "designInspired": "Original design font: Hidayatullah by Anthonie Van Hayu (ARToni).",
   "openSourceLicenses": "Open-source licences",
   "continueWithGoogle": "Continue with Google",
@@ -710,7 +710,7 @@
   "takeQuiz": "Take the phase quiz",
   "later": "Later",
   "wordByWord": "Word by word",
-  "quranSource": "Text & word-by-word: quran.com · Translation: Saheeh International",
+  "quranSource": "Mushaf text & word-by-word: quran.com (King Fahd Complex Uthmani script) · Translation: Saheeh International",
   "startHere": "START",
   "quizWordMeaning": "What does this word mean?",
   "quizAyahMeaning": "What does this ayah mean?",
@@ -757,5 +757,218 @@
     }
   },
   "quizDoneBody": "Quizzes are optional — they help you remember what you read.",
-  "quizLoading": "Preparing your quiz…"
+  "quizLoading": "Preparing your quiz…",
+  "tabQuran": "Quran",
+  "tabDua": "Dua",
+  "specialSurahs": "Recommended to read",
+  "chipMulk": "Al-Mulk",
+  "chipMulkWhen": "Before sleep",
+  "chipSajdah": "As-Sajdah",
+  "chipKahf": "Al-Kahf",
+  "chipKahfWhen": "Friday",
+  "chipKursi": "Ayatul Kursi",
+  "chipKursiWhen": "After salah & sleep",
+  "chipBaqarahEnd": "Last 2 of Al-Baqarah",
+  "chipNight": "At night",
+  "chipYasin": "Ya-Sin",
+  "chipQuls": "3 Quls",
+  "chipQulsWhen": "Morning & evening",
+  "chipAnytime": "Any time",
+  "chipToday": "Today",
+  "chipTonight": "Tonight",
+  "revealedMakkah": "Revealed in Makkah",
+  "revealedMadinah": "Revealed in Madinah",
+  "reciter": "Reciter",
+  "chooseReciter": "Choose a reciter",
+  "playAyah": "Play from this ayah",
+  "recitingAyah": "Ayah {n} of {total}",
+  "@recitingAyah": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "audioError": "Couldn't load the recitation. Check your internet.",
+  "dailyQuran": "Daily Quran",
+  "energy0": "Your heart is waiting for light today",
+  "energy1": "Charging… a few more ayat",
+  "energy2": "Almost full — keep going!",
+  "energy3": "Full of light — MashaAllah!",
+  "energy4": "Shining bright today ✨",
+  "versesToday": "{n} / {goal} ayat today",
+  "@versesToday": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "streakDays": "{n}-day streak",
+  "@streakDays": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "readNow": "Read now",
+  "keepReading": "Read more",
+  "achievements": "Achievements",
+  "achievementsCount": "{n} of {total} earned",
+  "@achievementsCount": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "achievementEarned": "Earned on {date}",
+  "@achievementEarned": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "achievementLocked": "In progress · {done}/{target}",
+  "@achievementLocked": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "target": {
+        "type": "String"
+      }
+    }
+  },
+  "achievementUnlocked": "Achievement unlocked: {name}",
+  "@achievementUnlocked": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "ach_bismillah": "Bismillah",
+  "ach_bismillah_desc": "Read your first ayah",
+  "ach_fatiha": "The Opener",
+  "ach_fatiha_desc": "Complete Surah Al-Fatihah",
+  "ach_quls": "Three Quls",
+  "ach_quls_desc": "Complete Al-Ikhlas, Al-Falaq and An-Nas",
+  "ach_streak3": "Steady Steps",
+  "ach_streak3_desc": "Read Quran 3 days in a row",
+  "ach_streak7": "Week of Light",
+  "ach_streak7_desc": "Read Quran 7 days in a row",
+  "ach_streak30": "Month of Noor",
+  "ach_streak30_desc": "Read Quran 30 days in a row",
+  "ach_verses100": "Hundred Ayat",
+  "ach_verses100_desc": "Read 100 ayat",
+  "ach_verses1000": "Thousand Ayat",
+  "ach_verses1000_desc": "Read 1,000 ayat",
+  "ach_kahf": "Friday Light",
+  "ach_kahf_desc": "Complete Al-Kahf on a Friday",
+  "ach_mulk": "Night Guardian",
+  "ach_mulk_desc": "Complete Al-Mulk at night",
+  "ach_yasin": "Ya-Sin",
+  "ach_yasin_desc": "Complete Surah Ya-Sin",
+  "ach_listener": "Attentive Listener",
+  "ach_listener_desc": "Listen to a whole surah recitation",
+  "ach_quiz100": "Sharp Mind",
+  "ach_quiz100_desc": "Score 100% in a phase quiz",
+  "ach_juzamma": "Juz 'Amma",
+  "ach_juzamma_desc": "Complete all 37 surahs of the 30th juz",
+  "ach_phases10": "Ten Phases",
+  "ach_phases10_desc": "Complete 10 phases of the journey",
+  "ach_khatm": "Khatm al-Quran",
+  "ach_khatm_desc": "Complete all 114 surahs",
+  "duaHeader": "A day with the remembrance of Allah",
+  "duaSub": "From waking up to sleeping — the duas the Prophet ﷺ taught for every moment.",
+  "repeatTimes": "Say {n}×",
+  "@repeatTimes": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "duaSource": "Hisn al-Muslim #{n}",
+  "@duaSource": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "duaCredit": "Duas from Hisn al-Muslim (Fortress of the Muslim) by Sa’id bin Ali al-Qahtani, via its official site hisnmuslim.com.",
+  "nowLabel": "Now",
+  "scene_wake": "Waking up",
+  "scene_wake_story": "The day begins with thanks — Allah returned the soul after sleep.",
+  "scene_restroom": "Restroom",
+  "scene_restroom_story": "Even the smallest routine begins by seeking Allah’s protection.",
+  "scene_wudu": "Wudu",
+  "scene_wudu_story": "Water on the hands, His name on the tongue — getting ready to stand before Allah.",
+  "scene_dress": "Getting dressed",
+  "scene_dress_story": "Every garment is a gift — thank the One who clothed you.",
+  "scene_athan": "The adhan",
+  "scene_athan_story": "The call rises over the neighbourhood — answer it, then ask for the Prophet ﷺ.",
+  "scene_masjid": "To the masjid",
+  "scene_masjid_story": "Each step toward the masjid is light — enter and leave with dua.",
+  "scene_after_salah": "After salah",
+  "scene_after_salah_story": "Before rushing off, sit a moment with the remembrance after salah.",
+  "scene_morning": "Morning adhkar",
+  "scene_morning_story": "Words that guard you until evening.",
+  "scene_eating": "Breakfast",
+  "scene_eating_story": "Begin with His name, end with His praise.",
+  "scene_leave_home": "Stepping out",
+  "scene_leave_home_story": "At the door, hand your day over to Allah.",
+  "scene_travel": "On the way",
+  "scene_travel_story": "Bus, rickshaw or car — Allahu Akbar going up, SubhanAllah coming down.",
+  "scene_meeting": "Meeting people",
+  "scene_meeting_story": "Spread salam and answer a brother’s sneeze.",
+  "scene_good_news": "When good things happen",
+  "scene_good_news_story": "Joy is a reminder of the Giver — praise Him, and thank the people too.",
+  "scene_hardship": "When it gets hard",
+  "scene_hardship_story": "Worry, difficulty or a plan that failed — turn to Him first.",
+  "scene_patience": "Loss and patience",
+  "scene_patience_story": "When something is taken, remember that we belong to Allah.",
+  "scene_anger": "Holding back anger",
+  "scene_anger_story": "Seek refuge before words you may regret.",
+  "scene_pain": "Pain and sickness",
+  "scene_pain_story": "For your own pain, and for a friend you visit.",
+  "scene_rain": "When it rains",
+  "scene_rain_story": "Rain is mercy — ask for it to be beneficial.",
+  "scene_home": "Back home",
+  "scene_home_story": "Enter with His name and greet your family.",
+  "scene_gathering": "Leaving a gathering",
+  "scene_gathering_story": "Before you stand up, wipe away the slips of the tongue.",
+  "scene_forgiveness": "Seeking forgiveness",
+  "scene_forgiveness_story": "The day’s mistakes, washed in istighfar.",
+  "scene_sleep": "Before sleep",
+  "scene_sleep_story": "End the day as it began — in His name, under His protection.",
+  "scene_night": "In the night",
+  "scene_night_story": "If you wake or have a bad dream, He is near.",
+  "part_dawn": "Dawn",
+  "part_morning": "Morning",
+  "part_day": "Day",
+  "part_evening": "Evening",
+  "part_night": "Night",
+  "removeSession": "Remove",
+  "addSession": "Add {session}",
+  "@addSession": {
+    "placeholders": {
+      "session": {
+        "type": "String"
+      }
+    }
+  }
 }

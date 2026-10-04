@@ -1,6 +1,9 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:super_sliver_list/super_sliver_list.dart';
 
 import '../../core/nav.dart';
 import '../../core/theme/app_colors.dart';
@@ -14,16 +17,22 @@ import '../../core/widgets/surfaces.dart';
 import '../../data/quran/quran_repository.dart';
 import '../../data/quran/surahs.dart';
 import '../../l10n/app_localizations.dart';
+import '../../services/recitation_player.dart';
+import '../../state/providers.dart';
 import '../../state/quran.dart';
 import 'quiz_screen.dart';
 import 'read_widgets.dart';
 
-/// Reads one surah: Arabic, translation and (optionally) word-by-word.
-/// The header stays fixed; the ayahs scroll underneath.
+/// Reads one surah: Mushaf text, translation, optional word-by-word, and a
+/// verse-by-verse recitation player. Only the top bar stays fixed; the
+/// surah title and the ayat scroll underneath it.
 class SurahScreen extends ConsumerStatefulWidget {
-  const SurahScreen({super.key, required this.surah});
+  const SurahScreen({super.key, required this.surah, this.startAyah});
 
   final Surah surah;
+
+  /// Opens at this ayah (e.g. Ayatul Kursi = 2:255).
+  final int? startAyah;
 
   @override
   ConsumerState<SurahScreen> createState() => _SurahScreenState();
@@ -31,16 +40,47 @@ class SurahScreen extends ConsumerStatefulWidget {
 
 class _SurahScreenState extends ConsumerState<SurahScreen> {
   late Future<List<Ayah>> _ayahs = _load();
+  final _scroll = ScrollController();
+  final _list = ListController();
   bool _words = false;
-  int _seen = 0;
+  bool _jumped = false;
+  DateTime _userScrolledAt = DateTime(2000);
+  late final RecitationPlayer _player;
+
+  Surah get _s => widget.surah;
+  bool get _hasBismillah => _s.id != 1 && _s.id != 9;
+
+  /// List index of ayah [n]: [intro, (bismillah), ayah 1 …, end].
+  int _indexOf(int n) => n - 1 + 1 + (_hasBismillah ? 1 : 0);
 
   String get _lang =>
       Localizations.localeOf(context).languageCode == 'bn' ? 'bn' : 'en';
 
+  @override
+  void initState() {
+    super.initState();
+    final prefs = ref.read(prefsProvider);
+    _player = RecitationPlayer(
+      repo: ref.read(quranRepositoryProvider),
+      surah: _s.id,
+      verses: _s.verses,
+      reciter: reciterById(prefs.reciter),
+      onAyah: _onRecitedAyah,
+      onFinished: () =>
+          ref.read(quranProgressProvider.notifier).listened(_s.id),
+    );
+  }
+
+  @override
+  void dispose() {
+    _player.dispose();
+    _scroll.dispose();
+    super.dispose();
+  }
+
   Future<List<Ayah>> _load({bool refresh = false}) => Future(
-    () => ref
-        .read(quranRepositoryProvider)
-        .surah(widget.surah.id, _lang, refresh: refresh),
+    () =>
+        ref.read(quranRepositoryProvider).surah(_s.id, _lang, refresh: refresh),
   );
 
   Future<void> _refresh() async {
@@ -51,29 +91,99 @@ class _SurahScreenState extends ConsumerState<SurahScreen> {
     } catch (_) {}
   }
 
-  void _seenAyah(int n) {
-    if (n <= _seen) return;
-    _seen = n;
-    // After the frame: providers must not change while building.
+  void _markRead(int ayah) =>
+      ref.read(quranProgressProvider.notifier).read(_s.id, ayah);
+
+  /// Marks the ayat currently on screen as read.
+  void _markVisible() {
+    if (!mounted || !_list.isAttached) return;
+    final r = _list.unobstructedVisibleRange;
+    if (r == null) return;
+    final first = _indexOf(1);
+    for (var i = r.$1; i <= r.$2; i++) {
+      final n = i - first + 1;
+      if (n >= 1 && n <= _s.verses) _markRead(n);
+    }
+  }
+
+  void _onRecitedAyah(int n) {
+    _markRead(n);
+    // Follow the reciter unless the user is browsing on their own.
+    if (DateTime.now().difference(_userScrolledAt).inSeconds < 4) return;
+    if (!_list.isAttached || !_scroll.hasClients) return;
+    _list.animateToItem(
+      index: _indexOf(n),
+      scrollController: _scroll,
+      alignment: 0.15,
+      duration: (_) => const Duration(milliseconds: 450),
+      curve: (_) => Curves.easeOutCubic,
+    );
+  }
+
+  void _jumpToStart() {
+    if (_jumped || widget.startAyah == null) return;
+    _jumped = true;
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted) return;
-      final p = ref.read(quranProgressProvider);
-      if (!p.completed.contains(widget.surah.id)) {
-        ref.read(quranProgressProvider.notifier).readUpTo(widget.surah.id, n);
-      }
+      if (!_list.isAttached || !_scroll.hasClients) return;
+      _list.jumpToItem(
+        index: _indexOf(widget.startAyah!),
+        scrollController: _scroll,
+        alignment: 0.05,
+      );
     });
+  }
+
+  Future<void> _pickReciter() async {
+    final t = L10n.of(context);
+    final bn = Fmt.of(context).isBn;
+    final r = await showModalBottomSheet<Reciter>(
+      context: context,
+      useSafeArea: true,
+      isScrollControlled: true,
+      builder: (ctx) => Container(
+        decoration: BoxDecoration(
+          color: AppColors.card,
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(Radii.sheet),
+          ),
+        ),
+        padding: const EdgeInsets.fromLTRB(Gap.l, Gap.xl, Gap.l, Gap.l),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: Gap.s),
+              child: Text(t.chooseReciter, style: AppText.subtitle),
+            ),
+            const SizedBox(height: Gap.s),
+            for (final x in kReciters)
+              ListTile(
+                onTap: () => Navigator.pop(ctx, x),
+                leading: _ReciterAvatar(reciter: x),
+                title: Text(x.label(bn), style: AppText.label),
+                trailing: x.id == _player.reciter.id
+                    ? Icon(Icons.check_circle_rounded, color: AppColors.gold)
+                    : null,
+              ),
+          ],
+        ),
+      ),
+    );
+    if (r == null) return;
+    ref.read(prefsProvider).reciter = r.id;
+    await _player.setReciter(r);
   }
 
   Future<void> _complete() async {
     final t = L10n.of(context);
     final f = Fmt.of(context);
-    final s = widget.surah;
     HapticFeedback.mediumImpact();
-    ref.read(quranProgressProvider.notifier).complete(s.id);
+    ref.read(quranProgressProvider.notifier).complete(_s.id);
     final progress = ref.read(quranProgressProvider);
-    final i = kJourney.indexOf(s);
+    final i = kJourney.indexOf(_s);
     final next = i + 1 < kJourney.length ? kJourney[i + 1] : null;
-    final phase = phaseOf(s.id);
+    final phase = phaseOf(_s.id);
     final quiz = progress.phaseDone(phase);
 
     final action = await showModalBottomSheet<String>(
@@ -116,18 +226,10 @@ class _SurahScreenState extends ConsumerState<SurahScreen> {
             ),
             const SizedBox(height: Gap.l),
             Text(
-              t.surahDone(s.name(f.isBn)),
+              t.surahDone(_s.name(f.isBn)),
               textAlign: TextAlign.center,
               style: AppText.subtitle,
             ),
-            if (next != null) ...[
-              const SizedBox(height: Gap.s),
-              Text(
-                t.nextUnlocked(next.name(f.isBn)),
-                textAlign: TextAlign.center,
-                style: AppText.body.copyWith(color: AppColors.muted),
-              ),
-            ],
             const SizedBox(height: Gap.xl),
             if (quiz) ...[
               AppButton(
@@ -161,9 +263,8 @@ class _SurahScreenState extends ConsumerState<SurahScreen> {
   Widget build(BuildContext context) {
     final t = L10n.of(context);
     final f = Fmt.of(context);
-    final s = widget.surah;
     final done = ref.watch(
-      quranProgressProvider.select((p) => p.completed.contains(s.id)),
+      quranProgressProvider.select((p) => p.completed.contains(_s.id)),
     );
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
@@ -171,8 +272,8 @@ class _SurahScreenState extends ConsumerState<SurahScreen> {
       child: Scaffold(
         body: Column(
           children: [
-            _SurahHeader(
-              surah: s,
+            _TopBar(
+              title: '${f.digits(_s.id)}. ${_s.name(f.isBn)}',
               words: _words,
               onWords: () => setState(() => _words = !_words),
             ),
@@ -206,43 +307,121 @@ class _SurahScreenState extends ConsumerState<SurahScreen> {
                     );
                   }
                   final ayahs = snap.data!;
-                  final bismillah = s.id != 1 && s.id != 9;
-                  final extra = bismillah ? 1 : 0;
-                  return CustomScrollView(
-                    slivers: [
-                      PullToRefresh(onRefresh: _refresh),
-                      SliverPadding(
-                        padding: const EdgeInsets.fromLTRB(
-                          Gap.l,
-                          Gap.l,
-                          Gap.l,
-                          Gap.xxl,
-                        ),
-                        sliver: SliverList.separated(
-                          itemCount: ayahs.length + extra + 1,
-                          separatorBuilder: (_, _) =>
-                              const SizedBox(height: Gap.m),
-                          itemBuilder: (context, i) {
-                            if (bismillah && i == 0) return const _Bismillah();
-                            final k = i - extra;
-                            if (k == ayahs.length) {
-                              return _EndCard(
-                                done: done,
-                                onComplete: _complete,
-                              );
-                            }
-                            _seenAyah(ayahs[k].number);
-                            return _AyahCard(
-                              ayah: ayahs[k],
-                              words: _words,
-                              number: f.digits(ayahs[k].number),
-                            );
-                          },
-                        ),
+                  _jumpToStart();
+                  WidgetsBinding.instance.addPostFrameCallback(
+                    (_) => _markVisible(),
+                  );
+                  final extra = _hasBismillah ? 1 : 0;
+                  return NotificationListener<ScrollNotification>(
+                    onNotification: (n) {
+                      if (n is ScrollStartNotification &&
+                          n.dragDetails != null) {
+                        _userScrolledAt = DateTime.now();
+                      }
+                      if (n is ScrollEndNotification) _markVisible();
+                      return false;
+                    },
+                    child: ListenableBuilder(
+                      listenable: _player,
+                      builder: (context, _) => CustomScrollView(
+                        controller: _scroll,
+                        slivers: [
+                          PullToRefresh(onRefresh: _refresh),
+                          SliverPadding(
+                            padding: const EdgeInsets.fromLTRB(
+                              Gap.l,
+                              Gap.l,
+                              Gap.l,
+                              Gap.xxl,
+                            ),
+                            sliver: SuperSliverList.builder(
+                              listController: _list,
+                              itemCount: ayahs.length + extra + 2,
+                              itemBuilder: (context, i) {
+                                final Widget child;
+                                if (i == 0) {
+                                  child = _SurahIntro(surah: _s);
+                                } else if (_hasBismillah && i == 1) {
+                                  child = const _Bismillah();
+                                } else if (i == ayahs.length + extra + 1) {
+                                  child = _EndCard(
+                                    done: done,
+                                    onComplete: _complete,
+                                  );
+                                } else {
+                                  final a = ayahs[i - 1 - extra];
+                                  child = _AyahCard(
+                                    ayah: a,
+                                    words: _words,
+                                    number: f.digits(a.number),
+                                    reciting:
+                                        _player.started &&
+                                        _player.ayah == a.number,
+                                    playing: _player.playing,
+                                    onPlay: () => _player.playFrom(a.number),
+                                  );
+                                }
+                                return Padding(
+                                  padding: const EdgeInsets.only(bottom: Gap.m),
+                                  child: child,
+                                );
+                              },
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
+                    ),
                   );
                 },
+              ),
+            ),
+            _PlayerBar(player: _player, surah: _s, onReciter: _pickReciter),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Fixed top: patterned bar behind the status bar with back, the surah's
+/// name and the word-by-word toggle.
+class _TopBar extends StatelessWidget {
+  const _TopBar({
+    required this.title,
+    required this.words,
+    required this.onWords,
+  });
+
+  final String title;
+  final bool words;
+  final VoidCallback onWords;
+
+  @override
+  Widget build(BuildContext context) {
+    final t = L10n.of(context);
+    return IslamicPattern(
+      child: Padding(
+        padding: EdgeInsets.only(
+          top: MediaQuery.of(context).padding.top,
+          bottom: 4,
+        ),
+        child: Row(
+          children: [
+            BackButton(color: AppColors.onHeader),
+            Expanded(
+              child: Text(
+                title,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: AppText.subtitle.copyWith(color: AppColors.onHeader),
+              ),
+            ),
+            IconButton(
+              tooltip: t.wordByWord,
+              onPressed: onWords,
+              icon: Icon(
+                Icons.translate_rounded,
+                color: words ? AppColors.goldLight : AppColors.onHeader,
               ),
             ),
           ],
@@ -252,65 +431,57 @@ class _SurahScreenState extends ConsumerState<SurahScreen> {
   }
 }
 
-class _SurahHeader extends StatelessWidget {
-  const _SurahHeader({
-    required this.surah,
-    required this.words,
-    required this.onWords,
-  });
-
+/// Surah title card – scrolls away with the ayat.
+class _SurahIntro extends StatelessWidget {
+  const _SurahIntro({required this.surah});
   final Surah surah;
-  final bool words;
-  final VoidCallback onWords;
 
   @override
   Widget build(BuildContext context) {
     final t = L10n.of(context);
     final f = Fmt.of(context);
-    return IslamicPattern(
-      child: Padding(
-        padding: EdgeInsets.only(
-          top: MediaQuery.of(context).padding.top,
-          bottom: Gap.l,
-        ),
-        child: Column(
-          children: [
-            Row(
-              children: [
-                BackButton(color: AppColors.onHeader),
-                Expanded(
-                  child: Text(
-                    '${f.digits(surah.id)}. ${surah.name(f.isBn)}',
-                    style: AppText.subtitle.copyWith(color: AppColors.onHeader),
-                  ),
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(Radii.card),
+      child: IslamicPattern(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            vertical: Gap.xl,
+            horizontal: Gap.l,
+          ),
+          child: Column(
+            children: [
+              Text(
+                surah.nameAr,
+                textDirection: TextDirection.rtl,
+                style: TextStyle(
+                  fontFamily: AppText.arabic,
+                  fontSize: 38,
+                  height: 1.4,
+                  color: AppColors.goldLight,
                 ),
-                IconButton(
-                  tooltip: t.wordByWord,
-                  onPressed: onWords,
-                  icon: Icon(
-                    Icons.translate_rounded,
-                    color: words ? AppColors.goldLight : AppColors.onHeader,
+              ),
+              Text(
+                surah.name(f.isBn),
+                style: AppText.label.copyWith(color: AppColors.onHeader),
+              ),
+              const SizedBox(height: 6),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  RevelationIcon(makki: surah.makki, size: 18),
+                  const SizedBox(width: 6),
+                  Flexible(
+                    child: Text(
+                      '${surah.meaning(f.isBn)} · ${surah.makki ? t.makki : t.madani} · ${t.versesN(f.digits(surah.verses))}',
+                      style: AppText.caption.copyWith(
+                        color: AppColors.onHeader.withValues(alpha: 0.8),
+                      ),
+                    ),
                   ),
-                ),
-              ],
-            ),
-            Text(
-              surah.nameAr,
-              textDirection: TextDirection.rtl,
-              style: TextStyle(
-                fontFamily: AppText.arabic,
-                fontSize: 34,
-                height: 1.4,
-                color: AppColors.goldLight,
+                ],
               ),
-            ),
-            Text(
-              '${surah.meaning(f.isBn)} · ${surah.makki ? t.makki : t.madani} · ${t.versesN(f.digits(surah.verses))}',
-              style: AppText.caption.copyWith(
-                color: AppColors.onHeader.withValues(alpha: 0.8),
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -324,13 +495,13 @@ class _Bismillah extends StatelessWidget {
   Widget build(BuildContext context) => Padding(
     padding: const EdgeInsets.symmetric(vertical: Gap.s),
     child: Text(
-      'بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ',
+      kBismillah,
       textAlign: TextAlign.center,
       textDirection: TextDirection.rtl,
       style: TextStyle(
         fontFamily: AppText.arabic,
-        fontSize: 26,
-        height: 1.6,
+        fontSize: 28,
+        height: 1.8,
         color: AppColors.gold,
       ),
     ),
@@ -342,56 +513,179 @@ class _AyahCard extends StatelessWidget {
     required this.ayah,
     required this.words,
     required this.number,
+    required this.reciting,
+    required this.playing,
+    required this.onPlay,
   });
 
   final Ayah ayah;
   final bool words;
   final String number;
 
+  /// This ayah is the one the player is on.
+  final bool reciting;
+  final bool playing;
+  final VoidCallback onPlay;
+
   @override
-  Widget build(BuildContext context) => AppCard(
-    padding: const EdgeInsets.fromLTRB(Gap.l, Gap.m, Gap.l, Gap.l),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Align(alignment: Alignment.centerLeft, child: AyahNumber(number)),
-        const SizedBox(height: Gap.s),
-        Text(
-          ayah.arabic,
-          textAlign: TextAlign.right,
-          textDirection: TextDirection.rtl,
-          style: TextStyle(
-            fontFamily: AppText.arabic,
-            fontSize: 26,
-            height: 2,
-            color: AppColors.ink,
+  Widget build(BuildContext context) {
+    final t = L10n.of(context);
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 350),
+      curve: Curves.easeOut,
+      decoration: BoxDecoration(
+        color: reciting
+            ? Color.alphaBlend(
+                AppColors.gold.withValues(alpha: 0.09),
+                AppColors.card,
+              )
+            : AppColors.card,
+        borderRadius: BorderRadius.circular(Radii.card),
+        border: Border.all(
+          color: reciting ? AppColors.gold : Colors.transparent,
+          width: 1.5,
+        ),
+        boxShadow: reciting
+            ? [
+                BoxShadow(
+                  color: AppColors.gold.withValues(alpha: 0.18),
+                  blurRadius: 18,
+                  offset: const Offset(0, 6),
+                ),
+              ]
+            : null,
+      ),
+      padding: const EdgeInsets.fromLTRB(Gap.l, Gap.s, Gap.s, Gap.l),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Row(
+            children: [
+              AyahNumber(number),
+              if (reciting) ...[
+                const SizedBox(width: Gap.s),
+                _Equalizer(active: playing),
+              ],
+              const Spacer(),
+              IconButton(
+                tooltip: t.playAyah,
+                onPressed: onPlay,
+                icon: Icon(
+                  Icons.play_circle_outline_rounded,
+                  color: AppColors.gold,
+                ),
+              ),
+            ],
           ),
-        ),
-        AnimatedSize(
-          duration: const Duration(milliseconds: 250),
-          alignment: Alignment.topCenter,
-          child: words
-              ? Padding(
-                  padding: const EdgeInsets.only(top: Gap.m),
-                  child: Directionality(
-                    textDirection: TextDirection.rtl,
-                    child: Wrap(
-                      spacing: Gap.s,
-                      runSpacing: Gap.s,
-                      children: [
-                        for (final w in ayah.words) _WordChip(word: w),
-                      ],
+          Padding(
+            padding: const EdgeInsets.only(right: Gap.s),
+            child: Text(
+              ayah.arabic,
+              textAlign: TextAlign.right,
+              textDirection: TextDirection.rtl,
+              style: TextStyle(
+                fontFamily: AppText.arabic,
+                fontSize: 28,
+                height: 2.1,
+                color: AppColors.ink,
+              ),
+            ),
+          ),
+          AnimatedSize(
+            duration: const Duration(milliseconds: 250),
+            alignment: Alignment.topCenter,
+            child: words
+                ? Padding(
+                    padding: const EdgeInsets.only(top: Gap.m, right: Gap.s),
+                    child: Directionality(
+                      textDirection: TextDirection.rtl,
+                      child: Wrap(
+                        spacing: Gap.s,
+                        runSpacing: Gap.s,
+                        children: [
+                          for (final w in ayah.words) _WordChip(word: w),
+                        ],
+                      ),
                     ),
-                  ),
-                )
-              : const SizedBox(width: double.infinity),
-        ),
-        const SizedBox(height: Gap.m),
-        Text(
-          ayah.translation,
-          style: AppText.body.copyWith(color: AppColors.muted, height: 1.55),
-        ),
-      ],
+                  )
+                : const SizedBox(width: double.infinity),
+          ),
+          const SizedBox(height: Gap.m),
+          Padding(
+            padding: const EdgeInsets.only(right: Gap.s),
+            child: Text(
+              ayah.translation,
+              style: AppText.body.copyWith(
+                color: AppColors.muted,
+                height: 1.55,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Three gold bars that bounce while the ayah is being recited.
+class _Equalizer extends StatefulWidget {
+  const _Equalizer({required this.active});
+  final bool active;
+
+  @override
+  State<_Equalizer> createState() => _EqualizerState();
+}
+
+class _EqualizerState extends State<_Equalizer>
+    with SingleTickerProviderStateMixin {
+  late final _c = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 900),
+  );
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.active) _c.repeat();
+  }
+
+  @override
+  void didUpdateWidget(_Equalizer old) {
+    super.didUpdateWidget(old);
+    if (widget.active && !_c.isAnimating) _c.repeat();
+    if (!widget.active && _c.isAnimating) _c.stop();
+  }
+
+  @override
+  void dispose() {
+    _c.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => AnimatedBuilder(
+    animation: _c,
+    builder: (_, _) => SizedBox(
+      height: 16,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          for (var i = 0; i < 3; i++)
+            Container(
+              margin: const EdgeInsets.only(right: 2),
+              width: 3,
+              height:
+                  4 +
+                  12 *
+                      (0.5 + 0.5 * math.sin(_c.value * 2 * math.pi + i * 1.9))
+                          .abs(),
+              decoration: BoxDecoration(
+                color: AppColors.gold,
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+        ],
+      ),
     ),
   );
 }
@@ -416,8 +710,8 @@ class _WordChip extends StatelessWidget {
           textDirection: TextDirection.rtl,
           style: TextStyle(
             fontFamily: AppText.arabic,
-            fontSize: 20,
-            height: 1.5,
+            fontSize: 22,
+            height: 1.6,
             color: AppColors.gold,
           ),
         ),
@@ -457,6 +751,183 @@ class _EndCard extends StatelessWidget {
             style: AppText.micro.copyWith(color: AppColors.muted),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _ReciterAvatar extends StatelessWidget {
+  const _ReciterAvatar({required this.reciter, this.size = 38});
+  final Reciter reciter;
+  final double size;
+
+  @override
+  Widget build(BuildContext context) => Container(
+    width: size,
+    height: size,
+    alignment: Alignment.center,
+    decoration: BoxDecoration(
+      shape: BoxShape.circle,
+      gradient: LinearGradient(
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+        colors: [AppColors.header, AppColors.inkDeep],
+      ),
+      border: Border.all(color: AppColors.goldLight.withValues(alpha: 0.6)),
+    ),
+    child: Text(
+      reciter.initials,
+      style: AppText.caption.copyWith(
+        color: AppColors.goldLight,
+        fontWeight: FontWeight.w600,
+      ),
+    ),
+  );
+}
+
+/// Bottom player: reciter, ayah being recited, play/pause, previous/next and
+/// the progress through the surah.
+class _PlayerBar extends StatelessWidget {
+  const _PlayerBar({
+    required this.player,
+    required this.surah,
+    required this.onReciter,
+  });
+
+  final RecitationPlayer player;
+  final Surah surah;
+  final VoidCallback onReciter;
+
+  @override
+  Widget build(BuildContext context) {
+    final t = L10n.of(context);
+    final f = Fmt.of(context);
+    return ListenableBuilder(
+      listenable: player,
+      builder: (context, _) => DecoratedBox(
+        decoration: BoxDecoration(
+          color: AppColors.card,
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.dark
+                  ? const Color(0x66000000)
+                  : const Color(0x14002828),
+              blurRadius: 16,
+              offset: const Offset(0, -4),
+            ),
+          ],
+        ),
+        child: SafeArea(
+          top: false,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              LinearProgressIndicator(
+                value: player.started ? player.progress : 0,
+                minHeight: 3,
+                color: AppColors.gold,
+                backgroundColor: AppColors.gold.withValues(alpha: 0.12),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(Gap.l, Gap.s, Gap.s, Gap.s),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(Radii.button),
+                        onTap: onReciter,
+                        child: Row(
+                          children: [
+                            _ReciterAvatar(reciter: player.reciter, size: 36),
+                            const SizedBox(width: Gap.s),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    player.reciter.label(f.isBn),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: AppText.label,
+                                  ),
+                                  Text(
+                                    player.error
+                                        ? t.audioError
+                                        : t.recitingAyah(
+                                            f.digits(player.ayah),
+                                            f.digits(surah.verses),
+                                          ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: AppText.micro.copyWith(
+                                      color: player.error
+                                          ? AppColors.danger
+                                          : AppColors.muted,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Icon(
+                              Icons.expand_more_rounded,
+                              color: AppColors.muted,
+                              size: 20,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: player.ayah > 1 ? player.previous : null,
+                      icon: Icon(
+                        Icons.skip_previous_rounded,
+                        color: AppColors.ink,
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: player.toggle,
+                      child: Container(
+                        width: 48,
+                        height: 48,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          gradient: LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: [AppColors.goldLight, AppColors.gold],
+                          ),
+                        ),
+                        child: player.loading
+                            ? const SizedBox.square(
+                                dimension: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2.2,
+                                  color: Colors.white,
+                                ),
+                              )
+                            : Icon(
+                                player.playing
+                                    ? Icons.pause_rounded
+                                    : Icons.play_arrow_rounded,
+                                color: Colors.white,
+                                size: 28,
+                              ),
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: player.ayah < surah.verses
+                          ? player.next
+                          : null,
+                      icon: Icon(Icons.skip_next_rounded, color: AppColors.ink),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

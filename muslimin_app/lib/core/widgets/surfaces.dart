@@ -197,6 +197,8 @@ class AppChip extends StatelessWidget {
     required this.selected,
     required this.onTap,
     this.dense = false,
+    this.idleColor,
+    this.idleTextColor,
   });
 
   final String label;
@@ -204,9 +206,14 @@ class AppChip extends StatelessWidget {
   final VoidCallback onTap;
   final bool dense;
 
+  /// Unselected fill/text (defaults: card / ink). Use a grey on white cards
+  /// so unselected chips still read as tappable.
+  final Color? idleColor;
+  final Color? idleTextColor;
+
   @override
   Widget build(BuildContext context) => Material(
-    color: selected ? AppColors.gold : AppColors.card,
+    color: selected ? AppColors.gold : (idleColor ?? AppColors.card),
     borderRadius: BorderRadius.circular(Radii.pill),
     child: InkWell(
       borderRadius: BorderRadius.circular(Radii.pill),
@@ -216,7 +223,9 @@ class AppChip extends StatelessWidget {
         child: Text(
           label,
           style: AppText.caption.copyWith(
-            color: selected ? AppColors.onGold : AppColors.ink,
+            color: selected
+                ? AppColors.onGold
+                : (idleTextColor ?? AppColors.ink),
           ),
         ),
       ),

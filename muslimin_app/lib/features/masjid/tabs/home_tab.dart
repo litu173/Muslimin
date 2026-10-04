@@ -520,6 +520,7 @@ class _MaktabEditorState extends ConsumerState<_MaktabEditor> {
   late final Set<int> _days = {...widget.masjid.maktab.days};
   late HMRange? _morning = widget.masjid.maktab.morning;
   late HMRange? _evening = widget.masjid.maktab.evening;
+  late bool _showMorning = _morning != null || _evening == null;
   late bool _showEvening = _evening != null;
   bool _saving = false;
 
@@ -542,7 +543,7 @@ class _MaktabEditorState extends ConsumerState<_MaktabEditor> {
             widget.masjid.id,
             Maktab(
               days: _days.toList()..sort(),
-              morning: _morning,
+              morning: _showMorning ? _morning : null,
               evening: _showEvening ? _evening : null,
             ),
           );
@@ -564,6 +565,7 @@ class _MaktabEditorState extends ConsumerState<_MaktabEditor> {
       String label,
       HMRange? value,
       ValueChanged<HMRange> onSet,
+      VoidCallback onRemove,
     ) => Padding(
       padding: const EdgeInsets.symmetric(vertical: 6),
       child: Row(
@@ -576,8 +578,19 @@ class _MaktabEditorState extends ConsumerState<_MaktabEditor> {
               if (r != null) setState(() => onSet(r));
             },
           ),
+          IconButton(
+            tooltip: t.removeSession,
+            onPressed: () => setState(onRemove),
+            icon: Icon(Icons.delete_outline_rounded, color: AppColors.danger),
+          ),
         ],
       ),
+    );
+
+    Widget addButton(String label, VoidCallback onTap) => TextButton.icon(
+      onPressed: () => setState(onTap),
+      icon: const Icon(Icons.add_rounded, size: 18),
+      label: Text(t.addSession(label)),
     );
 
     return AppCard(
@@ -595,6 +608,11 @@ class _MaktabEditorState extends ConsumerState<_MaktabEditor> {
                 AppChip(
                   dense: true,
                   label: f.weekdaysShort[i],
+                  // Unselected days in light grey so they read as tappable.
+                  idleColor: AppColors.dark
+                      ? AppColors.field
+                      : const Color(0xFFE9E7E1),
+                  idleTextColor: AppColors.muted,
                   selected: _days.contains(Fmt.weekdayFromSatFirst(i)),
                   onTap: () => setState(() {
                     final wd = Fmt.weekdayFromSatFirst(i);
@@ -604,26 +622,34 @@ class _MaktabEditorState extends ConsumerState<_MaktabEditor> {
             ],
           ),
           const SizedBox(height: Gap.m),
-          rangeRow(t.morning, _morning, (r) => _morning = r),
-          if (_showEvening) ...[
-            const Divider(),
-            rangeRow(t.evening, _evening, (r) => _evening = r),
-          ],
+          if (_showMorning)
+            rangeRow(t.morning, _morning, (r) => _morning = r, () {
+              _morning = null;
+              _showMorning = false;
+            }),
+          if (_showMorning && _showEvening) const Divider(),
+          if (_showEvening)
+            rangeRow(t.evening, _evening, (r) => _evening = r, () {
+              _evening = null;
+              _showEvening = false;
+            }),
+          if (!_showMorning || !_showEvening)
+            Wrap(
+              children: [
+                if (!_showMorning)
+                  addButton(t.morning, () => _showMorning = true),
+                if (!_showEvening)
+                  addButton(t.evening, () => _showEvening = true),
+              ],
+            ),
           const SizedBox(height: Gap.l),
           ButtonPair(
-            secondary: _showEvening
-                ? AppButton(
-                    t.cancel,
-                    style: AppButtonStyle.outlined,
-                    pill: true,
-                    onPressed: widget.onDone,
-                  )
-                : AppButton(
-                    t.addNew,
-                    style: AppButtonStyle.outlined,
-                    pill: true,
-                    onPressed: () => setState(() => _showEvening = true),
-                  ),
+            secondary: AppButton(
+              t.cancel,
+              style: AppButtonStyle.outlined,
+              pill: true,
+              onPressed: widget.onDone,
+            ),
             primary: AppButton(
               t.update,
               pill: true,

@@ -16,7 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 1.6.0+9
+version: 1.7.0+10
 
 environment:
   sdk: ^3.13.5
@@ -61,6 +61,9 @@ dependencies:
   firebase_ai: ^4.0.0
   image_picker: ^1.2.3
   path_provider: ^2.1.6
+  just_audio: ^0.10.6
+  audio_session: ^0.2.4
+  super_sliver_list: ^0.4.1
 
 dev_dependencies:
   flutter_test:
@@ -91,6 +94,7 @@ flutter:
     - assets/patterns/
     - assets/brand/
     - assets/prayers/
+    - assets/duas/
     - assets/licenses/
 
   fonts:
@@ -127,9 +131,9 @@ flutter:
     - family: Galada
       fonts:
         - asset: assets/fonts/Galada-Regular.ttf
-    - family: Amiri
+    - family: ScheherazadeNew
       fonts:
-        - asset: assets/fonts/Amiri-Regular.ttf
+        - asset: assets/fonts/ScheherazadeNew-Regular.ttf
 
   # To add assets to your application, add an assets section, like this:
   # assets:

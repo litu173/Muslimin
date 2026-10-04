@@ -53,6 +53,10 @@ class Prefs {
   set follows(Map<String, Map<String, dynamic>> v) =>
       _p.setString('follows', jsonEncode(v));
 
+  /// quran.com recitation id of the chosen reciter (7 = Mishary Alafasy).
+  int get reciter => _p.getInt('reciter') ?? 7;
+  set reciter(int v) => _p.setInt('reciter', v);
+
   /// Quran reading journey (Read tab): finished surahs, last position and
   /// best quiz score per phase – stored on the phone.
   Map<String, dynamic> get quranProgress {

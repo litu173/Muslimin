@@ -49,12 +49,20 @@ QuranPhase phaseOf(int surahId) =>
     kPhases.firstWhere((p) => p.surahs.any((s) => s.id == surahId));
 
 // ------------------------------------------------------------------ progress
+String dayKey(DateTime d) =>
+    '${d.year}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}';
+
 class QuranProgress {
   const QuranProgress({
     this.completed = const {},
     this.lastSurah,
     this.lastAyah = 1,
     this.quizBest = const {},
+    this.daily = const {},
+    this.today = '',
+    this.todaySeen = const {},
+    this.events = const {},
+    this.achievedAt = const {},
   });
 
   /// Surah ids read to the end.
@@ -65,28 +73,78 @@ class QuranProgress {
   /// Best quiz score (0-100) per phase index.
   final Map<int, int> quizBest;
 
-  /// The first surah of the journey that is not finished yet.
+  /// Verses read per day ("2026-10-04" -> 12).
+  final Map<String, int> daily;
+
+  /// Day of [todaySeen] and the verse keys ("2:255") read that day, so a
+  /// verse counts once a day.
+  final String today;
+  final Set<String> todaySeen;
+
+  /// Special moments: 'kahf_friday', 'mulk_night', 'listener'.
+  final Set<String> events;
+
+  /// Achievement id -> when it was earned (ISO date).
+  final Map<String, String> achievedAt;
+
+  /// Next surah to read on the journey (all surahs are open to read).
   Surah? get current =>
       kJourney.where((s) => !completed.contains(s.id)).firstOrNull;
 
-  /// A surah opens when every surah before it in the journey is read.
-  bool isUnlocked(Surah s) {
-    final i = kJourney.indexOf(s);
-    return i == 0 || completed.contains(kJourney[i - 1].id);
-  }
+  /// Every surah can be read at any time.
+  bool isUnlocked(Surah s) => true;
 
   bool phaseDone(QuranPhase p) =>
       p.surahs.every((s) => completed.contains(s.id));
 
-  int get versesRead => kSurahs
-      .where((s) => completed.contains(s.id))
-      .fold(0, (a, s) => a + s.verses);
+  int versesOn(DateTime d) => daily[dayKey(d)] ?? 0;
+
+  int get versesToday => versesOn(DateTime.now());
+
+  /// All verses read, ever (counted per day).
+  int get versesRead => daily.values.fold(0, (a, b) => a + b);
+
+  /// Days in a row with some reading, ending today (or yesterday, so the
+  /// streak survives until the end of today).
+  int get streak {
+    var d = DateTime.now();
+    if (versesOn(d) == 0) d = d.subtract(const Duration(days: 1));
+    var n = 0;
+    while (versesOn(d) > 0) {
+      n++;
+      d = d.subtract(const Duration(days: 1));
+    }
+    return n;
+  }
+
+  /// Longest run of reading days ever.
+  int get bestStreak {
+    final days =
+        daily.entries
+            .where((e) => e.value > 0)
+            .map((e) => DateTime.parse(e.key))
+            .toList()
+          ..sort();
+    var best = 0, run = 0;
+    DateTime? prev;
+    for (final d in days) {
+      run = prev != null && d.difference(prev).inDays == 1 ? run + 1 : 1;
+      if (run > best) best = run;
+      prev = d;
+    }
+    return best;
+  }
 
   Map<String, dynamic> toJson() => {
     'completed': completed.toList(),
     'lastSurah': lastSurah,
     'lastAyah': lastAyah,
     'quizBest': quizBest.map((k, v) => MapEntry('$k', v)),
+    'daily': daily,
+    'today': today,
+    'todaySeen': todaySeen.toList(),
+    'events': events.toList(),
+    'achievedAt': achievedAt,
   };
 
   factory QuranProgress.fromJson(Map<String, dynamic> j) => QuranProgress(
@@ -96,6 +154,15 @@ class QuranProgress {
     quizBest: ((j['quizBest'] as Map?) ?? {}).map(
       (k, v) => MapEntry(int.parse('$k'), v as int),
     ),
+    daily: ((j['daily'] as Map?) ?? {}).map(
+      (k, v) => MapEntry('$k', (v as num).toInt()),
+    ),
+    today: (j['today'] as String?) ?? '',
+    todaySeen: {...((j['todaySeen'] as List?) ?? []).cast<String>()},
+    events: {...((j['events'] as List?) ?? []).cast<String>()},
+    achievedAt: ((j['achievedAt'] as Map?) ?? {}).map(
+      (k, v) => MapEntry('$k', '$v'),
+    ),
   );
 
   QuranProgress copyWith({
@@ -103,11 +170,21 @@ class QuranProgress {
     int? lastSurah,
     int? lastAyah,
     Map<int, int>? quizBest,
+    Map<String, int>? daily,
+    String? today,
+    Set<String>? todaySeen,
+    Set<String>? events,
+    Map<String, String>? achievedAt,
   }) => QuranProgress(
     completed: completed ?? this.completed,
     lastSurah: lastSurah ?? this.lastSurah,
     lastAyah: lastAyah ?? this.lastAyah,
     quizBest: quizBest ?? this.quizBest,
+    daily: daily ?? this.daily,
+    today: today ?? this.today,
+    todaySeen: todaySeen ?? this.todaySeen,
+    events: events ?? this.events,
+    achievedAt: achievedAt ?? this.achievedAt,
   );
 }
 
@@ -117,18 +194,66 @@ class QuranProgressNotifier extends Notifier<QuranProgress> {
       QuranProgress.fromJson(ref.watch(prefsProvider).quranProgress);
 
   void _save(QuranProgress p) {
+    // Stamp any achievement that has just been earned.
+    final now = DateTime.now().toIso8601String();
+    final earned = {...p.achievedAt};
+    for (final a in kAchievements) {
+      if (!earned.containsKey(a.id) && a.progress(p) >= a.target) {
+        earned[a.id] = now;
+      }
+    }
+    if (earned.length != p.achievedAt.length) {
+      p = p.copyWith(achievedAt: earned);
+    }
     state = p;
     ref.read(prefsProvider).quranProgress = p.toJson();
   }
 
-  void readUpTo(int surah, int ayah) {
-    if (state.lastSurah == surah && state.lastAyah >= ayah) return;
-    _save(state.copyWith(lastSurah: surah, lastAyah: ayah));
+  /// An ayah was read (seen in the reader or recited by the player).
+  void read(int surah, int ayah) {
+    final now = DateTime.now();
+    final key = dayKey(now);
+    final seen = state.today == key ? state.todaySeen : <String>{};
+    final verse = '$surah:$ayah';
+    final isNew = !seen.contains(verse);
+    final moved = !(state.lastSurah == surah && state.lastAyah >= ayah);
+    if (!isNew && !moved) return;
+    _save(
+      state.copyWith(
+        today: key,
+        todaySeen: isNew ? {...seen, verse} : seen,
+        daily: isNew
+            ? {...state.daily, key: (state.daily[key] ?? 0) + 1}
+            : state.daily,
+        lastSurah: moved ? surah : null,
+        lastAyah: moved ? ayah : null,
+      ),
+    );
   }
 
-  void complete(int surah) => _save(
-    state.copyWith(completed: {...state.completed, surah}, lastAyah: 1),
-  );
+  void complete(int surah) {
+    final now = DateTime.now();
+    final events = {...state.events};
+    if (surah == 18 && now.weekday == DateTime.friday) {
+      events.add('kahf_friday');
+    }
+    if (surah == 67 && (now.hour >= 18 || now.hour < 4)) {
+      events.add('mulk_night');
+    }
+    _save(
+      state.copyWith(
+        completed: {...state.completed, surah},
+        lastAyah: 1,
+        events: events,
+      ),
+    );
+  }
+
+  /// A whole surah was listened to with the player.
+  void listened(int surah) {
+    if (state.events.contains('listener')) return;
+    _save(state.copyWith(events: {...state.events, 'listener'}));
+  }
 
   void quizScore(int phase, int percent) {
     if ((state.quizBest[phase] ?? -1) >= percent) return;
@@ -140,6 +265,73 @@ final quranProgressProvider =
     NotifierProvider<QuranProgressNotifier, QuranProgress>(
       QuranProgressNotifier.new,
     );
+
+// --------------------------------------------------------------- achievements
+/// Daily reading goal (verses) behind the Home energy card.
+const kDailyGoal = 10;
+
+class Achievement {
+  const Achievement(this.id, this.icon, this.target, this.progress);
+
+  final String id;
+
+  /// Material icon code point name, resolved by the UI.
+  final String icon;
+  final int target;
+  final int Function(QuranProgress p) progress;
+}
+
+int _done(QuranProgress p, Iterable<int> ids) =>
+    ids.where(p.completed.contains).length;
+
+final kAchievements = <Achievement>[
+  Achievement('bismillah', 'auto_stories', 1, (p) => p.versesRead),
+  Achievement('fatiha', 'menu_book', 1, (p) => _done(p, [1])),
+  Achievement('quls', 'shield', 3, (p) => _done(p, [112, 113, 114])),
+  Achievement('streak3', 'local_fire_department', 3, (p) => p.bestStreak),
+  Achievement('streak7', 'whatshot', 7, (p) => p.bestStreak),
+  Achievement('streak30', 'brightness_7', 30, (p) => p.bestStreak),
+  Achievement('verses100', 'format_list_numbered', 100, (p) => p.versesRead),
+  Achievement('verses1000', 'military_tech', 1000, (p) => p.versesRead),
+  Achievement(
+    'kahf',
+    'wb_sunny',
+    1,
+    (p) => p.events.contains('kahf_friday') ? 1 : 0,
+  ),
+  Achievement(
+    'mulk',
+    'nights_stay',
+    1,
+    (p) => p.events.contains('mulk_night') ? 1 : 0,
+  ),
+  Achievement('yasin', 'favorite', 1, (p) => _done(p, [36])),
+  Achievement(
+    'listener',
+    'headphones',
+    1,
+    (p) => p.events.contains('listener') ? 1 : 0,
+  ),
+  Achievement(
+    'quiz100',
+    'emoji_events',
+    1,
+    (p) => p.quizBest.values.any((v) => v == 100) ? 1 : 0,
+  ),
+  Achievement(
+    'juzamma',
+    'star',
+    37,
+    (p) => _done(p, [for (var i = 78; i <= 114; i++) i]),
+  ),
+  Achievement(
+    'phases10',
+    'route',
+    10,
+    (p) => kPhases.where(p.phaseDone).length,
+  ),
+  Achievement('khatm', 'workspace_premium', 114, (p) => p.completed.length),
+];
 
 // ---------------------------------------------------------------------- quiz
 enum QuizKind { vocabulary, meaning, whichSurah, revelation, verses, name }

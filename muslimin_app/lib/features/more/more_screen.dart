@@ -12,6 +12,7 @@ import '../../core/widgets/surfaces.dart';
 import '../../data/models/masjid.dart';
 import '../../l10n/app_localizations.dart';
 import '../../state/providers.dart';
+import '../achievements/achievements.dart';
 import '../admin/admin_panel_screen.dart';
 import '../auth/auth_screens.dart';
 import '../auth/profile_screen.dart';
@@ -67,6 +68,8 @@ class _MoreScreenState extends ConsumerState<MoreScreen> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   _AccountCard(),
+                  const SizedBox(height: Gap.l),
+                  const AchievementsCard(),
                   const SizedBox(height: Gap.l),
                   if (showBanner) ...[
                     AuthorityBanner(

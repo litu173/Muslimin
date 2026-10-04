@@ -889,35 +889,35 @@ class L10nEn extends L10n {
       'Before approving, call the submitter and check the location on the map.';
 
   @override
-  String get verse1Ar => 'وَاسْتَعِينُوا بِالصَّبْرِ وَالصَّلَاةِ';
+  String get verse1Ar => 'وَٱسْتَعِينُوا۟ بِٱلصَّبْرِ وَٱلصَّلَوٰةِ';
 
   @override
-  String get verse1 => 'And seek help in patience and prayer';
+  String get verse1 => 'And seek help through patience and prayer';
 
   @override
-  String get verse1Ref => 'Al-Baqarah 45';
+  String get verse1Ref => 'Al-Baqarah 2:45';
 
   @override
   String get verse2Ar =>
-      'إِنَّ الصَّلَاةَ كَانَتْ عَلَى الْمُؤْمِنِينَ كِتَابًا مَّوْقُوتًا';
+      'إِنَّ ٱلصَّلَوٰةَ كَانَتْ عَلَى ٱلْمُؤْمِنِينَ كِتَـٰبًا مَّوْقُوتًا';
 
   @override
   String get verse2 =>
-      'Indeed, prayer has been decreed upon the believers at specified times';
+      'Indeed, prayer has been decreed upon the believers a decree of specified times';
 
   @override
-  String get verse2Ref => 'An-Nisa 103';
+  String get verse2Ref => 'An-Nisa\' 4:103';
 
   @override
   String get verse3Ar =>
-      'حَافِظُوا عَلَى الصَّلَوَاتِ وَالصَّلَاةِ الْوُسْطَىٰ';
+      'حَـٰفِظُوا۟ عَلَى ٱلصَّلَوَٰتِ وَٱلصَّلَوٰةِ ٱلْوُسْطَىٰ';
 
   @override
   String get verse3 =>
-      'Guard strictly the prayers, especially the middle prayer';
+      'Maintain with care the [obligatory] prayers and [in particular] the middle prayer';
 
   @override
-  String get verse3Ref => 'Al-Baqarah 238';
+  String get verse3Ref => 'Al-Baqarah 2:238';
 
   @override
   String get hijriMonths =>
@@ -1100,7 +1100,7 @@ class L10nEn extends L10n {
 
   @override
   String get fontCredits =>
-      'Logo & English prayer names: lettering from the Muslimin design, based on Hidayatullah by Anthonie Van Hayu (ARToni). Fonts: Grenze Gotisch by Omnibus-Type, Poppins by Indian Type Foundry & Jonny Pinhorn, Hind Siliguri by Indian Type Foundry, Anek Bangla (Bangla digits) by Ek Type, Galada by Black Foundry, Amiri by Khaled Hosny. All fonts are free under the SIL Open Font License 1.1.';
+      'Logo & English prayer names: lettering from the Muslimin design, based on Hidayatullah by Anthonie Van Hayu (ARToni). Fonts: Grenze Gotisch by Omnibus-Type, Poppins by Indian Type Foundry & Jonny Pinhorn, Hind Siliguri by Indian Type Foundry, Anek Bangla (Bangla digits) by Ek Type, Galada by Black Foundry, Scheherazade New by SIL International. All fonts are free under the SIL Open Font License 1.1.';
 
   @override
   String get designInspired =>
@@ -1379,7 +1379,7 @@ class L10nEn extends L10n {
 
   @override
   String get quranSource =>
-      'Text & word-by-word: quran.com · Translation: Saheeh International';
+      'Mushaf text & word-by-word: quran.com (King Fahd Complex Uthmani script) · Translation: Saheeh International';
 
   @override
   String get startHere => 'START';
@@ -1446,4 +1446,438 @@ class L10nEn extends L10n {
 
   @override
   String get quizLoading => 'Preparing your quiz…';
+
+  @override
+  String get tabQuran => 'Quran';
+
+  @override
+  String get tabDua => 'Dua';
+
+  @override
+  String get specialSurahs => 'Recommended to read';
+
+  @override
+  String get chipMulk => 'Al-Mulk';
+
+  @override
+  String get chipMulkWhen => 'Before sleep';
+
+  @override
+  String get chipSajdah => 'As-Sajdah';
+
+  @override
+  String get chipKahf => 'Al-Kahf';
+
+  @override
+  String get chipKahfWhen => 'Friday';
+
+  @override
+  String get chipKursi => 'Ayatul Kursi';
+
+  @override
+  String get chipKursiWhen => 'After salah & sleep';
+
+  @override
+  String get chipBaqarahEnd => 'Last 2 of Al-Baqarah';
+
+  @override
+  String get chipNight => 'At night';
+
+  @override
+  String get chipYasin => 'Ya-Sin';
+
+  @override
+  String get chipQuls => '3 Quls';
+
+  @override
+  String get chipQulsWhen => 'Morning & evening';
+
+  @override
+  String get chipAnytime => 'Any time';
+
+  @override
+  String get chipToday => 'Today';
+
+  @override
+  String get chipTonight => 'Tonight';
+
+  @override
+  String get revealedMakkah => 'Revealed in Makkah';
+
+  @override
+  String get revealedMadinah => 'Revealed in Madinah';
+
+  @override
+  String get reciter => 'Reciter';
+
+  @override
+  String get chooseReciter => 'Choose a reciter';
+
+  @override
+  String get playAyah => 'Play from this ayah';
+
+  @override
+  String recitingAyah(String n, String total) {
+    return 'Ayah $n of $total';
+  }
+
+  @override
+  String get audioError =>
+      'Couldn\'t load the recitation. Check your internet.';
+
+  @override
+  String get dailyQuran => 'Daily Quran';
+
+  @override
+  String get energy0 => 'Your heart is waiting for light today';
+
+  @override
+  String get energy1 => 'Charging… a few more ayat';
+
+  @override
+  String get energy2 => 'Almost full — keep going!';
+
+  @override
+  String get energy3 => 'Full of light — MashaAllah!';
+
+  @override
+  String get energy4 => 'Shining bright today ✨';
+
+  @override
+  String versesToday(String n, String goal) {
+    return '$n / $goal ayat today';
+  }
+
+  @override
+  String streakDays(String n) {
+    return '$n-day streak';
+  }
+
+  @override
+  String get readNow => 'Read now';
+
+  @override
+  String get keepReading => 'Read more';
+
+  @override
+  String get achievements => 'Achievements';
+
+  @override
+  String achievementsCount(String n, String total) {
+    return '$n of $total earned';
+  }
+
+  @override
+  String achievementEarned(String date) {
+    return 'Earned on $date';
+  }
+
+  @override
+  String achievementLocked(String done, String target) {
+    return 'In progress · $done/$target';
+  }
+
+  @override
+  String achievementUnlocked(String name) {
+    return 'Achievement unlocked: $name';
+  }
+
+  @override
+  String get ach_bismillah => 'Bismillah';
+
+  @override
+  String get ach_bismillah_desc => 'Read your first ayah';
+
+  @override
+  String get ach_fatiha => 'The Opener';
+
+  @override
+  String get ach_fatiha_desc => 'Complete Surah Al-Fatihah';
+
+  @override
+  String get ach_quls => 'Three Quls';
+
+  @override
+  String get ach_quls_desc => 'Complete Al-Ikhlas, Al-Falaq and An-Nas';
+
+  @override
+  String get ach_streak3 => 'Steady Steps';
+
+  @override
+  String get ach_streak3_desc => 'Read Quran 3 days in a row';
+
+  @override
+  String get ach_streak7 => 'Week of Light';
+
+  @override
+  String get ach_streak7_desc => 'Read Quran 7 days in a row';
+
+  @override
+  String get ach_streak30 => 'Month of Noor';
+
+  @override
+  String get ach_streak30_desc => 'Read Quran 30 days in a row';
+
+  @override
+  String get ach_verses100 => 'Hundred Ayat';
+
+  @override
+  String get ach_verses100_desc => 'Read 100 ayat';
+
+  @override
+  String get ach_verses1000 => 'Thousand Ayat';
+
+  @override
+  String get ach_verses1000_desc => 'Read 1,000 ayat';
+
+  @override
+  String get ach_kahf => 'Friday Light';
+
+  @override
+  String get ach_kahf_desc => 'Complete Al-Kahf on a Friday';
+
+  @override
+  String get ach_mulk => 'Night Guardian';
+
+  @override
+  String get ach_mulk_desc => 'Complete Al-Mulk at night';
+
+  @override
+  String get ach_yasin => 'Ya-Sin';
+
+  @override
+  String get ach_yasin_desc => 'Complete Surah Ya-Sin';
+
+  @override
+  String get ach_listener => 'Attentive Listener';
+
+  @override
+  String get ach_listener_desc => 'Listen to a whole surah recitation';
+
+  @override
+  String get ach_quiz100 => 'Sharp Mind';
+
+  @override
+  String get ach_quiz100_desc => 'Score 100% in a phase quiz';
+
+  @override
+  String get ach_juzamma => 'Juz \'Amma';
+
+  @override
+  String get ach_juzamma_desc => 'Complete all 37 surahs of the 30th juz';
+
+  @override
+  String get ach_phases10 => 'Ten Phases';
+
+  @override
+  String get ach_phases10_desc => 'Complete 10 phases of the journey';
+
+  @override
+  String get ach_khatm => 'Khatm al-Quran';
+
+  @override
+  String get ach_khatm_desc => 'Complete all 114 surahs';
+
+  @override
+  String get duaHeader => 'A day with the remembrance of Allah';
+
+  @override
+  String get duaSub =>
+      'From waking up to sleeping — the duas the Prophet ﷺ taught for every moment.';
+
+  @override
+  String repeatTimes(String n) {
+    return 'Say $n×';
+  }
+
+  @override
+  String duaSource(String n) {
+    return 'Hisn al-Muslim #$n';
+  }
+
+  @override
+  String get duaCredit =>
+      'Duas from Hisn al-Muslim (Fortress of the Muslim) by Sa’id bin Ali al-Qahtani, via its official site hisnmuslim.com.';
+
+  @override
+  String get nowLabel => 'Now';
+
+  @override
+  String get scene_wake => 'Waking up';
+
+  @override
+  String get scene_wake_story =>
+      'The day begins with thanks — Allah returned the soul after sleep.';
+
+  @override
+  String get scene_restroom => 'Restroom';
+
+  @override
+  String get scene_restroom_story =>
+      'Even the smallest routine begins by seeking Allah’s protection.';
+
+  @override
+  String get scene_wudu => 'Wudu';
+
+  @override
+  String get scene_wudu_story =>
+      'Water on the hands, His name on the tongue — getting ready to stand before Allah.';
+
+  @override
+  String get scene_dress => 'Getting dressed';
+
+  @override
+  String get scene_dress_story =>
+      'Every garment is a gift — thank the One who clothed you.';
+
+  @override
+  String get scene_athan => 'The adhan';
+
+  @override
+  String get scene_athan_story =>
+      'The call rises over the neighbourhood — answer it, then ask for the Prophet ﷺ.';
+
+  @override
+  String get scene_masjid => 'To the masjid';
+
+  @override
+  String get scene_masjid_story =>
+      'Each step toward the masjid is light — enter and leave with dua.';
+
+  @override
+  String get scene_after_salah => 'After salah';
+
+  @override
+  String get scene_after_salah_story =>
+      'Before rushing off, sit a moment with the remembrance after salah.';
+
+  @override
+  String get scene_morning => 'Morning adhkar';
+
+  @override
+  String get scene_morning_story => 'Words that guard you until evening.';
+
+  @override
+  String get scene_eating => 'Breakfast';
+
+  @override
+  String get scene_eating_story => 'Begin with His name, end with His praise.';
+
+  @override
+  String get scene_leave_home => 'Stepping out';
+
+  @override
+  String get scene_leave_home_story =>
+      'At the door, hand your day over to Allah.';
+
+  @override
+  String get scene_travel => 'On the way';
+
+  @override
+  String get scene_travel_story =>
+      'Bus, rickshaw or car — Allahu Akbar going up, SubhanAllah coming down.';
+
+  @override
+  String get scene_meeting => 'Meeting people';
+
+  @override
+  String get scene_meeting_story =>
+      'Spread salam and answer a brother’s sneeze.';
+
+  @override
+  String get scene_good_news => 'When good things happen';
+
+  @override
+  String get scene_good_news_story =>
+      'Joy is a reminder of the Giver — praise Him, and thank the people too.';
+
+  @override
+  String get scene_hardship => 'When it gets hard';
+
+  @override
+  String get scene_hardship_story =>
+      'Worry, difficulty or a plan that failed — turn to Him first.';
+
+  @override
+  String get scene_patience => 'Loss and patience';
+
+  @override
+  String get scene_patience_story =>
+      'When something is taken, remember that we belong to Allah.';
+
+  @override
+  String get scene_anger => 'Holding back anger';
+
+  @override
+  String get scene_anger_story => 'Seek refuge before words you may regret.';
+
+  @override
+  String get scene_pain => 'Pain and sickness';
+
+  @override
+  String get scene_pain_story =>
+      'For your own pain, and for a friend you visit.';
+
+  @override
+  String get scene_rain => 'When it rains';
+
+  @override
+  String get scene_rain_story => 'Rain is mercy — ask for it to be beneficial.';
+
+  @override
+  String get scene_home => 'Back home';
+
+  @override
+  String get scene_home_story => 'Enter with His name and greet your family.';
+
+  @override
+  String get scene_gathering => 'Leaving a gathering';
+
+  @override
+  String get scene_gathering_story =>
+      'Before you stand up, wipe away the slips of the tongue.';
+
+  @override
+  String get scene_forgiveness => 'Seeking forgiveness';
+
+  @override
+  String get scene_forgiveness_story =>
+      'The day’s mistakes, washed in istighfar.';
+
+  @override
+  String get scene_sleep => 'Before sleep';
+
+  @override
+  String get scene_sleep_story =>
+      'End the day as it began — in His name, under His protection.';
+
+  @override
+  String get scene_night => 'In the night';
+
+  @override
+  String get scene_night_story =>
+      'If you wake or have a bad dream, He is near.';
+
+  @override
+  String get part_dawn => 'Dawn';
+
+  @override
+  String get part_morning => 'Morning';
+
+  @override
+  String get part_day => 'Day';
+
+  @override
+  String get part_evening => 'Evening';
+
+  @override
+  String get part_night => 'Night';
+
+  @override
+  String get removeSession => 'Remove';
+
+  @override
+  String addSession(String session) {
+    return 'Add $session';
+  }
 }

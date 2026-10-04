@@ -888,35 +888,35 @@ class L10nBn extends L10n {
       'অনুমোদনের আগে জমাদানকারীকে ফোন করুন এবং ম্যাপে লোকেশন যাচাই করুন।';
 
   @override
-  String get verse1Ar => 'وَاسْتَعِينُوا بِالصَّبْرِ وَالصَّلَاةِ';
+  String get verse1Ar => 'وَٱسْتَعِينُوا۟ بِٱلصَّبْرِ وَٱلصَّلَوٰةِ';
 
   @override
-  String get verse1 => 'তোমরা ধৈর্য ও নামাজের মাধ্যমে সাহায্য প্রার্থনা কর';
+  String get verse1 => 'আর তোমরা ধৈর্য ও সালাতের মাধ্যমে সাহায্য প্রার্থনা করো';
 
   @override
-  String get verse1Ref => 'আল-বাকারা ৪৫';
+  String get verse1Ref => 'সূরা আল-বাকারা ২:৪৫';
 
   @override
   String get verse2Ar =>
-      'إِنَّ الصَّلَاةَ كَانَتْ عَلَى الْمُؤْمِنِينَ كِتَابًا مَّوْقُوتًا';
+      'إِنَّ ٱلصَّلَوٰةَ كَانَتْ عَلَى ٱلْمُؤْمِنِينَ كِتَـٰبًا مَّوْقُوتًا';
 
   @override
   String get verse2 =>
-      'নিশ্চয়ই নির্ধারিত সময়ে নামাজ আদায় করা মুমিনদের উপর ফরজ';
+      'নির্ধারিত সময়ে সালাত কায়েম করা মুমিনদের জন্য অবশ্য কর্তব্য';
 
   @override
-  String get verse2Ref => 'আন-নিসা ১০৩';
+  String get verse2Ref => 'সূরা আন-নিসা ৪:১০৩';
 
   @override
   String get verse3Ar =>
-      'حَافِظُوا عَلَى الصَّلَوَاتِ وَالصَّلَاةِ الْوُسْطَىٰ';
+      'حَـٰفِظُوا۟ عَلَى ٱلصَّلَوَٰتِ وَٱلصَّلَوٰةِ ٱلْوُسْطَىٰ';
 
   @override
   String get verse3 =>
-      'তোমরা নামাজসমূহের প্রতি যত্নবান হও, বিশেষ করে মধ্যবর্তী নামাজের';
+      'তোমরা সালাতের প্রতি যত্নবান হবে, বিশেষত মধ্যবর্তী সালাতের';
 
   @override
-  String get verse3Ref => 'আল-বাকারা ২৩৮';
+  String get verse3Ref => 'সূরা আল-বাকারা ২:২৩৮';
 
   @override
   String get hijriMonths =>
@@ -1099,7 +1099,7 @@ class L10nBn extends L10n {
 
   @override
   String get fontCredits =>
-      'লোগো ও ইংরেজি নামাজের নাম: Muslimin ডিজাইনের লেটারিং, Anthonie Van Hayu (ARToni)-এর Hidayatullah অবলম্বনে। ফন্ট: Omnibus-Type-এর Grenze Gotisch, Indian Type Foundry ও Jonny Pinhorn-এর Poppins, Indian Type Foundry-এর Hind Siliguri, Ek Type-এর Anek Bangla (বাংলা সংখ্যা), Black Foundry-এর Galada, খালেদ হোসনির Amiri। সব ফন্ট SIL Open Font License 1.1-এর অধীনে ফ্রি।';
+      'লোগো ও ইংরেজি নামাজের নাম: Muslimin ডিজাইনের লেটারিং, Anthonie Van Hayu (ARToni)-এর Hidayatullah অবলম্বনে। ফন্ট: Omnibus-Type-এর Grenze Gotisch, Indian Type Foundry ও Jonny Pinhorn-এর Poppins, Indian Type Foundry-এর Hind Siliguri, Ek Type-এর Anek Bangla (বাংলা সংখ্যা), Black Foundry-এর Galada, SIL International-এর Scheherazade New। সব ফন্ট SIL Open Font License 1.1-এর অধীনে ফ্রি।';
 
   @override
   String get designInspired =>
@@ -1376,7 +1376,7 @@ class L10nBn extends L10n {
 
   @override
   String get quranSource =>
-      'টেক্সট ও শব্দার্থ: quran.com · অনুবাদ: তাইসীরুল কুরআন';
+      'মুসহাফের টেক্সট ও শব্দার্থ: quran.com (বাদশাহ ফাহাদ কমপ্লেক্সের উসমানী লিপি) · অনুবাদ: ড. আবু বকর মুহাম্মাদ যাকারিয়া';
 
   @override
   String get startHere => 'শুরু';
@@ -1443,4 +1443,435 @@ class L10nBn extends L10n {
 
   @override
   String get quizLoading => 'কুইজ তৈরি হচ্ছে…';
+
+  @override
+  String get tabQuran => 'কুরআন';
+
+  @override
+  String get tabDua => 'দো‘আ';
+
+  @override
+  String get specialSurahs => 'নিয়মিত পড়ার সূরা';
+
+  @override
+  String get chipMulk => 'আল-মুলক';
+
+  @override
+  String get chipMulkWhen => 'ঘুমের আগে';
+
+  @override
+  String get chipSajdah => 'আস-সাজদা';
+
+  @override
+  String get chipKahf => 'আল-কাহফ';
+
+  @override
+  String get chipKahfWhen => 'জুমু‘আর দিন';
+
+  @override
+  String get chipKursi => 'আয়াতুল কুরসী';
+
+  @override
+  String get chipKursiWhen => 'সালাত ও ঘুমের পর';
+
+  @override
+  String get chipBaqarahEnd => 'আল-বাকারার শেষ ২ আয়াত';
+
+  @override
+  String get chipNight => 'রাতে';
+
+  @override
+  String get chipYasin => 'ইয়াসীন';
+
+  @override
+  String get chipQuls => 'তিন কুল';
+
+  @override
+  String get chipQulsWhen => 'সকাল-সন্ধ্যা';
+
+  @override
+  String get chipAnytime => 'যেকোনো সময়';
+
+  @override
+  String get chipToday => 'আজ';
+
+  @override
+  String get chipTonight => 'আজ রাতে';
+
+  @override
+  String get revealedMakkah => 'মক্কায় অবতীর্ণ';
+
+  @override
+  String get revealedMadinah => 'মদিনায় অবতীর্ণ';
+
+  @override
+  String get reciter => 'ক্বারী';
+
+  @override
+  String get chooseReciter => 'ক্বারী বেছে নিন';
+
+  @override
+  String get playAyah => 'এই আয়াত থেকে শুনুন';
+
+  @override
+  String recitingAyah(String n, String total) {
+    return 'আয়াত $n / $total';
+  }
+
+  @override
+  String get audioError => 'তিলাওয়াত লোড হয়নি। ইন্টারনেট সংযোগ দেখুন।';
+
+  @override
+  String get dailyQuran => 'দৈনিক কুরআন';
+
+  @override
+  String get energy0 => 'আজ আপনার অন্তর আলোর অপেক্ষায়';
+
+  @override
+  String get energy1 => 'চার্জ হচ্ছে… আরও কয়েকটি আয়াত';
+
+  @override
+  String get energy2 => 'প্রায় পূর্ণ — চালিয়ে যান!';
+
+  @override
+  String get energy3 => 'আলোয় পূর্ণ — মাশাআল্লাহ!';
+
+  @override
+  String get energy4 => 'আজ উজ্জ্বল আলোয় ভরপুর ✨';
+
+  @override
+  String versesToday(String n, String goal) {
+    return 'আজ $n / $goal আয়াত';
+  }
+
+  @override
+  String streakDays(String n) {
+    return '$n দিনের ধারাবাহিকতা';
+  }
+
+  @override
+  String get readNow => 'এখন পড়ুন';
+
+  @override
+  String get keepReading => 'আরও পড়ুন';
+
+  @override
+  String get achievements => 'অর্জন';
+
+  @override
+  String achievementsCount(String n, String total) {
+    return '$totalটির মধ্যে $nটি অর্জিত';
+  }
+
+  @override
+  String achievementEarned(String date) {
+    return '$date তারিখে অর্জিত';
+  }
+
+  @override
+  String achievementLocked(String done, String target) {
+    return 'চলমান · $done/$target';
+  }
+
+  @override
+  String achievementUnlocked(String name) {
+    return 'নতুন অর্জন: $name';
+  }
+
+  @override
+  String get ach_bismillah => 'বিসমিল্লাহ';
+
+  @override
+  String get ach_bismillah_desc => 'প্রথম আয়াত পড়ুন';
+
+  @override
+  String get ach_fatiha => 'সূচনা';
+
+  @override
+  String get ach_fatiha_desc => 'সূরা আল-ফাতিহা সম্পূর্ণ করুন';
+
+  @override
+  String get ach_quls => 'তিন কুল';
+
+  @override
+  String get ach_quls_desc => 'আল-ইখলাস, আল-ফালাক ও আন-নাস সম্পূর্ণ করুন';
+
+  @override
+  String get ach_streak3 => 'দৃঢ় পদক্ষেপ';
+
+  @override
+  String get ach_streak3_desc => 'টানা ৩ দিন কুরআন পড়ুন';
+
+  @override
+  String get ach_streak7 => 'আলোর সপ্তাহ';
+
+  @override
+  String get ach_streak7_desc => 'টানা ৭ দিন কুরআন পড়ুন';
+
+  @override
+  String get ach_streak30 => 'নূরের মাস';
+
+  @override
+  String get ach_streak30_desc => 'টানা ৩০ দিন কুরআন পড়ুন';
+
+  @override
+  String get ach_verses100 => 'একশো আয়াত';
+
+  @override
+  String get ach_verses100_desc => '১০০টি আয়াত পড়ুন';
+
+  @override
+  String get ach_verses1000 => 'এক হাজার আয়াত';
+
+  @override
+  String get ach_verses1000_desc => '১,০০০টি আয়াত পড়ুন';
+
+  @override
+  String get ach_kahf => 'জুমু‘আর আলো';
+
+  @override
+  String get ach_kahf_desc => 'জুমু‘আর দিনে সূরা আল-কাহফ সম্পূর্ণ করুন';
+
+  @override
+  String get ach_mulk => 'রাতের পাহারাদার';
+
+  @override
+  String get ach_mulk_desc => 'রাতে সূরা আল-মুলক সম্পূর্ণ করুন';
+
+  @override
+  String get ach_yasin => 'ইয়াসীন';
+
+  @override
+  String get ach_yasin_desc => 'সূরা ইয়াসীন সম্পূর্ণ করুন';
+
+  @override
+  String get ach_listener => 'মনোযোগী শ্রোতা';
+
+  @override
+  String get ach_listener_desc => 'একটি পূর্ণ সূরার তিলাওয়াত শুনুন';
+
+  @override
+  String get ach_quiz100 => 'তীক্ষ্ণ মেধা';
+
+  @override
+  String get ach_quiz100_desc => 'কোনো ধাপের কুইজে ১০০% পান';
+
+  @override
+  String get ach_juzamma => 'আম্মা পারা';
+
+  @override
+  String get ach_juzamma_desc => '৩০তম পারার ৩৭টি সূরা সম্পূর্ণ করুন';
+
+  @override
+  String get ach_phases10 => 'দশ ধাপ';
+
+  @override
+  String get ach_phases10_desc => 'যাত্রার ১০টি ধাপ সম্পূর্ণ করুন';
+
+  @override
+  String get ach_khatm => 'খতমে কুরআন';
+
+  @override
+  String get ach_khatm_desc => '১১৪টি সূরা সম্পূর্ণ করুন';
+
+  @override
+  String get duaHeader => 'আল্লাহর স্মরণে একটি দিন';
+
+  @override
+  String get duaSub =>
+      'ঘুম থেকে জাগা থেকে ঘুমাতে যাওয়া — প্রতিটি মুহূর্তের জন্য নবী ﷺ-এর শেখানো দো‘আ।';
+
+  @override
+  String repeatTimes(String n) {
+    return '$n বার';
+  }
+
+  @override
+  String duaSource(String n) {
+    return 'হিসনুল মুসলিম #$n';
+  }
+
+  @override
+  String get duaCredit =>
+      'দো‘আগুলো সা‘ঈদ ইবন আলী আল-কাহতানীর “হিসনুল মুসলিম” থেকে, এর অফিসিয়াল সাইট hisnmuslim.com অনুযায়ী।';
+
+  @override
+  String get nowLabel => 'এখন';
+
+  @override
+  String get scene_wake => 'ঘুম থেকে জাগা';
+
+  @override
+  String get scene_wake_story =>
+      'দিনের শুরু কৃতজ্ঞতায় — ঘুমের পর আল্লাহ রূহ ফিরিয়ে দিলেন।';
+
+  @override
+  String get scene_restroom => 'প্রয়োজন সারতে';
+
+  @override
+  String get scene_restroom_story =>
+      'ছোট্ট দৈনন্দিন কাজও শুরু হয় আল্লাহর আশ্রয় চেয়ে।';
+
+  @override
+  String get scene_wudu => 'অযু';
+
+  @override
+  String get scene_wudu_story =>
+      'হাতে পানি, মুখে তাঁর নাম — আল্লাহর সামনে দাঁড়ানোর প্রস্তুতি।';
+
+  @override
+  String get scene_dress => 'কাপড় পরা';
+
+  @override
+  String get scene_dress_story =>
+      'প্রতিটি পোশাক এক নি‘আমত — যিনি পরিয়েছেন তাঁর শুকরিয়া।';
+
+  @override
+  String get scene_athan => 'আযান';
+
+  @override
+  String get scene_athan_story =>
+      'মহল্লা জুড়ে আযানের ধ্বনি — জবাব দিন, তারপর নবী ﷺ-এর জন্য দো‘আ করুন।';
+
+  @override
+  String get scene_masjid => 'মসজিদের পথে';
+
+  @override
+  String get scene_masjid_story =>
+      'মসজিদের দিকে প্রতিটি পদক্ষেপ আলো — দো‘আ পড়ে প্রবেশ করুন ও বের হোন।';
+
+  @override
+  String get scene_after_salah => 'সালাতের পর';
+
+  @override
+  String get scene_after_salah_story =>
+      'তাড়াহুড়ো না করে সালাতের পরের যিকিরে একটু বসুন।';
+
+  @override
+  String get scene_morning => 'সকালের যিকির';
+
+  @override
+  String get scene_morning_story =>
+      'যে কথাগুলো সন্ধ্যা পর্যন্ত আপনাকে হেফাযত করে।';
+
+  @override
+  String get scene_eating => 'খাবার';
+
+  @override
+  String get scene_eating_story => 'শুরু তাঁর নামে, শেষ তাঁর প্রশংসায়।';
+
+  @override
+  String get scene_leave_home => 'ঘর থেকে বের হওয়া';
+
+  @override
+  String get scene_leave_home_story =>
+      'দরজায় দাঁড়িয়ে পুরো দিনটা আল্লাহর ওপর সঁপে দিন।';
+
+  @override
+  String get scene_travel => 'পথে';
+
+  @override
+  String get scene_travel_story =>
+      'বাস, রিকশা বা গাড়ি — উঠতে আল্লাহু আকবার, নামতে সুবহানাল্লাহ।';
+
+  @override
+  String get scene_meeting => 'মানুষের সাথে দেখা';
+
+  @override
+  String get scene_meeting_story =>
+      'সালাম ছড়িয়ে দিন, ভাইয়ের হাঁচির জবাব দিন।';
+
+  @override
+  String get scene_good_news => 'ভালো কিছু হলে';
+
+  @override
+  String get scene_good_news_story =>
+      'আনন্দ দাতার কথা মনে করিয়ে দেয় — তাঁর প্রশংসা করুন, মানুষেরও শুকরিয়া জানান।';
+
+  @override
+  String get scene_hardship => 'কঠিন সময়ে';
+
+  @override
+  String get scene_hardship_story =>
+      'দুশ্চিন্তা, কাঠিন্য বা ব্যর্থতা — আগে তাঁর দিকে ফিরুন।';
+
+  @override
+  String get scene_patience => 'বিপদ ও সবর';
+
+  @override
+  String get scene_patience_story => 'কিছু হারালে মনে রাখুন — আমরা আল্লাহরই।';
+
+  @override
+  String get scene_anger => 'রাগ সামলানো';
+
+  @override
+  String get scene_anger_story => 'আফসোসের কথা বলার আগে আশ্রয় চান।';
+
+  @override
+  String get scene_pain => 'ব্যথা ও অসুস্থতা';
+
+  @override
+  String get scene_pain_story => 'নিজের কষ্টে এবং অসুস্থ বন্ধুকে দেখতে গেলে।';
+
+  @override
+  String get scene_rain => 'বৃষ্টি হলে';
+
+  @override
+  String get scene_rain_story => 'বৃষ্টি রহমত — উপকারী বৃষ্টি প্রার্থনা করুন।';
+
+  @override
+  String get scene_home => 'ঘরে ফেরা';
+
+  @override
+  String get scene_home_story => 'তাঁর নামে প্রবেশ করুন, পরিবারকে সালাম দিন।';
+
+  @override
+  String get scene_gathering => 'মজলিস শেষে';
+
+  @override
+  String get scene_gathering_story =>
+      'উঠে যাওয়ার আগে কথার ভুলগুলোর কাফফারা দিন।';
+
+  @override
+  String get scene_forgiveness => 'ক্ষমা প্রার্থনা';
+
+  @override
+  String get scene_forgiveness_story => 'দিনের ভুলগুলো ইস্তিগফারে ধুয়ে নিন।';
+
+  @override
+  String get scene_sleep => 'ঘুমের আগে';
+
+  @override
+  String get scene_sleep_story =>
+      'দিন যেভাবে শুরু হয়েছিল সেভাবেই শেষ — তাঁর নামে, তাঁর আশ্রয়ে।';
+
+  @override
+  String get scene_night => 'রাতে';
+
+  @override
+  String get scene_night_story =>
+      'রাতে জেগে উঠলে বা খারাপ স্বপ্ন দেখলে — তিনি কাছেই আছেন।';
+
+  @override
+  String get part_dawn => 'ভোর';
+
+  @override
+  String get part_morning => 'সকাল';
+
+  @override
+  String get part_day => 'দিন';
+
+  @override
+  String get part_evening => 'সন্ধ্যা';
+
+  @override
+  String get part_night => 'রাত';
+
+  @override
+  String get removeSession => 'মুছে ফেলুন';
+
+  @override
+  String addSession(String session) {
+    return '$session যোগ করুন';
+  }
 }

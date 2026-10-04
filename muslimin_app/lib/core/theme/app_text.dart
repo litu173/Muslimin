@@ -24,7 +24,10 @@ abstract final class AppText {
   /// Grenze Gotisch is a variable font; 800 matches the weight of the Figma face.
   static const displayVariations = [FontVariation('wght', 800)];
   static const displayBangla = 'Galada';
-  static const arabic = 'Amiri';
+
+  /// Quran & dua text. Scheherazade New (SIL) supports every mark of the
+  /// Uthmani (Madani Mushaf) script, so harakat render exactly as written.
+  static const arabic = 'ScheherazadeNew';
 
   static List<String> fallbackFor(String family) =>
       family == bangla ? const [latin] : const [bangla];

@@ -25,6 +25,7 @@
 	<string>Muslimin uses your location to show the masjids near you and to calculate accurate prayer times.</string>
 	<key>UIBackgroundModes</key>
 	<array>
+		<string>audio</string>
 		<string>remote-notification</string>
 	</array>
 	<key>CFBundleLocalizations</key>

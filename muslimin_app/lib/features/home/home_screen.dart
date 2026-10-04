@@ -22,6 +22,7 @@ import '../registration/registration_flow.dart';
 import 'location_bar.dart';
 import 'masjid_card.dart';
 import 'masjid_list_screen.dart';
+import 'quran_energy_card.dart';
 import 'verse_carousel.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
@@ -102,6 +103,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
               ),
             ),
             SliverToBoxAdapter(child: _in(1, const PrayerHeader())),
+            // Daily Quran reading: the lantern fills as you read.
+            SliverToBoxAdapter(
+              child: _in(
+                2,
+                const Padding(
+                  padding: EdgeInsets.fromLTRB(Gap.l, Gap.xl, Gap.l, 0),
+                  child: QuranEnergyCard(),
+                ),
+              ),
+            ),
 
             // ---- authority banner
             if (showBanner)

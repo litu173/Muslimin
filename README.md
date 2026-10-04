@@ -103,7 +103,7 @@ Fonts bundled with the app are free under the [SIL Open Font License 1.1](https:
 | [Hind Siliguri](https://github.com/itfoundry/hind-siliguri) | Bangla text | Indian Type Foundry |
 | [Anek Bangla](https://github.com/EkType/Anek) | Bangla digits (times, dates) – cut to `BanglaDigits` by `tool/build_bangla_digits.py` | Ek Type |
 | [Galada](https://fonts.google.com/specimen/Galada) | Bangla prayer names | Black Foundry |
-| [Amiri](https://github.com/aliftype/amiri) | Quranic ayat | Khaled Hosny |
+| [Scheherazade New](https://software.sil.org/scheherazade/) | Quran and dua text (full Uthmani script support) | SIL International |
 
 The design asks for **Li Ador Noirrit** (Lipighor) for Bangla times. Lipighor's free licence does not allow redistributing the font file, which bundling it in an app would do, so Anek Bangla is used until Lipighor grants permission (admin@lipighor.com); then replace the `BanglaDigits` files.
 
