@@ -17,15 +17,12 @@ import '../../data/quran/surahs.dart';
 import '../../l10n/app_localizations.dart';
 import '../../state/quran.dart';
 import 'quiz_screen.dart';
-import 'dua_story.dart';
 import 'read_widgets.dart';
 import 'surah_screen.dart';
 
-/// Read tab with two parts:
-/// * Quran – recommended surahs, then the whole Quran as a journey
-///   (Al-Fatiha, then An-Nas back to Al-Baqarah) in phases, each ending
-///   with an optional quiz. Every surah is open to read.
-/// * Dua – a day told as a story, with the duas for each moment.
+/// Quran tab: recommended surahs, then the whole Quran as a journey
+/// (Al-Fatiha, then An-Nas back to Al-Baqarah) in phases, each ending with
+/// an optional quiz. Every surah is open to read.
 class ReadScreen extends ConsumerStatefulWidget {
   const ReadScreen({super.key});
 
@@ -74,7 +71,6 @@ double _wave(int step) => math.sin(step * math.pi / 3.2) * 0.62;
 class _ReadScreenState extends ConsumerState<ReadScreen> {
   final _currentKey = GlobalKey();
   bool _scrolled = false;
-  int _tab = 0;
 
   void _scrollToCurrent() {
     final ctx = _currentKey.currentContext;
@@ -106,60 +102,50 @@ class _ReadScreenState extends ConsumerState<ReadScreen> {
       child: Scaffold(
         body: Column(
           children: [
-            _Header(
-              progress: progress,
-              tab: _tab,
-              onTab: (i) => setState(() => _tab = i),
-              onContinue: _open,
-            ),
+            _Header(progress: progress, onContinue: _open),
             Expanded(
-              child: _tab == 1
-                  ? const DuaStory()
-                  : CustomScrollView(
-                      slivers: [
-                        PullToRefresh(
-                          onRefresh: () async {
-                            ref.invalidate(quranProgressProvider);
-                            await Future<void>.delayed(
-                              const Duration(milliseconds: 600),
-                            );
-                          },
+              child: CustomScrollView(
+                slivers: [
+                  PullToRefresh(
+                    onRefresh: () async {
+                      ref.invalidate(quranProgressProvider);
+                      await Future<void>.delayed(
+                        const Duration(milliseconds: 600),
+                      );
+                    },
+                  ),
+                  SliverToBoxAdapter(
+                    child: _SpecialSurahs(onOpen: (s, a) => _open(s, ayah: a)),
+                  ),
+                  const SliverToBoxAdapter(child: _RevelationLegend()),
+                  SliverPadding(
+                    padding: const EdgeInsets.only(bottom: 120),
+                    sliver: SliverList.builder(
+                      itemCount: _items.length,
+                      itemBuilder: (context, i) => switch (_items[i]) {
+                        _PhaseItem(:final phase) => _PhaseHeader(
+                          phase: phase,
+                          progress: progress,
                         ),
-                        SliverToBoxAdapter(
-                          child: _SpecialSurahs(
-                            onOpen: (s, a) => _open(s, ayah: a),
-                          ),
+                        _SurahItem(:final surah, :final step) => _SurahNode(
+                          key: surah.id == progress.current?.id
+                              ? _currentKey
+                              : null,
+                          surah: surah,
+                          step: step,
+                          progress: progress,
+                          onOpen: () => _open(surah),
                         ),
-                        const SliverToBoxAdapter(child: _RevelationLegend()),
-                        SliverPadding(
-                          padding: const EdgeInsets.only(bottom: 120),
-                          sliver: SliverList.builder(
-                            itemCount: _items.length,
-                            itemBuilder: (context, i) => switch (_items[i]) {
-                              _PhaseItem(:final phase) => _PhaseHeader(
-                                phase: phase,
-                                progress: progress,
-                              ),
-                              _SurahItem(:final surah, :final step) =>
-                                _SurahNode(
-                                  key: surah.id == progress.current?.id
-                                      ? _currentKey
-                                      : null,
-                                  surah: surah,
-                                  step: step,
-                                  progress: progress,
-                                  onOpen: () => _open(surah),
-                                ),
-                              _QuizItem(:final phase, :final step) => _QuizNode(
-                                phase: phase,
-                                step: step,
-                                progress: progress,
-                              ),
-                            },
-                          ),
+                        _QuizItem(:final phase, :final step) => _QuizNode(
+                          phase: phase,
+                          step: step,
+                          progress: progress,
                         ),
-                      ],
+                      },
                     ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
@@ -169,16 +155,9 @@ class _ReadScreenState extends ConsumerState<ReadScreen> {
 }
 
 class _Header extends StatelessWidget {
-  const _Header({
-    required this.progress,
-    required this.tab,
-    required this.onTab,
-    required this.onContinue,
-  });
+  const _Header({required this.progress, required this.onContinue});
 
   final QuranProgress progress;
-  final int tab;
-  final ValueChanged<int> onTab;
   final void Function(Surah) onContinue;
 
   @override
@@ -200,29 +179,18 @@ class _Header extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    tab == 0 ? t.readQuran : t.tabDua,
-                    style: AppText.headline.copyWith(color: AppColors.onHeader),
-                  ),
-                ),
-                _Segmented(
-                  labels: [t.tabQuran, t.tabDua],
-                  index: tab,
-                  onChanged: onTab,
-                ),
-              ],
+            Text(
+              t.readQuran,
+              style: AppText.headline.copyWith(color: AppColors.onHeader),
             ),
             const SizedBox(height: 2),
             Text(
-              tab == 0 ? t.journeySub : t.duaHeader,
+              t.journeySub,
               style: AppText.caption.copyWith(
                 color: AppColors.onHeader.withValues(alpha: 0.75),
               ),
             ),
-            if (tab == 0) ...[
+            ...[
               const SizedBox(height: Gap.m),
               Row(
                 children: [
@@ -272,53 +240,6 @@ class _Header extends StatelessWidget {
       ),
     );
   }
-}
-
-/// Pill-shaped two-way switch on the dark header.
-class _Segmented extends StatelessWidget {
-  const _Segmented({
-    required this.labels,
-    required this.index,
-    required this.onChanged,
-  });
-
-  final List<String> labels;
-  final int index;
-  final ValueChanged<int> onChanged;
-
-  @override
-  Widget build(BuildContext context) => Container(
-    padding: const EdgeInsets.all(3),
-    decoration: BoxDecoration(
-      color: Colors.white.withValues(alpha: 0.08),
-      borderRadius: BorderRadius.circular(Radii.pill),
-      border: Border.all(color: AppColors.goldLight.withValues(alpha: 0.3)),
-    ),
-    child: Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        for (final (i, l) in labels.indexed)
-          GestureDetector(
-            onTap: () => onChanged(i),
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 200),
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-              decoration: BoxDecoration(
-                color: i == index ? AppColors.goldLight : Colors.transparent,
-                borderRadius: BorderRadius.circular(Radii.pill),
-              ),
-              child: Text(
-                l,
-                style: AppText.caption.copyWith(
-                  color: i == index ? AppColors.inkDeep : AppColors.onHeader,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
-          ),
-      ],
-    ),
-  );
 }
 
 /// Surahs the Sunnah encourages reading at particular times; the one that

@@ -6,12 +6,13 @@ import '../../core/theme/app_text.dart';
 import '../../l10n/app_localizations.dart';
 import '../../state/quran.dart';
 import '../achievements/achievements.dart';
+import '../dua/dua_screen.dart';
 import '../home/home_screen.dart';
 import '../home/quran_energy_card.dart';
 import '../more/more_screen.dart';
 import '../read/read_screen.dart';
 
-/// Bottom navigation: Home · Read · More.
+/// Bottom navigation: Home · Quran · Dua · More.
 class Shell extends ConsumerStatefulWidget {
   const Shell({super.key});
 
@@ -36,7 +37,7 @@ class _ShellState extends ConsumerState<Shell> {
     return Scaffold(
       body: IndexedStack(
         index: _tab,
-        children: const [HomeScreen(), ReadScreen(), MoreScreen()],
+        children: const [HomeScreen(), ReadScreen(), DuaScreen(), MoreScreen()],
       ),
       bottomNavigationBar: DecoratedBox(
         decoration: BoxDecoration(
@@ -67,15 +68,23 @@ class _ShellState extends ConsumerState<Shell> {
                   icon: _tab == 1
                       ? Icons.menu_book_rounded
                       : Icons.menu_book_outlined,
-                  label: t.tabRead,
+                  label: t.tabQuran,
                   selected: _tab == 1,
                   onTap: () => _go(1),
                 ),
                 _NavItem(
-                  icon: Icons.menu_rounded,
-                  label: t.more,
+                  icon: _tab == 2
+                      ? Icons.volunteer_activism_rounded
+                      : Icons.volunteer_activism_outlined,
+                  label: t.tabDua,
                   selected: _tab == 2,
                   onTap: () => _go(2),
+                ),
+                _NavItem(
+                  icon: Icons.menu_rounded,
+                  label: t.more,
+                  selected: _tab == 3,
+                  onTap: () => _go(3),
                 ),
               ],
             ),

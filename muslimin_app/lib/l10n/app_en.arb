@@ -970,5 +970,46 @@
         "type": "String"
       }
     }
+  },
+  "duaSearchHint": "Search duas",
+  "duaPartCount": "{topics} topics · {duas} duas",
+  "@duaPartCount": {
+    "placeholders": {
+      "topics": {
+        "type": "String"
+      },
+      "duas": {
+        "type": "String"
+      }
+    }
+  },
+  "duaNoResults": "No dua found for “{q}”",
+  "@duaNoResults": {
+    "placeholders": {
+      "q": {
+        "type": "String"
+      }
+    }
+  },
+  "duaResults": "{n, plural, =1{1 dua found} other{{n} duas found}}",
+  "@duaResults": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "part_dawn_sub": "Waking, wudu and Fajr",
+  "part_morning_sub": "Adhkar, food and going out",
+  "part_day_sub": "People, joys and trials",
+  "part_evening_sub": "Home, gatherings, istighfar",
+  "part_night_sub": "Sleep and the night",
+  "duaCount": "{n, plural, =1{1 dua} other{{n} duas}}",
+  "@duaCount": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
   }
 }

@@ -3444,6 +3444,66 @@ abstract class L10n {
   /// In en, this message translates to:
   /// **'Add {session}'**
   String addSession(String session);
+
+  /// No description provided for @duaSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search duas'**
+  String get duaSearchHint;
+
+  /// No description provided for @duaPartCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{topics} topics · {duas} duas'**
+  String duaPartCount(String topics, String duas);
+
+  /// No description provided for @duaNoResults.
+  ///
+  /// In en, this message translates to:
+  /// **'No dua found for “{q}”'**
+  String duaNoResults(String q);
+
+  /// No description provided for @duaResults.
+  ///
+  /// In en, this message translates to:
+  /// **'{n, plural, =1{1 dua found} other{{n} duas found}}'**
+  String duaResults(int n);
+
+  /// No description provided for @part_dawn_sub.
+  ///
+  /// In en, this message translates to:
+  /// **'Waking, wudu and Fajr'**
+  String get part_dawn_sub;
+
+  /// No description provided for @part_morning_sub.
+  ///
+  /// In en, this message translates to:
+  /// **'Adhkar, food and going out'**
+  String get part_morning_sub;
+
+  /// No description provided for @part_day_sub.
+  ///
+  /// In en, this message translates to:
+  /// **'People, joys and trials'**
+  String get part_day_sub;
+
+  /// No description provided for @part_evening_sub.
+  ///
+  /// In en, this message translates to:
+  /// **'Home, gatherings, istighfar'**
+  String get part_evening_sub;
+
+  /// No description provided for @part_night_sub.
+  ///
+  /// In en, this message translates to:
+  /// **'Sleep and the night'**
+  String get part_night_sub;
+
+  /// No description provided for @duaCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{n, plural, =1{1 dua} other{{n} duas}}'**
+  String duaCount(int n);
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {

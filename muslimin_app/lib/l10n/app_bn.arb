@@ -557,5 +557,15 @@
   "part_evening": "সন্ধ্যা",
   "part_night": "রাত",
   "removeSession": "মুছে ফেলুন",
-  "addSession": "{session} যোগ করুন"
+  "addSession": "{session} যোগ করুন",
+  "duaSearchHint": "দো‘আ খুঁজুন",
+  "duaPartCount": "{topics}টি বিষয় · {duas}টি দো‘আ",
+  "duaNoResults": "“{q}” দিয়ে কোনো দো‘আ পাওয়া যায়নি",
+  "duaResults": "{n}টি দো‘আ পাওয়া গেছে",
+  "part_dawn_sub": "জাগরণ, অযু ও ফজর",
+  "part_morning_sub": "যিকির, খাবার ও বের হওয়া",
+  "part_day_sub": "মানুষ, আনন্দ ও পরীক্ষা",
+  "part_evening_sub": "ঘর, মজলিস, ইস্তিগফার",
+  "part_night_sub": "ঘুম ও রাত",
+  "duaCount": "{n}টি দো‘আ"
 }

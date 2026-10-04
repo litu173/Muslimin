@@ -1874,4 +1874,42 @@ class L10nBn extends L10n {
   String addSession(String session) {
     return '$session যোগ করুন';
   }
+
+  @override
+  String get duaSearchHint => 'দো‘আ খুঁজুন';
+
+  @override
+  String duaPartCount(String topics, String duas) {
+    return '$topicsটি বিষয় · $duasটি দো‘আ';
+  }
+
+  @override
+  String duaNoResults(String q) {
+    return '“$q” দিয়ে কোনো দো‘আ পাওয়া যায়নি';
+  }
+
+  @override
+  String duaResults(int n) {
+    return '$nটি দো‘আ পাওয়া গেছে';
+  }
+
+  @override
+  String get part_dawn_sub => 'জাগরণ, অযু ও ফজর';
+
+  @override
+  String get part_morning_sub => 'যিকির, খাবার ও বের হওয়া';
+
+  @override
+  String get part_day_sub => 'মানুষ, আনন্দ ও পরীক্ষা';
+
+  @override
+  String get part_evening_sub => 'ঘর, মজলিস, ইস্তিগফার';
+
+  @override
+  String get part_night_sub => 'ঘুম ও রাত';
+
+  @override
+  String duaCount(int n) {
+    return '$nটি দো‘আ';
+  }
 }

@@ -1880,4 +1880,54 @@ class L10nEn extends L10n {
   String addSession(String session) {
     return 'Add $session';
   }
+
+  @override
+  String get duaSearchHint => 'Search duas';
+
+  @override
+  String duaPartCount(String topics, String duas) {
+    return '$topics topics · $duas duas';
+  }
+
+  @override
+  String duaNoResults(String q) {
+    return 'No dua found for “$q”';
+  }
+
+  @override
+  String duaResults(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$n duas found',
+      one: '1 dua found',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get part_dawn_sub => 'Waking, wudu and Fajr';
+
+  @override
+  String get part_morning_sub => 'Adhkar, food and going out';
+
+  @override
+  String get part_day_sub => 'People, joys and trials';
+
+  @override
+  String get part_evening_sub => 'Home, gatherings, istighfar';
+
+  @override
+  String get part_night_sub => 'Sleep and the night';
+
+  @override
+  String duaCount(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$n duas',
+      one: '1 dua',
+    );
+    return '$_temp0';
+  }
 }
