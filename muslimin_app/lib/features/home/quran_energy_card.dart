@@ -86,7 +86,7 @@ class _QuranEnergyCardState extends ConsumerState<QuranEnergyCard>
                 child: AnimatedBuilder(
                   animation: _t,
                   builder: (_, _) => CustomPaint(
-                    painter: _MishkatPainter(
+                    painter: _QuranLightPainter(
                       energy: e,
                       t: _t.value,
                       dark: AppColors.dark,
@@ -227,12 +227,16 @@ class _EnergyBar extends StatelessWidget {
   );
 }
 
-/// A qindil – the hanging lamp of the masjid, recalling Ayat an-Nur ("a
-/// lamp within glass, the glass as if it were a brilliant star"). Unlit
-/// until you read; as you read, light rays turn slowly around it, the glass
-/// breathes with light and motes of light drift upward.
-class _MishkatPainter extends CustomPainter {
-  _MishkatPainter({required this.energy, required this.t, required this.dark});
+/// An open Quran resting on a rehal (the crossed wooden stand, like the
+/// Maktab icon). Unlit until you read; as you read, a fan of light rises
+/// from the open pages, sways gently and grows, and motes of light float up
+/// out of the book – more of them the more you read.
+class _QuranLightPainter extends CustomPainter {
+  _QuranLightPainter({
+    required this.energy,
+    required this.t,
+    required this.dark,
+  });
 
   final double energy;
 
@@ -240,253 +244,289 @@ class _MishkatPainter extends CustomPainter {
   final double t;
   final bool dark;
 
-  static const _gold = Color(0xFFD9A93A);
-  static const _goldDeep = Color(0xFFA67B17);
-
   @override
   void paint(Canvas canvas, Size s) {
     final w = s.width, h = s.height;
-    // Pale light glows on the night card; on the cream card a warmer gold
-    // is needed for the rays and motes to show.
     final light = dark ? const Color(0xFFFFE3A0) : const Color(0xFFEFB43A);
     final lit = energy.clamp(0.0, 1.0);
     final extra = (energy - 1).clamp(0.0, 1.0);
     final breathe = 0.5 + 0.5 * math.sin(t * 2 * math.pi * 3);
-    final cx = w * 0.42;
-    final lampH = h * 0.86;
-    final top = h * 0.04;
-    // Bowl geometry.
-    final bowlTop = top + lampH * 0.42;
-    final bowlBot = top + lampH * 0.86;
-    final bowlW = w * 0.44;
-    final c = Offset(cx, (bowlTop + bowlBot) / 2 + lampH * 0.02);
 
-    // --- Light rays: long, soft, slowly turning (only when lit).
+    // Whole scene a little smaller, so the rehal sits inside the card.
+    canvas.save();
+    canvas.translate(w * 0.05, h * 0.02);
+    canvas.scale(0.88);
+
+    // Geometry: book centred low-left, rehal under it.
+    final cx = w * 0.42;
+    final bookW = w * 0.62;
+    final spineTop = Offset(cx, h * 0.56);
+    final spineBot = Offset(cx, h * 0.66);
+    final source = spineTop.translate(0, -2); // where the light comes from
+
+    // --- Fan of rays rising from the open pages.
     if (lit > 0) {
-      const rays = 14;
-      final rot = t * 2 * math.pi;
-      final reach = math.max(w, h) * (0.55 + 0.25 * lit + 0.15 * extra);
+      const rays = 9;
+      final reach = h * (0.55 + 0.25 * lit + 0.15 * extra);
       for (var i = 0; i < rays; i++) {
-        final a = rot + i * 2 * math.pi / rays;
-        final flick = 0.75 + 0.25 * math.sin(t * 2 * math.pi * 2 + i * 1.7);
-        final len = reach * flick;
-        const spread = 0.07;
+        // Spread across the upper half (-75° … +75° from straight up),
+        // swaying slowly.
+        final base = (i / (rays - 1) - 0.5) * 2.6;
+        final sway = 0.08 * math.sin(t * 2 * math.pi + i * 0.9);
+        final a = -math.pi / 2 + base * 0.58 + sway;
+        final flick = 0.7 + 0.3 * math.sin(t * 2 * math.pi * 2 + i * 1.3);
+        final len = reach * flick * (1 - 0.25 * (base.abs() / 1.3));
+        final spread = 0.03 + 0.015 * lit;
         final p = Path()
-          ..moveTo(c.dx, c.dy)
+          ..moveTo(source.dx, source.dy)
           ..lineTo(
-            c.dx + len * math.cos(a - spread),
-            c.dy + len * math.sin(a - spread),
+            source.dx + len * math.cos(a - spread),
+            source.dy + len * math.sin(a - spread),
           )
           ..lineTo(
-            c.dx + len * math.cos(a + spread),
-            c.dy + len * math.sin(a + spread),
+            source.dx + len * math.cos(a + spread),
+            source.dy + len * math.sin(a + spread),
           )
           ..close();
+        final shader = RadialGradient(
+          colors: [
+            light.withValues(alpha: (0.5 * lit + 0.15 * extra) * flick),
+            light.withValues(alpha: 0),
+          ],
+        ).createShader(Rect.fromCircle(center: source, radius: len));
+        // Soft beam…
         canvas.drawPath(
           p,
           Paint()
-            ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 4)
-            ..shader = RadialGradient(
-              colors: [
-                light.withValues(alpha: (0.26 * lit + 0.1 * extra) * flick),
-                light.withValues(alpha: 0),
-              ],
-            ).createShader(Rect.fromCircle(center: c, radius: len)),
+            ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 2)
+            ..shader = shader,
+        );
+        // …with a bright core line.
+        canvas.drawLine(
+          source,
+          Offset(
+            source.dx + len * 0.85 * math.cos(a),
+            source.dy + len * 0.85 * math.sin(a),
+          ),
+          Paint()
+            ..strokeWidth = 1
+            ..shader = shader,
         );
       }
-      // Breathing halo.
-      final hr = bowlW * (0.9 + 0.25 * breathe * lit + 0.3 * extra);
+      // Soft glow over the pages, breathing.
+      final gr = bookW * (0.55 + 0.15 * breathe * lit + 0.2 * extra);
       canvas.drawCircle(
-        c,
-        hr,
+        source.translate(0, -h * 0.04),
+        gr,
         Paint()
-          ..shader = RadialGradient(
-            colors: [
-              light.withValues(alpha: (0.32 + 0.12 * breathe) * lit),
-              light.withValues(alpha: 0),
-            ],
-          ).createShader(Rect.fromCircle(center: c, radius: hr)),
+          ..shader =
+              RadialGradient(
+                colors: [
+                  light.withValues(alpha: (0.38 + 0.14 * breathe) * lit),
+                  light.withValues(alpha: 0),
+                ],
+              ).createShader(
+                Rect.fromCircle(
+                  center: source.translate(0, -h * 0.04),
+                  radius: gr,
+                ),
+              ),
       );
     }
 
-    final line = Paint()
-      ..color = _goldDeep
-      ..strokeWidth = 1.2
-      ..style = PaintingStyle.stroke;
-    final fill = Paint()..color = _gold;
-
-    // --- Ring and three chains to the rim.
-    final ring = Offset(cx, top + 4);
-    canvas.drawCircle(ring, 3.5, line);
-    final rimY = bowlTop;
-    final neckTop = top + lampH * 0.26;
-    for (final dx in [-bowlW * 0.5, 0.0, bowlW * 0.5]) {
-      final end = Offset(cx + dx * (dx == 0 ? 0 : 1), dx == 0 ? neckTop : rimY);
-      canvas.drawLine(ring.translate(0, 3), end, line);
+    // --- Rehal: two crossed boards (X) with a pivot pin.
+    const wood = Color(0xFFB8862B);
+    const woodDark = Color(0xFF8A611A);
+    final boardW = w * 0.075;
+    Path board(Offset a, Offset b) {
+      final d = b - a;
+      final n = Offset(-d.dy, d.dx) / d.distance * (boardW / 2);
+      return Path()
+        ..moveTo(a.dx + n.dx, a.dy + n.dy)
+        ..lineTo(b.dx + n.dx, b.dy + n.dy)
+        ..lineTo(b.dx - n.dx, b.dy - n.dy)
+        ..lineTo(a.dx - n.dx, a.dy - n.dy)
+        ..close();
     }
 
-    // --- Neck (flared) above the bowl.
-    final neck = Path()
-      ..moveTo(cx - bowlW * 0.16, neckTop)
-      ..lineTo(cx + bowlW * 0.16, neckTop)
-      ..quadraticBezierTo(cx + bowlW * 0.14, rimY - 2, cx + bowlW * 0.5, rimY)
-      ..lineTo(cx - bowlW * 0.5, rimY)
-      ..quadraticBezierTo(
-        cx - bowlW * 0.14,
-        rimY - 2,
-        cx - bowlW * 0.16,
-        neckTop,
-      )
-      ..close();
-
-    // --- Bowl.
-    final bowl = Path()
-      ..moveTo(cx - bowlW * 0.5, rimY)
-      ..lineTo(cx + bowlW * 0.5, rimY)
-      ..cubicTo(
-        cx + bowlW * 0.62,
-        rimY + (bowlBot - rimY) * 0.45,
-        cx + bowlW * 0.42,
-        bowlBot,
-        cx,
-        bowlBot,
-      )
-      ..cubicTo(
-        cx - bowlW * 0.42,
-        bowlBot,
-        cx - bowlW * 0.62,
-        rimY + (bowlBot - rimY) * 0.45,
-        cx - bowlW * 0.5,
-        rimY,
-      )
-      ..close();
-
-    final unlit = dark ? const Color(0xFF223834) : const Color(0xFFE6DCBF);
-    final glow = Color.lerp(
-      unlit,
-      const Color(0xFFFFEBB8),
-      (0.2 + 0.55 * lit + 0.12 * breathe * lit).clamp(0, 0.88),
-    )!;
-    final glassShader = RadialGradient(
-      center: const Alignment(0, 0.25),
-      radius: 0.8,
-      colors: [glow, Color.lerp(glow, unlit, 0.6)!],
-    ).createShader(Rect.fromLTRB(cx - bowlW, neckTop, cx + bowlW, bowlBot));
-    canvas.drawPath(neck, Paint()..shader = glassShader);
-    canvas.drawPath(bowl, Paint()..shader = glassShader);
-
-    // Enamel band with dots around the bowl's shoulder.
-    final bandY = rimY + (bowlBot - rimY) * 0.18;
-    final band = Rect.fromLTRB(
-      cx - bowlW * 0.56,
-      bandY,
-      cx + bowlW * 0.56,
-      bandY + 5,
+    final l1 = board(
+      Offset(cx - bookW * 0.42, h * 0.6),
+      Offset(cx + bookW * 0.34, h * 0.94),
     );
-    canvas.save();
-    canvas.clipPath(bowl);
-    canvas.drawRect(band, fill);
-    for (var x = band.left + 4; x < band.right; x += 7) {
-      canvas.drawCircle(
-        Offset(x, band.center.dy),
-        1,
-        Paint()..color = const Color(0xFFFFF4D6),
-      );
-    }
-    canvas.restore();
-
-    // Star window ("as if it were a brilliant star").
-    final sr = bowlW * 0.2;
-    final sc = c.translate(0, 4);
-    final star = Path();
-    for (var i = 0; i < 16; i++) {
-      final a = -math.pi / 2 + i * math.pi / 8;
-      final r = i.isEven ? sr : sr * 0.72;
-      final pt = Offset(sc.dx + r * math.cos(a), sc.dy + r * math.sin(a));
-      i == 0 ? star.moveTo(pt.dx, pt.dy) : star.lineTo(pt.dx, pt.dy);
-    }
+    final l2 = board(
+      Offset(cx + bookW * 0.42, h * 0.6),
+      Offset(cx - bookW * 0.34, h * 0.94),
+    );
+    final woodPaint = Paint()
+      ..shader = const LinearGradient(
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
+        colors: [Color(0xFFD9A93A), wood, woodDark],
+      ).createShader(Rect.fromLTWH(0, h * 0.58, w, h * 0.38));
+    canvas.drawPath(l2, woodPaint);
     canvas.drawPath(
-      star..close(),
+      l2,
       Paint()
-        ..color = _gold.withValues(alpha: 0.7)
+        ..color = woodDark
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 0.8,
+    );
+    canvas.drawPath(l1, woodPaint);
+    canvas.drawPath(
+      l1,
+      Paint()
+        ..color = woodDark
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 0.8,
+    );
+    final pin = Offset(cx, h * 0.79);
+    canvas.drawCircle(pin, w * 0.022, Paint()..color = const Color(0xFFFFF1CC));
+    canvas.drawCircle(
+      pin,
+      w * 0.022,
+      Paint()
+        ..color = woodDark
         ..style = PaintingStyle.stroke
         ..strokeWidth = 1,
     );
 
-    // Flame in the star.
-    if (energy > 0) {
-      final fl =
-          sr * (0.55 + 0.35 * lit) * (1 + 0.08 * math.sin(t * 2 * math.pi * 7));
-      final flame = Path()
-        ..moveTo(sc.dx, sc.dy - fl)
+    // --- Open book: green cover edges + two curved page blocks.
+    const cover = Color(0xFF1F5F4E);
+    final coverPath = Path()
+      ..moveTo(spineBot.dx, spineBot.dy + 3)
+      ..quadraticBezierTo(
+        cx - bookW * 0.28,
+        h * 0.62,
+        cx - bookW * 0.5,
+        h * 0.52,
+      )
+      ..lineTo(cx - bookW * 0.5, h * 0.555)
+      ..quadraticBezierTo(
+        cx - bookW * 0.28,
+        h * 0.665,
+        spineBot.dx,
+        spineBot.dy + 7,
+      )
+      ..quadraticBezierTo(
+        cx + bookW * 0.28,
+        h * 0.665,
+        cx + bookW * 0.5,
+        h * 0.555,
+      )
+      ..lineTo(cx + bookW * 0.5, h * 0.52)
+      ..quadraticBezierTo(
+        cx + bookW * 0.28,
+        h * 0.62,
+        spineBot.dx,
+        spineBot.dy + 3,
+      )
+      ..close();
+    canvas.drawPath(coverPath, Paint()..color = cover);
+
+    final pageColor = Color.lerp(
+      dark ? const Color(0xFFE9DDB8) : const Color(0xFFFFF8E4),
+      const Color(0xFFFFF4CF),
+      lit,
+    )!;
+    Path pages(int side) {
+      final sx = side.toDouble();
+      return Path()
+        ..moveTo(spineBot.dx, spineBot.dy)
         ..quadraticBezierTo(
-          sc.dx + fl * 0.5,
-          sc.dy - fl * 0.15,
-          sc.dx,
-          sc.dy + fl * 0.3,
+          cx + sx * bookW * 0.26,
+          h * 0.6,
+          cx + sx * bookW * 0.48,
+          h * 0.5,
         )
+        ..lineTo(cx + sx * bookW * 0.46, h * 0.43)
         ..quadraticBezierTo(
-          sc.dx - fl * 0.5,
-          sc.dy - fl * 0.15,
-          sc.dx,
-          sc.dy - fl,
+          cx + sx * bookW * 0.24,
+          h * 0.5,
+          spineTop.dx,
+          spineTop.dy,
         )
         ..close();
-      canvas.drawPath(
-        flame,
-        Paint()
-          ..color = Color.lerp(
-            const Color(0xFFE59A2F),
-            const Color(0xFFFFF6DC),
-            lit,
-          )!,
-      );
-    } else {
-      canvas.drawCircle(sc, 1.6, Paint()..color = const Color(0xFF8C7A4A));
     }
 
-    // Outlines and foot.
-    canvas.drawPath(neck, line);
-    canvas.drawPath(bowl, line);
+    for (final side in [-1, 1]) {
+      final p = pages(side);
+      canvas.drawPath(
+        p,
+        Paint()
+          ..shader =
+              LinearGradient(
+                begin: side < 0 ? Alignment.centerRight : Alignment.centerLeft,
+                end: side < 0 ? Alignment.centerLeft : Alignment.centerRight,
+                colors: [
+                  pageColor,
+                  Color.lerp(pageColor, const Color(0xFFD9C79A), 0.5)!,
+                ],
+              ).createShader(
+                Rect.fromLTWH(cx - bookW / 2, h * 0.42, bookW, h * 0.26),
+              ),
+      );
+      // Text lines on the page.
+      final lines = Paint()
+        ..color = const Color(0xFFB8862B).withValues(alpha: 0.45)
+        ..strokeWidth = 0.9;
+      for (var k = 1; k <= 4; k++) {
+        final f = k / 5;
+        final y0 =
+            spineTop.dy + (h * 0.455 - spineTop.dy) * 0.15 + f * (h * 0.1);
+        canvas.drawLine(
+          Offset(cx + side * bookW * 0.07, y0 - h * 0.03 * (1 - f)),
+          Offset(cx + side * bookW * 0.4, y0 - h * 0.085 * (1 - f) - h * 0.02),
+          lines,
+        );
+      }
+      canvas.drawPath(
+        p,
+        Paint()
+          ..color = const Color(0xFFB8862B)
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 1,
+      );
+    }
+    // Spine highlight.
     canvas.drawLine(
-      Offset(cx - bowlW * 0.5, rimY),
-      Offset(cx + bowlW * 0.5, rimY),
-      line..strokeWidth = 2,
+      spineTop,
+      spineBot,
+      Paint()
+        ..color = const Color(0xFFB8862B)
+        ..strokeWidth = 1.2,
     );
-    canvas.drawPath(
-      Path()
-        ..moveTo(cx - 5, bowlBot - 1)
-        ..lineTo(cx + 5, bowlBot - 1)
-        ..lineTo(cx, bowlBot + 8)
-        ..close(),
-      Paint()..color = _goldDeep,
-    );
-    canvas.drawCircle(Offset(cx, bowlBot + 10), 2, Paint()..color = _goldDeep);
 
-    // --- Motes of light rising (more as you read more).
+    // --- Motes of light floating up out of the book.
     if (lit > 0) {
-      final motes = (5 + 10 * energy / 2).round();
-      final r = math.Random(11);
+      final motes = (8 + 16 * energy / 2).round();
+      final r = math.Random(5);
       for (var i = 0; i < motes; i++) {
         final seed = r.nextDouble();
-        final dx = (r.nextDouble() - 0.5) * w * 0.85;
-        final size = 0.8 + r.nextDouble() * 1.6;
-        final phase = (t * 4 + seed) % 1;
-        final x = c.dx + dx + math.sin((phase * 2 + seed) * math.pi) * 5;
-        final y = c.dy + h * 0.1 - phase * h * 0.95;
-        final a = math.sin(phase * math.pi) * (0.3 + 0.4 * lit);
+        final drift = (r.nextDouble() - 0.5) * bookW * 1.3;
+        final size = 0.8 + r.nextDouble() * 1.8;
+        final speed = 3 + r.nextDouble() * 2;
+        final phase = (t * speed + seed) % 1;
+        // Start inside the open pages, spread out as they rise.
+        final x =
+            source.dx +
+            (r.nextDouble() - 0.5) * bookW * 0.5 +
+            drift * phase +
+            math.sin((phase * 3 + seed) * math.pi) * 4;
+        final y = source.dy - phase * h * 0.62;
+        final a = math.sin(phase * math.pi) * (0.35 + 0.45 * lit);
         canvas.drawCircle(
           Offset(x, y),
-          size,
+          size * (1 - 0.4 * phase),
           Paint()
             ..color = light.withValues(alpha: a)
-            ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 1.2),
+            ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 1.1),
         );
       }
     }
+    canvas.restore();
   }
 
   @override
-  bool shouldRepaint(_MishkatPainter old) =>
+  bool shouldRepaint(_QuranLightPainter old) =>
       old.energy != energy || old.t != t || old.dark != dark;
 }
