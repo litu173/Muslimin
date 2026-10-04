@@ -1975,12 +1975,6 @@ abstract class L10n {
   /// **'Verification email sent to {email}.'**
   String verificationSent(String email);
 
-  /// No description provided for @iVerified.
-  ///
-  /// In en, this message translates to:
-  /// **'I\'ve verified'**
-  String get iVerified;
-
   /// No description provided for @changePassword.
   ///
   /// In en, this message translates to:
@@ -2280,6 +2274,24 @@ abstract class L10n {
   /// In en, this message translates to:
   /// **'Pull down to refresh'**
   String get pullToRefresh;
+
+  /// No description provided for @verifyAutoCheck.
+  ///
+  /// In en, this message translates to:
+  /// **'Open the link we emailed you — this page updates by itself once you\'re verified.'**
+  String get verifyAutoCheck;
+
+  /// No description provided for @signOutTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign out?'**
+  String get signOutTitle;
+
+  /// No description provided for @signOutBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You will need to sign in again to see your followed masjids and get jamat reminders on this phone.'**
+  String get signOutBody;
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {

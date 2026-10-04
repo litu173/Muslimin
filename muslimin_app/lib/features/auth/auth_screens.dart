@@ -533,9 +533,7 @@ class _GoogleSignInButtonState extends ConsumerState<GoogleSignInButton> {
                 // Google's button is always white with dark text.
                 Text(
                   t.continueWithGoogle,
-                  style: AppText.label.copyWith(
-                    color: const Color(0xFF1F1F1F),
-                  ),
+                  style: AppText.label.copyWith(color: const Color(0xFF1F1F1F)),
                 ),
               ],
             ),

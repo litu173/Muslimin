@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -13,8 +15,6 @@ import '../../core/widgets/surfaces.dart';
 import '../../data/models/app_user.dart';
 import '../../l10n/app_localizations.dart';
 import '../../state/providers.dart';
-import '../more/followed_masjids_screen.dart';
-import '../more/manage_masjids_screen.dart';
 import 'auth_errors.dart';
 
 /// Account details, email verification, password change, sign out, delete.
@@ -25,19 +25,54 @@ class ProfileScreen extends ConsumerStatefulWidget {
   ConsumerState<ProfileScreen> createState() => _ProfileScreenState();
 }
 
-class _ProfileScreenState extends ConsumerState<ProfileScreen> {
+class _ProfileScreenState extends ConsumerState<ProfileScreen>
+    with WidgetsBindingObserver {
   final _name = TextEditingController();
   bool _savingName = false;
-  bool _checking = false;
+
+  /// Firebase has no "email verified" event, so while the email is
+  /// unverified the account is re-read every few seconds and whenever the
+  /// app comes back to the foreground (e.g. from the mail app).
+  Timer? _verifyPoll;
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _name.text = ref.read(backendProvider).currentUser?.name ?? '';
+    _verifyPoll = Timer.periodic(
+      const Duration(seconds: 4),
+      (_) => _checkVerified(),
+    );
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) _checkVerified();
+  }
+
+  Future<void> _checkVerified() async {
+    final backend = ref.read(backendProvider);
+    final before = backend.currentUser;
+    if (before == null || before.emailVerified) {
+      _verifyPoll?.cancel();
+      return;
+    }
+    try {
+      final after = await backend.reloadUser();
+      if (after?.emailVerified ?? false) {
+        _verifyPoll?.cancel();
+        if (mounted) toast(context, L10n.of(context).emailVerified);
+      }
+    } catch (_) {
+      // Offline etc. – try again on the next tick.
+    }
   }
 
   @override
   void dispose() {
+    _verifyPoll?.cancel();
+    WidgetsBinding.instance.removeObserver(this);
     _name.dispose();
     super.dispose();
   }
@@ -228,36 +263,37 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                         Text(t.emailNotVerified, style: AppText.label),
                       ],
                     ),
-                    const SizedBox(height: Gap.m),
+                    const SizedBox(height: Gap.s),
                     Row(
                       children: [
+                        SizedBox.square(
+                          dimension: 12,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 1.6,
+                            color: AppColors.muted,
+                          ),
+                        ),
+                        const SizedBox(width: Gap.s),
                         Expanded(
-                          child: AppButton(
-                            t.resendVerification,
-                            style: AppButtonStyle.outlined,
-                            dense: true,
-                            onPressed: () => _run(
-                              () => ref
-                                  .read(backendProvider)
-                                  .sendEmailVerification(),
-                              success: t.verificationSent(user.email),
+                          child: Text(
+                            t.verifyAutoCheck,
+                            style: AppText.caption.copyWith(
+                              color: AppColors.muted,
                             ),
                           ),
                         ),
-                        const SizedBox(width: Gap.m),
-                        AppButton(
-                          t.iVerified,
-                          dense: true,
-                          loading: _checking,
-                          onPressed: () async {
-                            setState(() => _checking = true);
-                            await _run(
-                              () => ref.read(backendProvider).reloadUser(),
-                            );
-                            if (mounted) setState(() => _checking = false);
-                          },
-                        ),
                       ],
+                    ),
+                    const SizedBox(height: Gap.m),
+                    AppButton(
+                      t.resendVerification,
+                      style: AppButtonStyle.outlined,
+                      dense: true,
+                      expand: true,
+                      onPressed: () => _run(
+                        () => ref.read(backendProvider).sendEmailVerification(),
+                        success: t.verificationSent(user.email),
+                      ),
                     ),
                   ],
                 ),
@@ -302,22 +338,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             ),
             child: Column(
               children: [
-                _Action(
-                  icon: Icons.favorite_border_rounded,
-
-                  label: t.followedMasjids,
-
-                  onTap: () => push(context, const FollowedMasjidsScreen()),
-                ),
-                const Divider(),
-                _Action(
-                  icon: Icons.mosque_outlined,
-
-                  label: t.manageMasjids,
-
-                  onTap: () => push(context, const ManageMasjidsScreen()),
-                ),
-                const Divider(),
                 if (user.hasPassword) ...[
                   _Action(
                     icon: Icons.lock_reset_rounded,
@@ -330,6 +350,28 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   icon: Icons.logout_rounded,
                   label: t.signOut,
                   onTap: () async {
+                    final ok = await showDialog<bool>(
+                      context: context,
+                      builder: (d) => AlertDialog(
+                        backgroundColor: AppColors.cream,
+                        title: Text(t.signOutTitle, style: AppText.subtitle),
+                        content: Text(t.signOutBody, style: AppText.body),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.pop(d, false),
+                            child: Text(t.cancel),
+                          ),
+                          TextButton(
+                            onPressed: () => Navigator.pop(d, true),
+                            child: Text(
+                              t.signOut,
+                              style: TextStyle(color: AppColors.danger),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                    if (ok != true) return;
                     await ref.read(backendProvider).signOut();
                     if (context.mounted) Navigator.pop(context);
                   },

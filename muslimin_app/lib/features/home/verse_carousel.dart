@@ -119,8 +119,16 @@ class _VerseCard extends StatelessWidget {
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
                 colors: dark
-                    ? const [Color(0xFF2A2A12), Color(0xFF13241F), Color(0xFF173A33)]
-                    : const [Color(0xFFFFE7A3), Color(0xFFF7F0D8), Color(0xFFCDEBDF)],
+                    ? const [
+                        Color(0xFF2A2A12),
+                        Color(0xFF13241F),
+                        Color(0xFF173A33),
+                      ]
+                    : const [
+                        Color(0xFFFFE7A3),
+                        Color(0xFFF7F0D8),
+                        Color(0xFFCDEBDF),
+                      ],
               ),
             ),
           ),

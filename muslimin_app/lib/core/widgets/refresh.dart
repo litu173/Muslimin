@@ -35,22 +35,38 @@ class PullToRefresh extends StatelessWidget {
     onRefresh: onRefresh,
     refreshTriggerPullDistance: 90,
     refreshIndicatorExtent: 56,
+    // A fixed-size spinner that only fades: it never grows with the pull
+    // and stays just above the content instead of sliding with the gap.
     builder: (context, mode, pulled, trigger, extent) {
-      final p = (pulled / trigger).clamp(0.0, 1.0);
-      final spinning =
-          mode == RefreshIndicatorMode.refresh ||
-          mode == RefreshIndicatorMode.armed;
-      return Center(
-        child: Opacity(
-          opacity: mode == RefreshIndicatorMode.inactive ? 0 : 1,
-          child: SizedBox(
-            width: 26,
-            height: 26,
-            child: CircularProgressIndicator(
-              strokeWidth: 2.6,
-              color: AppColors.gold,
-              backgroundColor: AppColors.gold.withValues(alpha: 0.15),
-              value: spinning ? null : p,
+      final opacity = switch (mode) {
+        RefreshIndicatorMode.inactive => 0.0,
+        RefreshIndicatorMode.drag => ((pulled - 16) / (trigger * 0.6)).clamp(
+          0.0,
+          1.0,
+        ),
+        RefreshIndicatorMode.armed || RefreshIndicatorMode.refresh => 1.0,
+        RefreshIndicatorMode.done => (pulled / extent).clamp(0.0, 1.0),
+      };
+      // OverflowBox: the gap starts at 0 px tall; the spinner keeps its
+      // size instead of being squeezed while the gap opens.
+      return OverflowBox(
+        alignment: Alignment.bottomCenter,
+        minWidth: 0,
+        maxWidth: 40,
+        minHeight: 0,
+        maxHeight: 40,
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: Opacity(
+            opacity: opacity,
+            child: SizedBox.square(
+              dimension: 24,
+              child: CircularProgressIndicator(
+                strokeWidth: 2.4,
+                strokeCap: StrokeCap.round,
+                color: AppColors.gold,
+                backgroundColor: AppColors.gold.withValues(alpha: 0.15),
+              ),
             ),
           ),
         ),

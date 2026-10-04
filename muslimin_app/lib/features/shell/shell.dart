@@ -85,13 +85,20 @@ class _NavItem extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(icon, size: 22, color: AppColors.ink),
+          // Selected tab in gold, like every other "active" state.
+          Icon(
+            icon,
+            size: 22,
+            color: selected ? AppColors.gold : AppColors.muted,
+          ),
           const SizedBox(height: 2),
-          Text(
-            label,
+          AnimatedDefaultTextStyle(
+            duration: const Duration(milliseconds: 180),
             style: AppText.caption.copyWith(
+              color: selected ? AppColors.gold : AppColors.muted,
               fontWeight: selected ? FontWeight.w600 : FontWeight.w400,
             ),
+            child: Text(label),
           ),
         ],
       ),

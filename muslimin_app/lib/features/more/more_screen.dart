@@ -52,70 +52,84 @@ class _MoreScreenState extends ConsumerState<MoreScreen> {
       body: SafeArea(
         child: RefreshList(
           onRefresh: () => refreshAll(ref),
-          padding: const EdgeInsets.fromLTRB(Gap.l, Gap.s, Gap.l, Gap.xxl),
+          padding: const EdgeInsets.fromLTRB(0, Gap.s, 0, Gap.xxl),
           children: [
-            const LocationBar(),
+            // Same insets as on Home, so the bell does not jump when
+            // switching tabs.
+            const Padding(
+              padding: EdgeInsets.fromLTRB(Gap.l, 0, Gap.s, 0),
+              child: LocationBar(),
+            ),
             const SizedBox(height: Gap.l),
-            _AccountCard(),
-            const SizedBox(height: Gap.l),
-            if (showBanner) ...[
-              AuthorityBanner(
-                showDontShow: true,
-                onClose: () => setState(() => _bannerClosed = true),
-              ),
-              const SizedBox(height: Gap.xl),
-            ],
-            AppCard(
-              padding: const EdgeInsets.symmetric(
-                horizontal: Gap.l,
-                vertical: Gap.xs,
-              ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: Gap.l),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  _MenuRow(
-                    icon: Icons.favorite_border_rounded,
-
-                    label: t.followedMasjids,
-
-                    onTap: () => push(context, const FollowedMasjidsScreen()),
-                  ),
-                  const Divider(),
-                  _MenuRow(
-                    icon: Icons.settings_outlined,
-                    label: t.appSettings,
-                    onTap: () => push(context, const SettingsScreen()),
-                  ),
-                  const Divider(),
-                  _MenuRow(
-                    icon: Icons.help_outline_rounded,
-                    label: t.faq,
-                    onTap: () => push(context, const FaqScreen()),
-                  ),
-                  const Divider(),
-                  _MenuRow(
-                    icon: Icons.info_outline_rounded,
-                    label: t.aboutApp,
-                    onTap: () => push(context, const AboutScreen()),
-                  ),
-                  const Divider(),
-                  _MenuRow(
-                    icon: Icons.mosque_outlined,
-                    label: t.manageMasjids,
-                    onTap: () => push(context, const ManageMasjidsScreen()),
-                  ),
-                  if (user?.isSuperAdmin ?? false) ...[
-                    const Divider(),
-                    _MenuRow(
-                      icon: Icons.verified_user_outlined,
-                      label: t.adminPanel,
-                      onTap: () => push(context, const AdminPanelScreen()),
+                  _AccountCard(),
+                  const SizedBox(height: Gap.l),
+                  if (showBanner) ...[
+                    AuthorityBanner(
+                      showDontShow: true,
+                      onClose: () => setState(() => _bannerClosed = true),
                     ),
+                    const SizedBox(height: Gap.xl),
                   ],
+                  AppCard(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: Gap.l,
+                      vertical: Gap.xs,
+                    ),
+                    child: Column(
+                      children: [
+                        _MenuRow(
+                          icon: Icons.favorite_border_rounded,
+                          label: t.followedMasjids,
+                          onTap: () =>
+                              push(context, const FollowedMasjidsScreen()),
+                        ),
+                        const Divider(),
+                        _MenuRow(
+                          icon: Icons.mosque_outlined,
+                          label: t.manageMasjids,
+                          onTap: () =>
+                              push(context, const ManageMasjidsScreen()),
+                        ),
+                        const Divider(),
+                        _MenuRow(
+                          icon: Icons.settings_outlined,
+                          label: t.appSettings,
+                          onTap: () => push(context, const SettingsScreen()),
+                        ),
+                        const Divider(),
+                        _MenuRow(
+                          icon: Icons.help_outline_rounded,
+                          label: t.faq,
+                          onTap: () => push(context, const FaqScreen()),
+                        ),
+                        const Divider(),
+                        _MenuRow(
+                          icon: Icons.info_outline_rounded,
+                          label: t.aboutApp,
+                          onTap: () => push(context, const AboutScreen()),
+                        ),
+                        if (user?.isSuperAdmin ?? false) ...[
+                          const Divider(),
+                          _MenuRow(
+                            icon: Icons.verified_user_outlined,
+                            label: t.adminPanel,
+                            onTap: () =>
+                                push(context, const AdminPanelScreen()),
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: Gap.xxl * 2),
+                  _ShareCard(),
                 ],
               ),
             ),
-            const SizedBox(height: Gap.xxl * 2),
-            _ShareCard(),
           ],
         ),
       ),

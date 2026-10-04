@@ -203,7 +203,7 @@ Future<void> showNoticeDetails(
 }
 
 /// Horizontal category filter used on Home ("All · Talim · Quran · …").
-class NoticeFilterBar extends StatelessWidget {
+class NoticeFilterBar extends StatefulWidget {
   const NoticeFilterBar({
     super.key,
     required this.selected,
@@ -224,6 +224,35 @@ class NoticeFilterBar extends StatelessWidget {
   ];
 
   @override
+  State<NoticeFilterBar> createState() => _NoticeFilterBarState();
+}
+
+class _NoticeFilterBarState extends State<NoticeFilterBar> {
+  final _keys = {
+    for (final c in <NoticeCategory?>[null, ...NoticeFilterBar.order])
+      c: GlobalKey(),
+  };
+
+  @override
+  void didUpdateWidget(NoticeFilterBar old) {
+    super.didUpdateWidget(old);
+    // Keep the selected chip in view when the category changes by swiping.
+    if (old.selected != widget.selected) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        final ctx = _keys[widget.selected]?.currentContext;
+        if (ctx != null && ctx.mounted) {
+          Scrollable.ensureVisible(
+            ctx,
+            alignment: 0.5,
+            duration: const Duration(milliseconds: 280),
+            curve: Curves.easeOutCubic,
+          );
+        }
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final f = Fmt.of(context);
     final t = L10n.of(context);
@@ -234,16 +263,18 @@ class NoticeFilterBar extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: Gap.l),
         children: [
           AppChip(
+            key: _keys[null],
             label: t.all,
-            selected: selected == null,
-            onTap: () => onChanged(null),
+            selected: widget.selected == null,
+            onTap: () => widget.onChanged(null),
           ),
-          for (final c in order) ...[
+          for (final c in NoticeFilterBar.order) ...[
             const SizedBox(width: Gap.m),
             AppChip(
+              key: _keys[c],
               label: f.category(c, short: true),
-              selected: selected == c,
-              onTap: () => onChanged(c),
+              selected: widget.selected == c,
+              onTap: () => widget.onChanged(c),
             ),
           ],
         ],

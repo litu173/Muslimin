@@ -491,7 +491,6 @@
   "emailVerified": "Email verified",
   "resendVerification": "Send verification email",
   "verificationSent": "Verification email sent to {email}.",
-  "iVerified": "I've verified",
   "changePassword": "Change Password",
   "currentPassword": "Current Password",
   "newPassword": "New Password",
@@ -583,5 +582,8 @@
   "themeLight": "Light",
   "themeDark": "Dark",
   "appearanceHint": "Dark mode is easier on the eyes at Fajr and Isha.",
-  "pullToRefresh": "Pull down to refresh"
+  "pullToRefresh": "Pull down to refresh",
+  "verifyAutoCheck": "Open the link we emailed you — this page updates by itself once you're verified.",
+  "signOutTitle": "Sign out?",
+  "signOutBody": "You will need to sign in again to see your followed masjids and get jamat reminders on this phone."
 }

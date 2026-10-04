@@ -10,6 +10,7 @@ import '../../core/theme/app_text.dart';
 import '../../core/widgets/brand.dart';
 import '../../core/widgets/buttons.dart';
 import '../../core/widgets/islamic_pattern.dart';
+import '../../core/widgets/language_toggle.dart';
 import '../../core/widgets/surfaces.dart';
 import '../../l10n/app_localizations.dart';
 import '../../state/providers.dart';
@@ -60,6 +61,10 @@ class WelcomeScreen extends ConsumerWidget {
               padding: const EdgeInsets.all(Gap.xl),
               child: Column(
                 children: [
+                  Align(
+                    alignment: AlignmentDirectional.centerEnd,
+                    child: LanguageToggle(color: AppColors.goldLight),
+                  ),
                   const Spacer(flex: 2),
                   Image.asset('assets/images/onboard_mosque.png', height: 170),
                   const SizedBox(height: Gap.xl),

@@ -1047,9 +1047,6 @@ class L10nEn extends L10n {
   }
 
   @override
-  String get iVerified => 'I\'ve verified';
-
-  @override
   String get changePassword => 'Change Password';
 
   @override
@@ -1219,4 +1216,15 @@ class L10nEn extends L10n {
 
   @override
   String get pullToRefresh => 'Pull down to refresh';
+
+  @override
+  String get verifyAutoCheck =>
+      'Open the link we emailed you — this page updates by itself once you\'re verified.';
+
+  @override
+  String get signOutTitle => 'Sign out?';
+
+  @override
+  String get signOutBody =>
+      'You will need to sign in again to see your followed masjids and get jamat reminders on this phone.';
 }

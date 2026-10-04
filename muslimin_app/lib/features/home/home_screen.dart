@@ -12,6 +12,7 @@ import '../../core/widgets/countdown_ring.dart';
 import '../../core/widgets/islamic_pattern.dart';
 import '../../core/widgets/refresh.dart';
 import '../../core/widgets/surfaces.dart';
+import '../../core/widgets/swipe_tabs.dart';
 import '../../data/models/notice.dart';
 import '../../l10n/app_localizations.dart';
 import '../../state/providers.dart';
@@ -33,6 +34,9 @@ class HomeScreen extends ConsumerStatefulWidget {
 class _HomeScreenState extends ConsumerState<HomeScreen>
     with SingleTickerProviderStateMixin {
   NoticeCategory? _filter;
+
+  /// "All" followed by the categories, in the chip bar's order.
+  static const _noticeTabs = <NoticeCategory?>[null, ...NoticeFilterBar.order];
   bool _bannerClosed = false;
 
   /// Entrance: body sections slide up and fade in, one after another.
@@ -181,40 +185,45 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
               ),
             ),
             const SliverToBoxAdapter(child: SizedBox(height: Gap.l)),
-            ...notices.when(
-              loading: () => [const SliverToBoxAdapter(child: Loader())],
-              error: (_, _) => [
-                SliverToBoxAdapter(
-                  child: EmptyState(inCard: true, message: t.somethingWrong),
-                ),
-              ],
-              data: (all) {
-                final list = _filter == null
-                    ? all
-                    : all.where((n) => n.category == _filter).toList();
-                if (list.isEmpty) {
-                  return [
-                    SliverToBoxAdapter(
-                      child: EmptyState(
-                        inCard: true,
-                        message: t.noNotices,
-                        icon: Icons.campaign_outlined,
-                      ),
-                    ),
-                  ];
-                }
-                return [
-                  SliverPadding(
-                    padding: const EdgeInsets.symmetric(horizontal: Gap.l),
-                    sliver: SliverList.separated(
-                      itemCount: list.length,
-                      separatorBuilder: (_, _) => const SizedBox(height: 10),
-                      itemBuilder: (_, i) =>
-                          _in(9 + i, NoticeCard(notice: list[i])),
-                    ),
+            // Swipe sideways on the notices to switch category, like the
+            // tabs on a masjid page.
+            SliverToBoxAdapter(
+              child: _in(
+                9,
+                SwipeTabs(
+                  index: _noticeTabs.indexOf(_filter),
+                  count: _noticeTabs.length,
+                  onChanged: (i) => setState(() => _filter = _noticeTabs[i]),
+                  child: notices.when(
+                    loading: () => const Loader(),
+                    error: (_, _) =>
+                        EmptyState(inCard: true, message: t.somethingWrong),
+                    data: (all) {
+                      final list = _filter == null
+                          ? all
+                          : all.where((n) => n.category == _filter).toList();
+                      if (list.isEmpty) {
+                        return EmptyState(
+                          inCard: true,
+                          message: t.noNotices,
+                          icon: Icons.campaign_outlined,
+                        );
+                      }
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: Gap.l),
+                        child: Column(
+                          children: [
+                            for (final (i, n) in list.indexed) ...[
+                              if (i > 0) const SizedBox(height: 10),
+                              NoticeCard(notice: n),
+                            ],
+                          ],
+                        ),
+                      );
+                    },
                   ),
-                ];
-              },
+                ),
+              ),
             ),
             const SliverToBoxAdapter(child: SizedBox(height: Gap.xxl)),
           ],

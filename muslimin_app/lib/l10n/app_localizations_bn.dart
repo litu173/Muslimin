@@ -1046,9 +1046,6 @@ class L10nBn extends L10n {
   }
 
   @override
-  String get iVerified => 'যাচাই করেছি';
-
-  @override
   String get changePassword => 'পাসওয়ার্ড পরিবর্তন';
 
   @override
@@ -1217,4 +1214,15 @@ class L10nBn extends L10n {
 
   @override
   String get pullToRefresh => 'রিফ্রেশ করতে নিচে টানুন';
+
+  @override
+  String get verifyAutoCheck =>
+      'ইমেইলে পাঠানো লিংকটি খুলুন — যাচাই হলে এই পেজ নিজেই আপডেট হবে।';
+
+  @override
+  String get signOutTitle => 'সাইন আউট করবেন?';
+
+  @override
+  String get signOutBody =>
+      'এই ফোনে ফলো করা মসজিদ দেখতে ও জামাতের রিমাইন্ডার পেতে আবার সাইন ইন করতে হবে।';
 }

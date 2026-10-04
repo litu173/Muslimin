@@ -9,6 +9,7 @@ import '../../core/theme/app_colors.dart';
 import '../../core/widgets/brand.dart';
 import '../../core/widgets/countdown_ring.dart';
 import '../../core/widgets/islamic_pattern.dart';
+import '../../core/widgets/language_toggle.dart';
 import '../../core/widgets/surfaces.dart';
 import '../../core/utils/format.dart';
 import '../../data/models/prayer.dart';
@@ -56,6 +57,13 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
         child: SheetCard(
           child: Column(
             children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(Gap.l, Gap.l, Gap.l, 0),
+                child: Align(
+                  alignment: AlignmentDirectional.centerEnd,
+                  child: LanguageToggle(color: AppColors.gold),
+                ),
+              ),
               Expanded(
                 child: PageView.builder(
                   controller: _page,
