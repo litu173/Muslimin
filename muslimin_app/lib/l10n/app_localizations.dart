@@ -2226,6 +2226,24 @@ abstract class L10n {
   /// In en, this message translates to:
   /// **'Reminder {minutes} min'**
   String reminderBadge(String minutes);
+
+  /// No description provided for @manageMasjids.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage Masjids'**
+  String get manageMasjids;
+
+  /// No description provided for @noMyMasjids.
+  ///
+  /// In en, this message translates to:
+  /// **'You haven’t registered a masjid yet.'**
+  String get noMyMasjids;
+
+  /// No description provided for @noMyMasjidsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Committee members, imam, khatib, moazzin or khadem can register their masjid. Our team verifies it before it goes public.'**
+  String get noMyMasjidsHint;
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {

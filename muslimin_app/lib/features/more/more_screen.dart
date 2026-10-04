@@ -16,11 +16,10 @@ import '../auth/auth_screens.dart';
 import '../auth/profile_screen.dart';
 import '../home/home_screen.dart';
 import '../home/location_bar.dart';
-import '../masjid/masjid_screen.dart';
-import '../registration/registration_flow.dart';
 import 'about_screen.dart';
 import 'faq_screen.dart';
 import 'followed_masjids_screen.dart';
+import 'manage_masjids_screen.dart';
 import 'settings_screen.dart';
 
 /// Public download page – update once the website is live.
@@ -64,11 +63,6 @@ class _MoreScreenState extends ConsumerState<MoreScreen> {
               ),
               const SizedBox(height: Gap.xl),
             ],
-            for (final m in mine) ...[
-              _MyMasjidCard(masjid: m),
-              const SizedBox(height: Gap.m),
-            ],
-            if (mine.isNotEmpty) const SizedBox(height: Gap.s),
             AppCard(
               padding: const EdgeInsets.symmetric(
                 horizontal: Gap.l,
@@ -101,14 +95,12 @@ class _MoreScreenState extends ConsumerState<MoreScreen> {
                     label: t.aboutApp,
                     onTap: () => push(context, const AboutScreen()),
                   ),
-                  if (!showBanner) ...[
-                    const Divider(),
-                    _MenuRow(
-                      icon: Icons.add_business_outlined,
-                      label: t.registerMasjid,
-                      onTap: () => startRegistration(context, ref),
-                    ),
-                  ],
+                  const Divider(),
+                  _MenuRow(
+                    icon: Icons.mosque_outlined,
+                    label: t.manageMasjids,
+                    onTap: () => push(context, const ManageMasjidsScreen()),
+                  ),
                   if (user?.isSuperAdmin ?? false) ...[
                     const Divider(),
                     _MenuRow(
@@ -123,72 +115,6 @@ class _MoreScreenState extends ConsumerState<MoreScreen> {
             const SizedBox(height: Gap.xxl * 2),
             _ShareCard(),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class _MyMasjidCard extends StatelessWidget {
-  const _MyMasjidCard({required this.masjid});
-
-  final Masjid masjid;
-
-  @override
-  Widget build(BuildContext context) {
-    final t = L10n.of(context);
-    final (label, color) = switch (masjid.status) {
-      MasjidStatus.approved => (t.statusApproved, Colors.white),
-      MasjidStatus.pending => (t.statusPending, AppColors.ink),
-      MasjidStatus.rejected => (t.statusRejected, AppColors.danger),
-      MasjidStatus.suspended => (t.statusSuspended, AppColors.danger),
-    };
-    return Material(
-      color: AppColors.gold,
-      borderRadius: BorderRadius.circular(Radii.card),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(Radii.card),
-        onTap: () =>
-            push(context, MasjidScreen(masjidId: masjid.id, initial: masjid)),
-        child: Padding(
-          padding: const EdgeInsets.all(Gap.l),
-          child: Row(
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Flexible(
-                          child: Text(
-                            masjid.displayName(
-                              Localizations.localeOf(context).languageCode ==
-                                  'bn',
-                            ),
-                            style: AppText.subtitle.copyWith(
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: Gap.s),
-                        if (masjid.status != MasjidStatus.approved)
-                          StatusPill(label: label, color: color),
-                      ],
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      masjid.fullAddress,
-                      style: AppText.body.copyWith(
-                        color: Colors.white.withValues(alpha: 0.85),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const Icon(Icons.chevron_right_rounded, color: Colors.white),
-            ],
-          ),
         ),
       ),
     );

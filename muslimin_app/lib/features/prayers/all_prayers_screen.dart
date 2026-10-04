@@ -5,7 +5,6 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text.dart';
 import '../../core/utils/format.dart';
-import '../../core/widgets/islamic_pattern.dart';
 import '../../core/widgets/surfaces.dart';
 import '../../data/models/prayer.dart';
 import '../../l10n/app_localizations.dart';
@@ -56,153 +55,145 @@ class AllPrayersScreen extends ConsumerWidget {
       ),
       body: day == null
           ? const Loader()
-          : IslamicPattern(
-              child: ListView(
-                children: [
-                  for (final e in day.windows.entries) ...[
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: Gap.xl,
-                        vertical: 20,
-                      ),
-                      child: Row(
-                        children: [
-                          SizedBox(
-                            width: 100,
-                            child: Text(
-                              f.prayer(e.key),
-                              style: AppText.subtitle.copyWith(
-                                color: cream,
-                                fontWeight: FontWeight.w600,
-                              ),
+          : ListView(
+              children: [
+                for (final e in day.windows.entries) ...[
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: Gap.xl,
+                      vertical: 20,
+                    ),
+                    child: Row(
+                      children: [
+                        SizedBox(
+                          width: 100,
+                          child: Text(
+                            f.prayer(e.key),
+                            style: AppText.subtitle.copyWith(
+                              color: cream,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
-                          if (waqt?.isCurrent == true &&
-                              (waqt!.prayer == e.key ||
-                                  (waqt.prayer == Prayer.jumuah &&
-                                      e.key == Prayer.dhuhr)))
-                            Text(
-                              t.now,
-                              style: AppText.subtitle.copyWith(
-                                color: AppColors.goldLight,
-                              ),
-                            ),
-                          const Spacer(),
+                        ),
+                        if (waqt?.isCurrent == true &&
+                            (waqt!.prayer == e.key ||
+                                (waqt.prayer == Prayer.jumuah &&
+                                    e.key == Prayer.dhuhr)))
                           Text(
-                            f.range(e.value.start, e.value.end),
-                            style: AppText.subtitle.copyWith(color: cream),
+                            t.now,
+                            style: AppText.subtitle.copyWith(
+                              color: AppColors.goldLight,
+                            ),
+                          ),
+                        const Spacer(),
+                        Text(
+                          f.range(e.value.start, e.value.end),
+                          style: AppText.subtitle.copyWith(color: cream),
+                        ),
+                      ],
+                    ),
+                  ),
+                  if (e.key != Prayer.isha)
+                    Divider(
+                      color: cream.withValues(alpha: 0.12),
+                      indent: Gap.xl,
+                      endIndent: Gap.xl,
+                    ),
+                ],
+                const SizedBox(height: Gap.s),
+                // ---- forbidden times (cream panel)
+                Container(
+                  color: AppColors.cream,
+                  padding: const EdgeInsets.fromLTRB(
+                    Gap.xl,
+                    Gap.l,
+                    Gap.xl,
+                    Gap.l,
+                  ),
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Text(t.forbiddenTime, style: AppText.body),
+                          ),
+                          Tooltip(
+                            triggerMode: TooltipTriggerMode.tap,
+                            message: t.forbiddenInfo,
+                            child: const Icon(
+                              Icons.info_outline_rounded,
+                              color: AppColors.ink,
+                              size: 20,
+                            ),
                           ),
                         ],
                       ),
-                    ),
-                    if (e.key != Prayer.isha)
-                      Divider(
-                        color: cream.withValues(alpha: 0.12),
-                        indent: Gap.xl,
-                        endIndent: Gap.xl,
+                      _lightRow(
+                        t.morning,
+                        f.range(
+                          day.forbiddenMorning.start,
+                          day.forbiddenMorning.end,
+                        ),
                       ),
-                  ],
-                  const SizedBox(height: Gap.s),
-                  // ---- forbidden times (cream panel)
-                  Container(
-                    color: AppColors.cream,
-                    padding: const EdgeInsets.fromLTRB(
-                      Gap.xl,
-                      Gap.l,
-                      Gap.xl,
-                      Gap.l,
-                    ),
-                    child: Column(
-                      children: [
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Text(t.forbiddenTime, style: AppText.body),
-                            ),
-                            Tooltip(
-                              triggerMode: TooltipTriggerMode.tap,
-                              message: t.forbiddenInfo,
-                              child: const Icon(
-                                Icons.info_outline_rounded,
-                                color: AppColors.ink,
-                                size: 20,
-                              ),
-                            ),
-                          ],
+                      const Divider(),
+                      _lightRow(
+                        t.noon,
+                        f.range(day.forbiddenNoon.start, day.forbiddenNoon.end),
+                      ),
+                      const Divider(),
+                      _lightRow(
+                        t.evening,
+                        f.range(
+                          day.forbiddenEvening.start,
+                          day.forbiddenEvening.end,
                         ),
-                        _lightRow(
-                          t.morning,
-                          f.range(
-                            day.forbiddenMorning.start,
-                            day.forbiddenMorning.end,
-                          ),
-                        ),
-                        const Divider(),
-                        _lightRow(
-                          t.noon,
-                          f.range(
-                            day.forbiddenNoon.start,
-                            day.forbiddenNoon.end,
-                          ),
-                        ),
-                        const Divider(),
-                        _lightRow(
-                          t.evening,
-                          f.range(
-                            day.forbiddenEvening.start,
-                            day.forbiddenEvening.end,
-                          ),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                  // ---- nafl
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(
-                      Gap.xl,
-                      Gap.xxl,
-                      Gap.xl,
-                      Gap.xxl,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          t.naflPrayers,
-                          style: AppText.body.copyWith(color: cream),
-                        ),
-                        const SizedBox(height: Gap.l),
-                        _NaflBlock(
-                          name: t.tahajjud,
-                          time:
-                              '${f.timeUpper(day.tahajjud.start)} - ${f.timeUpper(day.tahajjud.end)}',
-                          hadith: [(t.tahajjudHadith, t.tahajjudSource)],
-                        ),
-                        Divider(
-                          color: cream.withValues(alpha: 0.12),
-                          height: 40,
-                        ),
-                        _NaflBlock(
-                          name: t.duha,
-                          time:
-                              '${f.timeUpper(day.duha.start)} - ${f.timeUpper(day.duha.end)}',
-                          hadith: [
-                            (t.duhaHadith1, t.duhaSource1),
-                            (t.duhaHadith2, t.duhaSource2),
-                          ],
-                        ),
-                        const SizedBox(height: Gap.xxl),
-                        Text(
-                          t.calcMethodNote,
-                          style: AppText.caption.copyWith(
-                            color: cream.withValues(alpha: 0.6),
-                          ),
-                        ),
-                      ],
-                    ),
+                ),
+                // ---- nafl
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(
+                    Gap.xl,
+                    Gap.xxl,
+                    Gap.xl,
+                    Gap.xxl,
                   ),
-                ],
-              ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        t.naflPrayers,
+                        style: AppText.body.copyWith(color: cream),
+                      ),
+                      const SizedBox(height: Gap.l),
+                      _NaflBlock(
+                        name: t.tahajjud,
+                        time:
+                            '${f.timeUpper(day.tahajjud.start)} - ${f.timeUpper(day.tahajjud.end)}',
+                        hadith: [(t.tahajjudHadith, t.tahajjudSource)],
+                      ),
+                      Divider(color: cream.withValues(alpha: 0.12), height: 40),
+                      _NaflBlock(
+                        name: t.duha,
+                        time:
+                            '${f.timeUpper(day.duha.start)} - ${f.timeUpper(day.duha.end)}',
+                        hadith: [
+                          (t.duhaHadith1, t.duhaSource1),
+                          (t.duhaHadith2, t.duhaSource2),
+                        ],
+                      ),
+                      const SizedBox(height: Gap.xxl),
+                      Text(
+                        t.calcMethodNote,
+                        style: AppText.caption.copyWith(
+                          color: cream.withValues(alpha: 0.6),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
     );
   }

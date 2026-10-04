@@ -11,6 +11,7 @@ import '../../core/theme/app_text.dart';
 import '../../core/utils/format.dart';
 import '../../core/utils/geo.dart';
 import '../../core/widgets/buttons.dart';
+import '../../core/widgets/islamic_pattern.dart';
 import '../../core/widgets/surfaces.dart';
 import '../../data/models/masjid.dart';
 import '../../l10n/app_localizations.dart';
@@ -130,125 +131,130 @@ class _Header extends ConsumerWidget {
       walk = d < 2500 ? t.minWalk(f.digits(walkMinutes(d))) : f.distance(d);
     }
 
-    return Container(
-      color: AppColors.ink,
-      padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              const BackButton(color: AppColors.cream),
-              const Spacer(),
-              PopupMenuButton<String>(
-                icon: const Icon(
-                  Icons.more_horiz_rounded,
-                  color: AppColors.cream,
-                ),
-                color: AppColors.card,
-                onSelected: (v) {
-                  if (v == 'share') {
-                    SharePlus.instance.share(
-                      ShareParams(
-                        text:
-                            '${masjid.name}\n${masjid.fullAddress}\nhttps://maps.google.com/?q=${masjid.lat},${masjid.lng}',
-                      ),
-                    );
-                  } else if (v == 'dir') {
-                    openDirections(masjid);
-                  }
-                },
-                itemBuilder: (_) => [
-                  PopupMenuItem(value: 'share', child: Text(t.share)),
-                  PopupMenuItem(value: 'dir', child: Text(t.directions)),
-                ],
-              ),
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(Gap.xl, Gap.s, Gap.xl, Gap.xl),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
+    // Same patterned dark green as the Home prayer header.
+    return IslamicPattern(
+      child: Padding(
+        padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
               children: [
-                const MasjidBadge(),
-                const SizedBox(width: Gap.l),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        masjid.displayName(f.isBn),
-                        style: AppText.title.copyWith(color: AppColors.cream),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        masjid.fullAddress,
-                        style: AppText.body.copyWith(color: AppColors.cream),
-                      ),
-                      if (walk != null && walk.isNotEmpty) ...[
-                        const SizedBox(height: 4),
-                        Text(
-                          walk,
-                          style: AppText.caption.copyWith(
-                            color: AppColors.cream.withValues(alpha: 0.8),
-                          ),
-                        ),
-                      ],
-                      const SizedBox(height: Gap.m),
-                      Wrap(
-                        spacing: Gap.s,
-                        runSpacing: Gap.s,
-                        children: [
-                          AppButton(
-                            following ? t.following : t.follow,
-                            icon: following
-                                ? Icons.check_rounded
-                                : Icons.add_rounded,
-                            style: following
-                                ? AppButtonStyle.darkOutlined
-                                : AppButtonStyle.filled,
-                            pill: true,
-                            dense: true,
-                            onPressed: () async {
-                              final n = ref.read(followsProvider.notifier);
-                              if (following) {
-                                await n.unfollow(masjid.id);
-                              } else {
-                                await n.follow(masjid);
-                                if (context.mounted) {
-                                  toast(context, t.followedToast(masjid.name));
-                                }
-                              }
-                            },
-                          ),
-                          if (canEdit)
-                            AppButton(
-                              t.edit,
-                              icon: Icons.edit_outlined,
-                              style: AppButtonStyle.darkOutlined,
-                              dense: true,
-                              onPressed: () => push(
-                                context,
-                                EditMasjidInfoScreen(masjid: masjid),
-                              ),
-                            ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                IconButton(
-                  tooltip: t.directions,
-                  onPressed: () => openDirections(masjid),
+                const BackButton(color: AppColors.cream),
+                const Spacer(),
+                PopupMenuButton<String>(
                   icon: const Icon(
-                    Icons.explore_outlined,
+                    Icons.more_horiz_rounded,
                     color: AppColors.cream,
                   ),
+                  color: AppColors.card,
+                  onSelected: (v) {
+                    if (v == 'share') {
+                      SharePlus.instance.share(
+                        ShareParams(
+                          text:
+                              '${masjid.name}\n${masjid.fullAddress}\nhttps://maps.google.com/?q=${masjid.lat},${masjid.lng}',
+                        ),
+                      );
+                    } else if (v == 'dir') {
+                      openDirections(masjid);
+                    }
+                  },
+                  itemBuilder: (_) => [
+                    PopupMenuItem(value: 'share', child: Text(t.share)),
+                    PopupMenuItem(value: 'dir', child: Text(t.directions)),
+                  ],
                 ),
               ],
             ),
-          ),
-        ],
+            Padding(
+              padding: const EdgeInsets.fromLTRB(Gap.xl, Gap.s, Gap.xl, Gap.xl),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const MasjidBadge(),
+                  const SizedBox(width: Gap.l),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          masjid.displayName(f.isBn),
+                          style: AppText.title.copyWith(color: AppColors.cream),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          masjid.fullAddress,
+                          style: AppText.body.copyWith(color: AppColors.cream),
+                        ),
+                        if (walk != null && walk.isNotEmpty) ...[
+                          const SizedBox(height: 4),
+                          Text(
+                            walk,
+                            style: AppText.caption.copyWith(
+                              color: AppColors.cream.withValues(alpha: 0.8),
+                            ),
+                          ),
+                        ],
+                        const SizedBox(height: Gap.m),
+                        Wrap(
+                          spacing: Gap.s,
+                          runSpacing: Gap.s,
+                          children: [
+                            AppButton(
+                              following ? t.following : t.follow,
+                              icon: following
+                                  ? Icons.check_rounded
+                                  : Icons.add_rounded,
+                              style: following
+                                  ? AppButtonStyle.darkOutlined
+                                  : AppButtonStyle.filled,
+                              pill: true,
+                              dense: true,
+                              onPressed: () async {
+                                final n = ref.read(followsProvider.notifier);
+                                if (following) {
+                                  await n.unfollow(masjid.id);
+                                } else {
+                                  await n.follow(masjid);
+                                  if (context.mounted) {
+                                    toast(
+                                      context,
+                                      t.followedToast(masjid.name),
+                                    );
+                                  }
+                                }
+                              },
+                            ),
+                            if (canEdit)
+                              AppButton(
+                                t.edit,
+                                icon: Icons.edit_outlined,
+                                style: AppButtonStyle.darkOutlined,
+                                dense: true,
+                                onPressed: () => push(
+                                  context,
+                                  EditMasjidInfoScreen(masjid: masjid),
+                                ),
+                              ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  IconButton(
+                    tooltip: t.directions,
+                    onPressed: () => openDirections(masjid),
+                    icon: const Icon(
+                      Icons.explore_outlined,
+                      color: AppColors.cream,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

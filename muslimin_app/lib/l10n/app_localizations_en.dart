@@ -1190,4 +1190,14 @@ class L10nEn extends L10n {
   String reminderBadge(String minutes) {
     return 'Reminder $minutes min';
   }
+
+  @override
+  String get manageMasjids => 'Manage Masjids';
+
+  @override
+  String get noMyMasjids => 'You haven’t registered a masjid yet.';
+
+  @override
+  String get noMyMasjidsHint =>
+      'Committee members, imam, khatib, moazzin or khadem can register their masjid. Our team verifies it before it goes public.';
 }

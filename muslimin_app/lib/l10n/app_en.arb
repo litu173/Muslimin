@@ -574,5 +574,8 @@
         "type": "String"
       }
     }
-  }
+  },
+  "manageMasjids": "Manage Masjids",
+  "noMyMasjids": "You haven’t registered a masjid yet.",
+  "noMyMasjidsHint": "Committee members, imam, khatib, moazzin or khadem can register their masjid. Our team verifies it before it goes public."
 }

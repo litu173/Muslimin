@@ -13,6 +13,7 @@ import '../../data/models/app_user.dart';
 import '../../l10n/app_localizations.dart';
 import '../../state/providers.dart';
 import '../more/followed_masjids_screen.dart';
+import '../more/manage_masjids_screen.dart';
 import 'auth_errors.dart';
 
 /// Account details, email verification, password change, sign out, delete.
@@ -311,6 +312,14 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   label: t.followedMasjids,
 
                   onTap: () => push(context, const FollowedMasjidsScreen()),
+                ),
+                const Divider(),
+                _Action(
+                  icon: Icons.mosque_outlined,
+
+                  label: t.manageMasjids,
+
+                  onTap: () => push(context, const ManageMasjidsScreen()),
                 ),
                 const Divider(),
                 if (user.hasPassword) ...[

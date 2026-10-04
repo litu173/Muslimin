@@ -1188,4 +1188,14 @@ class L10nBn extends L10n {
   String reminderBadge(String minutes) {
     return 'রিমাইন্ডার $minutes মিনিট';
   }
+
+  @override
+  String get manageMasjids => 'মসজিদ পরিচালনা';
+
+  @override
+  String get noMyMasjids => 'আপনি এখনো কোনো মসজিদ নিবন্ধন করেননি।';
+
+  @override
+  String get noMyMasjidsHint =>
+      'কমিটির সদস্য, ইমাম, খতিব, মুয়াজ্জিন বা খাদেম তাঁদের মসজিদ নিবন্ধন করতে পারবেন। প্রকাশের আগে আমাদের টিম যাচাই করে।';
 }
