@@ -124,11 +124,21 @@
     details[open] summary::after { content: "–"; }
     details p { margin-top: 10px; opacity: .85; font-size: 14.5px; }
 
-    footer { padding: 36px 0 44px; font-size: 13.5px; }
-    footer .row { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; align-items: center; position: relative; z-index: 1; }
-    footer a { color: var(--gold-light); text-decoration: none; margin-left: 16px; }
-    footer .credits { position: relative; z-index: 1; margin-top: 18px; font-size: 12px; opacity: .65; }
-    footer .credits a { margin-left: 0; }
+    footer { padding: 48px 0 40px; font-size: 13.5px; }
+    footer .wrap { position: relative; z-index: 1; }
+    .foot-grid { display: grid; grid-template-columns: 1.6fr 1fr 1fr 1fr; gap: 32px; }
+    .foot-brand img { height: 30px; display: block; }
+    .foot-brand p { margin: 12px 0 0; opacity: .75; max-width: 300px; }
+    .foot-brand .beta { margin-left: 0; display: inline-block; margin-top: 12px; }
+    footer h4 { font-size: 12px; letter-spacing: 1.2px; text-transform: uppercase; color: var(--gold-light); margin: 4px 0 12px; font-weight: 600; }
+    footer ul { list-style: none; margin: 0; padding: 0; }
+    footer li { margin-bottom: 8px; }
+    footer a { color: var(--cream); text-decoration: none; opacity: .85; }
+    footer a:hover { opacity: 1; color: var(--gold-light); }
+    .foot-bottom { margin-top: 32px; padding-top: 20px; border-top: 1px solid rgba(243,238,213,.12); display: flex;
+      justify-content: space-between; gap: 12px; flex-wrap: wrap; font-size: 12.5px; opacity: .75; }
+    footer .credits { margin-top: 14px; font-size: 12px; opacity: .6; line-height: 1.7; }
+    footer .credits a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
 
     @media (max-width: 880px) {
       .hero-grid { grid-template-columns: 1fr; padding: 16px 0 64px; gap: 40px; }
@@ -139,6 +149,8 @@
       .nav-link { display: none; }
       .store { flex: 1 1 100%; }
       section { padding: 60px 0; }
+      .foot-grid { grid-template-columns: 1fr 1fr; }
+      .foot-brand { grid-column: 1 / -1; }
     }
   </style>
 </head>
@@ -198,7 +210,7 @@
         <div class="card">
           <div class="icon"><svg viewBox="0 0 24 24"><path d="M6 8a6 6 0 1112 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 003.4 0"/></svg></div>
           <h3 data-i18n="f2">Jamat reminders</h3>
-          <p data-i18n="f2d">Follow your masjid and get notified 15, 30 or 45 minutes before every jamat — even when the app is closed.</p>
+          <p data-i18n="f2d">Follow your masjid and get notified 15, 30 or 45 minutes before every jamat — even when the app is closed. Followed masjids wear a gold badge.</p>
         </div>
         <div class="card">
           <div class="icon"><svg viewBox="0 0 24 24"><path d="M3 11l18-8-8 18-2-8-8-2z"/></svg></div>
@@ -213,12 +225,27 @@
         <div class="card">
           <div class="icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0116 0"/></svg></div>
           <h3 data-i18n="f5">Your account, synced</h3>
-          <p data-i18n="f5d">Create a free account to keep followed masjids and reminders on every phone. Reset your password anytime.</p>
+          <p data-i18n="f5d">Sign in with email or Google to keep followed masjids and reminders on every phone. Reset your password or delete your account anytime.</p>
         </div>
         <div class="card">
           <div class="icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg></div>
           <h3 data-i18n="f6">Verified masjids</h3>
           <p data-i18n="f6d">Every masjid profile is created from inside the masjid and checked by our team before it goes public.</p>
+        </div>
+        <div class="card">
+          <div class="icon"><svg viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"/></svg></div>
+          <h3 data-i18n="f7">Light &amp; dark mode</h3>
+          <p data-i18n="f7d">A calm cream theme for the day and a premium deep-green dark theme for Fajr and Isha — or follow your phone.</p>
+        </div>
+        <div class="card">
+          <div class="icon"><svg viewBox="0 0 24 24"><path d="M4 5h7M7.5 5v2c0 3-2 6-4 7"/><path d="M5 10c1 2 3 3.5 6 4"/><path d="M13 20l4-9 4 9M14.5 17h5"/></svg></div>
+          <h3 data-i18n="f8">Fully in Bangla</h3>
+          <p data-i18n="f8d">Every screen in Bangla or English, with Bangla digits, Bangla day-parts (ভোর, দুপুর, সন্ধ্যা) and Hijri dates.</p>
+        </div>
+        <div class="card">
+          <div class="icon"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="12" rx="2"/><path d="M10 9l4 2-4 2z"/><path d="M8 21h8"/></svg></div>
+          <h3 data-i18n="f9">Live from the masjid</h3>
+          <p data-i18n="f9d">Watch Jum'ah khutbah and waz live from your masjid's YouTube or Facebook, and pull down on any page to refresh.</p>
         </div>
       </div>
     </div>
@@ -285,7 +312,7 @@
   </section>
 
   <!-- ============ AUTHORITY ============ -->
-  <section style="padding-top:0">
+  <section id="authority" style="padding-top:0">
     <div class="wrap">
       <div class="authority">
         <div>
@@ -293,8 +320,9 @@
           <p data-i18n="authSub">Register your masjid in the app so Muslims nearby can find your jamat times and notices.</p>
           <ul>
             <li data-i18n="r1">Committee members, imam, khatib, moazzin or khadem can register</li>
-            <li data-i18n="r2">Register from inside the masjid with a verified phone number</li>
+            <li data-i18n="r2">Register from inside the masjid with your phone number and its exact location</li>
             <li data-i18n="r3">Your masjid goes live after our team verifies it</li>
+            <li data-i18n="r4">Then keep jamat times, maktab, staff, live link, notices and location up to date</li>
           </ul>
         </div>
         <a class="btn cream" href="#download" data-i18n="authBtn">Get the app</a>
@@ -303,23 +331,58 @@
   </section>
 
   <!-- ============ FAQ ============ -->
-  <section style="padding-top:0">
+  <section id="faq" style="padding-top:0">
     <div class="wrap" style="max-width:760px">
       <div class="section-title"><h2 data-i18n="faqTitle">Questions</h2></div>
       <details><summary data-i18n="q1">Is Muslimin free?</summary><p data-i18n="qa1">Yes. Muslimin is completely free, with no ads.</p></details>
-      <details><summary data-i18n="q2">Do I need an account?</summary><p data-i18n="qa2">No — you can browse as a guest. A free account (email or Google) keeps your followed masjids and reminders safe and synced across phones. Masjid authorities need an account to register a masjid.</p></details>
+      <details><summary data-i18n="q2">Do I need an account?</summary><p data-i18n="qa2">Yes — a free account with email or Google. It takes a few seconds and keeps your followed masjids and reminders safe and synced across phones. You can delete it anytime from the app.</p></details>
       <details><summary data-i18n="q3">I forgot my password.</summary><p data-i18n="qa3">On the Sign In screen tap “Forgot password?”, enter your email and we will send you a reset link.</p></details>
       <details><summary data-i18n="q4">Why does the app need my location?</summary><p data-i18n="qa4">To show the masjids near you and calculate accurate prayer times. Your location stays on your phone.</p></details>
+      <details><summary data-i18n="q6">How do I update the app?</summary><p data-i18n="qa6">On Android open More → About the App → App version and tap the download button when an update is available. Or download again from this page — your data stays.</p></details>
+      <details><summary data-i18n="q7">How do I turn on dark mode?</summary><p data-i18n="qa7">Go to More → App Settings → Appearance and choose Dark, Light or System.</p></details>
       <details><summary data-i18n="q5">Android says the app is from an unknown source.</summary><p data-i18n="qa5">That is normal for apps downloaded outside the Play Store. The APK is signed by us and published on our official GitHub page.</p></details>
     </div>
   </section>
 
   <footer class="pattern">
-    <div class="wrap row">
-      <div><span class="logo"><img src="assets/logo.svg" alt="Muslimin" style="height:26px" /></span> <span style="opacity:.7">© <span id="yr"></span></span></div>
-      <div><a href="privacy.html" data-i18n="privacy">Privacy Policy</a><a href="https://github.com/litu173/Muslimin">GitHub</a></div>
+    <div class="wrap">
+      <div class="foot-grid">
+        <div class="foot-brand">
+          <img src="assets/logo.svg" alt="Muslimin" width="118" height="30" />
+          <p data-i18n="footTag">Jamat times, reminders and notices from the masjids around you. Free, ad-free, in Bangla and English.</p>
+          <span class="beta">BETA</span>
+        </div>
+        <div>
+          <h4 data-i18n="footApp">App</h4>
+          <ul>
+            <li><a href="#features" data-i18n="navFeatures">Features</a></li>
+            <li><a href="#download" data-i18n="footDownload">Download</a></li>
+            <li><a href="#install" data-i18n="howInstall">How to install</a></li>
+            <li><a id="notesLink" href="https://github.com/litu173/Muslimin/releases" data-i18n="footNotes">What's new</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 data-i18n="footMasjid">Masjids</h4>
+          <ul>
+            <li><a href="#authority" data-i18n="footRegister">Register a masjid</a></li>
+            <li><a href="#faq" data-i18n="faqTitle">Questions</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 data-i18n="footHelp">Support</h4>
+          <ul>
+            <li><a href="https://github.com/litu173/Muslimin/issues" data-i18n="footIssue">Report a problem</a></li>
+            <li><a href="privacy.html" data-i18n="privacy">Privacy Policy</a></li>
+            <li><a href="https://github.com/litu173/Muslimin">GitHub</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="foot-bottom">
+        <span>© <span id="yr"></span> Muslimin · <span id="footVer" data-i18n="footVer">Beta</span></span>
+        <span data-i18n="footMade">Made with care for the Muslims of Bangladesh</span>
+      </div>
+      <div class="credits" data-i18n="credits">Logo and English prayer names: lettering from the Muslimin design, based on Hidayatullah by Anthonie Van Hayu (ARToni). Fonts: <a href="https://github.com/Omnibus-Type/Grenze-Gotisch">Grenze Gotisch</a> by Omnibus-Type, Poppins &amp; Hind Siliguri by Indian Type Foundry, <a href="https://github.com/EkType/Anek">Anek Bangla</a> by Ek Type, Galada by Black Foundry, Amiri by Khaled Hosny — all under the SIL Open Font License. Quran translations are for reference; please consult a scholar.</div>
     </div>
-    <div class="wrap credits" data-i18n="credits">Fonts: <a href="https://github.com/Omnibus-Type/Grenze-Gotisch">Grenze Gotisch</a> by Omnibus-Type, Poppins &amp; Hind Siliguri by Indian Type Foundry, Anek Bangla by Ek Type, Galada by Black Foundry, Amiri by Khaled Hosny — all under the SIL Open Font License. Original design typeface: Hidayatullah by Anthonie Van Hayu (ARToni).</div>
   </footer>
 
   <script>
@@ -354,9 +417,13 @@
     const showVersion = () => {
       document.getElementById("verText").textContent =
         (isBn ? "সর্বশেষ ভার্সন " : "Latest version ") + (latestTag || "");
+      document.getElementById("footVer").textContent = latestTag || (isBn ? "বেটা" : "Beta");
     };
     fetch(`https://api.github.com/repos/${REPO}/releases/latest`).then(r => r.ok ? r.json() : null).then(r => {
-      if (r && r.tag_name) { latestTag = r.tag_name; showVersion(); }
+      if (r && r.tag_name) {
+        latestTag = r.tag_name; showVersion();
+        document.getElementById("notesLink").href = r.html_url;
+      }
     }).catch(() => {});
 
     function selectTab(name) {
@@ -373,10 +440,10 @@
       getFor: "ডাউনলোড করুন", howInstall: "কীভাবে ইনস্টল করবেন", scanShort: "ফোনের ক্যামেরা দিয়ে স্ক্যান করে ডাউনলোড করুন",
       featTitle: "প্রতিদিনের নামাজের সবকিছু", featSub: "মসজিদ কমিটির সাথে মিলে, মুসল্লিদের জন্য তৈরি।",
       f1: "কাছের মসজিদের জামাত", f1d: "হাঁটার দূরত্ব অনুযায়ী সাজানো মসজিদ, প্রতিটির নিজস্ব জামাতের সময় — মসজিদ নিজেই দেয়।",
-      f2: "জামাত রিমাইন্ডার", f2d: "মসজিদ ফলো করুন, প্রতিটি জামাতের ১৫, ৩০ বা ৪৫ মিনিট আগে নোটিফিকেশন পান — অ্যাপ বন্ধ থাকলেও।",
+      f2: "জামাত রিমাইন্ডার", f2d: "মসজিদ ফলো করুন, প্রতিটি জামাতের ১৫, ৩০ বা ৪৫ মিনিট আগে নোটিফিকেশন পান — অ্যাপ বন্ধ থাকলেও। ফলো করা মসজিদে সোনালি ব্যাজ।",
       f3: "মসজিদের নোটিশ", f3d: "শুধু যাচাইকৃত মসজিদ থেকে জানাজা, তালিম, কুরআন ক্লাস, মাহফিল ও নিয়োগ বিজ্ঞপ্তি।",
       f4: "নামাজ ও নিষিদ্ধ সময়", f4d: "আপনার লোকেশন অনুযায়ী সঠিক ওয়াক্ত, লাইভ কাউন্টডাউন, নিষিদ্ধ সময়, তাহাজ্জুদ ও দুহা।",
-      f5: "আপনার অ্যাকাউন্ট, সিঙ্কড", f5d: "ফ্রি অ্যাকাউন্ট খুলুন — ফলো করা মসজিদ ও রিমাইন্ডার সব ফোনে থাকবে। যেকোনো সময় পাসওয়ার্ড রিসেট করুন।",
+      f5: "আপনার অ্যাকাউন্ট, সিঙ্কড", f5d: "ইমেইল বা Google দিয়ে সাইন ইন করুন — ফলো করা মসজিদ ও রিমাইন্ডার সব ফোনে থাকবে। যেকোনো সময় পাসওয়ার্ড রিসেট বা অ্যাকাউন্ট ডিলিট করুন।",
       f6: "যাচাইকৃত মসজিদ", f6d: "প্রতিটি মসজিদ প্রোফাইল মসজিদের ভেতর থেকে তৈরি হয় এবং প্রকাশের আগে আমাদের টিম যাচাই করে।",
       shotsTitle: "সহজ, শান্ত ও সুন্দর", shotsSub: "মসজিদের রঙে ডিজাইন — সম্পূর্ণ বাংলায়।",
       s1: "আজকের নামাজ", s2: "মসজিদের জামাতের সময়", s3: "নামাজ ও নিষিদ্ধ সময়",
@@ -387,14 +454,24 @@
       i3: "আইফোনে Settings → General → VPN & Device Management-এ গিয়ে ডেভেলপারকে trust করুন।",
       allReleases: "সব ভার্সন ও রিলিজ নোট:", scan: "স্ক্যান করে ডাউনলোড", scanSub: "ফোনের ক্যামেরা খুলে কোডের দিকে ধরুন। অ্যান্ড্রয়েডে অ্যাপ ডাউনলোড হবে, আইফোনে ইনস্টল গাইড খুলবে।",
       authTitle: "আপনি কি মসজিদ কর্তৃপক্ষ?", authSub: "অ্যাপে আপনার মসজিদ নিবন্ধন করুন, যাতে আশেপাশের মুসলিমরা জামাতের সময় ও নোটিশ পান।",
-      r1: "কমিটির সদস্য, ইমাম, খতিব, মুয়াজ্জিন বা খাদেম নিবন্ধন করতে পারবেন", r2: "যাচাইকৃত ফোন নম্বর দিয়ে মসজিদের ভেতর থেকে নিবন্ধন করুন", r3: "আমাদের টিম যাচাই করার পর মসজিদ প্রকাশ হবে",
+      r1: "কমিটির সদস্য, ইমাম, খতিব, মুয়াজ্জিন বা খাদেম নিবন্ধন করতে পারবেন", r2: "আপনার ফোন নম্বর ও মসজিদের সঠিক লোকেশন দিয়ে মসজিদের ভেতর থেকে নিবন্ধন করুন", r3: "আমাদের টিম যাচাই করার পর মসজিদ প্রকাশ হবে",
       authBtn: "অ্যাপ নিন", faqTitle: "জিজ্ঞাসা",
       q1: "মুসলিমীন কি ফ্রি?", qa1: "হ্যাঁ। মুসলিমীন সম্পূর্ণ ফ্রি, কোনো বিজ্ঞাপন নেই।",
-      q2: "অ্যাকাউন্ট লাগবে কি?", qa2: "না — অতিথি হিসেবেও ব্যবহার করা যায়। ফ্রি অ্যাকাউন্ট (ইমেইল বা Google) থাকলে ফলো করা মসজিদ ও রিমাইন্ডার সব ফোনে সংরক্ষিত থাকে। মসজিদ নিবন্ধনের জন্য অ্যাকাউন্ট লাগবে।",
+      q2: "অ্যাকাউন্ট লাগবে কি?", qa2: "হ্যাঁ — ইমেইল বা Google দিয়ে একটি ফ্রি অ্যাকাউন্ট। কয়েক সেকেন্ডেই হয়ে যায়, আর ফলো করা মসজিদ ও রিমাইন্ডার সব ফোনে নিরাপদে থাকে। অ্যাপ থেকে যেকোনো সময় ডিলিট করা যায়।",
       q3: "পাসওয়ার্ড ভুলে গেছি।", qa3: "সাইন ইন স্ক্রিনে “পাসওয়ার্ড ভুলে গেছেন?” চাপুন, ইমেইল দিন — রিসেট লিংক পাঠানো হবে।",
       q4: "অ্যাপের লোকেশন কেন লাগে?", qa4: "কাছের মসজিদ দেখাতে ও সঠিক নামাজের সময় হিসাব করতে। আপনার লোকেশন ফোনেই থাকে।",
       q5: "অ্যান্ড্রয়েড বলছে অ্যাপটি অজানা উৎস থেকে।", qa5: "প্লে স্টোরের বাইরে থেকে ডাউনলোড করলে এটা স্বাভাবিক। APK আমাদের সাইন করা এবং অফিসিয়াল GitHub পেজে প্রকাশিত।",
-      privacy: "প্রাইভেসি পলিসি"
+      privacy: "প্রাইভেসি পলিসি",
+      f7: "লাইট ও ডার্ক মোড", f7d: "দিনের জন্য শান্ত ক্রিম থিম, ফজর ও এশার জন্য প্রিমিয়াম গাঢ় সবুজ ডার্ক থিম — অথবা ফোনের সেটিং অনুযায়ী।",
+      f8: "সম্পূর্ণ বাংলায়", f8d: "প্রতিটি স্ক্রিন বাংলা বা ইংরেজিতে — বাংলা সংখ্যা, ভোর-দুপুর-সন্ধ্যা আর হিজরি তারিখসহ।",
+      f9: "মসজিদ থেকে লাইভ", f9d: "মসজিদের YouTube বা Facebook থেকে জুমার খুতবা ও ওয়াজ লাইভ দেখুন, আর যেকোনো পেজে নিচে টেনে রিফ্রেশ করুন।",
+      r4: "এরপর জামাতের সময়, মক্তব, স্টাফ, লাইভ লিংক, নোটিশ ও লোকেশন হালনাগাদ রাখুন",
+      q6: "অ্যাপ কীভাবে আপডেট করব?", qa6: "অ্যান্ড্রয়েডে আরও → অ্যাপ সম্পর্কে → অ্যাপ ভার্সন-এ গিয়ে আপডেট থাকলে ডাউনলোড বাটন চাপুন। অথবা এই পেজ থেকে আবার ডাউনলোড করুন — আপনার তথ্য থেকে যাবে।",
+      q7: "ডার্ক মোড কীভাবে চালু করব?", qa7: "আরও → অ্যাপ সেটিংস → থিম-এ গিয়ে ডার্ক, লাইট বা সিস্টেম বেছে নিন।",
+      footTag: "আশেপাশের মসজিদের জামাতের সময়, রিমাইন্ডার ও নোটিশ। ফ্রি, বিজ্ঞাপনমুক্ত, বাংলা ও ইংরেজিতে।",
+      footApp: "অ্যাপ", footDownload: "ডাউনলোড", footNotes: "নতুন কী আছে", footMasjid: "মসজিদ", footRegister: "মসজিদ নিবন্ধন",
+      footHelp: "সহায়তা", footIssue: "সমস্যা জানান", footVer: "বেটা", footMade: "বাংলাদেশের মুসলিমদের জন্য যত্ন নিয়ে তৈরি",
+      credits: "লোগো ও ইংরেজি নামাজের নাম: Muslimin ডিজাইনের লেটারিং, Anthonie Van Hayu (ARToni)-এর Hidayatullah অবলম্বনে। ফন্ট: Omnibus-Type-এর <a href=\"https://github.com/Omnibus-Type/Grenze-Gotisch\">Grenze Gotisch</a>, Indian Type Foundry-এর Poppins ও Hind Siliguri, Ek Type-এর <a href=\"https://github.com/EkType/Anek\">Anek Bangla</a>, Black Foundry-এর Galada, খালেদ হোসনির Amiri — সব SIL Open Font License-এর অধীনে। কুরআনের অনুবাদ রেফারেন্সের জন্য; প্রয়োজনে আলেমের পরামর্শ নিন।"
     };
     const en = {};
     document.querySelectorAll("[data-i18n]").forEach(el => en[el.dataset.i18n] = el.innerHTML);
