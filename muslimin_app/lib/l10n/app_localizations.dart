@@ -3504,6 +3504,42 @@ abstract class L10n {
   /// In en, this message translates to:
   /// **'{n, plural, =1{1 dua} other{{n} duas}}'**
   String duaCount(int n);
+
+  /// No description provided for @noticeSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search notices, masjids…'**
+  String get noticeSearchHint;
+
+  /// No description provided for @noticesSub.
+  ///
+  /// In en, this message translates to:
+  /// **'From the masjids around you'**
+  String get noticesSub;
+
+  /// No description provided for @tabNotices.
+  ///
+  /// In en, this message translates to:
+  /// **'Notice'**
+  String get tabNotices;
+
+  /// No description provided for @chooseSurah.
+  ///
+  /// In en, this message translates to:
+  /// **'Go to surah'**
+  String get chooseSurah;
+
+  /// No description provided for @surahSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search surah by name or number'**
+  String get surahSearchHint;
+
+  /// No description provided for @previousSurah.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous surah'**
+  String get previousSurah;
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {

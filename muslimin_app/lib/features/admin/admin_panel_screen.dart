@@ -4,6 +4,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../core/nav.dart';
 import '../../core/theme/app_colors.dart';
+import '../../core/widgets/page_header.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text.dart';
 import '../../core/utils/format.dart';
@@ -32,7 +33,7 @@ class AdminPanelScreen extends ConsumerWidget {
     return DefaultTabController(
       length: 4,
       child: Scaffold(
-        appBar: AppBar(
+        appBar: PatternAppBar(
           title: Text(t.adminPanel),
           bottom: TabBar(
             isScrollable: true,
@@ -135,7 +136,6 @@ class _ReviewCardState extends ConsumerState<_ReviewCard> {
     final reason = await showDialog<String>(
       context: context,
       builder: (d) => AlertDialog(
-        backgroundColor: AppColors.cream,
         title: Text(t.reject, style: AppText.subtitle),
         content: AppTextField(
           label: t.rejectReason,

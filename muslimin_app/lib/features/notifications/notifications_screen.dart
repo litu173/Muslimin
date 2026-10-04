@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/widgets/refresh.dart';
 import '../../core/widgets/surfaces.dart';
+import '../../core/widgets/page_header.dart';
 import '../../l10n/app_localizations.dart';
 import '../../state/follows.dart';
 import '../../state/providers.dart';
@@ -19,7 +20,7 @@ class NotificationsScreen extends ConsumerWidget {
     final ids = ref.watch(followsProvider).keys;
     final notices = ref.watch(noticesProvider(noticeKey(ids)));
     return Scaffold(
-      appBar: AppBar(title: Text(t.notifications)),
+      appBar: PatternAppBar(title: Text(t.notifications)),
       body: ids.isEmpty
           ? EmptyState(
               message: t.noNotifications,

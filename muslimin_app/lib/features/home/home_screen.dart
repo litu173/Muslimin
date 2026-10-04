@@ -12,11 +12,8 @@ import '../../core/widgets/countdown_ring.dart';
 import '../../core/widgets/islamic_pattern.dart';
 import '../../core/widgets/refresh.dart';
 import '../../core/widgets/surfaces.dart';
-import '../../core/widgets/swipe_tabs.dart';
-import '../../data/models/notice.dart';
 import '../../l10n/app_localizations.dart';
 import '../../state/providers.dart';
-import '../notices/notice_card.dart';
 import '../prayers/all_prayers_screen.dart';
 import '../registration/registration_flow.dart';
 import 'location_bar.dart';
@@ -34,10 +31,6 @@ class HomeScreen extends ConsumerStatefulWidget {
 
 class _HomeScreenState extends ConsumerState<HomeScreen>
     with SingleTickerProviderStateMixin {
-  NoticeCategory? _filter;
-
-  /// "All" followed by the categories, in the chip bar's order.
-  static const _noticeTabs = <NoticeCategory?>[null, ...NoticeFilterBar.order];
   bool _bannerClosed = false;
 
   /// Entrance: body sections slide up and fade in, one after another.
@@ -77,7 +70,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
     final t = L10n.of(context);
     final loc = ref.watch(locationProvider);
     final masjids = ref.watch(nearbyMasjidsProvider);
-    final notices = ref.watch(nearbyNoticesProvider);
     // Only for users who have not registered a masjid yet.
     final mine = ref.watch(myMasjidsProvider);
     final showBanner =
@@ -184,58 +176,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
             const SliverToBoxAdapter(child: SizedBox(height: Gap.xl)),
             SliverToBoxAdapter(child: _in(7, const VerseCarousel())),
 
-            // ---- notices
-            SliverToBoxAdapter(child: _in(8, SectionHeader(title: t.notice))),
-            SliverToBoxAdapter(
-              child: _in(
-                8,
-                NoticeFilterBar(
-                  selected: _filter,
-                  onChanged: (c) => setState(() => _filter = c),
-                ),
-              ),
-            ),
-            const SliverToBoxAdapter(child: SizedBox(height: Gap.l)),
-            // Swipe sideways on the notices to switch category, like the
-            // tabs on a masjid page.
-            SliverToBoxAdapter(
-              child: _in(
-                9,
-                SwipeTabs(
-                  index: _noticeTabs.indexOf(_filter),
-                  count: _noticeTabs.length,
-                  onChanged: (i) => setState(() => _filter = _noticeTabs[i]),
-                  child: notices.when(
-                    loading: () => const Loader(),
-                    error: (_, _) =>
-                        EmptyState(inCard: true, message: t.somethingWrong),
-                    data: (all) {
-                      final list = _filter == null
-                          ? all
-                          : all.where((n) => n.category == _filter).toList();
-                      if (list.isEmpty) {
-                        return EmptyState(
-                          inCard: true,
-                          message: t.noNotices,
-                          icon: Icons.campaign_outlined,
-                        );
-                      }
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: Gap.l),
-                        child: Column(
-                          children: [
-                            for (final (i, n) in list.indexed) ...[
-                              if (i > 0) const SizedBox(height: 10),
-                              NoticeCard(notice: n),
-                            ],
-                          ],
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ),
-            ),
             const SliverToBoxAdapter(child: SizedBox(height: Gap.xxl)),
           ],
         ),

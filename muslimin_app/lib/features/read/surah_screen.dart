@@ -12,6 +12,7 @@ import '../../core/theme/app_text.dart';
 import '../../core/utils/format.dart';
 import '../../core/widgets/buttons.dart';
 import '../../core/widgets/islamic_pattern.dart';
+import '../../core/widgets/page_header.dart';
 import '../../core/widgets/refresh.dart';
 import '../../core/widgets/surfaces.dart';
 import '../../data/quran/quran_repository.dart';
@@ -50,8 +51,8 @@ class _SurahScreenState extends ConsumerState<SurahScreen> {
   Surah get _s => widget.surah;
   bool get _hasBismillah => _s.id != 1 && _s.id != 9;
 
-  /// List index of ayah [n]: [intro, (bismillah), ayah 1 …, end].
-  int _indexOf(int n) => n - 1 + 1 + (_hasBismillah ? 1 : 0);
+  /// List index of ayah [n]: [(bismillah), ayah 1 …, end].
+  int _indexOf(int n) => n - 1 + (_hasBismillah ? 1 : 0);
 
   String get _lang =>
       Localizations.localeOf(context).languageCode == 'bn' ? 'bn' : 'en';
@@ -131,6 +132,19 @@ class _SurahScreenState extends ConsumerState<SurahScreen> {
         alignment: 0.05,
       );
     });
+  }
+
+  /// Opens another surah in place of this one (arrows / surah picker).
+  void _goTo(Surah s) {
+    if (s.id == _s.id) return;
+    Navigator.of(context).pushReplacement(
+      PageRouteBuilder(
+        transitionDuration: const Duration(milliseconds: 220),
+        pageBuilder: (_, _, _) => SurahScreen(surah: s),
+        transitionsBuilder: (_, a, _, child) =>
+            FadeTransition(opacity: a, child: child),
+      ),
+    );
   }
 
   Future<void> _pickReciter() async {
@@ -273,9 +287,10 @@ class _SurahScreenState extends ConsumerState<SurahScreen> {
         body: Column(
           children: [
             _TopBar(
-              title: '${f.digits(_s.id)}. ${_s.name(f.isBn)}',
+              surah: _s,
               words: _words,
               onWords: () => setState(() => _words = !_words),
+              onGo: _goTo,
             ),
             Expanded(
               child: FutureBuilder<List<Ayah>>(
@@ -336,20 +351,18 @@ class _SurahScreenState extends ConsumerState<SurahScreen> {
                             ),
                             sliver: SuperSliverList.builder(
                               listController: _list,
-                              itemCount: ayahs.length + extra + 2,
+                              itemCount: ayahs.length + extra + 1,
                               itemBuilder: (context, i) {
                                 final Widget child;
-                                if (i == 0) {
-                                  child = _SurahIntro(surah: _s);
-                                } else if (_hasBismillah && i == 1) {
+                                if (_hasBismillah && i == 0) {
                                   child = const _Bismillah();
-                                } else if (i == ayahs.length + extra + 1) {
+                                } else if (i == ayahs.length + extra) {
                                   child = _EndCard(
                                     done: done,
                                     onComplete: _complete,
                                   );
                                 } else {
-                                  final a = ayahs[i - 1 - extra];
+                                  final a = ayahs[i - extra];
                                   child = _AyahCard(
                                     ayah: a,
                                     words: _words,
@@ -383,39 +396,118 @@ class _SurahScreenState extends ConsumerState<SurahScreen> {
   }
 }
 
-/// Fixed top: patterned bar behind the status bar with back, the surah's
-/// name and the word-by-word toggle.
+/// Fixed top: back, previous / next surah arrows around the surah's name
+/// (tap the name to jump to any surah), the word-by-word toggle, and the
+/// meaning · Makki/Madani · verses line under the name.
 class _TopBar extends StatelessWidget {
   const _TopBar({
-    required this.title,
+    required this.surah,
     required this.words,
     required this.onWords,
+    required this.onGo,
   });
 
-  final String title;
+  final Surah surah;
   final bool words;
   final VoidCallback onWords;
+  final ValueChanged<Surah> onGo;
 
   @override
   Widget build(BuildContext context) {
     final t = L10n.of(context);
+    final f = Fmt.of(context);
+    final prev = surah.id > 1 ? kSurahs[surah.id - 2] : null;
+    final next = surah.id < 114 ? kSurahs[surah.id] : null;
+    // Surah arrows sit in gold rings so they read differently from Back.
+    Widget arrow(IconData icon, Surah? to, String tip) {
+      final c = to == null
+          ? AppColors.onHeader.withValues(alpha: 0.25)
+          : AppColors.goldLight;
+      return Tooltip(
+        message: tip,
+        child: InkResponse(
+          onTap: to == null ? null : () => onGo(to),
+          radius: 22,
+          child: Container(
+            width: 30,
+            height: 30,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(color: c, width: 1.2),
+            ),
+            child: Icon(icon, size: 20, color: c),
+          ),
+        ),
+      );
+    }
     return IslamicPattern(
       child: Padding(
         padding: EdgeInsets.only(
           top: MediaQuery.of(context).padding.top,
-          bottom: 4,
+          bottom: Gap.s,
         ),
         child: Row(
           children: [
             BackButton(color: AppColors.onHeader),
+            arrow(Icons.chevron_left_rounded, prev, t.previousSurah),
             Expanded(
-              child: Text(
-                title,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: AppText.subtitle.copyWith(color: AppColors.onHeader),
+              child: InkWell(
+                borderRadius: BorderRadius.circular(Radii.button),
+                onTap: () async {
+                  final s = await showSurahPicker(context, surah);
+                  if (s != null) onGo(s);
+                },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 4),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Flexible(
+                            child: Text(
+                              '${f.digits(surah.id)}. ${surah.name(f.isBn)}',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: AppText.subtitle.copyWith(
+                                color: AppColors.onHeader,
+                              ),
+                            ),
+                          ),
+                          Icon(
+                            Icons.expand_more_rounded,
+                            size: 20,
+                            color: AppColors.goldLight,
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          RevelationIcon(makki: surah.makki, size: 14),
+                          const SizedBox(width: 4),
+                          Flexible(
+                            child: Text(
+                              '${surah.meaning(f.isBn)} · ${surah.makki ? t.makki : t.madani} · ${t.versesN(f.digits(surah.verses))}',
+                              maxLines: 2,
+                              textAlign: TextAlign.center,
+                              overflow: TextOverflow.ellipsis,
+                              style: AppText.micro.copyWith(
+                                color: AppColors.onHeader.withValues(
+                                  alpha: 0.8,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ),
+            arrow(Icons.chevron_right_rounded, next, t.nextSurah),
             IconButton(
               tooltip: t.wordByWord,
               onPressed: onWords,
@@ -431,57 +523,129 @@ class _TopBar extends StatelessWidget {
   }
 }
 
-/// Surah title card – scrolls away with the ayat.
-class _SurahIntro extends StatelessWidget {
-  const _SurahIntro({required this.surah});
-  final Surah surah;
+/// Bottom sheet listing all 114 surahs (searchable); returns the pick.
+Future<Surah?> showSurahPicker(BuildContext context, Surah current) {
+  return showModalBottomSheet<Surah>(
+    context: context,
+    useSafeArea: true,
+    isScrollControlled: true,
+    builder: (_) => _SurahPicker(current: current),
+  );
+}
+
+class _SurahPicker extends StatefulWidget {
+  const _SurahPicker({required this.current});
+  final Surah current;
+
+  @override
+  State<_SurahPicker> createState() => _SurahPickerState();
+}
+
+class _SurahPickerState extends State<_SurahPicker> {
+  final _search = TextEditingController();
+  String _q = '';
+
+  @override
+  void dispose() {
+    _search.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final t = L10n.of(context);
     final f = Fmt.of(context);
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(Radii.card),
-      child: IslamicPattern(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            vertical: Gap.xl,
-            horizontal: Gap.l,
+    final q = _q.toLowerCase();
+    final list = [
+      for (final s in kSurahs)
+        if (q.isEmpty ||
+            '${s.id} ${f.digits(s.id)} ${s.nameEn} ${s.nameBn} ${s.nameAr} ${s.meaningEn} ${s.meaningBn}'
+                .toLowerCase()
+                .contains(q))
+          s,
+    ];
+    return DraggableScrollableSheet(
+      expand: false,
+      initialChildSize: 0.85,
+      maxChildSize: 0.95,
+      builder: (context, scroll) => Container(
+        decoration: BoxDecoration(
+          color: AppColors.card,
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(Radii.sheet),
           ),
-          child: Column(
-            children: [
-              Text(
-                surah.nameAr,
-                textDirection: TextDirection.rtl,
-                style: TextStyle(
-                  fontFamily: AppText.arabic,
-                  fontSize: 38,
-                  height: 1.4,
-                  color: AppColors.goldLight,
-                ),
+        ),
+        child: Column(
+          children: [
+            const SizedBox(height: Gap.s),
+            Container(
+              width: 40,
+              height: 4,
+              decoration: BoxDecoration(
+                color: AppColors.divider,
+                borderRadius: BorderRadius.circular(2),
               ),
-              Text(
-                surah.name(f.isBn),
-                style: AppText.label.copyWith(color: AppColors.onHeader),
-              ),
-              const SizedBox(height: 6),
-              Row(
-                mainAxisSize: MainAxisSize.min,
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(Gap.l, Gap.l, Gap.l, Gap.s),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  RevelationIcon(makki: surah.makki, size: 18),
-                  const SizedBox(width: 6),
-                  Flexible(
-                    child: Text(
-                      '${surah.meaning(f.isBn)} · ${surah.makki ? t.makki : t.madani} · ${t.versesN(f.digits(surah.verses))}',
-                      style: AppText.caption.copyWith(
-                        color: AppColors.onHeader.withValues(alpha: 0.8),
-                      ),
-                    ),
+                  Text(t.chooseSurah, style: AppText.subtitle),
+                  const SizedBox(height: Gap.m),
+                  AppSearchField(
+                    controller: _search,
+                    hint: t.surahSearchHint,
+                    onChanged: (v) => setState(() => _q = v.trim()),
                   ),
                 ],
               ),
-            ],
-          ),
+            ),
+            Expanded(
+              child: ListView.builder(
+                controller: scroll,
+                keyboardDismissBehavior:
+                    ScrollViewKeyboardDismissBehavior.onDrag,
+                itemCount: list.length,
+                itemBuilder: (_, i) {
+                  final s = list[i];
+                  final current = s.id == widget.current.id;
+                  return ListTile(
+                    onTap: () => Navigator.pop(context, s),
+                    selected: current,
+                    selectedTileColor: AppColors.gold.withValues(alpha: 0.1),
+                    leading: AyahNumber(f.digits(s.id), size: 38),
+                    title: Text(s.name(f.isBn), style: AppText.label),
+                    subtitle: Row(
+                      children: [
+                        RevelationIcon(makki: s.makki, size: 14),
+                        const SizedBox(width: 4),
+                        Flexible(
+                          child: Text(
+                            '${s.meaning(f.isBn)} · ${t.versesN(f.digits(s.verses))}',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: AppText.micro.copyWith(
+                              color: AppColors.muted,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    trailing: Text(
+                      s.nameAr,
+                      textDirection: TextDirection.rtl,
+                      style: TextStyle(
+                        fontFamily: AppText.arabic,
+                        fontSize: 22,
+                        color: AppColors.gold,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
         ),
       ),
     );

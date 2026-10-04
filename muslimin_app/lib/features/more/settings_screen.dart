@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/theme/app_colors.dart';
+import '../../core/widgets/page_header.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text.dart';
 import '../../core/utils/format.dart';
@@ -55,24 +56,18 @@ class SettingsScreen extends ConsumerWidget {
       runSpacing: Gap.s,
       children: [
         for (final i in items)
-          ChoiceChip(
-            label: Text(i.$2),
+          AppChip(
+            label: i.$2,
             selected: i.$1 == selected,
-            showCheckmark: false,
-            selectedColor: AppColors.gold,
-            backgroundColor: AppColors.cream,
-            side: BorderSide.none,
-            shape: const StadiumBorder(),
-            labelStyle: AppText.caption.copyWith(
-              color: i.$1 == selected ? AppColors.onGold : AppColors.ink,
-            ),
-            onSelected: (_) => onTap(i.$1),
+            idleColor: AppColors.chipIdle,
+            idleTextColor: AppColors.ink,
+            onTap: () => onTap(i.$1),
           ),
       ],
     );
 
     return Scaffold(
-      appBar: AppBar(title: Text(t.appSettings)),
+      appBar: PatternAppBar(title: Text(t.appSettings)),
       body: ListView(
         padding: const EdgeInsets.all(Gap.l),
         children: [

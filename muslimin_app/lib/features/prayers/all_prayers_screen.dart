@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/theme/app_colors.dart';
+import '../../core/widgets/page_header.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text.dart';
 import '../../core/utils/format.dart';
@@ -27,15 +28,12 @@ class AllPrayersScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: AppColors.header,
-      appBar: AppBar(
+      appBar: PatternAppBar(
         toolbarHeight: 68,
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              t.allPrayers,
-              style: AppText.subtitle.copyWith(color: cream, fontSize: 22),
-            ),
+            Text(t.allPrayers, style: AppText.subtitle.copyWith(color: cream)),
             if (loc != null)
               Text(
                 loc.label,

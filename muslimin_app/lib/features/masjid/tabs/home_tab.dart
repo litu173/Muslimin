@@ -609,9 +609,7 @@ class _MaktabEditorState extends ConsumerState<_MaktabEditor> {
                   dense: true,
                   label: f.weekdaysShort[i],
                   // Unselected days in light grey so they read as tappable.
-                  idleColor: AppColors.dark
-                      ? AppColors.field
-                      : const Color(0xFFE9E7E1),
+                  idleColor: AppColors.chipIdle,
                   idleTextColor: AppColors.muted,
                   selected: _days.contains(Fmt.weekdayFromSatFirst(i)),
                   onTap: () => setState(() {

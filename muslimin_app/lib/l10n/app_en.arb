@@ -1011,5 +1011,11 @@
         "type": "int"
       }
     }
-  }
+  },
+  "noticeSearchHint": "Search notices, masjids…",
+  "noticesSub": "From the masjids around you",
+  "tabNotices": "Notice",
+  "chooseSurah": "Go to surah",
+  "surahSearchHint": "Search surah by name or number",
+  "previousSurah": "Previous surah"
 }

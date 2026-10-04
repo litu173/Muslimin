@@ -174,7 +174,6 @@ Future<void> showNoticeDetails(
                   final ok = await showDialog<bool>(
                     context: ctx,
                     builder: (d) => AlertDialog(
-                      backgroundColor: AppColors.card,
                       title: Text(t.deleteNoticeQ, style: AppText.subtitle),
                       actions: [
                         TextButton(

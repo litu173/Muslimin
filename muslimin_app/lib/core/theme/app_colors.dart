@@ -49,6 +49,9 @@ abstract final class AppColors {
   /// Pill background used for editable time values.
   static Color get pill => _c(0xFFF3EED5, 0xFF1F302D);
 
+  /// Unselected chip on a card (light grey; reads as "tap to select").
+  static Color get chipIdle => _c(0xFFE9E7E1, 0xFF22312F);
+
   /// Teal used on the secondary masjid badge.
   static Color get teal => _c(0xFF74C5B3, 0xFF5FB3A1);
   static Color get tealDark => _c(0xFF2E6B60, 0xFF9AD8C9);

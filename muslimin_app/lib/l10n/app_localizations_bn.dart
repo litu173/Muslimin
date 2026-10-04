@@ -1912,4 +1912,22 @@ class L10nBn extends L10n {
   String duaCount(int n) {
     return '$nটি দো‘আ';
   }
+
+  @override
+  String get noticeSearchHint => 'নোটিশ, মসজিদ খুঁজুন…';
+
+  @override
+  String get noticesSub => 'আশেপাশের মসজিদ থেকে';
+
+  @override
+  String get tabNotices => 'নোটিশ';
+
+  @override
+  String get chooseSurah => 'সূরা বেছে নিন';
+
+  @override
+  String get surahSearchHint => 'নাম বা নম্বর দিয়ে সূরা খুঁজুন';
+
+  @override
+  String get previousSurah => 'আগের সূরা';
 }

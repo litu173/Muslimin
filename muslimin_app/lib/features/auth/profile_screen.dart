@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/nav.dart';
 import '../../core/theme/app_colors.dart';
+import '../../core/widgets/page_header.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text.dart';
 import '../../core/utils/format.dart';
@@ -97,7 +98,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen>
     return showDialog<String>(
       context: context,
       builder: (d) => AlertDialog(
-        backgroundColor: AppColors.cream,
         title: Text(title, style: AppText.subtitle),
         content: Column(
           mainAxisSize: MainAxisSize.min,
@@ -131,7 +131,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen>
     final ok = await showDialog<bool>(
       context: context,
       builder: (d) => AlertDialog(
-        backgroundColor: AppColors.cream,
         title: Text(t.changePassword, style: AppText.subtitle),
         content: Form(
           key: form,
@@ -198,7 +197,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen>
       final ok = await showDialog<bool>(
         context: context,
         builder: (d) => AlertDialog(
-          backgroundColor: AppColors.cream,
           title: Text(t.deleteAccount, style: AppText.subtitle),
           content: Text(t.deleteAccountBody, style: AppText.body),
           actions: [
@@ -232,13 +230,13 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen>
     final user = ref.watch(authProvider).value;
     if (user == null) {
       return Scaffold(
-        appBar: AppBar(title: Text(t.profile)),
+        appBar: PatternAppBar(title: Text(t.profile)),
         body: const Loader(),
       );
     }
 
     return Scaffold(
-      appBar: AppBar(title: Text(t.profile)),
+      appBar: PatternAppBar(title: Text(t.profile)),
       body: RefreshList(
         onRefresh: () => refreshAll(ref),
         padding: const EdgeInsets.all(Gap.l),
@@ -353,7 +351,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen>
                     final ok = await showDialog<bool>(
                       context: context,
                       builder: (d) => AlertDialog(
-                        backgroundColor: AppColors.cream,
                         title: Text(t.signOutTitle, style: AppText.subtitle),
                         content: Text(t.signOutBody, style: AppText.body),
                         actions: [

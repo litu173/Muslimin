@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:just_audio/just_audio.dart';
 
 import '../../core/nav.dart';
@@ -7,7 +6,7 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text.dart';
 import '../../core/utils/format.dart';
-import '../../core/widgets/islamic_pattern.dart';
+import '../../core/widgets/page_header.dart';
 import '../../core/widgets/refresh.dart';
 import '../../core/widgets/surfaces.dart';
 import '../../l10n/app_localizations.dart';
@@ -125,121 +124,6 @@ class _DuaAudio {
   }
 }
 
-/// Patterned header with title, subtitle and a search field.
-class _SearchHeader extends StatelessWidget {
-  const _SearchHeader({
-    required this.title,
-    required this.subtitle,
-    required this.controller,
-    required this.onChanged,
-    this.back = false,
-    this.colors,
-    this.lightSky = false,
-  });
-
-  final String title;
-  final String subtitle;
-  final TextEditingController controller;
-  final ValueChanged<String> onChanged;
-  final bool back;
-
-  /// Sky gradient instead of the green pattern (part pages).
-  final List<Color>? colors;
-
-  /// Dark text on light (morning / day) skies.
-  final bool lightSky;
-
-  @override
-  Widget build(BuildContext context) {
-    final t = L10n.of(context);
-    final fg = lightSky ? const Color(0xFF0B2A33) : AppColors.onHeader;
-    final content = Padding(
-      padding: EdgeInsets.fromLTRB(
-        back ? Gap.s : Gap.xl,
-        MediaQuery.of(context).padding.top + (back ? 0 : Gap.s),
-        Gap.l,
-        Gap.l,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              if (back) BackButton(color: fg),
-              Expanded(
-                child: Text(title, style: AppText.headline.copyWith(color: fg)),
-              ),
-            ],
-          ),
-          Padding(
-            padding: EdgeInsets.only(left: back ? Gap.l : 0, top: 2),
-            child: Text(
-              subtitle,
-              style: AppText.caption.copyWith(
-                color: fg.withValues(alpha: 0.85),
-              ),
-            ),
-          ),
-          const SizedBox(height: Gap.m),
-          Padding(
-            padding: EdgeInsets.only(left: back ? Gap.m : 0),
-            child: TextField(
-              controller: controller,
-              onChanged: onChanged,
-              textInputAction: TextInputAction.search,
-              style: AppText.body.copyWith(color: AppColors.ink),
-              decoration: InputDecoration(
-                hintText: t.duaSearchHint,
-                prefixIcon: Icon(Icons.search_rounded, color: AppColors.muted),
-                suffixIcon: ValueListenableBuilder(
-                  valueListenable: controller,
-                  builder: (_, v, _) => v.text.isEmpty
-                      ? const SizedBox.shrink()
-                      : IconButton(
-                          icon: Icon(
-                            Icons.close_rounded,
-                            color: AppColors.muted,
-                          ),
-                          onPressed: () {
-                            controller.clear();
-                            onChanged('');
-                          },
-                        ),
-                ),
-                filled: true,
-                fillColor: AppColors.field,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(Radii.pill),
-                  borderSide: BorderSide.none,
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(Radii.pill),
-                  borderSide: BorderSide.none,
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: lightSky ? SystemUiOverlayStyle.dark : SystemUiOverlayStyle.light,
-      child: colors == null
-          ? IslamicPattern(child: content)
-          : DecoratedBox(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [colors![0], colors![1]],
-                ),
-              ),
-              child: content,
-            ),
-    );
-  }
-}
-
 /// Dua tab: five cards for the parts of the day, and a search across all
 /// duas.
 class DuaScreen extends StatefulWidget {
@@ -267,11 +151,14 @@ class _DuaScreenState extends State<DuaScreen> {
     return Scaffold(
       body: Column(
         children: [
-          _SearchHeader(
+          PageHeader(
             title: t.tabDua,
             subtitle: t.duaHeader,
-            controller: _search,
-            onChanged: (v) => setState(() => _q = _norm(v.trim())),
+            bottom: AppSearchField(
+              controller: _search,
+              hint: t.duaSearchHint,
+              onChanged: (v) => setState(() => _q = _norm(v.trim())),
+            ),
           ),
           Expanded(
             child: FutureBuilder<List<DuaScene>>(
@@ -493,15 +380,18 @@ class _DuaPartScreenState extends State<DuaPartScreen> {
     return Scaffold(
       body: Column(
         children: [
-          _SearchHeader(
+          PageHeader(
             title: partName(t, widget.part),
             subtitle:
                 '${_partSub(t, widget.part)} · ${t.duaPartCount(f.digits(widget.scenes.length), f.digits(duas))}',
-            controller: _search,
-            onChanged: (v) => setState(() => _q = _norm(v.trim())),
             back: true,
-            colors: _skies[widget.part],
+            sky: _skies[widget.part],
             lightSky: !_darkSky(widget.part),
+            bottom: AppSearchField(
+              controller: _search,
+              hint: t.duaSearchHint,
+              onChanged: (v) => setState(() => _q = _norm(v.trim())),
+            ),
           ),
           Expanded(
             child: shown.isEmpty

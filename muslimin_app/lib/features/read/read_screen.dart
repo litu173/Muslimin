@@ -20,9 +20,9 @@ import 'quiz_screen.dart';
 import 'read_widgets.dart';
 import 'surah_screen.dart';
 
-/// Quran tab: recommended surahs, then the whole Quran as a journey
-/// (Al-Fatiha, then An-Nas back to Al-Baqarah) in phases, each ending with
-/// an optional quiz. Every surah is open to read.
+/// Quran tab: recommended surahs, then the whole Quran in Mushaf order
+/// (1 → 114) as a journey in phases, each ending with an optional quiz.
+/// Every surah is open to read.
 class ReadScreen extends ConsumerStatefulWidget {
   const ReadScreen({super.key});
 

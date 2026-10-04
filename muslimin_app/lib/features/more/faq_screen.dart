@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../core/theme/app_colors.dart';
+import '../../core/widgets/page_header.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text.dart';
 import '../../core/widgets/surfaces.dart';
@@ -20,7 +21,7 @@ class FaqScreen extends StatelessWidget {
       (t.faqQ5, t.faqA5),
     ];
     return Scaffold(
-      appBar: AppBar(title: Text(t.faq)),
+      appBar: PatternAppBar(title: Text(t.faq)),
       body: ListView.separated(
         padding: const EdgeInsets.all(Gap.l),
         itemCount: items.length,

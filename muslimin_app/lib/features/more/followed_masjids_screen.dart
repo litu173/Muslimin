@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/theme/app_colors.dart';
+import '../../core/widgets/page_header.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/utils/format.dart';
 import '../../core/widgets/refresh.dart';
@@ -21,7 +22,7 @@ class FollowedMasjidsScreen extends ConsumerWidget {
     final f = Fmt.of(context);
     final follows = ref.watch(followsProvider);
     return Scaffold(
-      appBar: AppBar(title: Text(t.followedMasjids)),
+      appBar: PatternAppBar(title: Text(t.followedMasjids)),
       body: follows.isEmpty
           ? EmptyState(message: t.noFollowed, hint: t.noFollowedHint)
           : RefreshList(

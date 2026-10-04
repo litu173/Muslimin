@@ -1930,4 +1930,22 @@ class L10nEn extends L10n {
     );
     return '$_temp0';
   }
+
+  @override
+  String get noticeSearchHint => 'Search notices, masjids…';
+
+  @override
+  String get noticesSub => 'From the masjids around you';
+
+  @override
+  String get tabNotices => 'Notice';
+
+  @override
+  String get chooseSurah => 'Go to surah';
+
+  @override
+  String get surahSearchHint => 'Search surah by name or number';
+
+  @override
+  String get previousSurah => 'Previous surah';
 }

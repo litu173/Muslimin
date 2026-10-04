@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../core/theme/app_colors.dart';
+import '../../core/widgets/page_header.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/widgets/refresh.dart';
 import '../../core/widgets/surfaces.dart';
@@ -18,26 +18,32 @@ class MasjidListScreen extends ConsumerStatefulWidget {
 }
 
 class _MasjidListScreenState extends ConsumerState<MasjidListScreen> {
+  final _search = TextEditingController();
   String _q = '';
+
+  @override
+  void dispose() {
+    _search.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final t = L10n.of(context);
     final masjids = ref.watch(nearbyMasjidsProvider);
     return Scaffold(
-      appBar: AppBar(title: Text(t.nearbyMasjids)),
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(Gap.l),
-            child: TextField(
+          PageHeader(
+            title: t.nearbyMasjids,
+            back: true,
+            bottom: AppSearchField(
+              controller: _search,
+              hint: t.searchMasjid,
               onChanged: (v) => setState(() => _q = v.trim().toLowerCase()),
-              decoration: InputDecoration(
-                hintText: t.searchMasjid,
-                prefixIcon: Icon(Icons.search_rounded, color: AppColors.ink),
-              ),
             ),
           ),
+          const SizedBox(height: Gap.l),
           Expanded(
             child: masjids.when(
               loading: () => const Loader(),

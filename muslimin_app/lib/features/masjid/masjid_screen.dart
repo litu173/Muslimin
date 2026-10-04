@@ -6,6 +6,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../core/nav.dart';
 import '../../core/theme/app_colors.dart';
+import '../../core/widgets/page_header.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text.dart';
 import '../../core/utils/format.dart';
@@ -60,7 +61,7 @@ class _MasjidScreenState extends ConsumerState<MasjidScreen>
 
     if (masjid == null) {
       return Scaffold(
-        appBar: AppBar(),
+        appBar: PatternAppBar(),
         body: async.isLoading
             ? const Loader()
             : EmptyState(message: t.somethingWrong),

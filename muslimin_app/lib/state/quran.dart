@@ -8,12 +8,8 @@ import 'providers.dart';
 
 final quranRepositoryProvider = Provider((_) => QuranRepository());
 
-/// Journey order: Al-Fatiha first, then from An-Nas (114) back to
-/// Al-Baqarah (2) – short surahs first, the way most people learn.
-final List<Surah> kJourney = [
-  kSurahs.first,
-  for (var i = 113; i >= 1; i--) kSurahs[i],
-];
+/// Journey order: the Mushaf order, Al-Fatihah (1) to An-Nas (114).
+final List<Surah> kJourney = kSurahs;
 
 /// A phase: up to three consecutive journey surahs, about 60 verses
 /// (a long surah is a phase on its own). Ends with an optional quiz.

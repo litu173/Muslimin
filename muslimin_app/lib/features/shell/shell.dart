@@ -10,9 +10,10 @@ import '../dua/dua_screen.dart';
 import '../home/home_screen.dart';
 import '../home/quran_energy_card.dart';
 import '../more/more_screen.dart';
+import '../notices/notices_screen.dart';
 import '../read/read_screen.dart';
 
-/// Bottom navigation: Home · Quran · Dua · More.
+/// Bottom navigation: Home · Quran · Dua · Notice · More.
 class Shell extends ConsumerStatefulWidget {
   const Shell({super.key});
 
@@ -37,7 +38,13 @@ class _ShellState extends ConsumerState<Shell> {
     return Scaffold(
       body: IndexedStack(
         index: _tab,
-        children: const [HomeScreen(), ReadScreen(), DuaScreen(), MoreScreen()],
+        children: const [
+          HomeScreen(),
+          ReadScreen(),
+          DuaScreen(),
+          NoticesScreen(),
+          MoreScreen(),
+        ],
       ),
       bottomNavigationBar: DecoratedBox(
         decoration: BoxDecoration(
@@ -81,10 +88,18 @@ class _ShellState extends ConsumerState<Shell> {
                   onTap: () => _go(2),
                 ),
                 _NavItem(
-                  icon: Icons.menu_rounded,
-                  label: t.more,
+                  icon: _tab == 3
+                      ? Icons.campaign_rounded
+                      : Icons.campaign_outlined,
+                  label: t.tabNotices,
                   selected: _tab == 3,
                   onTap: () => _go(3),
+                ),
+                _NavItem(
+                  icon: Icons.menu_rounded,
+                  label: t.more,
+                  selected: _tab == 4,
+                  onTap: () => _go(4),
                 ),
               ],
             ),

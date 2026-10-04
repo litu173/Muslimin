@@ -105,8 +105,11 @@ class PrayerNameArt extends StatelessWidget {
         width: _width[prayer]! * scale,
         // Up to just below the baseline; descenders (g, j) hang over the gap.
         height: 42 * scale,
+        // minHeight 0: shorter artworks (Isha) must not inherit the box's
+        // tight height, or the layout is invalid and nothing is drawn.
         child: OverflowBox(
           alignment: Alignment.topLeft,
+          minHeight: 0,
           maxHeight: _height[prayer]! * scale,
           child: SvgPicture.asset(
             'assets/prayers/${prayer == Prayer.jumuah ? 'jumah' : prayer.name}.svg',

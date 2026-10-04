@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/nav.dart';
 import '../../core/theme/app_colors.dart';
+import '../../core/widgets/page_header.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text.dart';
 import '../../core/utils/format.dart';
@@ -350,7 +351,7 @@ class AchievementsScreen extends ConsumerWidget {
     final p = ref.watch(quranProgressProvider);
     final list = _ordered(p);
     return Scaffold(
-      appBar: AppBar(title: Text(t.achievements)),
+      appBar: PatternAppBar(title: Text(t.achievements)),
       body: RefreshList(
         onRefresh: () =>
             Future<void>.delayed(const Duration(milliseconds: 500)),

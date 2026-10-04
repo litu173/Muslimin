@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/theme/app_colors.dart';
+import '../../core/widgets/page_header.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text.dart';
 import '../../core/utils/format.dart';
@@ -87,7 +88,7 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
     final t = L10n.of(context);
     final f = Fmt.of(context);
     return Scaffold(
-      appBar: AppBar(
+      appBar: PatternAppBar(
         title: Text(t.phaseQuiz(f.digits(widget.phase.index + 1))),
       ),
       body: FutureBuilder<List<QuizQuestion>>(

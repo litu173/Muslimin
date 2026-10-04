@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/nav.dart';
 import '../../core/theme/app_colors.dart';
+import '../../core/widgets/page_header.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text.dart';
 import '../../core/widgets/buttons.dart';
@@ -24,7 +25,7 @@ class ManageMasjidsScreen extends ConsumerWidget {
     final t = L10n.of(context);
     final mine = ref.watch(myMasjidsProvider);
     return Scaffold(
-      appBar: AppBar(title: Text(t.manageMasjids)),
+      appBar: PatternAppBar(title: Text(t.manageMasjids)),
       body: mine.when(
         loading: () => const Loader(),
         error: (_, _) => EmptyState(message: t.somethingWrong),

@@ -39,11 +39,22 @@ abstract final class AppTheme {
         fontFamily: family,
       ),
       cardColor: AppColors.card,
-      dialogTheme: DialogThemeData(backgroundColor: AppColors.card),
+      dialogTheme: DialogThemeData(
+        backgroundColor: AppColors.card,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(Radii.card),
+        ),
+        titleTextStyle: AppText.subtitle.copyWith(fontFamily: family),
+        contentTextStyle: AppText.body.copyWith(fontFamily: family),
+      ),
       popupMenuTheme: PopupMenuThemeData(color: AppColors.card),
       appBarTheme: AppBarTheme(
         backgroundColor: AppColors.header,
         foregroundColor: AppColors.onHeader,
+        titleTextStyle: AppText.subtitle.copyWith(
+          color: AppColors.onHeader,
+          fontFamily: family,
+        ),
         elevation: 0,
         centerTitle: false,
         systemOverlayStyle: SystemUiOverlayStyle.light,

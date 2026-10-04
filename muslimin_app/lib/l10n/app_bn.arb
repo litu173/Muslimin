@@ -567,5 +567,11 @@
   "part_day_sub": "মানুষ, আনন্দ ও পরীক্ষা",
   "part_evening_sub": "ঘর, মজলিস, ইস্তিগফার",
   "part_night_sub": "ঘুম ও রাত",
-  "duaCount": "{n}টি দো‘আ"
+  "duaCount": "{n}টি দো‘আ",
+  "noticeSearchHint": "নোটিশ, মসজিদ খুঁজুন…",
+  "noticesSub": "আশেপাশের মসজিদ থেকে",
+  "tabNotices": "নোটিশ",
+  "chooseSurah": "সূরা বেছে নিন",
+  "surahSearchHint": "নাম বা নম্বর দিয়ে সূরা খুঁজুন",
+  "previousSurah": "আগের সূরা"
 }
