@@ -355,6 +355,23 @@ class FirebaseBackend implements Backend {
       (data['geo'] as Map<String, dynamic>)['geopoint'] as GeoPoint;
 
   @override
+  Stream<List<Masjid>> allMasjids(double lat, double lng) => _masjids
+      .where('status', isEqualTo: MasjidStatus.approved.name)
+      .limit(1000)
+      .snapshots()
+      .map(
+        (s) => s.docs.map(_masjid).toList()
+          ..sort(
+            (a, b) => distanceMeters(
+              lat,
+              lng,
+              a.lat,
+              a.lng,
+            ).compareTo(distanceMeters(lat, lng, b.lat, b.lng)),
+          ),
+      );
+
+  @override
   Stream<List<Masjid>> nearbyMasjids(double lat, double lng, double radiusKm) {
     return GeoCollectionReference<Map<String, dynamic>>(_masjids)
         .subscribeWithin(

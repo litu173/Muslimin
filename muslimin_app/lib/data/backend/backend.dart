@@ -69,6 +69,9 @@ abstract class Backend {
   // ---- Masjids ----
   /// Approved masjids within [radiusKm] of the point.
   Stream<List<Masjid>> nearbyMasjids(double lat, double lng, double radiusKm);
+
+  /// Every approved masjid, nearest to the point first ("View All").
+  Stream<List<Masjid>> allMasjids(double lat, double lng);
   Stream<Masjid?> watchMasjid(String id);
   Stream<List<Masjid>> myMasjids(String uid);
 

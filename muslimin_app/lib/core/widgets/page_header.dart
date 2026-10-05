@@ -121,7 +121,11 @@ class PageHeader extends StatelessWidget {
           ),
           if (subtitle != null)
             Padding(
-              padding: EdgeInsets.only(left: back ? Gap.m : 0, top: 2),
+              // Lines up with the title, past the back button.
+              padding: EdgeInsets.only(
+                left: back ? kMinInteractiveDimension : 0,
+                top: 2,
+              ),
               child: Text(
                 subtitle!,
                 style: AppText.caption.copyWith(

@@ -590,5 +590,7 @@
   "locFromGps": "GPS",
   "locSaved": "সংরক্ষিত লোকেশন",
   "useGpsInstead": "GPS ব্যবহার",
-  "adjustOnMap": "ম্যাপে ঠিক করুন"
+  "adjustOnMap": "ম্যাপে ঠিক করুন",
+  "allMasjids": "সব মসজিদ",
+  "nearestFirst": "কাছের মসজিদ আগে"
 }

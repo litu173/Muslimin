@@ -233,6 +233,13 @@ final nearbyMasjidsProvider = StreamProvider<List<Masjid>>((ref) {
       .nearbyMasjids(loc.lat, loc.lng, kNearbyRadiusKm);
 });
 
+/// "View All": every verified masjid, nearest first.
+final allMasjidsProvider = StreamProvider<List<Masjid>>((ref) {
+  final loc = ref.watch(locationProvider).value;
+  if (loc == null) return const Stream.empty();
+  return ref.watch(backendProvider).allMasjids(loc.lat, loc.lng);
+});
+
 final masjidProvider = StreamProvider.family<Masjid?, String>(
   (ref, id) => ref.watch(backendProvider).watchMasjid(id),
 );

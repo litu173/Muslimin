@@ -1034,5 +1034,7 @@
   "locFromGps": "GPS",
   "locSaved": "Saved location",
   "useGpsInstead": "Use GPS",
-  "adjustOnMap": "Adjust on map"
+  "adjustOnMap": "Adjust on map",
+  "allMasjids": "All Masjids",
+  "nearestFirst": "Nearest first"
 }

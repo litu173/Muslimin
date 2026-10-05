@@ -68,10 +68,17 @@ class DemoBackend implements Backend {
       ('Baitul Aman Jame Masjid', 'Road 4, Block C', 'বায়তুল আমান জামে মসজিদ'),
       ('Masjid-e-Noor', 'College Gate', 'মসজিদে নূর'),
       ('Taqwa Masjid', 'Lake Road', 'তাকওয়া মসজিদ'),
+      // Beyond the 5 km "nearby" radius – only in View All.
+      ('Baitul Falah Masjid', 'Mirpur Road', 'বায়তুল ফালাহ মসজিদ'),
+      ('Uttara Central Masjid', 'Sector 7, Uttara', 'উত্তরা কেন্দ্রীয় মসজিদ'),
     ];
     final now = DateTime.now();
     for (var i = 0; i < names.length; i++) {
-      final dist = 150.0 + i * 320 + rnd.nextInt(80);
+      final dist = switch (i) {
+        5 => 6500.0,
+        6 => 12000.0,
+        _ => 150.0 + i * 320 + rnd.nextInt(80),
+      };
       final bearing = rnd.nextDouble() * 2 * math.pi;
       final dLat = dist * math.cos(bearing) / 111320;
       final dLng =
@@ -376,6 +383,20 @@ class DemoBackend implements Backend {
       return list;
     });
   }
+
+  @override
+  Stream<List<Masjid>> allMasjids(double lat, double lng) => _watch(
+    () =>
+        _masjids.values.where((m) => m.status == MasjidStatus.approved).toList()
+          ..sort(
+            (a, b) => distanceMeters(
+              lat,
+              lng,
+              a.lat,
+              a.lng,
+            ).compareTo(distanceMeters(lat, lng, b.lat, b.lng)),
+          ),
+  );
 
   @override
   Stream<Masjid?> watchMasjid(String id) => _watch(() => _masjids[id]);

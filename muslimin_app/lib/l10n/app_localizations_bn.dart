@@ -1985,4 +1985,10 @@ class L10nBn extends L10n {
 
   @override
   String get adjustOnMap => 'ম্যাপে ঠিক করুন';
+
+  @override
+  String get allMasjids => 'সব মসজিদ';
+
+  @override
+  String get nearestFirst => 'কাছের মসজিদ আগে';
 }

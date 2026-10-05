@@ -9,7 +9,7 @@ import '../../l10n/app_localizations.dart';
 import '../../state/providers.dart';
 import 'masjid_card.dart';
 
-/// "View All" – every verified masjid within 5 km, searchable.
+/// "View All" – every verified masjid, nearest first, searchable.
 class MasjidListScreen extends ConsumerStatefulWidget {
   const MasjidListScreen({super.key});
 
@@ -30,12 +30,13 @@ class _MasjidListScreenState extends ConsumerState<MasjidListScreen> {
   @override
   Widget build(BuildContext context) {
     final t = L10n.of(context);
-    final masjids = ref.watch(nearbyMasjidsProvider);
+    final masjids = ref.watch(allMasjidsProvider);
     return Scaffold(
       body: Column(
         children: [
           PageHeader(
-            title: t.nearbyMasjids,
+            title: t.allMasjids,
+            subtitle: t.nearestFirst,
             back: true,
             bottom: AppSearchField(
               controller: _search,
@@ -66,7 +67,10 @@ class _MasjidListScreenState extends ConsumerState<MasjidListScreen> {
                   );
                 }
                 return RefreshList.separated(
-                  onRefresh: () => refreshAll(ref),
+                  onRefresh: () async {
+                    ref.invalidate(allMasjidsProvider);
+                    await refreshAll(ref);
+                  },
                   padding: const EdgeInsets.fromLTRB(Gap.l, 0, Gap.l, Gap.xxl),
                   itemCount: list.length,
                   separatorBuilder: (_, _) => const SizedBox(height: 10),
