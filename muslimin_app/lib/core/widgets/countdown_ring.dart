@@ -5,7 +5,13 @@ import 'package:flutter/material.dart';
 import '../theme/app_colors.dart';
 
 /// The circular "Time left" ring of the home header.
-class CountdownRing extends StatelessWidget {
+///
+/// The countdown changes the progress every second by a hair. Animating each
+/// of those steps (600 ms per second) kept the app drawing ~36 frames a
+/// second for as long as Home was open, which made the phone's own UI
+/// sluggish. Small steps now jump (one frame); only real jumps – a new
+/// waqt, first load – are animated.
+class CountdownRing extends StatefulWidget {
   const CountdownRing({
     super.key,
     required this.progress,
@@ -19,25 +25,63 @@ class CountdownRing extends StatelessWidget {
   final double size;
 
   @override
+  State<CountdownRing> createState() => _CountdownRingState();
+}
+
+class _CountdownRingState extends State<CountdownRing>
+    with SingleTickerProviderStateMixin {
+  late final _anim = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 600),
+    value: 0,
+  )..forward();
+  late final _curve = CurvedAnimation(parent: _anim, curve: Curves.easeOut);
+  double _from = 1;
+  late double _to = 1 - widget.progress;
+
+  double get _remaining => _from + (_to - _from) * _curve.value;
+
+  @override
+  void didUpdateWidget(CountdownRing old) {
+    super.didUpdateWidget(old);
+    final next = 1 - widget.progress;
+    if (next == _to) return;
+    if ((next - _remaining).abs() < 0.02) {
+      // Per-second tick: just move, no animation frames.
+      _from = _to = next;
+      _anim.value = 1;
+    } else {
+      _from = _remaining;
+      _to = next;
+      _anim.forward(from: 0);
+    }
+  }
+
+  @override
+  void dispose() {
+    _curve.dispose();
+    _anim.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) => SizedBox.square(
-    dimension: size,
-    child: TweenAnimationBuilder<double>(
-      tween: Tween(end: 1 - progress),
-      duration: const Duration(milliseconds: 600),
-      builder: (_, remaining, c) =>
-          CustomPaint(painter: _RingPainter(remaining), child: c),
-      child: Center(child: child),
+    dimension: widget.size,
+    child: CustomPaint(
+      painter: _RingPainter(this),
+      child: Center(child: widget.child),
     ),
   );
 }
 
 class _RingPainter extends CustomPainter {
-  _RingPainter(this.remaining);
+  _RingPainter(this.ring) : super(repaint: ring._anim);
 
-  final double remaining;
+  final _CountdownRingState ring;
 
   @override
   void paint(Canvas canvas, Size size) {
+    final remaining = ring._remaining;
     const stroke = 5.0;
     final rect = (Offset.zero & size).deflate(stroke / 2);
     canvas.drawArc(
@@ -72,5 +116,5 @@ class _RingPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(_RingPainter old) => old.remaining != remaining;
+  bool shouldRepaint(_RingPainter old) => true;
 }

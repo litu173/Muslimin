@@ -52,12 +52,22 @@ class _VerseCarouselState extends State<VerseCarousel> {
     _timer?.cancel();
     if (!_visible) return;
     _timer = Timer.periodic(const Duration(seconds: 8), (_) {
-      if (!_controller.hasClients) return;
+      if (!_controller.hasClients || !_onScreen()) return;
       _controller.nextPage(
         duration: const Duration(milliseconds: 600),
         curve: Curves.easeInOut,
       );
     });
+  }
+
+  /// Slides only while the slider is actually in view – it sits at the
+  /// bottom of Home, and sliding off-screen would still cost frames.
+  bool _onScreen() {
+    final box = context.findRenderObject() as RenderBox?;
+    if (box == null || !box.attached || !box.hasSize) return false;
+    final top = box.localToGlobal(Offset.zero).dy;
+    final screen = MediaQuery.sizeOf(context).height;
+    return top < screen && top + box.size.height > 0;
   }
 
   @override

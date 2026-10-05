@@ -33,14 +33,22 @@ class QuranEnergyCard extends ConsumerStatefulWidget {
 
 class _QuranEnergyCardState extends ConsumerState<QuranEnergyCard>
     with SingleTickerProviderStateMixin {
-  /// One slow cycle drives the rising motes.
+  /// The motes drift up once when the card appears (and again after
+  /// reading), then rest. Never loop it: an endless animation keeps the
+  /// phone redrawing 60–120 times a second while Home is open, which slows
+  /// the whole system UI (status bar, notification shade).
   late final _t = AnimationController(
     vsync: this,
-    duration: const Duration(seconds: 12),
-  )..repeat();
+    duration: const Duration(seconds: 8),
+  )..forward();
+
+  /// Eases out, so the motes slow down and settle instead of freezing.
+  late final _drift = CurvedAnimation(parent: _t, curve: Curves.easeOutSine);
+  int? _lastToday;
 
   @override
   void dispose() {
+    _drift.dispose();
     _t.dispose();
     super.dispose();
   }
@@ -51,6 +59,8 @@ class _QuranEnergyCardState extends ConsumerState<QuranEnergyCard>
     final f = Fmt.of(context);
     final p = ref.watch(quranProgressProvider);
     final today = p.versesToday;
+    if (_lastToday != null && today != _lastToday) _t.forward(from: 0);
+    _lastToday = today;
     final streak = p.streak;
     // 0…1 up to the goal, up to 2 beyond it (extra shine).
     final energy = (today / kDailyGoal).clamp(0.0, 2.0);
@@ -89,7 +99,7 @@ class _QuranEnergyCardState extends ConsumerState<QuranEnergyCard>
                   child: CustomPaint(
                     painter: _QuranLightPainter(
                       energy: e,
-                      anim: _t,
+                      anim: _drift,
                       dark: AppColors.dark,
                     ),
                   ),
@@ -435,7 +445,8 @@ class _QuranLightPainter extends CustomPainter {
         final drift = (r.nextDouble() - 0.5) * bookW * 1.3;
         final size = 0.8 + r.nextDouble() * 1.8;
         final speed = 3 + r.nextDouble() * 2;
-        final phase = (t * speed + seed) % 1;
+        // Same drift speed as the old 12 s loop at the start of the ease.
+        final phase = (t * speed * 0.45 + seed) % 1;
         // Start inside the open pages, spread out as they rise.
         final x =
             source.dx +
