@@ -33,7 +33,7 @@ class QuranEnergyCard extends ConsumerStatefulWidget {
 
 class _QuranEnergyCardState extends ConsumerState<QuranEnergyCard>
     with SingleTickerProviderStateMixin {
-  /// One slow cycle drives the rays, the breathing glow and the motes.
+  /// One slow cycle drives the rising motes.
   late final _t = AnimationController(
     vsync: this,
     duration: const Duration(seconds: 12),
@@ -83,12 +83,13 @@ class _QuranEnergyCardState extends ConsumerState<QuranEnergyCard>
                 borderRadius: BorderRadius.horizontal(
                   left: Radius.circular(Radii.card),
                 ),
-                child: AnimatedBuilder(
-                  animation: _t,
-                  builder: (_, _) => CustomPaint(
+                // Own layer: each animation frame repaints only the motes,
+                // not the card, its pattern and text.
+                child: RepaintBoundary(
+                  child: CustomPaint(
                     painter: _QuranLightPainter(
                       energy: e,
-                      t: _t.value,
+                      anim: _t,
                       dark: AppColors.dark,
                     ),
                   ),
@@ -233,18 +234,20 @@ class _EnergyBar extends StatelessWidget {
 class _QuranLightPainter extends CustomPainter {
   _QuranLightPainter({
     required this.energy,
-    required this.t,
+    required this.anim,
     required this.dark,
-  });
+  }) : super(repaint: anim);
 
   final double energy;
 
-  /// 0…1, one slow animation cycle.
-  final double t;
+  /// 0…1, one slow animation cycle. Passed as `repaint`, so frames only
+  /// repaint this layer – no widget rebuilds.
+  final Animation<double> anim;
   final bool dark;
 
   @override
   void paint(Canvas canvas, Size s) {
+    final t = anim.value;
     final w = s.width, h = s.height;
     final light = dark ? const Color(0xFFFFE3A0) : const Color(0xFFEFB43A);
     final lit = energy.clamp(0.0, 1.0);
@@ -455,5 +458,5 @@ class _QuranLightPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(_QuranLightPainter old) =>
-      old.energy != energy || old.t != t || old.dark != dark;
+      old.energy != energy || old.anim != anim || old.dark != dark;
 }

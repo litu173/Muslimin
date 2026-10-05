@@ -28,14 +28,29 @@ class _VerseCarouselState extends State<VerseCarousel> {
   int _page = _startPage;
   Timer? _timer;
 
+  late final _lifecycle = AppLifecycleListener(
+    onResume: _restartTimer,
+    onHide: () => _timer?.cancel(),
+  );
+  bool _visible = true;
+
   @override
   void initState() {
     super.initState();
+    _lifecycle;
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Paused while another tab is shown (see Shell's TickerMode).
+    _visible = TickerMode.valuesOf(context).enabled;
     _restartTimer();
   }
 
   void _restartTimer() {
     _timer?.cancel();
+    if (!_visible) return;
     _timer = Timer.periodic(const Duration(seconds: 8), (_) {
       if (!_controller.hasClients) return;
       _controller.nextPage(
@@ -47,6 +62,7 @@ class _VerseCarouselState extends State<VerseCarousel> {
 
   @override
   void dispose() {
+    _lifecycle.dispose();
     _timer?.cancel();
     _controller.dispose();
     super.dispose();

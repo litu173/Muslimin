@@ -93,15 +93,15 @@ List<(DuaScene, List<Dua>)> _filter(L10n t, List<DuaScene> scenes, String q) {
 }
 
 /// Plays one dua's recitation at a time; shared by a page's cards.
+/// The native player is created on first use, not when the tab is built.
 class _DuaAudio {
-  final player = AudioPlayer();
+  AudioPlayer? _player;
   final playing = ValueNotifier<int?>(null);
 
-  _DuaAudio() {
-    player.playerStateStream.listen((s) {
+  AudioPlayer get player => _player ??= AudioPlayer()
+    ..playerStateStream.listen((s) {
       if (s.processingState == ProcessingState.completed) playing.value = null;
     });
-  }
 
   Future<void> toggle(Dua d) async {
     if (playing.value == d.n) {
@@ -119,7 +119,7 @@ class _DuaAudio {
   }
 
   void dispose() {
-    player.dispose();
+    _player?.dispose();
     playing.dispose();
   }
 }

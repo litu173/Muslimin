@@ -28,32 +28,36 @@ class IslamicPattern extends StatelessWidget {
       decoration: BoxDecoration(color: color ?? AppColors.header),
       child: Stack(
         children: [
+          // Drawn once and cached: the vector tile is costly to repaint, and
+          // headers often hold content that updates (countdown, scrolling).
           Positioned.fill(
-            child: LayoutBuilder(
-              builder: (_, c) {
-                final cols = math.max(1, (c.maxWidth / _w).ceil());
-                final rows = math.max(1, (c.maxHeight / _h).ceil());
-                return OverflowBox(
-                  alignment: Alignment.topLeft,
-                  maxWidth: cols * _w,
-                  maxHeight: rows * _h,
-                  child: Column(
-                    children: [
-                      for (var r = 0; r < rows; r++)
-                        Row(
-                          children: [
-                            for (var col = 0; col < cols; col++)
-                              SvgPicture.asset(
-                                'assets/patterns/header_pattern.svg',
-                                width: _w,
-                                height: _h,
-                              ),
-                          ],
-                        ),
-                    ],
-                  ),
-                );
-              },
+            child: RepaintBoundary(
+              child: LayoutBuilder(
+                builder: (_, c) {
+                  final cols = math.max(1, (c.maxWidth / _w).ceil());
+                  final rows = math.max(1, (c.maxHeight / _h).ceil());
+                  return OverflowBox(
+                    alignment: Alignment.topLeft,
+                    maxWidth: cols * _w,
+                    maxHeight: rows * _h,
+                    child: Column(
+                      children: [
+                        for (var r = 0; r < rows; r++)
+                          Row(
+                            children: [
+                              for (var col = 0; col < cols; col++)
+                                SvgPicture.asset(
+                                  'assets/patterns/header_pattern.svg',
+                                  width: _w,
+                                  height: _h,
+                                ),
+                            ],
+                          ),
+                      ],
+                    ),
+                  );
+                },
+              ),
             ),
           ),
           ?child,

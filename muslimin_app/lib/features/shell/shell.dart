@@ -38,12 +38,17 @@ class _ShellState extends ConsumerState<Shell> {
     return Scaffold(
       body: IndexedStack(
         index: _tab,
-        children: const [
-          HomeScreen(),
-          ReadScreen(),
-          DuaScreen(),
-          NoticesScreen(),
-          MoreScreen(),
+        children: [
+          // Hidden tabs stay alive but their animations and timers pause,
+          // so only the visible tab uses the CPU / GPU.
+          for (final (i, tab) in const [
+            HomeScreen(),
+            ReadScreen(),
+            DuaScreen(),
+            NoticesScreen(),
+            MoreScreen(),
+          ].indexed)
+            TickerMode(enabled: i == _tab, child: tab),
         ],
       ),
       bottomNavigationBar: DecoratedBox(

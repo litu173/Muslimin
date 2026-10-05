@@ -193,7 +193,6 @@ class PrayerHeader extends ConsumerWidget {
     final t = L10n.of(context);
     final f = Fmt.of(context);
     final waqt = ref.watch(waqtProvider);
-    final now = ref.watch(clockProvider).value ?? DateTime.now();
 
     return SizedBox(
       height: 204,
@@ -254,30 +253,40 @@ class PrayerHeader extends ConsumerWidget {
                         ],
                       ),
                     ),
-                    CountdownRing(
-                      size: 136,
-                      progress: waqt.progress(now),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            waqt.isCurrent ? t.timeLeft : t.startsIn,
-                            style: AppText.caption.copyWith(
-                              color: Colors.white,
-                            ),
-                          ),
-                          Text(
-                            f.countdown(waqt.remaining(now)),
-                            style: AppText.subtitle.copyWith(
-                              color: AppColors.goldLight,
-                              fontSize: 24,
-                              fontFeatures: const [
-                                FontFeature.tabularFigures(),
+                    // Only the ring ticks every second – the rest of the
+                    // header (pattern, prayer art) stays untouched.
+                    Consumer(
+                      builder: (context, ref, _) {
+                        final now =
+                            ref.watch(clockProvider).value ?? DateTime.now();
+                        return RepaintBoundary(
+                          child: CountdownRing(
+                            size: 136,
+                            progress: waqt.progress(now),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  waqt.isCurrent ? t.timeLeft : t.startsIn,
+                                  style: AppText.caption.copyWith(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                Text(
+                                  f.countdown(waqt.remaining(now)),
+                                  style: AppText.subtitle.copyWith(
+                                    color: AppColors.goldLight,
+                                    fontSize: 24,
+                                    fontFeatures: const [
+                                      FontFeature.tabularFigures(),
+                                    ],
+                                  ),
+                                ),
                               ],
                             ),
                           ),
-                        ],
-                      ),
+                        );
+                      },
                     ),
                   ],
                 ),

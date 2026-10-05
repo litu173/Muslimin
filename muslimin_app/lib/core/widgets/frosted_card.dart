@@ -1,5 +1,3 @@
-import 'dart:ui' show ImageFilter;
-
 import 'package:flutter/material.dart';
 
 import '../theme/app_colors.dart';
@@ -8,7 +6,7 @@ import 'islamic_pattern.dart';
 
 /// The "spiritual" card surface shared by the ayah slider and the Daily
 /// Quran tracker: a warm gold-to-mint gradient (deep green at night), the
-/// header pattern, and a frosted-glass wash on top.
+/// header pattern, and a frosted wash on top.
 class FrostedCard extends StatelessWidget {
   const FrostedCard({super.key, required this.child, this.onTap});
 
@@ -44,28 +42,25 @@ class FrostedCard extends StatelessWidget {
               ),
             ),
           ),
-          Positioned.fill(
-            child: Opacity(
-              opacity: dark ? 0.9 : 1,
-              child: const IslamicPattern(color: Colors.transparent),
-            ),
+          const Positioned.fill(
+            child: IslamicPattern(color: Colors.transparent),
           ),
+          // Frosted wash. A real backdrop blur is re-run by the GPU on every
+          // frame (and this card animates), so a translucent gradient gives
+          // the same look for free.
           Positioned.fill(
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 1.2, sigmaY: 1.2),
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  borderRadius: radius,
-                  border: Border.all(
-                    color: AppColors.gold.withValues(alpha: 0.35),
-                  ),
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: dark
-                        ? const [Color(0x330B1A18), Color(0x660B1A18)]
-                        : const [Color(0x59FFFFFF), Color(0x26FFFFFF)],
-                  ),
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                borderRadius: radius,
+                border: Border.all(
+                  color: AppColors.gold.withValues(alpha: 0.35),
+                ),
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: dark
+                      ? const [Color(0x400B1A18), Color(0x730B1A18)]
+                      : const [Color(0x59FFFFFF), Color(0x26FFFFFF)],
                 ),
               ),
             ),

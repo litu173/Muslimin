@@ -158,10 +158,31 @@ final locationProvider = AsyncNotifierProvider<LocationNotifier, UserLocation>(
 );
 
 // --------------------------------------------------------------------- clock
-/// Ticks every second – drives the countdown and "Now" markers.
-final clockProvider = StreamProvider<DateTime>((ref) async* {
-  yield DateTime.now();
-  yield* Stream.periodic(const Duration(seconds: 1), (_) => DateTime.now());
+/// Ticks every second – drives the countdown and "Now" markers. Stops while
+/// the app is in the background, so it never wakes the phone for nothing.
+final clockProvider = StreamProvider<DateTime>((ref) {
+  final out = StreamController<DateTime>();
+  Timer? timer;
+  void start() {
+    timer?.cancel();
+    out.add(DateTime.now());
+    timer = Timer.periodic(
+      const Duration(seconds: 1),
+      (_) => out.add(DateTime.now()),
+    );
+  }
+
+  final lifecycle = AppLifecycleListener(
+    onResume: start,
+    onHide: () => timer?.cancel(),
+  );
+  start();
+  ref.onDispose(() {
+    timer?.cancel();
+    lifecycle.dispose();
+    out.close();
+  });
+  return out.stream;
 });
 
 /// Ticks every minute – for things that don't need per-second updates.
