@@ -1,10 +1,12 @@
 import 'dart:convert';
-import 'dart:typed_data';
 
 import 'package:firebase_ai/firebase_ai.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 
 import '../data/models/hm.dart';
 import '../data/models/prayer.dart';
+import 'board_parser.dart';
 
 /// Reads the jamat times from a photo of a masjid's salat time board
 /// (LED / digital boards, printed or hand-written charts).
@@ -21,45 +23,55 @@ class TimeBoardException implements Exception {
   String toString() => message;
 }
 
-/// Gemini (via Firebase AI Logic, Gemini Developer API) looks at the photo
-/// and returns the times as structured JSON.
+/// Gemini (via Firebase AI Logic, Gemini Developer API) transcribes the
+/// board row by row; [assignBoard] then picks each prayer's jamat the same
+/// way as for on-device text: by label, else by the board's order.
 class GeminiTimeBoardReader implements TimeBoardReader {
-  static const _keys = {
-    Prayer.fajr: 'fajr',
-    Prayer.dhuhr: 'dhuhr',
-    Prayer.asr: 'asr',
-    Prayer.maghrib: 'maghrib',
-    Prayer.isha: 'isha',
-    Prayer.jumuah: 'jumuah',
-  };
-
   static const _prompt = '''
 This is a photo of a salat (prayer) time board in a masjid, usually in Bangladesh.
-Boards are often red/green 7-segment LED displays, but can also be printed or hand-written.
-Labels may be in Bangla (ফজর, যোহর/জোহর, আছর/আসর, মাগরিব, এশা/ইশা, জুম'আ/জুমা),
-English or Arabic (الفجر, الظهر, العصر, المغرب, العشاء, الجمعة).
+Boards are often red/green 7-segment LED displays, but can also be printed, painted or hand-written.
+Labels may be in Bangla (ফজর, যোহর/জোহর, আসর/আছর, মাগরিব, এশা/ইশা, জুম'আ/জুমা, সূর্যোদয়, সাহরি, ইফতার),
+English, or Arabic (الفجر, الظهر, العصر, المغرب, العشاء, الجمعة).
+Some boards have two times per prayer: azan/start (আযান) and jamat/iqamah (জামাত).
 
-Return the JAMAT (iqamah) time for each prayer:
-- If the board shows two times per prayer (start/azan and jamat/iqamah), return the jamat one.
-- Ignore the current clock, the date, sunrise, sehri/iftar and other rows.
-- Write each time as H:MM with ASCII digits exactly as shown (12-hour, no AM/PM), e.g. "5:15", "1:30".
-- Convert Bangla digits (০-৯) to ASCII.
-- Use null for a prayer you cannot read or that shows a placeholder such as 8:88 or --:--.
-Do not guess.''';
+Transcribe the board's rows from top to bottom. If the prayers stand side by side, list them left to right.
+For each row give:
+- label: the row's name exactly as written (any script), or "" if none
+- prayer: fajr, dhuhr, asr, maghrib, isha or jumuah if the label names one, else "other" (sunrise, sehri, iftar, zawal…)
+- times: every time on that row, left to right, as H:MM with ASCII digits (convert Bangla ০-৯ and Arabic ٠-٩ digits), 12- or 24-hour exactly as shown.
+For analog clock faces, read the hands to the nearest minute.
+Leave out the current clock, the date and the temperature.
+Skip a time that is unreadable or a placeholder like 8:88 or --:--. Do not guess.''';
 
   @override
   Future<Map<Prayer, HM>> read(Uint8List jpeg) async {
-    final time = Schema.string(
-      nullable: true,
-      description: 'Jamat time as H:MM (12-hour, no AM/PM), or null',
-    );
     final model = FirebaseAI.googleAI().generativeModel(
       model: 'gemini-2.5-flash',
       generationConfig: GenerationConfig(
         temperature: 0,
         responseMimeType: 'application/json',
         responseSchema: Schema.object(
-          properties: {for (final k in _keys.values) k: time},
+          properties: {
+            'rows': Schema.array(
+              items: Schema.object(
+                properties: {
+                  'label': Schema.string(),
+                  'prayer': Schema.enumString(
+                    enumValues: [
+                      'fajr',
+                      'dhuhr',
+                      'asr',
+                      'maghrib',
+                      'isha',
+                      'jumuah',
+                      'other',
+                    ],
+                  ),
+                  'times': Schema.array(items: Schema.string()),
+                },
+              ),
+            ),
+          },
         ),
       ),
     );
@@ -70,11 +82,80 @@ Do not guess.''';
     if (text == null || text.trim().isEmpty) {
       throw const TimeBoardException('empty response');
     }
-    final json = jsonDecode(text) as Map<String, dynamic>;
-    final out = <Prayer, HM>{
-      for (final e in _keys.entries)
-        e.key: ?normalizeBoardTime(e.key, json[e.value]),
-    };
+    final out = assignBoard(rowsFromGemini(jsonDecode(text)));
+    if (out.isEmpty) throw const TimeBoardException('no times found');
+    return out;
+  }
+}
+
+/// Gemini's JSON rows → board rows.
+List<BoardRow> rowsFromGemini(Object? json) {
+  final rows = (json is Map ? json['rows'] : null) as List? ?? const [];
+  return [
+    for (final r in rows.whereType<Map>())
+      BoardRow(
+        label: switch (r['prayer']) {
+          // Unlabelled rows keep their place in the board's order.
+          'other' when '${r['label'] ?? ''}'.trim().isEmpty => null,
+          'other' => skipRow,
+          final String k when Prayer.values.any((p) => p.name == k) =>
+            Prayer.values.byName(k),
+          _ => labelOf('${r['label'] ?? ''}'),
+        },
+        times: [
+          for (final t in (r['times'] as List? ?? const []))
+            ...timesIn('$t').map((e) => e.$1),
+        ],
+      ),
+  ];
+}
+
+/// On-device text recognition (Apple Vision / ML Kit): free, offline, and
+/// good with printed and LED digits in Latin script. It cannot read Bangla
+/// digits or labels – the board's order fills in for the labels.
+class OnDeviceTimeBoardReader implements TimeBoardReader {
+  static const _channel = MethodChannel('muslimin/board_ocr');
+
+  Future<List<OcrLine>> lines(Uint8List jpeg, {bool down = false}) async {
+    final r = await _channel.invokeListMethod<Map<Object?, Object?>>('read', {
+      'bytes': jpeg,
+      'down': down,
+    });
+    return [
+      for (final m in r ?? const <Map<Object?, Object?>>[]) OcrLine.fromMap(m),
+    ];
+  }
+
+  @override
+  Future<Map<Prayer, HM>> read(Uint8List jpeg) async {
+    // Read it both ways round (photos taken with the phone upside down)
+    // and keep the reading that makes more sense.
+    final up = readOcr(await lines(jpeg));
+    final turned = readOcr(await lines(jpeg, down: true));
+    final out = turned.length > up.length ? turned : up;
+    if (out.isEmpty) throw const TimeBoardException('no times found');
+    return out;
+  }
+}
+
+/// Both readers at once: Gemini's answer where it has one (it also reads
+/// Bangla digits), the on-device one for the rest – and on its own when
+/// Gemini is unavailable (offline, not set up, quota).
+class CombinedTimeBoardReader implements TimeBoardReader {
+  CombinedTimeBoardReader(this.ai, this.device);
+
+  final TimeBoardReader ai;
+  final TimeBoardReader device;
+
+  @override
+  Future<Map<Prayer, HM>> read(Uint8List jpeg) async {
+    Future<Map<Prayer, HM>> safe(TimeBoardReader r) =>
+        r.read(jpeg).catchError((Object e) {
+          debugPrint('time board ($r): $e');
+          return <Prayer, HM>{};
+        });
+    final both = await Future.wait([safe(ai), safe(device)]);
+    final out = {...both[1], ...both[0]};
     if (out.isEmpty) throw const TimeBoardException('no times found');
     return out;
   }

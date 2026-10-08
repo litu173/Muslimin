@@ -116,8 +116,22 @@ final settingsProvider = NotifierProvider<SettingsNotifier, AppSettings>(
 
 // ------------------------------------------------------------------ location
 class LocationNotifier extends AsyncNotifier<UserLocation> {
+  DateTime? _fetchedAt;
+
   @override
   Future<UserLocation> build() async {
+    // Back in the app after a while: the user may have walked somewhere
+    // else, so measure again.
+    final lifecycle = AppLifecycleListener(
+      onResume: () {
+        final at = _fetchedAt;
+        if (at == null ||
+            DateTime.now().difference(at) > const Duration(minutes: 2)) {
+          refresh();
+        }
+      },
+    );
+    ref.onDispose(lifecycle.dispose);
     final cached = ref.read(prefsProvider).lastLocation;
     if (cached != null) {
       // Show cached location instantly, refresh in the background.
@@ -133,6 +147,7 @@ class LocationNotifier extends AsyncNotifier<UserLocation> {
 
   Future<UserLocation> _fetch() async {
     final loc = await ref.read(locationServiceProvider).current();
+    _fetchedAt = DateTime.now();
     ref.read(prefsProvider).lastLocation = (
       lat: loc.lat,
       lng: loc.lng,
@@ -149,7 +164,8 @@ class LocationNotifier extends AsyncNotifier<UserLocation> {
       if (prev == null ||
           (prev.lat - loc.lat).abs() > 0.0005 ||
           (prev.lng - loc.lng).abs() > 0.0005 ||
-          prev.label != loc.label) {
+          prev.label != loc.label ||
+          prev.approximate != loc.approximate) {
         state = AsyncData(loc);
       }
     } catch (e, st) {

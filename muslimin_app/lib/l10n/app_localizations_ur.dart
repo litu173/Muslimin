@@ -2163,4 +2163,11 @@ class L10nUr extends L10n {
   @override
   String get channelNotAllowed =>
       'چینل اس وقت دستیاب نہیں (رسائی نہیں)۔ براہِ کرم بعد میں کوشش کریں۔';
+
+  @override
+  String get duaForNowSub => 'دن کے اس وقت کے اذکار و دعائیں';
+
+  @override
+  String get approxLocation =>
+      'تخمینی مقام – درست مقام آن کرنے کے لیے ٹیپ کریں';
 }

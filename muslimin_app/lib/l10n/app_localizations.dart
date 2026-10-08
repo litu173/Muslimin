@@ -3926,6 +3926,18 @@ abstract class L10n {
   /// In en, this message translates to:
   /// **'The channel isn\'t available right now (access denied). Please try again later.'**
   String get channelNotAllowed;
+
+  /// No description provided for @duaForNowSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Remembrance for this time of day'**
+  String get duaForNowSub;
+
+  /// No description provided for @approxLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Approximate location – tap to turn on Precise Location'**
+  String get approxLocation;
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {

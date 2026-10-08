@@ -74,6 +74,39 @@ class OsmService {
     return (t['name:$lang'] ?? t['name:en'] ?? t['name'] ?? '') as String;
   }
 
+  /// The named place drawn on the map at a point (a masjid, school, shop,
+  /// building…), or null when there is nothing named right there.
+  Future<MapPlace?> placeAt(
+    double lat,
+    double lng, {
+    String lang = 'en',
+  }) async {
+    final uri = Uri.https('nominatim.openstreetmap.org', '/reverse', {
+      'lat': '$lat',
+      'lon': '$lng',
+      'format': 'jsonv2',
+      'zoom': '18',
+      'accept-language': '$lang,en,bn',
+    });
+    try {
+      final res = await http
+          .get(uri, headers: _ua)
+          .timeout(const Duration(seconds: 10));
+      if (res.statusCode != 200) return null;
+      final r = jsonDecode(res.body) as Map<String, dynamic>;
+      final name = (r['name'] as String?)?.trim() ?? '';
+      if (name.isEmpty || r['lat'] == null) return null;
+      return MapPlace(
+        lat: double.parse(r['lat'] as String),
+        lng: double.parse(r['lon'] as String),
+        name: name,
+        isMasjid: r['type'] == 'place_of_worship' || r['type'] == 'mosque',
+      );
+    } catch (_) {
+      return null;
+    }
+  }
+
   /// Places matching [q] in Bangladesh (masjids, areas, roads…).
   Future<List<MapPlace>> search(String q, {String lang = 'en'}) async {
     if (q.trim().length < 3) return const [];

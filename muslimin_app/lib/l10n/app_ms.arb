@@ -635,5 +635,7 @@
   "attachFile": "Fail",
   "fileTooLarge": "Fail ini terlalu besar. Hadnya {size}.",
   "cantOpenFile": "Tiada aplikasi pada telefon ini yang boleh membuka fail ini.",
-  "channelNotAllowed": "Saluran tidak tersedia sekarang (akses ditolak). Sila cuba lagi nanti."
+  "channelNotAllowed": "Saluran tidak tersedia sekarang (akses ditolak). Sila cuba lagi nanti.",
+  "duaForNowSub": "Zikir dan doa untuk waktu ini",
+  "approxLocation": "Lokasi anggaran – ketik untuk menghidupkan Lokasi Tepat"
 }

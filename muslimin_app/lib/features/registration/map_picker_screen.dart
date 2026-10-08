@@ -21,6 +21,29 @@ import '../../state/providers.dart';
 
 final osmServiceProvider = Provider((_) => OsmService());
 
+/// OpenStreetMap's tiles washed out – less colour under a white veil – so
+/// the map reads light and the pins stand out.
+final _lightTiles = ColorFilter.matrix(_wash(saturation: 0.4, veil: 0.25));
+
+List<double> _wash({required double saturation, required double veil}) {
+  const lum = [0.2126, 0.7152, 0.0722];
+  final k = 1 - veil;
+  final add = 255 * veil;
+  return [
+    for (var row = 0; row < 3; row++) ...[
+      for (var col = 0; col < 3; col++)
+        k * (lum[col] * (1 - saturation) + (row == col ? saturation : 0)),
+      0,
+      add,
+    ],
+    0,
+    0,
+    0,
+    1,
+    0,
+  ];
+}
+
 /// Choose a masjid's location on the map: drag the map (or tap a spot) so
 /// the pin sits on the masjid, or tap a masjid already on the map. Returns a
 /// [UserLocation] with `fromMap: true`, or null if cancelled.
@@ -151,6 +174,33 @@ class _MapPickerScreenState extends ConsumerState<MapPickerScreen> {
     }
   }
 
+  /// A tap on the map: the pin goes there, then snaps to the masjid or
+  /// named place marked at that spot, if any (its name goes with it).
+  Future<void> _tapAt(LatLng p) async {
+    setState(() => _selected = null);
+    _goTo(p);
+    const near = Distance();
+    for (final m in _masjids) {
+      if (near.as(LengthUnit.Meter, p, LatLng(m.lat, m.lng)) < 30) {
+        _pickMasjid(m);
+        return;
+      }
+    }
+    final place = await ref
+        .read(osmServiceProvider)
+        .placeAt(p.latitude, p.longitude, lang: _lang);
+    // Ignore it if the user has moved on, or it is not where they tapped.
+    if (!mounted ||
+        place == null ||
+        near.as(LengthUnit.Meter, p, _center) > 1) {
+      return;
+    }
+    if (near.as(LengthUnit.Meter, p, LatLng(place.lat, place.lng)) > 40) {
+      return;
+    }
+    _pickMasjid(place);
+  }
+
   void _pickMasjid(MapPlace m) {
     HapticFeedback.selectionClick();
     setState(() => _selected = m);
@@ -237,11 +287,8 @@ class _MapPickerScreenState extends ConsumerState<MapPickerScreen> {
                         _onMoveEnd();
                       }
                     },
-                    // Tap a spot: the pin moves there.
-                    onTap: (_, p) {
-                      setState(() => _selected = null);
-                      _goTo(p);
-                    },
+                    // Tap a spot or a marked place: the pin moves there.
+                    onTap: (_, p) => _tapAt(p),
                   ),
                   children: [
                     TileLayer(
@@ -249,6 +296,8 @@ class _MapPickerScreenState extends ConsumerState<MapPickerScreen> {
                           'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
                       userAgentPackageName: 'com.muslimin.muslimin_app',
                       maxNativeZoom: 19,
+                      tileBuilder: (_, tile, _) =>
+                          ColorFiltered(colorFilter: _lightTiles, child: tile),
                     ),
                     MarkerLayer(
                       markers: [
@@ -517,7 +566,7 @@ class _BottomCard extends StatelessWidget {
                       color: AppColors.gold.withValues(alpha: 0.12),
                     ),
                     child: Icon(
-                      selected != null
+                      selected?.isMasjid ?? false
                           ? Icons.mosque_rounded
                           : Icons.place_rounded,
                       color: AppColors.gold,

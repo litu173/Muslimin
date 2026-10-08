@@ -635,5 +635,7 @@
   "attachFile": "Archivo",
   "fileTooLarge": "El archivo es demasiado grande. El límite es {size}.",
   "cantOpenFile": "Ninguna app de este teléfono puede abrir este archivo.",
-  "channelNotAllowed": "El canal no está disponible ahora (acceso denegado). Inténtalo más tarde."
+  "channelNotAllowed": "El canal no está disponible ahora (acceso denegado). Inténtalo más tarde.",
+  "duaForNowSub": "Recuerdo y duas para esta hora del día",
+  "approxLocation": "Ubicación aproximada – toca para activar la ubicación exacta"
 }

@@ -23,8 +23,11 @@ import '../../state/providers.dart';
 
 final timeBoardReaderProvider = Provider<TimeBoardReader>(
   (ref) => ref.watch(backendProvider) is DemoBackend
-      ? DemoTimeBoardReader()
-      : GeminiTimeBoardReader(),
+      ? OnDeviceTimeBoardReader()
+      : CombinedTimeBoardReader(
+          GeminiTimeBoardReader(),
+          OnDeviceTimeBoardReader(),
+        ),
 );
 
 /// Camera / gallery → photo of the masjid's time board → the times on it.

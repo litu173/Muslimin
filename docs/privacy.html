@@ -39,7 +39,9 @@
     <h2>How we use it</h2>
     <p>Only to run the app: show masjids, send reminders and notices, sync your settings and verify masjid profiles. We do not sell your data or show ads.</p>
 
-    <p>When you choose a masjid location on the map, the map tiles, nearby masjids and search results come from OpenStreetMap services (tile.openstreetmap.org, Overpass API and Nominatim). They receive the map area you view and what you type in the map search — not your account details.</p>
+    <p>When you choose a masjid location on the map, the map tiles, nearby masjids and search results come from OpenStreetMap services (tile.openstreetmap.org, Overpass API and Nominatim). They receive the map area you view, what you type in the map search and the spot you tap (to name the place there) — not your account details.</p>
+
+    <p>When a masjid authority scans a photo of the salat time board, the photo is first read on the phone itself (Apple Vision on iPhone, Google ML Kit on Android). It is also sent to Google's Gemini model through Firebase AI Logic to read Bangla digits and labels. The photo is used only to read the times and is not stored by Muslimin.</p>
 
     <h2>Where it is stored</h2>
     <p>Data is stored in Google Firebase (Cloud Firestore, asia-south1). Access is protected by security rules: only you can read your account data; NID and phone numbers of masjid authorities are visible only to them and to Muslimin administrators.</p>

@@ -26,6 +26,37 @@ String roleName(L10n t, ChannelRole r) => switch (r) {
   ChannelRole.admin => t.roleAdmin,
 };
 
+/// Asks, then leaves [masjid]'s channel.
+Future<void> leaveChannel(
+  BuildContext context,
+  WidgetRef ref,
+  Masjid masjid,
+) async {
+  final t = L10n.of(context);
+  final ok = await showDialog<bool>(
+    context: context,
+    builder: (d) => AlertDialog(
+      content: Text(t.leaveChannelQ, style: AppText.body),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(d, false),
+          child: Text(t.cancel),
+        ),
+        TextButton(
+          onPressed: () => Navigator.pop(d, true),
+          child: Text(t.leave),
+        ),
+      ],
+    ),
+  );
+  if (ok != true) return;
+  try {
+    await ref.read(channelActionsProvider).leave(masjid.id);
+  } catch (_) {
+    if (context.mounted) toast(context, t.somethingWrong);
+  }
+}
+
 /// Masjid page → Channel. Non-members see the invitation; members read the
 /// messages (newest at the bottom); editors and admins also write.
 class MasjidChannelTab extends ConsumerWidget {
@@ -55,43 +86,16 @@ class MasjidChannelTab extends ConsumerWidget {
   }
 }
 
-/// Members (admins) or Leave (members), and who posts here.
+/// Who posts here, and Members for admins. (Leave is in the header menu.)
 class _Bar extends ConsumerWidget {
   const _Bar({required this.masjid, required this.role});
 
   final Masjid masjid;
   final ChannelRole role;
 
-  Future<void> _leave(BuildContext context, WidgetRef ref) async {
-    final t = L10n.of(context);
-    final ok = await showDialog<bool>(
-      context: context,
-      builder: (d) => AlertDialog(
-        content: Text(t.leaveChannelQ, style: AppText.body),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(d, false),
-            child: Text(t.cancel),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(d, true),
-            child: Text(t.leave),
-          ),
-        ],
-      ),
-    );
-    if (ok != true) return;
-    try {
-      await ref.read(channelActionsProvider).leave(masjid.id);
-    } catch (_) {
-      if (context.mounted) toast(context, t.somethingWrong);
-    }
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final t = L10n.of(context);
-    final member = ref.watch(channelMembershipProvider(masjid.id)).value;
     return Container(
       color: AppColors.card,
       padding: const EdgeInsets.fromLTRB(Gap.l, Gap.s, Gap.s, Gap.s),
@@ -111,13 +115,6 @@ class _Bar extends ConsumerWidget {
                   push(context, ChannelMembersScreen(masjid: masjid)),
               icon: const Icon(Icons.group_rounded, size: 18),
               label: Text(t.members),
-            ),
-          // The owner is always an admin – nothing to leave.
-          if (member != null)
-            IconButton(
-              tooltip: t.leaveChannel,
-              onPressed: () => _leave(context, ref),
-              icon: Icon(Icons.logout_rounded, color: AppColors.muted),
             ),
         ],
       ),
@@ -181,8 +178,10 @@ class _Messages extends ConsumerWidget {
                   icon: Icons.forum_outlined,
                 )
               : ListView.separated(
-                  // Newest at the bottom, like a chat.
+                  // Newest at the bottom, like a chat. Scrolls on its own
+                  // (a reversed list can't drive the masjid page's scroll).
                   reverse: true,
+                  primary: false,
                   padding: const EdgeInsets.all(Gap.l),
                   itemCount: list.length,
                   separatorBuilder: (_, _) => const SizedBox(height: Gap.m),

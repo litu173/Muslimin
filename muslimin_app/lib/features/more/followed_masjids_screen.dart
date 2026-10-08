@@ -35,21 +35,17 @@ class FollowedMasjidsScreen extends ConsumerWidget {
                       .when(
                         data: (m) => m == null
                             ? const SizedBox.shrink()
-                            : Stack(
-                                children: [
-                                  MasjidCard(masjid: m, index: i),
-                                  if (e.value.reminder > 0)
-                                    Positioned(
-                                      right: Gap.m,
-                                      top: Gap.m,
-                                      child: StatusPill(
+                            : MasjidCard(
+                                masjid: m,
+                                index: i,
+                                footer: e.value.reminder > 0
+                                    ? StatusPill(
                                         label: t.reminderBadge(
                                           f.digits(e.value.reminder),
                                         ),
                                         color: AppColors.gold,
-                                      ),
-                                    ),
-                                ],
+                                      )
+                                    : null,
                               ),
                         loading: () => const Loader(),
                         error: (_, _) => const SizedBox.shrink(),

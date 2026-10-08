@@ -27,6 +27,7 @@ class NowDuaSection extends ConsumerWidget {
           children: [
             SectionHeader(
               title: t.duaForNow,
+              subtitle: t.duaForNowSub,
               action: t.viewAll,
               onAction: () => ref.read(shellTabProvider.notifier).go(2),
             ),

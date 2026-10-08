@@ -2157,4 +2157,11 @@ class L10nTr extends L10n {
   @override
   String get channelNotAllowed =>
       'Kanal şu anda kullanılamıyor (erişim reddedildi). Lütfen daha sonra tekrar deneyin.';
+
+  @override
+  String get duaForNowSub => 'Günün bu vakti için zikir ve dualar';
+
+  @override
+  String get approxLocation =>
+      'Yaklaşık konum – Kesin Konum\'u açmak için dokunun';
 }

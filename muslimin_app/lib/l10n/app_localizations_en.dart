@@ -2159,4 +2159,11 @@ class L10nEn extends L10n {
   @override
   String get channelNotAllowed =>
       'The channel isn\'t available right now (access denied). Please try again later.';
+
+  @override
+  String get duaForNowSub => 'Remembrance for this time of day';
+
+  @override
+  String get approxLocation =>
+      'Approximate location – tap to turn on Precise Location';
 }

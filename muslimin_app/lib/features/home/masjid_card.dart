@@ -14,10 +14,16 @@ import '../masjid/masjid_screen.dart';
 /// "Diluroad Chhata Masjid · Dhuhr Jamat 1:15 PM · 5 min walk" – the jamat
 /// of the current waqt (the prayer shown in the Home header).
 class MasjidCard extends ConsumerWidget {
-  const MasjidCard({super.key, required this.masjid, required this.index});
+  const MasjidCard({
+    super.key,
+    required this.masjid,
+    required this.index,
+    this.footer,
+  });
 
   final Masjid masjid;
   final int index;
+  final Widget? footer;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -40,6 +46,7 @@ class MasjidCard extends ConsumerWidget {
           ? t.jamatNotSet
           : t.jamatLine(f.prayer(jamat.prayer), f.timeUpper(jamat.at)),
       meta: meta,
+      footer: footer,
       onTap: () =>
           push(context, MasjidScreen(masjidId: masjid.id, initial: masjid)),
     );

@@ -635,5 +635,7 @@
   "attachFile": "Berkas",
   "fileTooLarge": "Berkas terlalu besar. Batasnya {size}.",
   "cantOpenFile": "Tidak ada aplikasi di ponsel ini yang dapat membuka berkas ini.",
-  "channelNotAllowed": "Kanal sedang tidak tersedia (akses ditolak). Silakan coba lagi nanti."
+  "channelNotAllowed": "Kanal sedang tidak tersedia (akses ditolak). Silakan coba lagi nanti.",
+  "duaForNowSub": "Zikir dan doa untuk waktu ini",
+  "approxLocation": "Lokasi perkiraan – ketuk untuk menyalakan Lokasi Akurat"
 }

@@ -12,6 +12,7 @@ import '../../core/utils/format.dart';
 import '../../core/widgets/buttons.dart';
 import '../../core/widgets/countdown_ring.dart';
 import '../../core/widgets/islamic_pattern.dart';
+import '../../core/widgets/entrance.dart';
 import '../../core/widgets/refresh.dart';
 import '../../data/quran/surahs.dart';
 import '../../l10n/app_localizations.dart';
@@ -104,47 +105,57 @@ class _ReadScreenState extends ConsumerState<ReadScreen> {
           children: [
             _Header(progress: progress, onContinue: _open),
             Expanded(
-              child: CustomScrollView(
-                slivers: [
-                  PullToRefresh(
-                    onRefresh: () async {
-                      ref.invalidate(quranProgressProvider);
-                      await Future<void>.delayed(
-                        const Duration(milliseconds: 600),
-                      );
-                    },
-                  ),
-                  SliverToBoxAdapter(
-                    child: _SpecialSurahs(onOpen: (s, a) => _open(s, ayah: a)),
-                  ),
-                  const SliverToBoxAdapter(child: _RevelationLegend()),
-                  SliverPadding(
-                    padding: const EdgeInsets.only(bottom: 120),
-                    sliver: SliverList.builder(
-                      itemCount: _items.length,
-                      itemBuilder: (context, i) => switch (_items[i]) {
-                        _PhaseItem(:final phase) => _PhaseHeader(
-                          phase: phase,
-                          progress: progress,
-                        ),
-                        _SurahItem(:final surah, :final step) => _SurahNode(
-                          key: surah.id == progress.current?.id
-                              ? _currentKey
-                              : null,
-                          surah: surah,
-                          step: step,
-                          progress: progress,
-                          onOpen: () => _open(surah),
-                        ),
-                        _QuizItem(:final phase, :final step) => _QuizNode(
-                          phase: phase,
-                          step: step,
-                          progress: progress,
-                        ),
+              child: EntranceScope(
+                child: CustomScrollView(
+                  slivers: [
+                    PullToRefresh(
+                      onRefresh: () async {
+                        ref.invalidate(quranProgressProvider);
+                        await Future<void>.delayed(
+                          const Duration(milliseconds: 600),
+                        );
                       },
                     ),
-                  ),
-                ],
+                    SliverToBoxAdapter(
+                      child: Entrance(
+                        child: _SpecialSurahs(
+                          onOpen: (s, a) => _open(s, ayah: a),
+                        ),
+                      ),
+                    ),
+                    const SliverToBoxAdapter(
+                      child: Entrance(child: _RevelationLegend()),
+                    ),
+                    SliverPadding(
+                      padding: const EdgeInsets.only(bottom: 120),
+                      sliver: SliverList.builder(
+                        itemCount: _items.length,
+                        itemBuilder: (context, i) => Entrance(
+                          child: switch (_items[i]) {
+                            _PhaseItem(:final phase) => _PhaseHeader(
+                              phase: phase,
+                              progress: progress,
+                            ),
+                            _SurahItem(:final surah, :final step) => _SurahNode(
+                              key: surah.id == progress.current?.id
+                                  ? _currentKey
+                                  : null,
+                              surah: surah,
+                              step: step,
+                              progress: progress,
+                              onOpen: () => _open(surah),
+                            ),
+                            _QuizItem(:final phase, :final step) => _QuizNode(
+                              phase: phase,
+                              step: step,
+                              progress: progress,
+                            ),
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ],

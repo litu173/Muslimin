@@ -2134,4 +2134,10 @@ class L10nAr extends L10n {
   @override
   String get channelNotAllowed =>
       'القناة غير متاحة الآن (تم رفض الوصول). يُرجى المحاولة لاحقًا.';
+
+  @override
+  String get duaForNowSub => 'أذكار وأدعية هذا الوقت من اليوم';
+
+  @override
+  String get approxLocation => 'موقع تقريبي – اضغط لتفعيل الموقع الدقيق';
 }

@@ -2163,4 +2163,11 @@ class L10nId extends L10n {
   @override
   String get channelNotAllowed =>
       'Kanal sedang tidak tersedia (akses ditolak). Silakan coba lagi nanti.';
+
+  @override
+  String get duaForNowSub => 'Zikir dan doa untuk waktu ini';
+
+  @override
+  String get approxLocation =>
+      'Lokasi perkiraan – ketuk untuk menyalakan Lokasi Akurat';
 }

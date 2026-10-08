@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:geolocator/geolocator.dart';
 
 import '../../core/nav.dart';
 import '../../core/theme/app_colors.dart';
@@ -76,6 +77,20 @@ class LocationBar extends ConsumerWidget {
                             ),
                           ],
                         ),
+                        // Approximate location is kilometres off: say so.
+                        if (loc.value?.approximate ?? false)
+                          GestureDetector(
+                            onTap: Geolocator.openAppSettings,
+                            child: Padding(
+                              padding: const EdgeInsets.only(top: 2),
+                              child: Text(
+                                t.approxLocation,
+                                style: AppText.caption.copyWith(
+                                  color: AppColors.danger,
+                                ),
+                              ),
+                            ),
+                          ),
                         if (showDate) ...[
                           const SizedBox(height: 4),
                           Text(

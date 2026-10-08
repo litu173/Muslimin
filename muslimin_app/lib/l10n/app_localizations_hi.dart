@@ -2159,4 +2159,11 @@ class L10nHi extends L10n {
   @override
   String get channelNotAllowed =>
       'चैनल अभी उपलब्ध नहीं है (अनुमति नहीं)। कृपया बाद में कोशिश करें।';
+
+  @override
+  String get duaForNowSub => 'दिन के इस समय के ज़िक्र और दुआएँ';
+
+  @override
+  String get approxLocation =>
+      'अनुमानित स्थान – सटीक स्थान चालू करने के लिए टैप करें';
 }

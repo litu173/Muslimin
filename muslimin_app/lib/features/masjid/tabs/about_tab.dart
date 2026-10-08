@@ -102,7 +102,10 @@ class _MasjidAboutTabState extends ConsumerState<MasjidAboutTab> {
                       ),
                     ),
                     TextButton(
-                      onPressed: () => openDirections(widget.masjid),
+                      onPressed: () => openDirections(
+                        widget.masjid,
+                        ref.read(locationProvider).value,
+                      ),
                       child: Text(t.directions),
                     ),
                   ],

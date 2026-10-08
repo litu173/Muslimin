@@ -23,6 +23,11 @@
 	<string>Choose a photo of the masjid's salat time board to fill in the jamat times.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Muslimin uses your location to show the masjids near you and to calculate accurate prayer times.</string>
+	<key>NSLocationTemporaryUsageDescriptionDictionary</key>
+	<dict>
+		<key>MasjidDistance</key>
+		<string>Precise location is needed to show the right distance and directions to masjids near you.</string>
+	</dict>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>Muslimin uses your location to show the masjids near you and to calculate accurate prayer times.</string>
 	<key>UIBackgroundModes</key>

@@ -2167,4 +2167,11 @@ class L10nMs extends L10n {
   @override
   String get channelNotAllowed =>
       'Saluran tidak tersedia sekarang (akses ditolak). Sila cuba lagi nanti.';
+
+  @override
+  String get duaForNowSub => 'Zikir dan doa untuk waktu ini';
+
+  @override
+  String get approxLocation =>
+      'Lokasi anggaran – ketik untuk menghidupkan Lokasi Tepat';
 }

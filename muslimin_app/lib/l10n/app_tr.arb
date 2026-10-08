@@ -635,5 +635,7 @@
   "attachFile": "Dosya",
   "fileTooLarge": "Dosya çok büyük. Sınır {size}.",
   "cantOpenFile": "Bu telefonda bu dosyayı açabilecek bir uygulama yok.",
-  "channelNotAllowed": "Kanal şu anda kullanılamıyor (erişim reddedildi). Lütfen daha sonra tekrar deneyin."
+  "channelNotAllowed": "Kanal şu anda kullanılamıyor (erişim reddedildi). Lütfen daha sonra tekrar deneyin.",
+  "duaForNowSub": "Günün bu vakti için zikir ve dualar",
+  "approxLocation": "Yaklaşık konum – Kesin Konum'u açmak için dokunun"
 }

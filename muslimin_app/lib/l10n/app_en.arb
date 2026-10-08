@@ -1098,5 +1098,7 @@
         "type": "String"
       }
     }
-  }
+  },
+  "duaForNowSub": "Remembrance for this time of day",
+  "approxLocation": "Approximate location – tap to turn on Precise Location"
 }

@@ -2140,4 +2140,11 @@ class L10nBn extends L10n {
   @override
   String get channelNotAllowed =>
       'চ্যানেলটি এখন পাওয়া যাচ্ছে না (অনুমতি নেই)। পরে আবার চেষ্টা করুন।';
+
+  @override
+  String get duaForNowSub => 'দিনের এই সময়ের যিকির ও দোয়া';
+
+  @override
+  String get approxLocation =>
+      'আনুমানিক অবস্থান – সঠিক অবস্থান চালু করতে চাপুন';
 }

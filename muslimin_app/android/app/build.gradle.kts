@@ -75,4 +75,7 @@ flutter {
 
 dependencies {
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
+    // On-device text recognition for time-board photos. The model comes
+    // from Google Play services (the bundled one adds ~30 MB to the APK).
+    implementation("com.google.android.gms:play-services-mlkit-text-recognition:19.0.1")
 }

@@ -204,12 +204,6 @@ class _PrayerRow extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: Gap.s, vertical: 2),
       padding: const EdgeInsets.symmetric(horizontal: Gap.m, vertical: 14),
-      decoration: current
-          ? BoxDecoration(
-              color: AppColors.gold.withValues(alpha: 0.16),
-              borderRadius: BorderRadius.circular(Radii.button),
-            )
-          : null,
       child: Row(
         children: [
           Text(
@@ -237,13 +231,7 @@ class _PrayerRow extends StatelessWidget {
             ),
           ],
           const Spacer(),
-          Text(
-            time,
-            style: AppText.subtitle.copyWith(
-              color: current ? AppColors.gold : AppColors.ink,
-              fontWeight: current ? FontWeight.w600 : null,
-            ),
-          ),
+          Text(time, style: AppText.subtitle.copyWith(color: AppColors.ink)),
         ],
       ),
     );

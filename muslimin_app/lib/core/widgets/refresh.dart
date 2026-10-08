@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../theme/app_colors.dart';
+import 'entrance.dart';
 
 /// iOS-style "rubber band" scrolling on every platform: lists stretch past
 /// both the top and the bottom edge and spring back on release.
@@ -75,7 +76,8 @@ class PullToRefresh extends StatelessWidget {
   );
 }
 
-/// A [ListView] replacement with [PullToRefresh] on top.
+/// A [ListView] replacement with [PullToRefresh] on top; its items come in
+/// with the page [Entrance].
 class RefreshList extends StatelessWidget {
   const RefreshList({
     super.key,
@@ -102,20 +104,32 @@ class RefreshList extends StatelessWidget {
   final IndexedWidgetBuilder? separatorBuilder;
   final EdgeInsetsGeometry padding;
 
+  /// [children] with the page entrance; spacers don't count as a step.
+  List<Widget> _animated() {
+    var i = 0;
+    return [
+      for (final c in children!)
+        c is SizedBox && c.child == null ? c : Entrance(index: i++, child: c),
+    ];
+  }
+
   @override
-  Widget build(BuildContext context) => CustomScrollView(
-    slivers: [
-      PullToRefresh(onRefresh: onRefresh),
-      SliverPadding(
-        padding: padding,
-        sliver: children != null
-            ? SliverList.list(children: children!)
-            : SliverList.separated(
-                itemCount: itemCount,
-                itemBuilder: itemBuilder!,
-                separatorBuilder: separatorBuilder!,
-              ),
-      ),
-    ],
+  Widget build(BuildContext context) => EntranceScope(
+    child: CustomScrollView(
+      slivers: [
+        PullToRefresh(onRefresh: onRefresh),
+        SliverPadding(
+          padding: padding,
+          sliver: children != null
+              ? SliverList.list(children: _animated())
+              : SliverList.separated(
+                  itemCount: itemCount,
+                  itemBuilder: (c, i) =>
+                      Entrance(index: i, child: itemBuilder!(c, i)),
+                  separatorBuilder: separatorBuilder!,
+                ),
+        ),
+      ],
+    ),
   );
 }

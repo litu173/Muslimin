@@ -130,6 +130,7 @@ class InfoTile extends StatelessWidget {
     this.trailing,
     this.onTap,
     this.lineStyle,
+    this.footer,
   });
 
   final Widget leading;
@@ -139,6 +140,9 @@ class InfoTile extends StatelessWidget {
   final Widget? trailing;
   final VoidCallback? onTap;
   final TextStyle? lineStyle;
+
+  /// Below the meta line (e.g. a reminder pill).
+  final Widget? footer;
 
   @override
   Widget build(BuildContext context) => AppCard(
@@ -179,6 +183,7 @@ class InfoTile extends StatelessWidget {
                     ),
                   ),
                 ],
+                if (footer != null) ...[const SizedBox(height: Gap.s), footer!],
               ],
             ),
           ),
