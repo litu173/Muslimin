@@ -6,6 +6,7 @@ import '../../core/widgets/page_header.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text.dart';
 import '../../core/utils/format.dart';
+import '../../core/widgets/frosted_card.dart';
 import '../../core/widgets/refresh.dart';
 import '../../core/widgets/surfaces.dart';
 import '../../data/models/prayer.dart';
@@ -13,7 +14,8 @@ import '../../l10n/app_localizations.dart';
 import '../../state/providers.dart';
 import '../more/settings_screen.dart';
 
-/// Dark "All Prayers" screen: waqt windows, forbidden times and nafl prayers.
+/// "All Prayers": the day's waqt windows on the frosted slider card,
+/// forbidden times on a white card, and the nafl prayers on the page.
 class AllPrayersScreen extends ConsumerWidget {
   const AllPrayersScreen({super.key});
 
@@ -26,8 +28,12 @@ class AllPrayersScreen extends ConsumerWidget {
     final loc = ref.watch(locationProvider).value;
     final cream = AppColors.onHeader;
 
+    bool isNow(Prayer p) =>
+        waqt?.isCurrent == true &&
+        (waqt!.prayer == p ||
+            (waqt.prayer == Prayer.jumuah && p == Prayer.dhuhr));
+
     return Scaffold(
-      backgroundColor: AppColors.header,
       appBar: PatternAppBar(
         toolbarHeight: 68,
         title: Column(
@@ -56,78 +62,69 @@ class AllPrayersScreen extends ConsumerWidget {
           ? const Loader()
           : RefreshList(
               onRefresh: () => refreshAll(ref),
+              padding: const EdgeInsets.fromLTRB(Gap.l, Gap.l, Gap.l, Gap.xxl),
               children: [
-                for (final e in day.windows.entries) ...[
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: Gap.xl,
-                      vertical: 20,
-                    ),
-                    child: Row(
+                // ---- prayer times (same surface as the Home ayah slider)
+                FrostedCard(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: Gap.s),
+                    child: Column(
                       children: [
-                        SizedBox(
-                          width: 100,
-                          child: Text(
-                            f.prayer(e.key),
-                            style: AppText.subtitle.copyWith(
-                              color: cream,
-                              fontWeight: FontWeight.w600,
-                            ),
+                        for (final e in day.windows.entries) ...[
+                          _PrayerRow(
+                            name: f.prayer(e.key),
+                            time: f.range(e.value.start, e.value.end),
+                            now: isNow(e.key) ? t.now : null,
                           ),
-                        ),
-                        if (waqt?.isCurrent == true &&
-                            (waqt!.prayer == e.key ||
-                                (waqt.prayer == Prayer.jumuah &&
-                                    e.key == Prayer.dhuhr)))
-                          Text(
-                            t.now,
-                            style: AppText.subtitle.copyWith(
-                              color: AppColors.goldLight,
+                          if (e.key != Prayer.isha)
+                            Divider(
+                              height: 1,
+                              indent: Gap.l,
+                              endIndent: Gap.l,
+                              color: AppColors.gold.withValues(alpha: 0.25),
                             ),
-                          ),
-                        const Spacer(),
-                        Text(
-                          f.range(e.value.start, e.value.end),
-                          style: AppText.subtitle.copyWith(color: cream),
-                        ),
+                        ],
                       ],
                     ),
                   ),
-                  if (e.key != Prayer.isha)
-                    Divider(
-                      color: cream.withValues(alpha: 0.12),
-                      indent: Gap.xl,
-                      endIndent: Gap.xl,
-                    ),
-                ],
-                const SizedBox(height: Gap.s),
-                // ---- forbidden times (cream panel)
-                Container(
-                  color: AppColors.cream,
+                ),
+                const SizedBox(height: Gap.l),
+                // ---- forbidden times
+                AppCard(
                   padding: const EdgeInsets.fromLTRB(
-                    Gap.xl,
                     Gap.l,
-                    Gap.xl,
+                    Gap.m,
                     Gap.l,
+                    Gap.s,
                   ),
                   child: Column(
                     children: [
                       Row(
                         children: [
+                          Icon(
+                            Icons.block_rounded,
+                            size: 20,
+                            color: AppColors.danger,
+                          ),
+                          const SizedBox(width: Gap.s),
                           Expanded(
-                            child: Text(t.forbiddenTime, style: AppText.body),
+                            child: Text(
+                              t.forbiddenTime,
+                              style: AppText.subtitle,
+                            ),
                           ),
                           Tooltip(
                             triggerMode: TooltipTriggerMode.tap,
                             message: t.forbiddenInfo,
                             child: Icon(
                               Icons.info_outline_rounded,
-                              color: AppColors.ink,
+                              color: AppColors.muted,
                               size: 20,
                             ),
                           ),
                         ],
                       ),
+                      const SizedBox(height: Gap.xs),
                       _lightRow(
                         t.morning,
                         f.range(
@@ -135,12 +132,12 @@ class AllPrayersScreen extends ConsumerWidget {
                           day.forbiddenMorning.end,
                         ),
                       ),
-                      const Divider(),
+                      const Divider(height: 1),
                       _lightRow(
                         t.noon,
                         f.range(day.forbiddenNoon.start, day.forbiddenNoon.end),
                       ),
-                      const Divider(),
+                      const Divider(height: 1),
                       _lightRow(
                         t.evening,
                         f.range(
@@ -151,47 +148,30 @@ class AllPrayersScreen extends ConsumerWidget {
                     ],
                   ),
                 ),
-                // ---- nafl
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(
-                    Gap.xl,
-                    Gap.xxl,
-                    Gap.xl,
-                    Gap.xxl,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        t.naflPrayers,
-                        style: AppText.body.copyWith(color: cream),
-                      ),
-                      const SizedBox(height: Gap.l),
-                      _NaflBlock(
-                        name: t.tahajjud,
-                        time:
-                            '${f.timeUpper(day.tahajjud.start)} - ${f.timeUpper(day.tahajjud.end)}',
-                        hadith: [(t.tahajjudHadith, t.tahajjudSource)],
-                      ),
-                      Divider(color: cream.withValues(alpha: 0.12), height: 40),
-                      _NaflBlock(
-                        name: t.duha,
-                        time:
-                            '${f.timeUpper(day.duha.start)} - ${f.timeUpper(day.duha.end)}',
-                        hadith: [
-                          (t.duhaHadith1, t.duhaSource1),
-                          (t.duhaHadith2, t.duhaSource2),
-                        ],
-                      ),
-                      const SizedBox(height: Gap.xxl),
-                      Text(
-                        t.calcMethodNote,
-                        style: AppText.caption.copyWith(
-                          color: cream.withValues(alpha: 0.6),
-                        ),
-                      ),
-                    ],
-                  ),
+                // ---- nafl, on the page itself
+                const SizedBox(height: Gap.xxl),
+                Text(t.naflPrayers, style: AppText.title),
+                const SizedBox(height: Gap.l),
+                _NaflBlock(
+                  name: t.tahajjud,
+                  time:
+                      '${f.timeUpper(day.tahajjud.start)} - ${f.timeUpper(day.tahajjud.end)}',
+                  hadith: [(t.tahajjudHadith, t.tahajjudSource)],
+                ),
+                Divider(height: 48, color: AppColors.divider),
+                _NaflBlock(
+                  name: t.duha,
+                  time:
+                      '${f.timeUpper(day.duha.start)} - ${f.timeUpper(day.duha.end)}',
+                  hadith: [
+                    (t.duhaHadith1, t.duhaSource1),
+                    (t.duhaHadith2, t.duhaSource2),
+                  ],
+                ),
+                const SizedBox(height: Gap.xxl),
+                Text(
+                  t.calcMethodNote,
+                  style: AppText.caption.copyWith(color: AppColors.muted),
                 ),
               ],
             ),
@@ -199,14 +179,75 @@ class AllPrayersScreen extends ConsumerWidget {
   }
 
   Widget _lightRow(String label, String value) => Padding(
-    padding: const EdgeInsets.symmetric(vertical: 10),
+    padding: const EdgeInsets.symmetric(vertical: 12),
     child: Row(
       children: [
         Expanded(child: Text(label, style: AppText.body)),
-        Text(value, style: AppText.body),
+        Text(value, style: AppText.label),
       ],
     ),
   );
+}
+
+class _PrayerRow extends StatelessWidget {
+  const _PrayerRow({required this.name, required this.time, this.now});
+
+  final String name;
+  final String time;
+
+  /// "Now" label when this is the current waqt.
+  final String? now;
+
+  @override
+  Widget build(BuildContext context) {
+    final current = now != null;
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: Gap.s, vertical: 2),
+      padding: const EdgeInsets.symmetric(horizontal: Gap.m, vertical: 14),
+      decoration: current
+          ? BoxDecoration(
+              color: AppColors.gold.withValues(alpha: 0.16),
+              borderRadius: BorderRadius.circular(Radii.button),
+            )
+          : null,
+      child: Row(
+        children: [
+          Text(
+            name,
+            style: AppText.subtitle.copyWith(
+              color: AppColors.ink,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          if (current) ...[
+            const SizedBox(width: Gap.s),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+              decoration: BoxDecoration(
+                color: AppColors.gold,
+                borderRadius: BorderRadius.circular(Radii.pill),
+              ),
+              child: Text(
+                now!,
+                style: AppText.micro.copyWith(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
+          ],
+          const Spacer(),
+          Text(
+            time,
+            style: AppText.subtitle.copyWith(
+              color: current ? AppColors.gold : AppColors.ink,
+              fontWeight: current ? FontWeight.w600 : null,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 class _NaflBlock extends StatelessWidget {
@@ -221,44 +262,40 @@ class _NaflBlock extends StatelessWidget {
   final List<(String, String)> hadith;
 
   @override
-  Widget build(BuildContext context) {
-    final cream = AppColors.onHeader;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            Expanded(
-              child: Text(
-                name,
-                style: AppText.subtitle.copyWith(
-                  color: AppColors.goldLight,
-                  fontWeight: FontWeight.w700,
-                ),
+  Widget build(BuildContext context) => Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Row(
+        children: [
+          Expanded(
+            child: Text(
+              name,
+              style: AppText.subtitle.copyWith(
+                color: AppColors.gold,
+                fontWeight: FontWeight.w700,
               ),
             ),
-            Text(
-              time,
-              style: AppText.subtitle.copyWith(color: AppColors.goldLight),
-            ),
-          ],
-        ),
-        for (final h in hadith) ...[
-          const SizedBox(height: Gap.m),
-          Text(
-            h.$1,
-            style: AppText.caption.copyWith(color: cream),
-            textAlign: TextAlign.justify,
           ),
-          const SizedBox(height: Gap.s),
-          Text(
-            h.$2,
-            style: AppText.caption.copyWith(
-              color: cream.withValues(alpha: 0.6),
-            ),
-          ),
+          Text(time, style: AppText.label.copyWith(color: AppColors.gold)),
         ],
+      ),
+      for (final h in hadith) ...[
+        const SizedBox(height: Gap.m),
+        // Easy-to-read body size (was a 14 px caption).
+        Text(
+          h.$1,
+          style: AppText.body.copyWith(
+            fontSize: 17,
+            height: 1.65,
+            color: AppColors.ink,
+          ),
+        ),
+        const SizedBox(height: Gap.s),
+        Text(
+          '— ${h.$2}',
+          style: AppText.caption.copyWith(color: AppColors.muted),
+        ),
       ],
-    );
-  }
+    ],
+  );
 }
