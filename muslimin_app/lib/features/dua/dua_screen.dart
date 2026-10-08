@@ -469,7 +469,8 @@ class _TopicTile extends StatelessWidget {
           ),
           title: Text(sceneTitle(t, scene.id), style: AppText.label),
           subtitle: Text(
-            '${sceneStory(t, scene.id)}\n${t.duaCount(duas.length)}',
+            '${sceneStory(t, scene.id)}\n'
+            '${t.duaCount(duas.length)}',
             maxLines: 3,
             overflow: TextOverflow.ellipsis,
             style: AppText.micro.copyWith(color: AppColors.muted),

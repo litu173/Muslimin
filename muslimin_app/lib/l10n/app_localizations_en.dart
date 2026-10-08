@@ -1896,10 +1896,15 @@ class L10nEn extends L10n {
 
   @override
   String duaResults(int n) {
+    final intl.NumberFormat nNumberFormat = intl.NumberFormat.decimalPattern(
+      localeName,
+    );
+    final String nString = nNumberFormat.format(n);
+
     String _temp0 = intl.Intl.pluralLogic(
       n,
       locale: localeName,
-      other: '$n duas found',
+      other: '$nString duas found',
       one: '1 dua found',
     );
     return '$_temp0';
@@ -1922,10 +1927,15 @@ class L10nEn extends L10n {
 
   @override
   String duaCount(int n) {
+    final intl.NumberFormat nNumberFormat = intl.NumberFormat.decimalPattern(
+      localeName,
+    );
+    final String nString = nNumberFormat.format(n);
+
     String _temp0 = intl.Intl.pluralLogic(
       n,
       locale: localeName,
-      other: '$n duas',
+      other: '$nString duas',
       one: '1 dua',
     );
     return '$_temp0';

@@ -1890,7 +1890,12 @@ class L10nBn extends L10n {
 
   @override
   String duaResults(int n) {
-    return '$nটি দো‘আ পাওয়া গেছে';
+    final intl.NumberFormat nNumberFormat = intl.NumberFormat.decimalPattern(
+      localeName,
+    );
+    final String nString = nNumberFormat.format(n);
+
+    return '$nStringটি দো‘আ পাওয়া গেছে';
   }
 
   @override
@@ -1910,7 +1915,12 @@ class L10nBn extends L10n {
 
   @override
   String duaCount(int n) {
-    return '$nটি দো‘আ';
+    final intl.NumberFormat nNumberFormat = intl.NumberFormat.decimalPattern(
+      localeName,
+    );
+    final String nString = nNumberFormat.format(n);
+
+    return '$nStringটি দো‘আ';
   }
 
   @override

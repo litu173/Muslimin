@@ -995,7 +995,8 @@
   "@duaResults": {
     "placeholders": {
       "n": {
-        "type": "int"
+        "type": "int",
+        "format": "decimalPattern"
       }
     }
   },
@@ -1008,7 +1009,8 @@
   "@duaCount": {
     "placeholders": {
       "n": {
-        "type": "int"
+        "type": "int",
+        "format": "decimalPattern"
       }
     }
   },

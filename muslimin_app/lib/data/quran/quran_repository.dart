@@ -70,7 +70,15 @@ class QuranRepository {
     try {
       final list = [
         for (final a in jsonDecode(await f.readAsString()) as List)
-          Ayah.fromJson(Map<String, dynamic>.from(a as Map)),
+          // Older caches: re-take the word Arabic from the ayah text.
+          switch (Ayah.fromJson(Map<String, dynamic>.from(a as Map))) {
+            final x => _withAyahWords(
+              x.number,
+              x.arabic,
+              x.translation,
+              x.words,
+            ),
+          },
       ];
       return _memory[key] = list;
     } catch (_) {
@@ -99,7 +107,7 @@ class QuranRepository {
         (jsonDecode(res.body) as Map<String, dynamic>)['verses'] as List;
     final list = [
       for (final v in verses.cast<Map<String, dynamic>>())
-        Ayah(
+        _withAyahWords(
           v['verse_number'] as int,
           v['text_uthmani'] as String,
           _clean(
@@ -153,6 +161,46 @@ class QuranRepository {
   }
 
   static int _ayahOf(String key) => int.parse(key.split(':').last);
+
+  /// Word-by-word Arabic is taken from the ayah's own text (checked against
+  /// the Tanzil Uthmani text) whenever the word counts match – the API's
+  /// separate word field has a few slips (e.g. 80:25 written without its
+  /// hamza). Pause and hizb marks stay attached to their word.
+  static Ayah _withAyahWords(
+    int number,
+    String arabic,
+    String translation,
+    List<QuranWord> words,
+  ) {
+    final tokens = <String>[];
+    var pending = '';
+    for (final w in arabic.split(RegExp(r'\s+'))) {
+      if (w.isEmpty) continue;
+      if (!_letter.hasMatch(w)) {
+        if (tokens.isEmpty) {
+          pending += '$w ';
+        } else {
+          tokens[tokens.length - 1] += ' $w';
+        }
+      } else {
+        tokens.add('$pending$w');
+        pending = '';
+      }
+    }
+    return Ayah(
+      number,
+      arabic,
+      translation,
+      tokens.length == words.length
+          ? [
+              for (var i = 0; i < words.length; i++)
+                QuranWord(tokens[i], words[i].meaning),
+            ]
+          : words,
+    );
+  }
+
+  static final _letter = RegExp('[\u0621-\u064A\u0671-\u06D3]');
 
   static String _absolute(String url) => url.startsWith('//')
       ? 'https:$url'
