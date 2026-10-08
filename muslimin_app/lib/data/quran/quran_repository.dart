@@ -10,7 +10,17 @@ const kBismillah = 'بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱل�
 
 /// Language used for Quran data: the UI language when supported, else English.
 String quranLang(String uiLang) =>
-    const {'en', 'bn', 'ar', 'hi', 'ur', 'id', 'ms', 'tr', 'es'}.contains(uiLang)
+    const {
+      'en',
+      'bn',
+      'ar',
+      'hi',
+      'ur',
+      'id',
+      'ms',
+      'tr',
+      'es',
+    }.contains(uiLang)
     ? uiLang
     : 'en';
 

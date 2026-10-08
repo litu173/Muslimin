@@ -520,9 +520,12 @@ List<QuizQuestion> buildQuiz({
     final meaning = tx.surahMeaning(s);
     if (meaning.isNotEmpty) {
       qs.add(
-        q(QuizKind.name, tx.nameMeans(name), meaning, {
-          for (final x in kSurahs) tx.surahMeaning(x),
-        }..remove(''),),
+        q(
+          QuizKind.name,
+          tx.nameMeans(name),
+          meaning,
+          {for (final x in kSurahs) tx.surahMeaning(x)}..remove(''),
+        ),
       );
     }
   }

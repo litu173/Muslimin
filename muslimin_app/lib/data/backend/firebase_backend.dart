@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -640,12 +642,32 @@ class FirebaseBackend implements Backend {
   Future<void> postChannelMessage(
     Masjid masjid,
     String text,
-    ChannelRole as,
-  ) async {
+    ChannelRole as, {
+    (String, Uint8List)? file,
+  }) async {
     final u = _requireUser();
-    await _messages(masjid.id).add({
+    final ref = _messages(masjid.id).doc();
+    ChannelAttachment? att;
+    if (file != null) {
+      final (name, bytes) = file;
+      final chunks = (bytes.length / kChunkBytes).ceil();
+      // Chunks first: the message only appears once its file is complete.
+      for (var i = 0; i < chunks; i++) {
+        final end = ((i + 1) * kChunkBytes).clamp(0, bytes.length);
+        await ref.collection('chunks').doc('$i').set({
+          'b': Blob(Uint8List.sublistView(bytes, i * kChunkBytes, end)),
+        });
+      }
+      att = ChannelAttachment(
+        kind: ChannelAttachment.kindOf(name),
+        name: name,
+        size: bytes.length,
+        chunks: chunks,
+      );
+    }
+    await ref.set({
       ...ChannelMessage(
-        id: '',
+        id: ref.id,
         masjidId: masjid.id,
         masjidName: masjid.name,
         text: text,
@@ -653,14 +675,35 @@ class FirebaseBackend implements Backend {
         authorName: u.displayName,
         authorRole: as,
         createdAt: DateTime.now(),
+        attachment: att,
       ).toMap(),
       'createdAt': FieldValue.serverTimestamp(),
     });
   }
 
   @override
-  Future<void> deleteChannelMessage(String masjidId, String id) =>
-      _messages(masjidId).doc(id).delete();
+  Future<Uint8List> channelAttachment(
+    String masjidId,
+    String messageId,
+    int count,
+  ) async {
+    final chunks = _messages(masjidId).doc(messageId).collection('chunks');
+    final out = BytesBuilder(copy: false);
+    for (var i = 0; i < count; i++) {
+      final d = await chunks.doc('$i').get();
+      out.add((d.data()!['b'] as Blob).bytes);
+    }
+    return out.takeBytes();
+  }
+
+  @override
+  Future<void> deleteChannelMessage(String masjidId, String id) async {
+    final ref = _messages(masjidId).doc(id);
+    for (final c in (await ref.collection('chunks').get()).docs) {
+      await c.reference.delete();
+    }
+    await ref.delete();
+  }
 
   void dispose() => _authSub.cancel();
 }

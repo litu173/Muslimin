@@ -627,5 +627,13 @@
   "monthNames": "enero,febrero,marzo,abril,mayo,junio,julio,agosto,septiembre,octubre,noviembre,diciembre",
   "am": "a. m.",
   "pm": "p. m.",
-  "jamatReminderBody": "Yamaa de {prayer} en {minutes} minutos"
+  "jamatReminderBody": "Yamaa de {prayer} en {minutes} minutos",
+  "attach": "Adjuntar",
+  "attachPhoto": "Foto",
+  "attachVideo": "Vídeo",
+  "attachAudio": "Audio",
+  "attachFile": "Archivo",
+  "fileTooLarge": "El archivo es demasiado grande. El límite es {size}.",
+  "cantOpenFile": "Ninguna app de este teléfono puede abrir este archivo.",
+  "channelNotAllowed": "El canal no está disponible ahora (acceso denegado). Inténtalo más tarde."
 }

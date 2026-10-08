@@ -2135,4 +2135,32 @@ class L10nId extends L10n {
   String jamatReminderBody(String prayer, String minutes) {
     return 'Jamaah $prayer dalam $minutes menit';
   }
+
+  @override
+  String get attach => 'Lampirkan';
+
+  @override
+  String get attachPhoto => 'Foto';
+
+  @override
+  String get attachVideo => 'Video';
+
+  @override
+  String get attachAudio => 'Audio';
+
+  @override
+  String get attachFile => 'Berkas';
+
+  @override
+  String fileTooLarge(String size) {
+    return 'Berkas terlalu besar. Batasnya $size.';
+  }
+
+  @override
+  String get cantOpenFile =>
+      'Tidak ada aplikasi di ponsel ini yang dapat membuka berkas ini.';
+
+  @override
+  String get channelNotAllowed =>
+      'Kanal sedang tidak tersedia (akses ditolak). Silakan coba lagi nanti.';
 }

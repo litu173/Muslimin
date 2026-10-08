@@ -2107,4 +2107,31 @@ class L10nAr extends L10n {
   String jamatReminderBody(String prayer, String minutes) {
     return 'جماعة $prayer بعد $minutes دقيقة';
   }
+
+  @override
+  String get attach => 'إرفاق';
+
+  @override
+  String get attachPhoto => 'صورة';
+
+  @override
+  String get attachVideo => 'فيديو';
+
+  @override
+  String get attachAudio => 'صوت';
+
+  @override
+  String get attachFile => 'ملف';
+
+  @override
+  String fileTooLarge(String size) {
+    return 'الملف كبير جدًا. الحد الأقصى $size.';
+  }
+
+  @override
+  String get cantOpenFile => 'لا يوجد تطبيق على هذا الهاتف يفتح هذا الملف.';
+
+  @override
+  String get channelNotAllowed =>
+      'القناة غير متاحة الآن (تم رفض الوصول). يُرجى المحاولة لاحقًا.';
 }

@@ -627,5 +627,13 @@
   "monthNames": "Ocak,Şubat,Mart,Nisan,Mayıs,Haziran,Temmuz,Ağustos,Eylül,Ekim,Kasım,Aralık",
   "am": "ÖÖ",
   "pm": "ÖS",
-  "jamatReminderBody": "{prayer} cemaatine {minutes} dakika kaldı"
+  "jamatReminderBody": "{prayer} cemaatine {minutes} dakika kaldı",
+  "attach": "Ekle",
+  "attachPhoto": "Fotoğraf",
+  "attachVideo": "Video",
+  "attachAudio": "Ses",
+  "attachFile": "Dosya",
+  "fileTooLarge": "Dosya çok büyük. Sınır {size}.",
+  "cantOpenFile": "Bu telefonda bu dosyayı açabilecek bir uygulama yok.",
+  "channelNotAllowed": "Kanal şu anda kullanılamıyor (erişim reddedildi). Lütfen daha sonra tekrar deneyin."
 }

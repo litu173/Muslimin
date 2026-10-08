@@ -2145,4 +2145,32 @@ class L10nEs extends L10n {
   String jamatReminderBody(String prayer, String minutes) {
     return 'Yamaa de $prayer en $minutes minutos';
   }
+
+  @override
+  String get attach => 'Adjuntar';
+
+  @override
+  String get attachPhoto => 'Foto';
+
+  @override
+  String get attachVideo => 'Vídeo';
+
+  @override
+  String get attachAudio => 'Audio';
+
+  @override
+  String get attachFile => 'Archivo';
+
+  @override
+  String fileTooLarge(String size) {
+    return 'El archivo es demasiado grande. El límite es $size.';
+  }
+
+  @override
+  String get cantOpenFile =>
+      'Ninguna app de este teléfono puede abrir este archivo.';
+
+  @override
+  String get channelNotAllowed =>
+      'El canal no está disponible ahora (acceso denegado). Inténtalo más tarde.';
 }

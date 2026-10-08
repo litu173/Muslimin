@@ -2129,4 +2129,32 @@ class L10nTr extends L10n {
   String jamatReminderBody(String prayer, String minutes) {
     return '$prayer cemaatine $minutes dakika kaldı';
   }
+
+  @override
+  String get attach => 'Ekle';
+
+  @override
+  String get attachPhoto => 'Fotoğraf';
+
+  @override
+  String get attachVideo => 'Video';
+
+  @override
+  String get attachAudio => 'Ses';
+
+  @override
+  String get attachFile => 'Dosya';
+
+  @override
+  String fileTooLarge(String size) {
+    return 'Dosya çok büyük. Sınır $size.';
+  }
+
+  @override
+  String get cantOpenFile =>
+      'Bu telefonda bu dosyayı açabilecek bir uygulama yok.';
+
+  @override
+  String get channelNotAllowed =>
+      'Kanal şu anda kullanılamıyor (erişim reddedildi). Lütfen daha sonra tekrar deneyin.';
 }

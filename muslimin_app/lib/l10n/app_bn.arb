@@ -627,5 +627,13 @@
   "monthNames": "জানুয়ারি,ফেব্রুয়ারি,মার্চ,এপ্রিল,মে,জুন,জুলাই,আগস্ট,সেপ্টেম্বর,অক্টোবর,নভেম্বর,ডিসেম্বর",
   "am": "am",
   "pm": "pm",
-  "jamatReminderBody": "{prayer}-এর জামাত {minutes} মিনিট পর"
+  "jamatReminderBody": "{prayer}-এর জামাত {minutes} মিনিট পর",
+  "attach": "সংযুক্ত করুন",
+  "attachPhoto": "ছবি",
+  "attachVideo": "ভিডিও",
+  "attachAudio": "অডিও",
+  "attachFile": "ফাইল",
+  "fileTooLarge": "ফাইলটি অনেক বড়। সর্বোচ্চ {size}।",
+  "cantOpenFile": "এই ফোনে ফাইলটি খোলার মতো কোনো অ্যাপ নেই।",
+  "channelNotAllowed": "চ্যানেলটি এখন পাওয়া যাচ্ছে না (অনুমতি নেই)। পরে আবার চেষ্টা করুন।"
 }

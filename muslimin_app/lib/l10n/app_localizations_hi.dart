@@ -2132,4 +2132,31 @@ class L10nHi extends L10n {
   String jamatReminderBody(String prayer, String minutes) {
     return '$prayer की जमाअत $minutes मिनट में';
   }
+
+  @override
+  String get attach => 'अटैच करें';
+
+  @override
+  String get attachPhoto => 'फ़ोटो';
+
+  @override
+  String get attachVideo => 'वीडियो';
+
+  @override
+  String get attachAudio => 'ऑडियो';
+
+  @override
+  String get attachFile => 'फ़ाइल';
+
+  @override
+  String fileTooLarge(String size) {
+    return 'यह फ़ाइल बहुत बड़ी है। सीमा $size है।';
+  }
+
+  @override
+  String get cantOpenFile => 'इस फ़ोन पर यह फ़ाइल खोलने वाला कोई ऐप नहीं है।';
+
+  @override
+  String get channelNotAllowed =>
+      'चैनल अभी उपलब्ध नहीं है (अनुमति नहीं)। कृपया बाद में कोशिश करें।';
 }

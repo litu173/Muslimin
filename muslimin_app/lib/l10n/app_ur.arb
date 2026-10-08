@@ -627,5 +627,13 @@
   "monthNames": "جنوری,فروری,مارچ,اپریل,مئی,جون,جولائی,اگست,ستمبر,اکتوبر,نومبر,دسمبر",
   "am": "ق ظ",
   "pm": "ب ظ",
-  "jamatReminderBody": "{prayer} کی جماعت {minutes} منٹ میں"
+  "jamatReminderBody": "{prayer} کی جماعت {minutes} منٹ میں",
+  "attach": "منسلک کریں",
+  "attachPhoto": "تصویر",
+  "attachVideo": "ویڈیو",
+  "attachAudio": "آڈیو",
+  "attachFile": "فائل",
+  "fileTooLarge": "یہ فائل بہت بڑی ہے۔ حد {size} ہے۔",
+  "cantOpenFile": "اس فون پر یہ فائل کھولنے والی کوئی ایپ نہیں۔",
+  "channelNotAllowed": "چینل اس وقت دستیاب نہیں (رسائی نہیں)۔ براہِ کرم بعد میں کوشش کریں۔"
 }

@@ -3878,6 +3878,54 @@ abstract class L10n {
   /// In en, this message translates to:
   /// **'{prayer} Jamat in {minutes} minutes'**
   String jamatReminderBody(String prayer, String minutes);
+
+  /// No description provided for @attach.
+  ///
+  /// In en, this message translates to:
+  /// **'Attach'**
+  String get attach;
+
+  /// No description provided for @attachPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo'**
+  String get attachPhoto;
+
+  /// No description provided for @attachVideo.
+  ///
+  /// In en, this message translates to:
+  /// **'Video'**
+  String get attachVideo;
+
+  /// No description provided for @attachAudio.
+  ///
+  /// In en, this message translates to:
+  /// **'Audio'**
+  String get attachAudio;
+
+  /// No description provided for @attachFile.
+  ///
+  /// In en, this message translates to:
+  /// **'File'**
+  String get attachFile;
+
+  /// No description provided for @fileTooLarge.
+  ///
+  /// In en, this message translates to:
+  /// **'This file is too large. The limit is {size}.'**
+  String fileTooLarge(String size);
+
+  /// No description provided for @cantOpenFile.
+  ///
+  /// In en, this message translates to:
+  /// **'No app on this phone can open this file.'**
+  String get cantOpenFile;
+
+  /// No description provided for @channelNotAllowed.
+  ///
+  /// In en, this message translates to:
+  /// **'The channel isn\'t available right now (access denied). Please try again later.'**
+  String get channelNotAllowed;
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {

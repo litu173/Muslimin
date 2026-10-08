@@ -627,5 +627,13 @@
   "monthNames": "Januari,Februari,Maret,April,Mei,Juni,Juli,Agustus,September,Oktober,November,Desember",
   "am": "AM",
   "pm": "PM",
-  "jamatReminderBody": "Jamaah {prayer} dalam {minutes} menit"
+  "jamatReminderBody": "Jamaah {prayer} dalam {minutes} menit",
+  "attach": "Lampirkan",
+  "attachPhoto": "Foto",
+  "attachVideo": "Video",
+  "attachAudio": "Audio",
+  "attachFile": "Berkas",
+  "fileTooLarge": "Berkas terlalu besar. Batasnya {size}.",
+  "cantOpenFile": "Tidak ada aplikasi di ponsel ini yang dapat membuka berkas ini.",
+  "channelNotAllowed": "Kanal sedang tidak tersedia (akses ditolak). Silakan coba lagi nanti."
 }

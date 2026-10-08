@@ -2132,4 +2132,31 @@ class L10nEn extends L10n {
   String jamatReminderBody(String prayer, String minutes) {
     return '$prayer Jamat in $minutes minutes';
   }
+
+  @override
+  String get attach => 'Attach';
+
+  @override
+  String get attachPhoto => 'Photo';
+
+  @override
+  String get attachVideo => 'Video';
+
+  @override
+  String get attachAudio => 'Audio';
+
+  @override
+  String get attachFile => 'File';
+
+  @override
+  String fileTooLarge(String size) {
+    return 'This file is too large. The limit is $size.';
+  }
+
+  @override
+  String get cantOpenFile => 'No app on this phone can open this file.';
+
+  @override
+  String get channelNotAllowed =>
+      'The channel isn\'t available right now (access denied). Please try again later.';
 }

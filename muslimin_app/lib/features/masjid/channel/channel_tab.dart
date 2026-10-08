@@ -1,6 +1,8 @@
+import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../../core/nav.dart';
 import '../../../core/theme/app_colors.dart';
@@ -14,6 +16,7 @@ import '../../../data/models/masjid.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../state/channel.dart';
 import '../../../state/providers.dart';
+import 'attachment_view.dart';
 import 'channel_invite_card.dart';
 import 'channel_members_screen.dart';
 
@@ -166,7 +169,12 @@ class _Messages extends ConsumerWidget {
         .watch(channelMessagesProvider(masjid.id))
         .when(
           loading: () => const Loader(),
-          error: (_, _) => EmptyState(message: t.somethingWrong),
+          error: (e, _) => EmptyState(
+            message: isPermissionError(e)
+                ? t.channelNotAllowed
+                : t.somethingWrong,
+            icon: Icons.lock_outline_rounded,
+          ),
           data: (list) => list.isEmpty
               ? EmptyState(
                   message: role.canPost ? t.channelEmptyAdmin : t.channelEmpty,
@@ -250,7 +258,14 @@ class _Bubble extends StatelessWidget {
               ],
             ),
             const SizedBox(height: Gap.xs),
-            SelectableText(message.text, style: AppText.body),
+            if (message.attachment != null) ...[
+              const SizedBox(height: Gap.xs),
+              AttachmentView(masjidId: message.masjidId, m: message),
+            ],
+            if (message.text.isNotEmpty) ...[
+              const SizedBox(height: Gap.xs),
+              SelectableText(message.text, style: AppText.body),
+            ],
             const SizedBox(height: Gap.xs),
             Align(
               alignment: AlignmentDirectional.centerEnd,
@@ -283,23 +298,114 @@ class _ComposerState extends ConsumerState<_Composer> {
   final _text = TextEditingController();
   bool _sending = false;
 
+  /// Picked attachment: (name, bytes).
+  (String, Uint8List)? _file;
+
   @override
   void dispose() {
     _text.dispose();
     super.dispose();
   }
 
+  Future<void> _attach() async {
+    final t = L10n.of(context);
+    final kind = await showModalBottomSheet<AttachmentKind>(
+      context: context,
+      backgroundColor: AppColors.card,
+      builder: (ctx) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            for (final (k, icon, label) in [
+              (AttachmentKind.image, Icons.image_outlined, t.attachPhoto),
+              (AttachmentKind.video, Icons.videocam_outlined, t.attachVideo),
+              (AttachmentKind.audio, Icons.audiotrack_outlined, t.attachAudio),
+              (AttachmentKind.file, Icons.attach_file_rounded, t.attachFile),
+            ])
+              ListTile(
+                leading: Icon(icon, color: AppColors.gold),
+                title: Text(label),
+                onTap: () => Navigator.pop(ctx, k),
+              ),
+          ],
+        ),
+      ),
+    );
+    if (kind == null) return;
+    (String, Uint8List)? picked;
+    if (kind == AttachmentKind.image) {
+      // Photos are shrunk before sending (small, quick to load).
+      final x = await ImagePicker().pickImage(
+        source: ImageSource.gallery,
+        maxWidth: 1600,
+        imageQuality: 80,
+      );
+      if (x != null) {
+        final ext = x.name.split('.').last;
+        picked = (
+          'photo_${DateTime.now().millisecondsSinceEpoch}.$ext',
+          await x.readAsBytes(),
+        );
+      }
+    } else {
+      final XFile? f;
+      if (kind == AttachmentKind.video) {
+        f = await ImagePicker().pickVideo(source: ImageSource.gallery);
+      } else {
+        f = await openFile(
+          acceptedTypeGroups: [
+            kind == AttachmentKind.audio
+                ? const XTypeGroup(
+                    label: 'audio',
+                    extensions: ['mp3', 'm4a', 'aac', 'wav', 'ogg', 'opus'],
+                    uniformTypeIdentifiers: ['public.audio'],
+                  )
+                : const XTypeGroup(
+                    label: 'any',
+                    uniformTypeIdentifiers: ['public.item'],
+                  ),
+          ],
+        );
+      }
+      if (f != null) {
+        // Check the size before loading a huge file into memory.
+        if (await f.length() > kMaxAttachmentBytes) {
+          if (mounted) {
+            toast(context, t.fileTooLarge(fileSize(kMaxAttachmentBytes)));
+          }
+          return;
+        }
+        picked = (f.name, await f.readAsBytes());
+      }
+    }
+    if (picked == null || !mounted) return;
+    if (picked.$2.length > kMaxAttachmentBytes) {
+      toast(context, t.fileTooLarge(fileSize(kMaxAttachmentBytes)));
+      return;
+    }
+    setState(() => _file = picked);
+  }
+
   Future<void> _send() async {
     final text = _text.text.trim();
-    if (text.isEmpty || _sending) return;
+    if ((text.isEmpty && _file == null) || _sending) return;
     setState(() => _sending = true);
     try {
       await ref
           .read(backendProvider)
-          .postChannelMessage(widget.masjid, text, widget.role);
+          .postChannelMessage(widget.masjid, text, widget.role, file: _file);
       _text.clear();
-    } catch (_) {
-      if (mounted) toast(context, L10n.of(context).somethingWrong);
+      setState(() => _file = null);
+    } catch (e) {
+      if (mounted) {
+        final denied = e.toString().contains('permission-denied');
+        toast(
+          context,
+          denied
+              ? L10n.of(context).channelNotAllowed
+              : L10n.of(context).somethingWrong,
+        );
+      }
     } finally {
       if (mounted) setState(() => _sending = false);
     }
@@ -311,42 +417,78 @@ class _ComposerState extends ConsumerState<_Composer> {
     return Container(
       color: AppColors.card,
       padding: EdgeInsets.fromLTRB(
-        Gap.l,
+        Gap.s,
         Gap.s,
         Gap.s,
         Gap.s + MediaQuery.paddingOf(context).bottom,
       ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.end,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Expanded(
-            child: TextField(
-              controller: _text,
-              minLines: 1,
-              maxLines: 5,
-              maxLength: kMaxChannelMessage,
-              textCapitalization: TextCapitalization.sentences,
-              decoration: InputDecoration(
-                hintText: t.messageHint,
-                counterText: '',
-                isDense: true,
+          if (_file != null)
+            Padding(
+              padding: const EdgeInsets.only(bottom: Gap.s, right: Gap.s),
+              child: Row(
+                children: [
+                  Icon(Icons.attach_file_rounded, color: AppColors.gold),
+                  const SizedBox(width: Gap.s),
+                  Expanded(
+                    child: Text(
+                      '${_file!.$1} · ${fileSize(_file!.$2.length)}',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: AppText.caption,
+                    ),
+                  ),
+                  if (!_sending)
+                    IconButton(
+                      icon: Icon(Icons.close_rounded, color: AppColors.muted),
+                      onPressed: () => setState(() => _file = null),
+                    ),
+                ],
               ),
             ),
-          ),
-          const SizedBox(width: Gap.s),
-          IconButton.filled(
-            tooltip: t.send,
-            onPressed: _sending ? null : _send,
-            style: IconButton.styleFrom(backgroundColor: AppColors.gold),
-            icon: _sending
-                ? const SizedBox.square(
-                    dimension: 18,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      color: Colors.white,
-                    ),
-                  )
-                : const Icon(Icons.send_rounded, color: Colors.white),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              IconButton(
+                tooltip: t.attach,
+                onPressed: _sending ? null : _attach,
+                icon: Icon(
+                  Icons.add_circle_outline_rounded,
+                  color: AppColors.gold,
+                ),
+              ),
+              Expanded(
+                child: TextField(
+                  controller: _text,
+                  minLines: 1,
+                  maxLines: 5,
+                  maxLength: kMaxChannelMessage,
+                  textCapitalization: TextCapitalization.sentences,
+                  decoration: InputDecoration(
+                    hintText: t.messageHint,
+                    counterText: '',
+                    isDense: true,
+                  ),
+                ),
+              ),
+              const SizedBox(width: Gap.s),
+              IconButton.filled(
+                tooltip: t.send,
+                onPressed: _sending ? null : _send,
+                style: IconButton.styleFrom(backgroundColor: AppColors.gold),
+                icon: _sending
+                    ? const SizedBox.square(
+                        dimension: 18,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: Colors.white,
+                        ),
+                      )
+                    : const Icon(Icons.send_rounded, color: Colors.white),
+              ),
+            ],
           ),
         ],
       ),

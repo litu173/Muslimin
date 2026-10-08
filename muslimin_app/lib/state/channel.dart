@@ -12,7 +12,15 @@ final channelMembershipProvider = StreamProvider.family<ChannelMember?, String>(
     ref.watch(authProvider); // re-check after sign-in / sign-out
     return ref.watch(backendProvider).channelMembership(masjidId);
   },
+  retry: _noRetry,
 );
+
+/// Channel reads fail for good on a permission error; Riverpod's automatic
+/// retry would keep the screen on its loading spinner forever.
+Duration? _noRetry(int count, Object error) => null;
+
+/// True when Firestore refused the read/write (rules).
+bool isPermissionError(Object? e) => '$e'.contains('permission-denied');
 
 /// My role in [masjid]'s channel: the owner and super admins are always
 /// admins; otherwise the membership's role; null when not joined.
@@ -35,11 +43,13 @@ final _channelRole = Provider.family<ChannelRole?, (String, String)>((
 final channelMessagesProvider =
     StreamProvider.family<List<ChannelMessage>, String>(
       (ref, masjidId) => ref.watch(backendProvider).channelMessages(masjidId),
+      retry: _noRetry,
     );
 
 final channelMembersProvider =
     StreamProvider.family<List<ChannelMember>, String>(
       (ref, masjidId) => ref.watch(backendProvider).channelMembers(masjidId),
+      retry: _noRetry,
     );
 
 /// Channels I joined.

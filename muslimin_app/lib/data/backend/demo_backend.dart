@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:typed_data';
 import 'dart:math' as math;
 
 import '../../core/utils/geo.dart';
@@ -635,16 +636,31 @@ class DemoBackend implements Backend {
     () => (_messages[masjidId] ?? const []).reversed.take(limit).toList(),
   );
 
+  /// Attachment bytes by message id.
+  final _files = <String, Uint8List>{};
+
   @override
   Future<void> postChannelMessage(
     Masjid masjid,
     String text,
-    ChannelRole as,
-  ) async {
+    ChannelRole as, {
+    (String, Uint8List)? file,
+  }) async {
     final u = _requireUser();
+    final id = _id();
+    ChannelAttachment? att;
+    if (file != null) {
+      _files[id] = file.$2;
+      att = ChannelAttachment(
+        kind: ChannelAttachment.kindOf(file.$1),
+        name: file.$1,
+        size: file.$2.length,
+        chunks: (file.$2.length / kChunkBytes).ceil(),
+      );
+    }
     (_messages[masjid.id] ??= []).add(
       ChannelMessage(
-        id: _id(),
+        id: id,
         masjidId: masjid.id,
         masjidName: masjid.name,
         text: text,
@@ -652,10 +668,18 @@ class DemoBackend implements Backend {
         authorName: u.displayName,
         authorRole: as,
         createdAt: DateTime.now(),
+        attachment: att,
       ),
     );
     _emit();
   }
+
+  @override
+  Future<Uint8List> channelAttachment(
+    String masjidId,
+    String messageId,
+    int chunks,
+  ) async => _files[messageId] ?? Uint8List(0);
 
   @override
   Future<void> deleteChannelMessage(String masjidId, String id) async {

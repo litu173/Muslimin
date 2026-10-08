@@ -58,6 +58,73 @@ class ChannelMember {
       );
 }
 
+enum AttachmentKind { image, video, audio, file }
+
+/// A file sent with a channel message. The bytes live next to the message
+/// in ~900 KB chunks (Firestore documents), so no paid file storage is
+/// needed; [chunks] says how many to fetch.
+class ChannelAttachment {
+  const ChannelAttachment({
+    required this.kind,
+    required this.name,
+    required this.size,
+    required this.chunks,
+  });
+
+  final AttachmentKind kind;
+  final String name;
+
+  /// Bytes.
+  final int size;
+  final int chunks;
+
+  Map<String, dynamic> toMap() => {
+    'kind': kind.name,
+    'name': name,
+    'size': size,
+    'chunks': chunks,
+  };
+
+  static ChannelAttachment? fromMap(Object? m) => m is Map
+      ? ChannelAttachment(
+          kind:
+              AttachmentKind.values.asNameMap()[m['kind']] ??
+              AttachmentKind.file,
+          name: (m['name'] ?? '') as String,
+          size: (m['size'] as num?)?.toInt() ?? 0,
+          chunks: (m['chunks'] as num?)?.toInt() ?? 0,
+        )
+      : null;
+
+  static AttachmentKind kindOf(String name) {
+    final ext = name.split('.').last.toLowerCase();
+    if (const {'jpg', 'jpeg', 'png', 'gif', 'webp', 'heic'}.contains(ext)) {
+      return AttachmentKind.image;
+    }
+    if (const {'mp4', 'mov', 'm4v', '3gp', 'webm', 'mkv'}.contains(ext)) {
+      return AttachmentKind.video;
+    }
+    if (const {
+      'mp3',
+      'm4a',
+      'aac',
+      'wav',
+      'ogg',
+      'opus',
+      'amr',
+    }.contains(ext)) {
+      return AttachmentKind.audio;
+    }
+    return AttachmentKind.file;
+  }
+}
+
+/// Largest attachment (keeps the free Firestore quota healthy).
+const kMaxAttachmentBytes = 15 * 1024 * 1024;
+
+/// Bytes per chunk document (Firestore's limit is 1 MiB per document).
+const kChunkBytes = 900 * 1024;
+
 class ChannelMessage {
   const ChannelMessage({
     required this.id,
@@ -68,12 +135,14 @@ class ChannelMessage {
     required this.authorName,
     required this.authorRole,
     required this.createdAt,
+    this.attachment,
   });
 
   final String id;
   final String masjidId;
   final String masjidName;
   final String text;
+  final ChannelAttachment? attachment;
   final String authorUid;
   final String authorName;
   final ChannelRole authorRole;
@@ -86,6 +155,7 @@ class ChannelMessage {
     'authorUid': authorUid,
     'authorName': authorName,
     'authorRole': authorRole.name,
+    if (attachment != null) 'attachment': attachment!.toMap(),
   };
 
   factory ChannelMessage.fromMap(
@@ -102,6 +172,7 @@ class ChannelMessage {
     authorRole:
         ChannelRole.values.asNameMap()[m['authorRole']] ?? ChannelRole.admin,
     createdAt: createdAt,
+    attachment: ChannelAttachment.fromMap(m['attachment']),
   );
 }
 

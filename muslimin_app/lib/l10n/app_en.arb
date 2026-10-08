@@ -1083,5 +1083,20 @@
         "type": "String"
       }
     }
+  },
+  "attach": "Attach",
+  "attachPhoto": "Photo",
+  "attachVideo": "Video",
+  "attachAudio": "Audio",
+  "attachFile": "File",
+  "fileTooLarge": "This file is too large. The limit is {size}.",
+  "cantOpenFile": "No app on this phone can open this file.",
+  "channelNotAllowed": "The channel isn't available right now (access denied). Please try again later.",
+  "@fileTooLarge": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    }
   }
 }

@@ -85,7 +85,12 @@ class ChannelMembersScreen extends ConsumerWidget {
           Expanded(
             child: members.when(
               loading: () => const Loader(),
-              error: (_, _) => EmptyState(message: t.somethingWrong),
+              error: (e, _) => EmptyState(
+                message: isPermissionError(e)
+                    ? t.channelNotAllowed
+                    : t.somethingWrong,
+                icon: Icons.lock_outline_rounded,
+              ),
               data: (list) => list.isEmpty
                   ? EmptyState(message: t.noMembers, icon: Icons.group_outlined)
                   : ListView.separated(

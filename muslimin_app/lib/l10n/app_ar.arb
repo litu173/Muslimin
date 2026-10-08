@@ -627,5 +627,13 @@
   "monthNames": "يناير,فبراير,مارس,أبريل,مايو,يونيو,يوليو,أغسطس,سبتمبر,أكتوبر,نوفمبر,ديسمبر",
   "am": "ص",
   "pm": "م",
-  "jamatReminderBody": "جماعة {prayer} بعد {minutes} دقيقة"
+  "jamatReminderBody": "جماعة {prayer} بعد {minutes} دقيقة",
+  "attach": "إرفاق",
+  "attachPhoto": "صورة",
+  "attachVideo": "فيديو",
+  "attachAudio": "صوت",
+  "attachFile": "ملف",
+  "fileTooLarge": "الملف كبير جدًا. الحد الأقصى {size}.",
+  "cantOpenFile": "لا يوجد تطبيق على هذا الهاتف يفتح هذا الملف.",
+  "channelNotAllowed": "القناة غير متاحة الآن (تم رفض الوصول). يُرجى المحاولة لاحقًا."
 }

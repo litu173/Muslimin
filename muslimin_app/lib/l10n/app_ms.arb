@@ -627,5 +627,13 @@
   "monthNames": "Januari,Februari,Mac,April,Mei,Jun,Julai,Ogos,September,Oktober,November,Disember",
   "am": "PG",
   "pm": "PTG",
-  "jamatReminderBody": "Jemaah {prayer} dalam {minutes} minit"
+  "jamatReminderBody": "Jemaah {prayer} dalam {minutes} minit",
+  "attach": "Lampirkan",
+  "attachPhoto": "Foto",
+  "attachVideo": "Video",
+  "attachAudio": "Audio",
+  "attachFile": "Fail",
+  "fileTooLarge": "Fail ini terlalu besar. Hadnya {size}.",
+  "cantOpenFile": "Tiada aplikasi pada telefon ini yang boleh membuka fail ini.",
+  "channelNotAllowed": "Saluran tidak tersedia sekarang (akses ditolak). Sila cuba lagi nanti."
 }

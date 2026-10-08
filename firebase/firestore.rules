@@ -118,10 +118,22 @@ service cloud.firestore {
           && request.resource.data.authorUid == request.auth.uid
           && request.resource.data.masjidId == masjidId
           && request.resource.data.text is string
-          && request.resource.data.text.size() > 0
-          && request.resource.data.text.size() <= 2000;
+          && request.resource.data.text.size() <= 2000
+          // Text, an attachment, or both.
+          && (request.resource.data.text.size() > 0
+              || request.resource.data.get('attachment', null) != null);
         allow delete: if isChannelAdmin()
           || (signedIn() && resource.data.authorUid == request.auth.uid);
+
+        // Attachment bytes, ~900 KB per chunk (no paid file storage).
+        match /chunks/{i} {
+          allow read: if isChannelAdmin() || channelRole() != '';
+          allow create: if canPost()
+            && request.resource.data.keys().hasOnly(['b'])
+            && request.resource.data.b is bytes
+            && request.resource.data.b.size() <= 1000000;
+          allow delete: if canPost();
+        }
       }
     }
 

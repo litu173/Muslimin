@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import '../models/app_user.dart';
 import '../models/channel.dart';
 import '../models/hm.dart';
@@ -128,7 +130,21 @@ abstract class Backend {
     String masjidId, {
     int limit = 100,
   });
-  Future<void> postChannelMessage(Masjid masjid, String text, ChannelRole as);
+
+  /// [file] = (name, bytes) of an optional attachment.
+  Future<void> postChannelMessage(
+    Masjid masjid,
+    String text,
+    ChannelRole as, {
+    (String, Uint8List)? file,
+  });
+
+  /// The attachment's bytes, joined from its chunks.
+  Future<Uint8List> channelAttachment(
+    String masjidId,
+    String messageId,
+    int chunks,
+  );
   Future<void> deleteChannelMessage(String masjidId, String id);
 }
 

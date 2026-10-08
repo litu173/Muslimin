@@ -2136,4 +2136,31 @@ class L10nUr extends L10n {
   String jamatReminderBody(String prayer, String minutes) {
     return '$prayer کی جماعت $minutes منٹ میں';
   }
+
+  @override
+  String get attach => 'منسلک کریں';
+
+  @override
+  String get attachPhoto => 'تصویر';
+
+  @override
+  String get attachVideo => 'ویڈیو';
+
+  @override
+  String get attachAudio => 'آڈیو';
+
+  @override
+  String get attachFile => 'فائل';
+
+  @override
+  String fileTooLarge(String size) {
+    return 'یہ فائل بہت بڑی ہے۔ حد $size ہے۔';
+  }
+
+  @override
+  String get cantOpenFile => 'اس فون پر یہ فائل کھولنے والی کوئی ایپ نہیں۔';
+
+  @override
+  String get channelNotAllowed =>
+      'چینل اس وقت دستیاب نہیں (رسائی نہیں)۔ براہِ کرم بعد میں کوشش کریں۔';
 }

@@ -2139,4 +2139,32 @@ class L10nMs extends L10n {
   String jamatReminderBody(String prayer, String minutes) {
     return 'Jemaah $prayer dalam $minutes minit';
   }
+
+  @override
+  String get attach => 'Lampirkan';
+
+  @override
+  String get attachPhoto => 'Foto';
+
+  @override
+  String get attachVideo => 'Video';
+
+  @override
+  String get attachAudio => 'Audio';
+
+  @override
+  String get attachFile => 'Fail';
+
+  @override
+  String fileTooLarge(String size) {
+    return 'Fail ini terlalu besar. Hadnya $size.';
+  }
+
+  @override
+  String get cantOpenFile =>
+      'Tiada aplikasi pada telefon ini yang boleh membuka fail ini.';
+
+  @override
+  String get channelNotAllowed =>
+      'Saluran tidak tersedia sekarang (akses ditolak). Sila cuba lagi nanti.';
 }
