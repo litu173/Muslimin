@@ -3,6 +3,7 @@
 // 1. New notice  -> push to everyone who follows that masjid (FCM topic `masjid_<id>`).
 // 2. Jamat time changed -> push "Jamat time updated" to followers.
 // 3. Masjid approved / rejected -> push to the owner's devices.
+// 4. New channel message -> push to the channel's members (FCM topic `channel_<id>`).
 const { onDocumentCreated, onDocumentUpdated } = require("firebase-functions/v2/firestore");
 const { initializeApp } = require("firebase-admin/app");
 const { getFirestore } = require("firebase-admin/firestore");
@@ -55,3 +56,18 @@ exports.onMasjidUpdated = onDocumentUpdated({ document: "masjids/{id}", region: 
     });
   }
 });
+
+exports.onChannelMessage = onDocumentCreated(
+  { document: "masjids/{masjidId}/messages/{id}", region: REGION },
+  async (event) => {
+    const m = event.data?.data();
+    if (!m) return;
+    const body = m.text.length > 180 ? `${m.text.slice(0, 177)}…` : m.text;
+    await getMessaging().send({
+      topic: `channel_${event.params.masjidId}`,
+      notification: { title: `${m.masjidName} · ${m.authorName}`, body },
+      data: { type: "channel", masjidId: event.params.masjidId, messageId: event.params.id },
+      android: { notification: { channelId: "notices" } },
+    });
+  },
+);

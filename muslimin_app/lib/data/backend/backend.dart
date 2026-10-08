@@ -1,4 +1,5 @@
 import '../models/app_user.dart';
+import '../models/channel.dart';
 import '../models/hm.dart';
 import '../models/masjid.dart';
 import '../models/notice.dart';
@@ -107,6 +108,28 @@ abstract class Backend {
   Stream<List<Notice>> noticesFor(List<String> masjidIds, {int limit = 30});
   Future<void> postNotice(Notice notice);
   Future<void> deleteNotice(String id);
+
+  // ---- Masjid channel ----
+  /// My membership of a masjid's channel; null when not joined.
+  Stream<ChannelMember?> channelMembership(String masjidId);
+
+  /// Every channel I joined (for the notifications inbox).
+  Stream<List<ChannelMember>> myChannels();
+  Future<void> joinChannel(Masjid masjid);
+  Future<void> leaveChannel(String masjidId);
+
+  /// All members – channel admins only.
+  Stream<List<ChannelMember>> channelMembers(String masjidId);
+  Future<void> setChannelRole(String masjidId, String uid, ChannelRole role);
+  Future<void> removeChannelMember(String masjidId, String uid);
+
+  /// Newest first.
+  Stream<List<ChannelMessage>> channelMessages(
+    String masjidId, {
+    int limit = 100,
+  });
+  Future<void> postChannelMessage(Masjid masjid, String text, ChannelRole as);
+  Future<void> deleteChannelMessage(String masjidId, String id);
 }
 
 /// Max masjid profiles a single phone number may own.

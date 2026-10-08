@@ -54,6 +54,10 @@ class Prefs {
       _p.setString('follows', jsonEncode(v));
 
   /// quran.com recitation id of the chosen reciter (7 = Mishary Alafasy).
+  /// Newest channel message already shown as a notification (ms epoch).
+  int get channelSeenAt => _p.getInt('channelSeenAt') ?? 0;
+  set channelSeenAt(int v) => _p.setInt('channelSeenAt', v);
+
   int get reciter => _p.getInt('reciter') ?? 7;
   set reciter(int v) => _p.setInt('reciter', v);
 

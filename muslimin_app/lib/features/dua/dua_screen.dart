@@ -12,7 +12,8 @@ import '../../core/widgets/surfaces.dart';
 import '../../l10n/app_localizations.dart';
 import 'dua_data.dart';
 
-final Future<List<DuaScene>> _scenes = loadDuaScenes();
+/// Loaded once; shared with Home's "Dua for now".
+final Future<List<DuaScene>> duaScenes = loadDuaScenes();
 
 String partName(L10n t, DayPart p) => switch (p) {
   DayPart.dawn => t.part_dawn,
@@ -162,7 +163,7 @@ class _DuaScreenState extends State<DuaScreen> {
           ),
           Expanded(
             child: FutureBuilder<List<DuaScene>>(
-              future: _scenes,
+              future: duaScenes,
               builder: (context, snap) {
                 if (!snap.hasData) return const Loader();
                 final scenes = snap.data!;
@@ -186,7 +187,7 @@ class _DuaScreenState extends State<DuaScreen> {
                     ),
                     const SizedBox(height: Gap.l),
                     for (final p in DayPart.values) ...[
-                      _PartCard(
+                      DuaPartCard(
                         part: p,
                         isNow: p == now,
                         scenes: [
@@ -214,9 +215,11 @@ class _DuaScreenState extends State<DuaScreen> {
 }
 
 /// A part of the day as a sky card: name, what it covers, topic and dua
-/// counts, and the topic icons.
-class _PartCard extends StatelessWidget {
-  const _PartCard({
+/// counts, and the topic icons. "Now" marks the current part (a chip only –
+/// no highlight). Also used on Home for the current part.
+class DuaPartCard extends StatelessWidget {
+  const DuaPartCard({
+    super.key,
     required this.part,
     required this.isNow,
     required this.scenes,
@@ -236,8 +239,8 @@ class _PartCard extends StatelessWidget {
     return Material(
       borderRadius: BorderRadius.circular(Radii.card),
       clipBehavior: Clip.antiAlias,
-      elevation: isNow ? 6 : 1,
-      shadowColor: isNow ? AppColors.gold : Colors.black26,
+      elevation: 1,
+      shadowColor: Colors.black26,
       child: InkWell(
         onTap: () => push(context, DuaPartScreen(part: part, scenes: scenes)),
         child: SizedBox(
@@ -255,13 +258,6 @@ class _PartCard extends StatelessWidget {
                 ),
               ),
               CustomPaint(painter: SkyPainter(part)),
-              if (isNow)
-                DecoratedBox(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(Radii.card),
-                    border: Border.all(color: AppColors.goldLight, width: 2),
-                  ),
-                ),
               Padding(
                 padding: const EdgeInsets.all(Gap.l),
                 child: Column(

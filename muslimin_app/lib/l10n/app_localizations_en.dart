@@ -2008,4 +2008,103 @@ class L10nEn extends L10n {
 
   @override
   String get nearestFirst => 'Nearest first';
+
+  @override
+  String get duaForNow => 'Duas for now';
+
+  @override
+  String get tabChannel => 'Channel';
+
+  @override
+  String get channelInviteTitle => 'Stay close to your Imam & Khatib';
+
+  @override
+  String get channelInviteHadith =>
+      '“Seeking knowledge is an obligation upon every Muslim.” — Sunan Ibn Majah 224';
+
+  @override
+  String get channelInviteBody =>
+      'Every Muslim must learn the Fard ʿAyn — the essentials of faith, purity, salah and daily life — and the best way is under the guidance of an Alim. Join this masjid\'s channel to receive guidance and messages from its Imam and Khatib, and grow closer to the masjid of your neighbourhood.';
+
+  @override
+  String get joinChannel => 'Join channel';
+
+  @override
+  String get openChannel => 'Open channel';
+
+  @override
+  String get joinedChannel => 'You\'re in this masjid\'s channel';
+
+  @override
+  String get channelJoined =>
+      'Joined. You\'ll receive messages from the Imam and Khatib.';
+
+  @override
+  String get leaveChannel => 'Leave channel';
+
+  @override
+  String get leaveChannelQ =>
+      'Leave this channel? You will stop receiving its messages.';
+
+  @override
+  String get leave => 'Leave';
+
+  @override
+  String get channelEmpty => 'No messages yet.';
+
+  @override
+  String get channelEmptyAdmin => 'Send the first message to your members.';
+
+  @override
+  String get channelReadOnly =>
+      'Only the Imam, Khatib and channel admins post here.';
+
+  @override
+  String get messageHint => 'Write a message…';
+
+  @override
+  String get send => 'Send';
+
+  @override
+  String get deleteMessageQ => 'Delete this message for everyone?';
+
+  @override
+  String get members => 'Members';
+
+  @override
+  String get noMembers =>
+      'No one has joined yet. Invite people from your masjid.';
+
+  @override
+  String get roleMember => 'Member';
+
+  @override
+  String get roleEditor => 'Editor';
+
+  @override
+  String get roleAdmin => 'Admin';
+
+  @override
+  String get roleMemberDesc => 'Reads messages';
+
+  @override
+  String get roleEditorDesc => 'Can send messages';
+
+  @override
+  String get roleAdminDesc => 'Sends messages and manages members';
+
+  @override
+  String get removeMember => 'Remove from channel';
+
+  @override
+  String get you => 'You';
+
+  @override
+  String get channelMessages => 'Channel messages';
+
+  @override
+  String get noticesHeading => 'Notices';
+
+  @override
+  String get signInToJoin => 'Sign in to join the channel.';
 }

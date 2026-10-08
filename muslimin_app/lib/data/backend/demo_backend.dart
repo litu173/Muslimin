@@ -3,6 +3,7 @@ import 'dart:math' as math;
 
 import '../../core/utils/geo.dart';
 import '../models/app_user.dart';
+import '../models/channel.dart';
 import '../models/hm.dart';
 import '../models/masjid.dart';
 import '../models/notice.dart';
@@ -28,6 +29,10 @@ class DemoBackend implements Backend {
 
   final _masjids = <String, Masjid>{};
   final _notices = <String, Notice>{};
+
+  /// masjidId → uid → member, and masjidId → messages (oldest first).
+  final _members = <String, Map<String, ChannelMember>>{};
+  final _messages = <String, List<ChannelMessage>>{};
   final _changes = StreamController<void>.broadcast();
   final _auth = StreamController<AppUser?>.broadcast();
   AppUser? _user;
@@ -131,6 +136,63 @@ class DemoBackend implements Backend {
         liveUrl: i == 1 ? 'https://www.youtube.com/' : null,
         createdAt: now.subtract(const Duration(days: 60)),
       );
+
+      if (i == 0) {
+        // A channel with its Imam as admin and a few messages.
+        final m = _masjids[id]!;
+        _members[id] = {
+          'demo_imam': ChannelMember(
+            uid: 'demo_imam',
+            masjidId: id,
+            masjidName: m.name,
+            name: 'Mawlana Tariqul Islam',
+            role: ChannelRole.admin,
+            joinedAt: now.subtract(const Duration(days: 30)),
+          ),
+        };
+        _messages[id] = [
+          for (final (k, text) in const [
+            'Assalamu alaikum. From this Friday, a short talk on the Fard '
+                "'Ayn of wudu and salah after Asr, in shaa Allah.",
+            "Remember to send salawat on the Prophet ﷺ abundantly on Friday.",
+            'Questions about your salah? Find me after Isha, every day.',
+          ].indexed)
+            ChannelMessage(
+              id: _id(),
+              masjidId: id,
+              masjidName: m.name,
+              text: text,
+              authorUid: 'demo_imam',
+              authorName: 'Mawlana Tariqul Islam',
+              authorRole: ChannelRole.admin,
+              createdAt: now.subtract(Duration(days: 3 - k, hours: 2)),
+            ),
+        ];
+      }
+
+      if (i == 1) {
+        // The demo Google user administers this one, to try roles.
+        final m = _masjids[id]!;
+        ChannelMember member(String uid, String name, ChannelRole r, int d) =>
+            ChannelMember(
+              uid: uid,
+              masjidId: id,
+              masjidName: m.name,
+              name: name,
+              role: r,
+              joinedAt: now.subtract(Duration(days: d)),
+            );
+        _members[id] = {
+          'demo_google': member(
+            'demo_google',
+            'Google User',
+            ChannelRole.admin,
+            20,
+          ),
+          'demo_m1': member('demo_m1', 'Abdul Karim', ChannelRole.editor, 12),
+          'demo_m2': member('demo_m2', 'Rafiq Hasan', ChannelRole.member, 5),
+        };
+      }
 
       if (i < 3) {
         final m = _masjids[id]!;
@@ -508,6 +570,99 @@ class DemoBackend implements Backend {
   );
 
   // --------------------------------------------------------------- notices
+  // ------------------------------------------------------------- channel
+  @override
+  Stream<ChannelMember?> channelMembership(String masjidId) =>
+      _watch(() => _user == null ? null : _members[masjidId]?[_user!.uid]);
+
+  @override
+  Stream<List<ChannelMember>> myChannels() => _watch(
+    () => [
+      if (_user != null)
+        for (final m in _members.values) ?m[_user!.uid],
+    ],
+  );
+
+  @override
+  Future<void> joinChannel(Masjid masjid) async {
+    final u = _requireUser();
+    (_members[masjid.id] ??= {})[u.uid] = ChannelMember(
+      uid: u.uid,
+      masjidId: masjid.id,
+      masjidName: masjid.name,
+      name: u.displayName,
+      role: ChannelRole.member,
+      joinedAt: DateTime.now(),
+    );
+    _emit();
+  }
+
+  @override
+  Future<void> leaveChannel(String masjidId) async {
+    _members[masjidId]?.remove(_user?.uid);
+    _emit();
+  }
+
+  @override
+  Stream<List<ChannelMember>> channelMembers(String masjidId) => _watch(
+    () =>
+        (_members[masjidId]?.values.toList() ?? [])
+          ..sort((a, b) => a.joinedAt.compareTo(b.joinedAt)),
+  );
+
+  @override
+  Future<void> setChannelRole(
+    String masjidId,
+    String uid,
+    ChannelRole role,
+  ) async {
+    final m = _members[masjidId]?[uid];
+    if (m != null) _members[masjidId]![uid] = m.copyWith(role: role);
+    _emit();
+  }
+
+  @override
+  Future<void> removeChannelMember(String masjidId, String uid) async {
+    _members[masjidId]?.remove(uid);
+    _emit();
+  }
+
+  @override
+  Stream<List<ChannelMessage>> channelMessages(
+    String masjidId, {
+    int limit = 100,
+  }) => _watch(
+    () => (_messages[masjidId] ?? const []).reversed.take(limit).toList(),
+  );
+
+  @override
+  Future<void> postChannelMessage(
+    Masjid masjid,
+    String text,
+    ChannelRole as,
+  ) async {
+    final u = _requireUser();
+    (_messages[masjid.id] ??= []).add(
+      ChannelMessage(
+        id: _id(),
+        masjidId: masjid.id,
+        masjidName: masjid.name,
+        text: text,
+        authorUid: u.uid,
+        authorName: u.displayName,
+        authorRole: as,
+        createdAt: DateTime.now(),
+      ),
+    );
+    _emit();
+  }
+
+  @override
+  Future<void> deleteChannelMessage(String masjidId, String id) async {
+    _messages[masjidId]?.removeWhere((m) => m.id == id);
+    _emit();
+  }
+
   @override
   Stream<List<Notice>> noticesFor(List<String> masjidIds, {int limit = 30}) =>
       _watch(() {

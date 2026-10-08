@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text.dart';
 import '../../l10n/app_localizations.dart';
+import '../../state/channel.dart';
 import '../../state/quran.dart';
 import '../achievements/achievements.dart';
 import '../dua/dua_screen.dart';
@@ -25,9 +26,18 @@ class _ShellState extends ConsumerState<Shell> {
   int get _tab => ref.watch(shellTabProvider);
   void _go(int i) => ref.read(shellTabProvider.notifier).go(i);
 
+  /// Bumped each time a tab is opened, so it is rebuilt fresh and always
+  /// starts scrolled to the top.
+  final _visits = List.filled(5, 0);
+
   @override
   Widget build(BuildContext context) {
     final t = L10n.of(context);
+    // New channel messages → phone notifications while the app runs.
+    ref.watch(channelNotifierProvider);
+    ref.listen(shellTabProvider, (prev, next) {
+      if (prev != next) setState(() => _visits[next]++);
+    });
     // Celebrate each achievement the moment it is earned.
     ref.listen(quranProgressProvider.select((p) => p.achievedAt), (prev, next) {
       if (prev == null) return;
@@ -48,7 +58,10 @@ class _ShellState extends ConsumerState<Shell> {
             NoticesScreen(),
             MoreScreen(),
           ].indexed)
-            TickerMode(enabled: i == _tab, child: tab),
+            TickerMode(
+              enabled: i == _tab,
+              child: KeyedSubtree(key: ValueKey(_visits[i]), child: tab),
+            ),
         ],
       ),
       bottomNavigationBar: DecoratedBox(

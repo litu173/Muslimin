@@ -11,7 +11,8 @@ import '../../state/providers.dart';
 import '../masjid/follow_badge.dart';
 import '../masjid/masjid_screen.dart';
 
-/// "Diluroad Chhata Masjid · 1:15 pm · 5 min walk"
+/// "Diluroad Chhata Masjid · Dhuhr Jamat 1:15 PM · 5 min walk" – the jamat
+/// of the current waqt (the prayer shown in the Home header).
 class MasjidCard extends ConsumerWidget {
   const MasjidCard({super.key, required this.masjid, required this.index});
 
@@ -24,7 +25,7 @@ class MasjidCard extends ConsumerWidget {
     final f = Fmt.of(context);
     final now = ref.watch(minuteProvider);
     final loc = ref.watch(locationProvider).value;
-    final next = masjid.nextJamat(now);
+    final jamat = masjid.jamatForWaqt(ref.watch(waqtProvider)?.prayer, now);
 
     String meta = '';
     if (loc != null) {
@@ -35,9 +36,9 @@ class MasjidCard extends ConsumerWidget {
     return InfoTile(
       leading: FollowBadge(masjidId: masjid.id),
       title: masjid.displayName(f.isBn),
-      line: next == null
+      line: jamat == null
           ? t.jamatNotSet
-          : t.jamatLine(f.prayer(next.prayer), f.timeUpper(next.at)),
+          : t.jamatLine(f.prayer(jamat.prayer), f.timeUpper(jamat.at)),
       meta: meta,
       onTap: () =>
           push(context, MasjidScreen(masjidId: masjid.id, initial: masjid)),

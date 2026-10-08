@@ -22,7 +22,7 @@ import 'edit_masjid_info_screen.dart';
 import 'follow_badge.dart';
 import 'tabs/about_tab.dart';
 import 'tabs/home_tab.dart';
-import 'tabs/live_tab.dart';
+import 'channel/channel_tab.dart';
 import 'tabs/notice_tab.dart';
 
 Future<void> openDirections(Masjid m) => launchUrl(
@@ -91,13 +91,18 @@ class _MasjidScreenState extends ConsumerState<MasjidScreen>
                     child: TabBarView(
                       controller: _tabs,
                       children: [
-                        MasjidHomeTab(masjid: masjid, canEdit: canEdit),
+                        MasjidHomeTab(
+                          masjid: masjid,
+                          canEdit: canEdit,
+                          onOpenChannel: () => _tabs.animateTo(2),
+                        ),
                         MasjidNoticeTab(
                           masjid: masjid,
                           canEdit:
                               canEdit && masjid.status == MasjidStatus.approved,
                         ),
-                        MasjidLiveTab(masjid: masjid, canEdit: canEdit),
+                        // Live is hidden for now (live_tab.dart is kept).
+                        MasjidChannelTab(masjid: masjid),
                         MasjidAboutTab(masjid: masjid, canEdit: canEdit),
                       ],
                     ),
@@ -306,7 +311,7 @@ class _TabBarDelegate extends SliverPersistentHeaderDelegate {
       tabs: [
         Tab(text: t.tabHome),
         Tab(text: t.tabNotice),
-        Tab(text: t.tabLive),
+        Tab(text: t.tabChannel),
         Tab(text: t.tabAbout),
       ],
     ),

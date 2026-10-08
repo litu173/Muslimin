@@ -3654,6 +3654,192 @@ abstract class L10n {
   /// In en, this message translates to:
   /// **'Nearest first'**
   String get nearestFirst;
+
+  /// No description provided for @duaForNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Duas for now'**
+  String get duaForNow;
+
+  /// No description provided for @tabChannel.
+  ///
+  /// In en, this message translates to:
+  /// **'Channel'**
+  String get tabChannel;
+
+  /// No description provided for @channelInviteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Stay close to your Imam & Khatib'**
+  String get channelInviteTitle;
+
+  /// No description provided for @channelInviteHadith.
+  ///
+  /// In en, this message translates to:
+  /// **'“Seeking knowledge is an obligation upon every Muslim.” — Sunan Ibn Majah 224'**
+  String get channelInviteHadith;
+
+  /// No description provided for @channelInviteBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Every Muslim must learn the Fard ʿAyn — the essentials of faith, purity, salah and daily life — and the best way is under the guidance of an Alim. Join this masjid\'s channel to receive guidance and messages from its Imam and Khatib, and grow closer to the masjid of your neighbourhood.'**
+  String get channelInviteBody;
+
+  /// No description provided for @joinChannel.
+  ///
+  /// In en, this message translates to:
+  /// **'Join channel'**
+  String get joinChannel;
+
+  /// No description provided for @openChannel.
+  ///
+  /// In en, this message translates to:
+  /// **'Open channel'**
+  String get openChannel;
+
+  /// No description provided for @joinedChannel.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re in this masjid\'s channel'**
+  String get joinedChannel;
+
+  /// No description provided for @channelJoined.
+  ///
+  /// In en, this message translates to:
+  /// **'Joined. You\'ll receive messages from the Imam and Khatib.'**
+  String get channelJoined;
+
+  /// No description provided for @leaveChannel.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave channel'**
+  String get leaveChannel;
+
+  /// No description provided for @leaveChannelQ.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave this channel? You will stop receiving its messages.'**
+  String get leaveChannelQ;
+
+  /// No description provided for @leave.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave'**
+  String get leave;
+
+  /// No description provided for @channelEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No messages yet.'**
+  String get channelEmpty;
+
+  /// No description provided for @channelEmptyAdmin.
+  ///
+  /// In en, this message translates to:
+  /// **'Send the first message to your members.'**
+  String get channelEmptyAdmin;
+
+  /// No description provided for @channelReadOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Only the Imam, Khatib and channel admins post here.'**
+  String get channelReadOnly;
+
+  /// No description provided for @messageHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Write a message…'**
+  String get messageHint;
+
+  /// No description provided for @send.
+  ///
+  /// In en, this message translates to:
+  /// **'Send'**
+  String get send;
+
+  /// No description provided for @deleteMessageQ.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this message for everyone?'**
+  String get deleteMessageQ;
+
+  /// No description provided for @members.
+  ///
+  /// In en, this message translates to:
+  /// **'Members'**
+  String get members;
+
+  /// No description provided for @noMembers.
+  ///
+  /// In en, this message translates to:
+  /// **'No one has joined yet. Invite people from your masjid.'**
+  String get noMembers;
+
+  /// No description provided for @roleMember.
+  ///
+  /// In en, this message translates to:
+  /// **'Member'**
+  String get roleMember;
+
+  /// No description provided for @roleEditor.
+  ///
+  /// In en, this message translates to:
+  /// **'Editor'**
+  String get roleEditor;
+
+  /// No description provided for @roleAdmin.
+  ///
+  /// In en, this message translates to:
+  /// **'Admin'**
+  String get roleAdmin;
+
+  /// No description provided for @roleMemberDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Reads messages'**
+  String get roleMemberDesc;
+
+  /// No description provided for @roleEditorDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Can send messages'**
+  String get roleEditorDesc;
+
+  /// No description provided for @roleAdminDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Sends messages and manages members'**
+  String get roleAdminDesc;
+
+  /// No description provided for @removeMember.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove from channel'**
+  String get removeMember;
+
+  /// No description provided for @you.
+  ///
+  /// In en, this message translates to:
+  /// **'You'**
+  String get you;
+
+  /// No description provided for @channelMessages.
+  ///
+  /// In en, this message translates to:
+  /// **'Channel messages'**
+  String get channelMessages;
+
+  /// No description provided for @noticesHeading.
+  ///
+  /// In en, this message translates to:
+  /// **'Notices'**
+  String get noticesHeading;
+
+  /// No description provided for @signInToJoin.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in to join the channel.'**
+  String get signInToJoin;
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {

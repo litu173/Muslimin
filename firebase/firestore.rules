@@ -79,6 +79,55 @@ service cloud.firestore {
         || isSuperAdmin();
 
       allow delete: if isSuperAdmin();
+
+      // ---- Channel: the masjid's Imam / Khatib / committee message the
+      // people who joined. Only members read; editors and admins post;
+      // admins (and the masjid's owner) manage roles.
+      function masjidDoc() { return get(/databases/$(database)/documents/masjids/$(masjidId)).data; }
+      function myMember() { return /databases/$(database)/documents/masjids/$(masjidId)/members/$(request.auth.uid); }
+      function channelRole() {
+        return signedIn() && exists(myMember()) ? get(myMember()).data.role : '';
+      }
+      function isChannelAdmin() {
+        return signedIn() && (masjidDoc().ownerUid == request.auth.uid
+          || channelRole() == 'admin' || isSuperAdmin());
+      }
+      function canPost() { return isChannelAdmin() || channelRole() == 'editor'; }
+
+      match /members/{uid} {
+        allow read: if signedIn() && (request.auth.uid == uid || isChannelAdmin());
+        // Join yourself, as a plain member, an approved masjid's channel.
+        allow create: if signedIn() && request.auth.uid == uid
+          && masjidDoc().status == 'approved'
+          && request.resource.data.keys().hasOnly(
+               ['uid', 'masjidId', 'masjidName', 'name', 'role', 'joinedAt'])
+          && request.resource.data.uid == uid
+          && request.resource.data.masjidId == masjidId
+          && request.resource.data.role == 'member';
+        // Only the role changes, and only by an admin.
+        allow update: if isChannelAdmin()
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['role'])
+          && request.resource.data.role in ['member', 'editor', 'admin'];
+        // Leave yourself, or be removed by an admin.
+        allow delete: if signedIn() && (request.auth.uid == uid || isChannelAdmin());
+      }
+
+      match /messages/{messageId} {
+        allow read: if isChannelAdmin() || channelRole() != '';
+        allow create: if canPost()
+          && request.resource.data.authorUid == request.auth.uid
+          && request.resource.data.masjidId == masjidId
+          && request.resource.data.text is string
+          && request.resource.data.text.size() > 0
+          && request.resource.data.text.size() <= 2000;
+        allow delete: if isChannelAdmin()
+          || (signedIn() && resource.data.authorUid == request.auth.uid);
+      }
+    }
+
+    // "My channels": a user can list their own memberships across masjids.
+    match /{path=**}/members/{uid} {
+      allow read: if signedIn() && resource.data.uid == request.auth.uid;
     }
 
     match /notices/{noticeId} {

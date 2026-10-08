@@ -26,6 +26,9 @@ class PushService {
       if (n == null || defaultTargetPlatform == TargetPlatform.iOS) {
         return; // iOS shows it itself.
       }
+      // Channel messages are already notified by the in-app listener
+      // (state/channel.dart) while the app is open.
+      if (msg.data['type'] == 'channel') return;
       NotificationService.instance.show(
         msg.hashCode,
         n.title ?? '',
@@ -54,6 +57,21 @@ class PushService {
   Future<void> follow(String masjidId) async {
     if (_enabled) {
       await FirebaseMessaging.instance.subscribeToTopic('masjid_$masjidId');
+    }
+  }
+
+  /// Channel members get its messages on topic `channel_<id>`.
+  Future<void> joinChannel(String masjidId) async {
+    if (_enabled) {
+      await FirebaseMessaging.instance.subscribeToTopic('channel_$masjidId');
+    }
+  }
+
+  Future<void> leaveChannel(String masjidId) async {
+    if (_enabled) {
+      await FirebaseMessaging.instance.unsubscribeFromTopic(
+        'channel_$masjidId',
+      );
     }
   }
 

@@ -16,6 +16,7 @@ import '../../../data/models/prayer.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../state/follows.dart';
 import '../../../state/providers.dart';
+import '../channel/channel_invite_card.dart';
 import '../time_board_scan.dart';
 
 Future<HM?> pickTime(BuildContext context, HM? initial) async {
@@ -29,10 +30,18 @@ Future<HM?> pickTime(BuildContext context, HM? initial) async {
 }
 
 class MasjidHomeTab extends ConsumerStatefulWidget {
-  const MasjidHomeTab({super.key, required this.masjid, required this.canEdit});
+  const MasjidHomeTab({
+    super.key,
+    required this.masjid,
+    required this.canEdit,
+    required this.onOpenChannel,
+  });
 
   final Masjid masjid;
   final bool canEdit;
+
+  /// Switches to the Channel tab.
+  final VoidCallback onOpenChannel;
 
   @override
   ConsumerState<MasjidHomeTab> createState() => _MasjidHomeTabState();
@@ -70,6 +79,13 @@ class _MasjidHomeTabState extends ConsumerState<MasjidHomeTab> {
             canEdit: widget.canEdit,
             onEdit: () => setState(() => _editMaktab = true),
           ),
+        if (widget.masjid.status == MasjidStatus.approved) ...[
+          const SizedBox(height: 10),
+          ChannelInviteCard(
+            masjid: widget.masjid,
+            onOpen: widget.onOpenChannel,
+          ),
+        ],
       ],
     );
   }

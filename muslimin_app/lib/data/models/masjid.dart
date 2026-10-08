@@ -116,6 +116,17 @@ class Masjid {
       [address, thana, district].where((s) => s.trim().isNotEmpty).join(', ');
 
   /// Next jamat from [now] (today, or tomorrow's Fajr). Friday uses Jum'ah instead of Duhr.
+  /// Jamat of the current waqt [prayer] (as in the Home header), even if it
+  /// has already started; Jum'ah falls back to Dhuhr where no Jum'ah time is
+  /// set. Without a waqt (or a time for it) – the next jamat.
+  ({Prayer prayer, DateTime at})? jamatForWaqt(Prayer? prayer, DateTime now) {
+    var p = prayer;
+    if (p == Prayer.jumuah && jamat[Prayer.jumuah] == null) p = Prayer.dhuhr;
+    final t = p == null ? null : jamat[p];
+    if (p == null || t == null) return nextJamat(now);
+    return (prayer: p, at: t.on(now));
+  }
+
   ({Prayer prayer, DateTime at})? nextJamat(DateTime now) {
     for (var dayOffset = 0; dayOffset < 2; dayOffset++) {
       final day = DateTime(

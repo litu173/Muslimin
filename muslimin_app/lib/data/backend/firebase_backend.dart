@@ -9,6 +9,7 @@ import 'package:geoflutterfire_plus/geoflutterfire_plus.dart';
 import '../../core/utils/geo.dart';
 import '../../firebase_options.dart';
 import '../models/app_user.dart';
+import '../models/channel.dart';
 import '../models/hm.dart';
 import '../models/masjid.dart';
 import '../models/notice.dart';
@@ -542,6 +543,124 @@ class FirebaseBackend implements Backend {
 
   @override
   Future<void> deleteNotice(String id) => _notices.doc(id).delete();
+
+  // ------------------------------------------------------------- channel
+  AppUser _requireUser() =>
+      _current ?? (throw BackendException('not-signed-in'));
+
+  CollectionReference<Map<String, dynamic>> _members(String masjidId) =>
+      _masjids.doc(masjidId).collection('members');
+  CollectionReference<Map<String, dynamic>> _messages(String masjidId) =>
+      _masjids.doc(masjidId).collection('messages');
+
+  /// Server time, or now while the write is still pending.
+  static DateTime _tsNow(Object? v) => _ts(v) ?? DateTime.now();
+
+  static ChannelMember _member(DocumentSnapshot<Map<String, dynamic>> d) =>
+      ChannelMember.fromMap(d.data()!, _tsNow(d.data()!['joinedAt']));
+
+  @override
+  Stream<ChannelMember?> channelMembership(String masjidId) {
+    final uid = _auth.currentUser?.uid;
+    if (uid == null) return Stream.value(null);
+    return _members(masjidId)
+        .doc(uid)
+        .snapshots()
+        .map((d) => d.exists ? _member(d) : null);
+  }
+
+  @override
+  Stream<List<ChannelMember>> myChannels() {
+    final uid = _auth.currentUser?.uid;
+    if (uid == null) return Stream.value(const []);
+    return _db
+        .collectionGroup('members')
+        .where('uid', isEqualTo: uid)
+        .snapshots()
+        .map((s) => s.docs.map(_member).toList());
+  }
+
+  @override
+  Future<void> joinChannel(Masjid masjid) async {
+    final u = _requireUser();
+    await _members(masjid.id).doc(u.uid).set({
+      ...ChannelMember(
+        uid: u.uid,
+        masjidId: masjid.id,
+        masjidName: masjid.name,
+        name: u.displayName,
+        role: ChannelRole.member,
+        joinedAt: DateTime.now(),
+      ).toMap(),
+      'joinedAt': FieldValue.serverTimestamp(),
+    });
+  }
+
+  @override
+  Future<void> leaveChannel(String masjidId) async {
+    final uid = _auth.currentUser?.uid;
+    if (uid != null) await _members(masjidId).doc(uid).delete();
+  }
+
+  @override
+  Stream<List<ChannelMember>> channelMembers(String masjidId) =>
+      _members(masjidId)
+          .orderBy('joinedAt')
+          .snapshots()
+          .map((s) => s.docs.map(_member).toList());
+
+  @override
+  Future<void> setChannelRole(String masjidId, String uid, ChannelRole role) =>
+      _members(masjidId).doc(uid).update({'role': role.name});
+
+  @override
+  Future<void> removeChannelMember(String masjidId, String uid) =>
+      _members(masjidId).doc(uid).delete();
+
+  @override
+  Stream<List<ChannelMessage>> channelMessages(
+    String masjidId, {
+    int limit = 100,
+  }) => _messages(masjidId)
+      .orderBy('createdAt', descending: true)
+      .limit(limit)
+      .snapshots()
+      .map(
+        (s) => [
+          for (final d in s.docs)
+            ChannelMessage.fromMap(
+              d.id,
+              d.data(),
+              _tsNow(d.data()['createdAt']),
+            ),
+        ],
+      );
+
+  @override
+  Future<void> postChannelMessage(
+    Masjid masjid,
+    String text,
+    ChannelRole as,
+  ) async {
+    final u = _requireUser();
+    await _messages(masjid.id).add({
+      ...ChannelMessage(
+        id: '',
+        masjidId: masjid.id,
+        masjidName: masjid.name,
+        text: text,
+        authorUid: u.uid,
+        authorName: u.displayName,
+        authorRole: as,
+        createdAt: DateTime.now(),
+      ).toMap(),
+      'createdAt': FieldValue.serverTimestamp(),
+    });
+  }
+
+  @override
+  Future<void> deleteChannelMessage(String masjidId, String id) =>
+      _messages(masjidId).doc(id).delete();
 
   void dispose() => _authSub.cancel();
 }

@@ -19,6 +19,7 @@ import '../registration/registration_flow.dart';
 import 'location_bar.dart';
 import 'masjid_card.dart';
 import 'masjid_list_screen.dart';
+import 'now_dua_card.dart';
 import 'quran_energy_card.dart';
 import 'verse_carousel.dart';
 
@@ -173,8 +174,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                     ],
             ),
 
+            // ---- duas for this part of the day
+            const SliverToBoxAdapter(child: SizedBox(height: Gap.l)),
+            SliverToBoxAdapter(child: _in(7, const NowDuaSection())),
+
             const SliverToBoxAdapter(child: SizedBox(height: Gap.xl)),
-            SliverToBoxAdapter(child: _in(7, const VerseCarousel())),
+            SliverToBoxAdapter(child: _in(8, const VerseCarousel())),
 
             const SliverToBoxAdapter(child: SizedBox(height: Gap.xxl)),
           ],

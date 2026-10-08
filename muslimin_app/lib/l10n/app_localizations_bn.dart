@@ -1991,4 +1991,101 @@ class L10nBn extends L10n {
 
   @override
   String get nearestFirst => 'কাছের মসজিদ আগে';
+
+  @override
+  String get duaForNow => 'এখনকার দো‘আ';
+
+  @override
+  String get tabChannel => 'চ্যানেল';
+
+  @override
+  String get channelInviteTitle => 'আপনার ইমাম ও খতিবের সাথে যুক্ত থাকুন';
+
+  @override
+  String get channelInviteHadith =>
+      '“ইলম অর্জন করা প্রত্যেক মুসলিমের উপর ফরজ।” — সুনানে ইবনে মাজাহ ২২৪';
+
+  @override
+  String get channelInviteBody =>
+      'ফরজে আইন — ঈমান, পবিত্রতা, নামাজ ও দৈনন্দিন জীবনের অপরিহার্য বিষয় — শেখা প্রত্যেক মুসলিমের উপর ফরজ, আর তা শেখার উত্তম পথ একজন আলেমের তত্ত্বাবধান। এই মসজিদের চ্যানেলে যোগ দিন — ইমাম ও খতিবের দিকনির্দেশনা ও বার্তা পান, আর নিজের এলাকার মসজিদের সাথে সম্পর্ক আরও গভীর করুন।';
+
+  @override
+  String get joinChannel => 'চ্যানেলে যোগ দিন';
+
+  @override
+  String get openChannel => 'চ্যানেল খুলুন';
+
+  @override
+  String get joinedChannel => 'আপনি এই মসজিদের চ্যানেলে আছেন';
+
+  @override
+  String get channelJoined => 'যোগ দিয়েছেন। ইমাম ও খতিবের বার্তা পাবেন।';
+
+  @override
+  String get leaveChannel => 'চ্যানেল ছাড়ুন';
+
+  @override
+  String get leaveChannelQ => 'চ্যানেল ছাড়বেন? এর বার্তা আর পাবেন না।';
+
+  @override
+  String get leave => 'ছাড়ুন';
+
+  @override
+  String get channelEmpty => 'এখনো কোনো বার্তা নেই।';
+
+  @override
+  String get channelEmptyAdmin => 'সদস্যদের প্রথম বার্তা পাঠান।';
+
+  @override
+  String get channelReadOnly =>
+      'এখানে শুধু ইমাম, খতিব ও চ্যানেল অ্যাডমিনরা বার্তা দেন।';
+
+  @override
+  String get messageHint => 'বার্তা লিখুন…';
+
+  @override
+  String get send => 'পাঠান';
+
+  @override
+  String get deleteMessageQ => 'বার্তাটি সবার জন্য মুছবেন?';
+
+  @override
+  String get members => 'সদস্য';
+
+  @override
+  String get noMembers =>
+      'এখনো কেউ যোগ দেননি। মসজিদের মুসল্লিদের আমন্ত্রণ জানান।';
+
+  @override
+  String get roleMember => 'সদস্য';
+
+  @override
+  String get roleEditor => 'এডিটর';
+
+  @override
+  String get roleAdmin => 'অ্যাডমিন';
+
+  @override
+  String get roleMemberDesc => 'বার্তা পড়তে পারেন';
+
+  @override
+  String get roleEditorDesc => 'বার্তা পাঠাতে পারেন';
+
+  @override
+  String get roleAdminDesc => 'বার্তা পাঠান ও সদস্য পরিচালনা করেন';
+
+  @override
+  String get removeMember => 'চ্যানেল থেকে সরান';
+
+  @override
+  String get you => 'আপনি';
+
+  @override
+  String get channelMessages => 'চ্যানেলের বার্তা';
+
+  @override
+  String get noticesHeading => 'নোটিশ';
+
+  @override
+  String get signInToJoin => 'চ্যানেলে যোগ দিতে সাইন ইন করুন।';
 }
