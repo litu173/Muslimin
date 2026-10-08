@@ -693,7 +693,7 @@ class L10nEn extends L10n {
 
   @override
   String get termsBody =>
-      '1. Only masjid committee members, imam, khatib, moazzin or khadem may create a masjid profile.\n2. The profile must be created from inside the masjid so its location is correct.\n3. Your NID and phone number are used only for verification and are never shown publicly.\n4. Jamat times and notices must be accurate and kept up to date.\n5. Notices must be related to masjid activities. Political, commercial or hateful content is not allowed.\n6. A profile stays hidden until it is verified by the Muslimin team. Profiles with false information will be removed.';
+      '1. Only masjid committee members, imam, khatib, moazzin or khadem may create a masjid profile.\n2. The masjid\'s location must be exact — set it with GPS inside the masjid or by pointing to it on the map.\n3. Your NID and phone number are used only for verification and are never shown publicly.\n4. Jamat times and notices must be accurate and kept up to date.\n5. Notices must be related to masjid activities. Political, commercial or hateful content is not allowed.\n6. A profile stays hidden until it is verified by the Muslimin team. Profiles with false information will be removed.';
 
   @override
   String get statusPending => 'Pending review';
@@ -805,7 +805,7 @@ class L10nEn extends L10n {
 
   @override
   String get faqA3 =>
-      'Go to More → Register a Masjid. You must be a committee member, imam, moazzin, khatib or khadem, and you must be inside the masjid while registering.';
+      'Go to More → Register a Masjid. You must be a committee member, imam, moazzin, khatib or khadem, and you set the masjid\'s exact location — with GPS inside the masjid or on the map.';
 
   @override
   String get faqQ4 => 'Why is my masjid not visible?';
@@ -2117,4 +2117,19 @@ class L10nEn extends L10n {
 
   @override
   String get signInToJoin => 'Sign in to join the channel.';
+
+  @override
+  String get monthNames =>
+      'January,February,March,April,May,June,July,August,September,October,November,December';
+
+  @override
+  String get am => 'am';
+
+  @override
+  String get pm => 'pm';
+
+  @override
+  String jamatReminderBody(String prayer, String minutes) {
+    return '$prayer Jamat in $minutes minutes';
+  }
 }

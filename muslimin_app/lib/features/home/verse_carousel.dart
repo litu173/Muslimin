@@ -157,17 +157,20 @@ class _VerseCard extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 6),
-              Text(
-                text,
-                textAlign: TextAlign.center,
-                maxLines: 3,
-                style: AppText.subtitle.copyWith(
-                  color: AppColors.ink,
-                  fontSize: 17,
-                  height: 1.25,
+              // No translation in the Arabic UI – the ayah speaks for itself.
+              if (text.isNotEmpty) ...[
+                const SizedBox(height: 6),
+                Text(
+                  text,
+                  textAlign: TextAlign.center,
+                  maxLines: 3,
+                  style: AppText.subtitle.copyWith(
+                    color: AppColors.ink,
+                    fontSize: 17,
+                    height: 1.25,
+                  ),
                 ),
-              ),
+              ],
               const SizedBox(height: 6),
               Text(ref, style: AppText.micro.copyWith(color: AppColors.muted)),
             ],

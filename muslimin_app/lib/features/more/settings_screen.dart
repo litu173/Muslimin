@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/languages.dart';
+
 import '../../core/theme/app_colors.dart';
 import '../../core/widgets/page_header.dart';
 import '../../core/theme/app_spacing.dart';
@@ -74,9 +76,9 @@ class SettingsScreen extends ConsumerWidget {
           section(
             t.language,
             chips(
-              [(const Locale('bn'), 'বাংলা'), (const Locale('en'), 'English')],
-              s.locale,
-              n.setLocale,
+              [for (final l in kAppLanguages) (l.code, l.nativeName)],
+              s.locale.languageCode,
+              (code) => n.setLocale(Locale(code)),
             ),
           ),
           section(

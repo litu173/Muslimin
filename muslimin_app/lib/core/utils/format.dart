@@ -4,9 +4,11 @@ import 'package:hijri/hijri_calendar.dart';
 import '../../data/models/hm.dart';
 import '../../data/models/notice.dart';
 import '../../data/models/prayer.dart';
+import '../../data/quran/surah_i18n.dart';
+import '../../data/quran/surahs.dart';
 import '../../l10n/app_localizations.dart';
 
-/// All locale-aware formatting lives here so English and Bangla stay consistent.
+/// All locale-aware formatting lives here so every language stays consistent.
 class Fmt {
   Fmt(this.locale, this.t);
 
@@ -16,11 +18,13 @@ class Fmt {
   final Locale locale;
   final L10n t;
 
-  bool get isBn => locale.languageCode == 'bn';
+  String get lang => locale.languageCode;
+  bool get isBn => lang == 'bn';
 
   static const _bnDigits = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
 
-  /// Converts ASCII digits to Bangla digits when the UI is in Bangla.
+  /// Bangla digits in Bangla; Western digits everywhere else (also Arabic:
+  /// Arabic-Indic zero "٠" is easily confused with the "·" separators).
   String digits(Object value) {
     final s = value.toString();
     if (!isBn) return s;
@@ -30,6 +34,9 @@ class Fmt {
     }
     return b.toString();
   }
+
+  /// List comma: Arabic script uses "،".
+  String get comma => lang == 'ar' || lang == 'ur' ? '، ' : ', ';
 
   String _pad(int n) => n.toString().padLeft(2, '0');
 
@@ -56,14 +63,14 @@ class Fmt {
   /// "1:15 pm" / "দুপুর ১:১৫" – used where the period matters.
   String hmPeriod(HM t) {
     if (isBn) return '${_bnPeriod(t.hour, t.minute)} ${hm(t)}';
-    return '${hm(t)} ${t.hour < 12 ? 'am' : 'pm'}';
+    return '${hm(t)} ${t.hour < 12 ? this.t.am : this.t.pm}';
   }
 
   String timePeriod(DateTime d) => hmPeriod(HM.fromDateTime(d));
 
   /// "7:26 PM" style for nafl windows.
   String timeUpper(DateTime d) {
-    if (isBn) return timePeriod(d);
+    if (lang != 'en') return timePeriod(d);
     return '${time(d)} ${d.hour < 12 ? 'AM' : 'PM'}';
   }
 
@@ -78,35 +85,6 @@ class Fmt {
       '${_pad(d.inHours)}:${_pad(d.inMinutes % 60)}:${_pad(d.inSeconds % 60)}',
     );
   }
-
-  static const _enMonths = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
-  ];
-  static const _bnMonths = [
-    'জানুয়ারি',
-    'ফেব্রুয়ারি',
-    'মার্চ',
-    'এপ্রিল',
-    'মে',
-    'জুন',
-    'জুলাই',
-    'আগস্ট',
-    'সেপ্টেম্বর',
-    'অক্টোবর',
-    'নভেম্বর',
-    'ডিসেম্বর',
-  ];
 
   /// DateTime.weekday (1=Mon..7=Sun) -> index in the Sat-first lists of the ARB files.
   static int satFirstIndex(int weekday) => (weekday + 1) % 7;
@@ -125,13 +103,13 @@ class Fmt {
 
   /// "03 July, 2024"
   String longDate(DateTime d) =>
-      '${digits(_pad(d.day))} ${(isBn ? _bnMonths : _enMonths)[d.month - 1]}, ${digits(d.year)}';
+      '${digits(_pad(d.day))} ${t.monthNames.split(',')[d.month - 1]}$comma${digits(d.year)}';
 
   /// "21 Rajab, Monday, 03 July, 2024"
   String headerDate(DateTime d, int hijriOffset) {
     final h = HijriCalendar.fromDate(d.add(Duration(days: hijriOffset)));
     final month = t.hijriMonths.split(',')[h.hMonth - 1];
-    return '${digits(h.hDay)} $month, ${weekdayLong(d.weekday)}, ${longDate(d)}';
+    return '${digits(h.hDay)} $month$comma${weekdayLong(d.weekday)}$comma${longDate(d)}';
   }
 
   String relativeDays(DateTime when, DateTime now) {
@@ -182,6 +160,27 @@ class Fmt {
         ];
         return parts.isEmpty ? '' : t.timeAndDate(parts.join(', '));
     }
+  }
+
+  /// Surah name in the UI language (Arabic script for Arabic and Urdu).
+  String surahName(Surah s) {
+    if (lang == 'bn') return s.nameBn;
+    if (lang == 'en') return s.nameEn;
+    final name = kSurahI18n[lang]?[s.id - 1].$1 ?? s.nameEn;
+    return name.isEmpty ? s.nameAr : name;
+  }
+
+  /// Meaning of the surah's name; may be empty (then it is left out).
+  String surahMeaning(Surah s) {
+    if (lang == 'bn') return s.meaningBn;
+    if (lang == 'en') return s.meaningEn;
+    return kSurahI18n[lang]?[s.id - 1].$2 ?? s.meaningEn;
+  }
+
+  /// "Meaning · rest", or just "rest" when there is no meaning.
+  String withMeaning(Surah s, String rest) {
+    final m = surahMeaning(s);
+    return m.isEmpty ? rest : '$m · $rest';
   }
 
   String distance(double meters) =>

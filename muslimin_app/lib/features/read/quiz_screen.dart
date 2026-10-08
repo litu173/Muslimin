@@ -34,7 +34,7 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
   Future<List<QuizQuestion>> _build() async {
     final f = Fmt.of(context);
     final t = L10n.of(context);
-    final lang = f.isBn ? 'bn' : 'en';
+    final lang = quranLang(f.lang);
     final repo = ref.read(quranRepositoryProvider);
     final ayahs = <int, List<Ayah>>{
       for (final s in widget.phase.surahs) s.id: await repo.surah(s.id, lang),
@@ -42,7 +42,6 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
     return buildQuiz(
       phase: widget.phase,
       ayahs: ayahs,
-      bn: f.isBn,
       tx: QuizTexts(
         wordMeaning: t.quizWordMeaning,
         ayahMeaning: t.quizAyahMeaning,
@@ -52,7 +51,8 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
         madinah: t.madinah,
         howManyVerses: t.quizVerses,
         nameMeans: t.quizNameMeans,
-        surahName: (s) => s.name(f.isBn),
+        surahName: f.surahName,
+        surahMeaning: f.surahMeaning,
         digits: f.digits,
       ),
     );

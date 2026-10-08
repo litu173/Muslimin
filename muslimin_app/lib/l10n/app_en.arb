@@ -350,7 +350,7 @@
   "submittedTitle": "Submitted for review",
   "submittedBody": "Jazakallahu khairan! Your masjid profile will be visible to everyone after our team verifies it. You will get a notification when it is approved.",
   "backToHome": "Back to Home",
-  "termsBody": "1. Only masjid committee members, imam, khatib, moazzin or khadem may create a masjid profile.\n2. The profile must be created from inside the masjid so its location is correct.\n3. Your NID and phone number are used only for verification and are never shown publicly.\n4. Jamat times and notices must be accurate and kept up to date.\n5. Notices must be related to masjid activities. Political, commercial or hateful content is not allowed.\n6. A profile stays hidden until it is verified by the Muslimin team. Profiles with false information will be removed.",
+  "termsBody": "1. Only masjid committee members, imam, khatib, moazzin or khadem may create a masjid profile.\n2. The masjid's location must be exact — set it with GPS inside the masjid or by pointing to it on the map.\n3. Your NID and phone number are used only for verification and are never shown publicly.\n4. Jamat times and notices must be accurate and kept up to date.\n5. Notices must be related to masjid activities. Political, commercial or hateful content is not allowed.\n6. A profile stays hidden until it is verified by the Muslimin team. Profiles with false information will be removed.",
   "statusPending": "Pending review",
   "statusApproved": "Approved",
   "statusRejected": "Rejected",
@@ -417,7 +417,7 @@
   "faqQ2": "Why is location mandatory?",
   "faqA2": "Location is used to show masjids near you and to calculate accurate prayer times. It is never shared with anyone.",
   "faqQ3": "How can I add my masjid?",
-  "faqA3": "Go to More → Register a Masjid. You must be a committee member, imam, moazzin, khatib or khadem, and you must be inside the masjid while registering.",
+  "faqA3": "Go to More → Register a Masjid. You must be a committee member, imam, moazzin, khatib or khadem, and you set the masjid's exact location — with GPS inside the masjid or on the map.",
   "faqQ4": "Why is my masjid not visible?",
   "faqA4": "New profiles are verified by our team before they become public. This usually takes 1–2 days.",
   "faqQ5": "How do jamat reminders work?",
@@ -1069,5 +1069,19 @@
   "you": "You",
   "channelMessages": "Channel messages",
   "noticesHeading": "Notices",
-  "signInToJoin": "Sign in to join the channel."
+  "signInToJoin": "Sign in to join the channel.",
+  "monthNames": "January,February,March,April,May,June,July,August,September,October,November,December",
+  "am": "am",
+  "pm": "pm",
+  "jamatReminderBody": "{prayer} Jamat in {minutes} minutes",
+  "@jamatReminderBody": {
+    "placeholders": {
+      "prayer": {
+        "type": "String"
+      },
+      "minutes": {
+        "type": "String"
+      }
+    }
+  }
 }

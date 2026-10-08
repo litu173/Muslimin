@@ -368,6 +368,7 @@ class QuizTexts {
     required this.howManyVerses,
     required this.nameMeans,
     required this.surahName,
+    required this.surahMeaning,
     required this.digits,
   });
 
@@ -380,6 +381,9 @@ class QuizTexts {
   final String Function(String surah) howManyVerses;
   final String Function(String surah) nameMeans;
   final String Function(Surah s) surahName;
+
+  /// Empty when there is no meaning in this language (question skipped).
+  final String Function(Surah s) surahMeaning;
   final String Function(Object) digits;
 }
 
@@ -390,7 +394,6 @@ List<QuizQuestion> buildQuiz({
   required QuranPhase phase,
   required Map<int, List<Ayah>> ayahs,
   required QuizTexts tx,
-  required bool bn,
   int count = 8,
   int? seed,
 }) {
@@ -456,7 +459,10 @@ List<QuizQuestion> buildQuiz({
   // Ayah meaning (short ayahs with short translations).
   final shortAyahs = [
     for (final (s, a) in allAyahs)
-      if (a.translation.length <= 130 && a.words.length <= 14) (s, a),
+      if (a.translation.isNotEmpty &&
+          a.translation.length <= 130 &&
+          a.words.length <= 14)
+        (s, a),
   ]..shuffle(r);
   final meaningPool = {for (final (_, a) in shortAyahs) a.translation};
   if (meaningPool.length >= 3) {
@@ -511,11 +517,14 @@ List<QuizQuestion> buildQuiz({
     qs.add(
       q(QuizKind.verses, tx.howManyVerses(name), tx.digits(s.verses), near),
     );
-    qs.add(
-      q(QuizKind.name, tx.nameMeans(name), s.meaning(bn), {
-        for (final x in kSurahs) x.meaning(bn),
-      }),
-    );
+    final meaning = tx.surahMeaning(s);
+    if (meaning.isNotEmpty) {
+      qs.add(
+        q(QuizKind.name, tx.nameMeans(name), meaning, {
+          for (final x in kSurahs) tx.surahMeaning(x),
+        }..remove(''),),
+      );
+    }
   }
 
   // Keep a mix: up to [count], spread across kinds.

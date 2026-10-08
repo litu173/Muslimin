@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../core/languages.dart';
 import '../data/backend/backend.dart';
 import '../data/models/app_user.dart';
 import '../data/models/masjid.dart';
@@ -65,7 +66,11 @@ class SettingsNotifier extends Notifier<AppSettings> {
     final device =
         WidgetsBinding.instance.platformDispatcher.locale.languageCode;
     return AppSettings(
-      locale: Locale(p.localeCode ?? (device == 'bn' ? 'bn' : 'en')),
+      // First run: the phone's language if the app has it, else English.
+      locale: Locale(
+        p.localeCode ??
+            (kAppLanguages.any((l) => l.code == device) ? device : 'en'),
+      ),
       madhab: p.madhab,
       calcMethod: p.calcMethod,
       hijriOffset: p.hijriOffset,

@@ -131,9 +131,8 @@ final reminderSyncProvider = Provider<void>((ref) {
     map,
     ReminderTexts(
       prayerName: f.prayer,
-      body: (prayer, minutes, _) => locale.languageCode == 'bn'
-          ? '$prayer-এর জামাত ${f.digits(minutes)} মিনিট পর'
-          : '$prayer Jamat in $minutes minutes',
+      body: (prayer, minutes, _) =>
+          t.jamatReminderBody(prayer, f.digits(minutes)),
     ),
   );
 });

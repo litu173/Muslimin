@@ -227,8 +227,8 @@ class _Header extends StatelessWidget {
                 const SizedBox(height: Gap.m),
                 AppButton(
                   resume
-                      ? '${t.continueReading} · ${next.name(f.isBn)} · ${t.ayahOf(f.digits(progress.lastAyah), f.digits(next.verses))}'
-                      : '${t.startReading} · ${next.name(f.isBn)}',
+                      ? '${t.continueReading} · ${f.surahName(next)} · ${t.ayahOf(f.digits(progress.lastAyah), f.digits(next.verses))}'
+                      : '${t.startReading} · ${f.surahName(next)}',
                   icon: Icons.menu_book_rounded,
                   expand: true,
                   onPressed: () => onContinue(next),
@@ -746,13 +746,13 @@ class _SurahNodeState extends State<_SurahNode>
             ),
           ),
         Text(
-          '${f.digits(s.id)}. ${s.name(f.isBn)}',
+          '${f.digits(s.id)}. ${f.surahName(s)}',
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           style: AppText.label.copyWith(color: AppColors.ink),
         ),
         Text(
-          '${s.meaning(f.isBn)} · ${s.makki ? t.makki : t.madani}',
+          f.withMeaning(s, s.makki ? t.makki : t.madani),
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           style: AppText.micro.copyWith(color: AppColors.muted),

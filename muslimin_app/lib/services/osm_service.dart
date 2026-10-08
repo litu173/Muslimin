@@ -39,7 +39,7 @@ class OsmService {
     double lat,
     double lng, {
     int radiusM = 1500,
-    bool bn = false,
+    String lang = 'en',
   }) async {
     final query =
         '[out:json][timeout:15];'
@@ -58,7 +58,7 @@ class OsmService {
               MapPlace(
                 lat: ((e['lat'] ?? e['center']['lat']) as num).toDouble(),
                 lng: ((e['lon'] ?? e['center']['lon']) as num).toDouble(),
-                name: _name(e['tags'] as Map?, bn),
+                name: _name(e['tags'] as Map?, lang),
               ),
         ];
       } catch (_) {
@@ -68,20 +68,21 @@ class OsmService {
     return const [];
   }
 
-  static String _name(Map? tags, bool bn) {
+  /// The masjid's name in [lang] if mapped, else English, else local.
+  static String _name(Map? tags, String lang) {
     final t = tags ?? const {};
-    return ((bn ? t['name:bn'] : t['name:en']) ?? t['name'] ?? '') as String;
+    return (t['name:$lang'] ?? t['name:en'] ?? t['name'] ?? '') as String;
   }
 
   /// Places matching [q] in Bangladesh (masjids, areas, roads…).
-  Future<List<MapPlace>> search(String q, {bool bn = false}) async {
+  Future<List<MapPlace>> search(String q, {String lang = 'en'}) async {
     if (q.trim().length < 3) return const [];
     final uri = Uri.https('nominatim.openstreetmap.org', '/search', {
       'q': q,
       'format': 'jsonv2',
       'limit': '8',
       'countrycodes': 'bd',
-      'accept-language': bn ? 'bn,en' : 'en,bn',
+      'accept-language': '$lang,en,bn',
     });
     final res = await http
         .get(uri, headers: _ua)

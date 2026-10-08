@@ -8,6 +8,12 @@ import 'package:path_provider/path_provider.dart';
 /// Bismillah exactly as in the Mushaf (Al-Fatihah 1:1, Uthmani script).
 const kBismillah = 'بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ';
 
+/// Language used for Quran data: the UI language when supported, else English.
+String quranLang(String uiLang) =>
+    const {'en', 'bn', 'ar', 'hi', 'ur', 'id', 'ms', 'tr', 'es'}.contains(uiLang)
+    ? uiLang
+    : 'en';
+
 class QuranWord {
   const QuranWord(this.arabic, this.meaning);
   final String arabic;
@@ -44,13 +50,28 @@ class Ayah {
 /// public quran.com API v4. Each surah is downloaded once per language and
 /// kept on the phone, so it reads offline afterwards.
 ///
-/// Translations (both Sunni and widely relied upon):
-/// English – Saheeh International (id 20);
-/// Bangla – Dr. Abu Bakr Muhammad Zakaria, published by the King Fahd
-/// Complex for the Printing of the Holy Quran (id 213).
+/// Translations (Sunni and widely relied upon), quran.com resource ids:
+/// English – Saheeh International (20);
+/// Bangla – Dr. Abu Bakr Muhammad Zakaria, King Fahd Complex (213);
+/// Hindi – Maulana Azizul Haque al-Umari, King Fahd Complex (122);
+/// Urdu – Maulana Fateh Muhammad Jalandhari (234);
+/// Indonesian – Ministry of Religious Affairs, Kemenag (33);
+/// Malay – Abdullah Muhammad Basmeih (39);
+/// Turkish – Diyanet İşleri (77);
+/// Spanish – Sheikh Isa Garcia (83).
+/// Arabic shows the Quran alone (no translation).
 class QuranRepository {
   static const _base = 'https://api.quran.com/api/v4';
-  static const _translation = {'en': 20, 'bn': 213};
+  static const _translation = {
+    'en': 20,
+    'bn': 213,
+    'hi': 122,
+    'ur': 234,
+    'id': 33,
+    'ms': 39,
+    'tr': 77,
+    'es': 83,
+  };
 
   final _memory = <String, List<Ayah>>{};
 
@@ -97,7 +118,8 @@ class QuranRepository {
     final uri = Uri.parse(
       '$_base/verses/by_chapter/$surah'
       '?language=$lang&words=true&word_fields=text_uthmani'
-      '&translations=${_translation[lang]}&fields=text_uthmani&per_page=300',
+      '${_translation[lang] == null ? '' : '&translations=${_translation[lang]}'}'
+      '&fields=text_uthmani&per_page=300',
     );
     final res = await http.get(uri).timeout(const Duration(seconds: 25));
     if (res.statusCode != 200) {
@@ -111,7 +133,7 @@ class QuranRepository {
           v['verse_number'] as int,
           v['text_uthmani'] as String,
           _clean(
-            ((v['translations'] as List).firstOrNull as Map?)?['text']
+            ((v['translations'] as List?)?.firstOrNull as Map?)?['text']
                     as String? ??
                 '',
           ),

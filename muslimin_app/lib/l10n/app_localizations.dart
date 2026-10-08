@@ -5,8 +5,15 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart' as intl;
 
+import 'app_localizations_ar.dart';
 import 'app_localizations_bn.dart';
 import 'app_localizations_en.dart';
+import 'app_localizations_es.dart';
+import 'app_localizations_hi.dart';
+import 'app_localizations_id.dart';
+import 'app_localizations_ms.dart';
+import 'app_localizations_tr.dart';
+import 'app_localizations_ur.dart';
 
 // ignore_for_file: type=lint
 
@@ -93,8 +100,15 @@ abstract class L10n {
 
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
+    Locale('ar'),
     Locale('bn'),
     Locale('en'),
+    Locale('es'),
+    Locale('hi'),
+    Locale('id'),
+    Locale('ms'),
+    Locale('tr'),
+    Locale('ur'),
   ];
 
   /// No description provided for @appName.
@@ -1342,7 +1356,7 @@ abstract class L10n {
   /// No description provided for @termsBody.
   ///
   /// In en, this message translates to:
-  /// **'1. Only masjid committee members, imam, khatib, moazzin or khadem may create a masjid profile.\n2. The profile must be created from inside the masjid so its location is correct.\n3. Your NID and phone number are used only for verification and are never shown publicly.\n4. Jamat times and notices must be accurate and kept up to date.\n5. Notices must be related to masjid activities. Political, commercial or hateful content is not allowed.\n6. A profile stays hidden until it is verified by the Muslimin team. Profiles with false information will be removed.'**
+  /// **'1. Only masjid committee members, imam, khatib, moazzin or khadem may create a masjid profile.\n2. The masjid\'s location must be exact — set it with GPS inside the masjid or by pointing to it on the map.\n3. Your NID and phone number are used only for verification and are never shown publicly.\n4. Jamat times and notices must be accurate and kept up to date.\n5. Notices must be related to masjid activities. Political, commercial or hateful content is not allowed.\n6. A profile stays hidden until it is verified by the Muslimin team. Profiles with false information will be removed.'**
   String get termsBody;
 
   /// No description provided for @statusPending.
@@ -1534,7 +1548,7 @@ abstract class L10n {
   /// No description provided for @faqA3.
   ///
   /// In en, this message translates to:
-  /// **'Go to More → Register a Masjid. You must be a committee member, imam, moazzin, khatib or khadem, and you must be inside the masjid while registering.'**
+  /// **'Go to More → Register a Masjid. You must be a committee member, imam, moazzin, khatib or khadem, and you set the masjid\'s exact location — with GPS inside the masjid or on the map.'**
   String get faqA3;
 
   /// No description provided for @faqQ4.
@@ -3840,6 +3854,30 @@ abstract class L10n {
   /// In en, this message translates to:
   /// **'Sign in to join the channel.'**
   String get signInToJoin;
+
+  /// No description provided for @monthNames.
+  ///
+  /// In en, this message translates to:
+  /// **'January,February,March,April,May,June,July,August,September,October,November,December'**
+  String get monthNames;
+
+  /// No description provided for @am.
+  ///
+  /// In en, this message translates to:
+  /// **'am'**
+  String get am;
+
+  /// No description provided for @pm.
+  ///
+  /// In en, this message translates to:
+  /// **'pm'**
+  String get pm;
+
+  /// No description provided for @jamatReminderBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{prayer} Jamat in {minutes} minutes'**
+  String jamatReminderBody(String prayer, String minutes);
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {
@@ -3851,8 +3889,17 @@ class _L10nDelegate extends LocalizationsDelegate<L10n> {
   }
 
   @override
-  bool isSupported(Locale locale) =>
-      <String>['bn', 'en'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => <String>[
+    'ar',
+    'bn',
+    'en',
+    'es',
+    'hi',
+    'id',
+    'ms',
+    'tr',
+    'ur',
+  ].contains(locale.languageCode);
 
   @override
   bool shouldReload(_L10nDelegate old) => false;
@@ -3861,10 +3908,24 @@ class _L10nDelegate extends LocalizationsDelegate<L10n> {
 L10n lookupL10n(Locale locale) {
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
+    case 'ar':
+      return L10nAr();
     case 'bn':
       return L10nBn();
     case 'en':
       return L10nEn();
+    case 'es':
+      return L10nEs();
+    case 'hi':
+      return L10nHi();
+    case 'id':
+      return L10nId();
+    case 'ms':
+      return L10nMs();
+    case 'tr':
+      return L10nTr();
+    case 'ur':
+      return L10nUr();
   }
 
   throw FlutterError(

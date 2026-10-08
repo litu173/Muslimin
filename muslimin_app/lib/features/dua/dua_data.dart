@@ -282,7 +282,13 @@ class DuaCardState extends State<DuaCard> {
     final t = L10n.of(context);
     final f = Fmt.of(context);
     final d = widget.dua;
-    final meaning = f.isBn && d.bn.isNotEmpty ? d.bn : d.en;
+    // Bangla and English translations are Hisn al-Muslim's own; other
+    // languages show the English one (Arabic: none – the dua itself).
+    final meaning = f.isBn && d.bn.isNotEmpty
+        ? d.bn
+        : f.lang == 'ar'
+        ? ''
+        : d.en;
     final ref = f.isBn ? d.refBn : d.refEn;
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
@@ -344,7 +350,7 @@ class DuaCardState extends State<DuaCard> {
               ),
             ),
           ),
-          if (!f.isBn && d.tr.isNotEmpty) ...[
+          if (!f.isBn && f.lang != 'ar' && d.tr.isNotEmpty) ...[
             const SizedBox(height: Gap.s),
             Text(
               d.tr,
@@ -354,11 +360,20 @@ class DuaCardState extends State<DuaCard> {
               ),
             ),
           ],
-          const SizedBox(height: Gap.s),
-          Padding(
-            padding: const EdgeInsets.only(right: Gap.s),
-            child: Text(meaning, style: AppText.body.copyWith(height: 1.5)),
-          ),
+          if (meaning.isNotEmpty) ...[
+            const SizedBox(height: Gap.s),
+            Padding(
+              padding: const EdgeInsetsDirectional.only(end: Gap.s),
+              child: Text(
+                meaning,
+                // English text stays left-to-right inside Arabic/Urdu UIs.
+                textDirection: f.isBn || f.lang == 'en' || !_rtl(f.lang)
+                    ? null
+                    : TextDirection.ltr,
+                style: AppText.body.copyWith(height: 1.5),
+              ),
+            ),
+          ],
           const SizedBox(height: Gap.s),
           InkWell(
             borderRadius: BorderRadius.circular(Radii.button),
@@ -407,3 +422,5 @@ class DuaCardState extends State<DuaCard> {
     );
   }
 }
+
+bool _rtl(String lang) => lang == 'ar' || lang == 'ur';

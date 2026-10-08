@@ -25,6 +25,8 @@ Future<T?> showGoldSheet<T>(
   return showModalBottomSheet<T>(
     context: context,
     useSafeArea: true,
+    // Long lists (e.g. 9 languages) scroll instead of overflowing.
+    isScrollControlled: true,
     builder: (ctx) => Container(
       decoration: BoxDecoration(
         color: AppColors.goldSurface,
@@ -55,31 +57,44 @@ Future<T?> showGoldSheet<T>(
             Text(subtitle, style: AppText.label.copyWith(color: Colors.white)),
           ],
           const SizedBox(height: Gap.s),
-          for (var i = 0; i < options.length; i++) ...[
-            InkWell(
-              onTap: () => Navigator.pop(ctx, options[i].value),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 14),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        options[i].label,
-                        style: AppText.label.copyWith(color: Colors.white),
+          Flexible(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  for (var i = 0; i < options.length; i++) ...[
+                    InkWell(
+                      onTap: () => Navigator.pop(ctx, options[i].value),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                options[i].label,
+                                style: AppText.label.copyWith(
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                            if (options[i].value == selected &&
+                                selectedLabel != null)
+                              Text(
+                                selectedLabel,
+                                style: AppText.caption.copyWith(
+                                  color: Colors.white,
+                                ),
+                              ),
+                          ],
+                        ),
                       ),
                     ),
-                    if (options[i].value == selected && selectedLabel != null)
-                      Text(
-                        selectedLabel,
-                        style: AppText.caption.copyWith(color: Colors.white),
-                      ),
+                    if (i < options.length - 1)
+                      Divider(color: Colors.white.withValues(alpha: 0.3)),
                   ],
-                ),
+                ],
               ),
             ),
-            if (i < options.length - 1)
-              Divider(color: Colors.white.withValues(alpha: 0.3)),
-          ],
+          ),
           ?footer,
         ],
       ),

@@ -32,6 +32,13 @@
 	<array>
 		<string>en</string>
 		<string>bn</string>
+		<string>ar</string>
+		<string>ur</string>
+		<string>hi</string>
+		<string>id</string>
+		<string>ms</string>
+		<string>tr</string>
+		<string>es</string>
 	</array>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>

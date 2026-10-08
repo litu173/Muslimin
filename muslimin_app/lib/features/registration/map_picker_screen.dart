@@ -68,7 +68,7 @@ class _MapPickerScreenState extends ConsumerState<MapPickerScreen> {
     return u == null ? null : LatLng(u.lat, u.lng);
   }
 
-  bool get _bn => Localizations.localeOf(context).languageCode == 'bn';
+  String get _lang => Localizations.localeOf(context).languageCode;
 
   @override
   void initState() {
@@ -125,7 +125,7 @@ class _MapPickerScreenState extends ConsumerState<MapPickerScreen> {
     setState(() => _loadingMasjids = true);
     final list = await ref
         .read(osmServiceProvider)
-        .masjidsAround(c.latitude, c.longitude, bn: _bn);
+        .masjidsAround(c.latitude, c.longitude, lang: _lang);
     if (!mounted) return;
     setState(() {
       _loadingMasjids = false;
@@ -167,7 +167,7 @@ class _MapPickerScreenState extends ConsumerState<MapPickerScreen> {
     _searchTimer = Timer(const Duration(milliseconds: 500), () async {
       setState(() => _searching = true);
       try {
-        final r = await ref.read(osmServiceProvider).search(q, bn: _bn);
+        final r = await ref.read(osmServiceProvider).search(q, lang: _lang);
         if (mounted && q == _search.text) setState(() => _results = r);
       } catch (_) {
       } finally {

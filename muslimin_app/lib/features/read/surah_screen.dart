@@ -54,8 +54,7 @@ class _SurahScreenState extends ConsumerState<SurahScreen> {
   /// List index of ayah [n]: [(bismillah), ayah 1 …, end].
   int _indexOf(int n) => n - 1 + (_hasBismillah ? 1 : 0);
 
-  String get _lang =>
-      Localizations.localeOf(context).languageCode == 'bn' ? 'bn' : 'en';
+  String get _lang => quranLang(Localizations.localeOf(context).languageCode);
 
   @override
   void initState() {
@@ -240,7 +239,7 @@ class _SurahScreenState extends ConsumerState<SurahScreen> {
             ),
             const SizedBox(height: Gap.l),
             Text(
-              t.surahDone(_s.name(f.isBn)),
+              t.surahDone(f.surahName(_s)),
               textAlign: TextAlign.center,
               style: AppText.subtitle,
             ),
@@ -256,7 +255,7 @@ class _SurahScreenState extends ConsumerState<SurahScreen> {
             ],
             if (next != null)
               AppButton(
-                '${t.nextSurah} · ${next.name(f.isBn)}',
+                '${t.nextSurah} · ${f.surahName(next)}',
                 style: quiz ? AppButtonStyle.outlined : AppButtonStyle.filled,
                 expand: true,
                 onPressed: () => Navigator.pop(ctx, 'next'),
@@ -468,7 +467,7 @@ class _TopBar extends StatelessWidget {
                         children: [
                           Flexible(
                             child: Text(
-                              '${f.digits(surah.id)}. ${surah.name(f.isBn)}',
+                              '${f.digits(surah.id)}. ${f.surahName(surah)}',
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: AppText.subtitle.copyWith(
@@ -490,7 +489,10 @@ class _TopBar extends StatelessWidget {
                           const SizedBox(width: 4),
                           Flexible(
                             child: Text(
-                              '${surah.meaning(f.isBn)} · ${surah.makki ? t.makki : t.madani} · ${t.versesN(f.digits(surah.verses))}',
+                              f.withMeaning(
+                                surah,
+                                '${surah.makki ? t.makki : t.madani} · ${t.versesN(f.digits(surah.verses))}',
+                              ),
                               maxLines: 2,
                               textAlign: TextAlign.center,
                               overflow: TextOverflow.ellipsis,
@@ -616,14 +618,14 @@ class _SurahPickerState extends State<_SurahPicker> {
                     selected: current,
                     selectedTileColor: AppColors.gold.withValues(alpha: 0.1),
                     leading: AyahNumber(f.digits(s.id), size: 38),
-                    title: Text(s.name(f.isBn), style: AppText.label),
+                    title: Text(f.surahName(s), style: AppText.label),
                     subtitle: Row(
                       children: [
                         RevelationIcon(makki: s.makki, size: 14),
                         const SizedBox(width: 4),
                         Flexible(
                           child: Text(
-                            '${s.meaning(f.isBn)} · ${t.versesN(f.digits(s.verses))}',
+                            f.withMeaning(s, t.versesN(f.digits(s.verses))),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: AppText.micro.copyWith(
@@ -775,17 +777,20 @@ class _AyahCard extends StatelessWidget {
                   )
                 : const SizedBox(width: double.infinity),
           ),
-          const SizedBox(height: Gap.m),
-          Padding(
-            padding: const EdgeInsets.only(right: Gap.s),
-            child: Text(
-              ayah.translation,
-              style: AppText.body.copyWith(
-                color: AppColors.muted,
-                height: 1.55,
+          // Arabic UI: the Quran alone, no translation.
+          if (ayah.translation.isNotEmpty) ...[
+            const SizedBox(height: Gap.m),
+            Padding(
+              padding: const EdgeInsetsDirectional.only(end: Gap.s),
+              child: Text(
+                ayah.translation,
+                style: AppText.body.copyWith(
+                  color: AppColors.muted,
+                  height: 1.55,
+                ),
               ),
             ),
-          ),
+          ],
         ],
       ),
     );

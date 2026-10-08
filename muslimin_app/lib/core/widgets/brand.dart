@@ -37,7 +37,11 @@ class DisplayText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bn = Localizations.localeOf(context).languageCode == 'bn';
+    final lang = Localizations.localeOf(context).languageCode;
+    final bn = lang == 'bn';
+    // Urdu's Nastaliq rises and falls far beyond the line: draw it a bit
+    // smaller with room above and below, so it never overlaps what follows.
+    final nastaliq = lang == 'ur';
     return Text(
       text,
       style: TextStyle(
@@ -45,8 +49,9 @@ class DisplayText extends StatelessWidget {
         fontFamilyFallback: const [AppText.displayLatin, AppText.bangla],
         fontVariations: bn ? null : AppText.displayVariations,
 
-        fontSize: size,
-        height: 1.15,
+        fontSize: nastaliq ? size * 0.78 : size,
+        height: nastaliq ? 1.75 : 1.15,
+        leadingDistribution: TextLeadingDistribution.even,
         color: color,
       ),
     );
@@ -94,7 +99,8 @@ class PrayerNameArt extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (Localizations.localeOf(context).languageCode == 'bn') {
+    // The lettering artwork spells the English names.
+    if (Localizations.localeOf(context).languageCode != 'en') {
       return DisplayText(label, size: size, color: color);
     }
     final scale = size / 42;
