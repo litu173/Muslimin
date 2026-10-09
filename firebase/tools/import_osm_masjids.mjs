@@ -75,6 +75,25 @@ if (!adminUid) {
 }
 console.log(`Owner (super admin): ${adminUid}`);
 
+// --- already done? ---------------------------------------------------------
+// Checked cheaply first: the full scan below reads every masjid (10,000+
+// reads – a fifth of the free plan's daily 50,000).
+const rows = JSON.parse(readFileSync(file, 'utf8'));
+const marker = db.doc('meta/osmImport');
+const done = (await marker.get()).data();
+const imported = (await db.collection('masjids').where('source', '==', 'osm').count().get())
+  .data().count;
+if ((done && done.file === rows.length) || imported >= rows.length - 50) {
+  console.log(`Already imported: ${imported} OpenStreetMap masjids are in the database. Nothing to do.`);
+  if (!done && !dryRun) await marker.set({ file: rows.length, imported, at: FieldValue.serverTimestamp() });
+  process.exit(0);
+}
+if (!flag('yes') && !dryRun && imported > 0) {
+  console.error(`${imported} masjids are imported already. Re-run with --yes to finish the rest ` +
+    `(it reads every masjid once).`);
+  process.exit(1);
+}
+
 // --- what is there already ----------------------------------------------
 const existing = await db.collection('masjids').select('geo', 'source', 'jamat', 'hasJamat').get();
 const have = new Set(existing.docs.map((d) => d.id));
@@ -92,7 +111,6 @@ for (const d of existing.docs) {
 console.log(`${existing.size} masjids in the database (${registered.length} registered in the app)`);
 
 // --- import ---------------------------------------------------------------
-const rows = JSON.parse(readFileSync(file, 'utf8'));
 let written = 0, skipped = 0, nearRegistered = 0;
 let batch = db.batch(), inBatch = 0;
 async function flush() {
@@ -153,6 +171,9 @@ for (const r of rows) {
   }
 }
 await flush();
+if (!dryRun && written < max) {
+  await marker.set({ file: rows.length, imported: rows.length, at: FieldValue.serverTimestamp() });
+}
 
 const left = rows.length - skipped - nearRegistered - (written - Math.min(backfill.length, max));
 console.log(`\n${dryRun ? '[dry run] would write' : 'Wrote'} ${written} documents ` +
