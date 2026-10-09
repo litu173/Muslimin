@@ -16,6 +16,7 @@ import '../models/hm.dart';
 import '../models/masjid.dart';
 import '../models/notice.dart';
 import '../models/prayer.dart';
+import '../models/volunteer.dart';
 import 'backend.dart';
 
 /// Production backend: Firebase Auth (email/password + phone OTP) + Cloud Firestore.
@@ -358,46 +359,72 @@ class FirebaseBackend implements Backend {
       (data['geo'] as Map<String, dynamic>)['geopoint'] as GeoPoint;
 
   @override
-  Stream<List<Masjid>> allMasjids(double lat, double lng) => _masjids
-      .where('status', isEqualTo: MasjidStatus.approved.name)
-      .limit(1000)
-      .snapshots()
-      .map(
-        (s) => s.docs.map(_masjid).toList()
-          ..sort(
-            (a, b) => distanceMeters(
-              lat,
-              lng,
-              a.lat,
-              a.lng,
-            ).compareTo(distanceMeters(lat, lng, b.lat, b.lng)),
-          ),
-      );
+  Stream<List<Masjid>> allMasjids(double lat, double lng) =>
+      _within(lat, lng, kAllMasjidsRadiusKm);
 
   @override
-  Stream<List<Masjid>> nearbyMasjids(double lat, double lng, double radiusKm) {
-    return GeoCollectionReference<Map<String, dynamic>>(_masjids)
-        .subscribeWithin(
-          center: GeoFirePoint(GeoPoint(lat, lng)),
-          radiusInKm: radiusKm,
-          field: 'geo',
-          geopointFrom: _geopointFrom,
-          queryBuilder: (q) =>
-              q.where('status', isEqualTo: MasjidStatus.approved.name),
-          strictMode: true,
-        )
-        .map((docs) {
-          final list = docs.map(_masjid).toList()
-            ..sort(
-              (a, b) => distanceMeters(
-                lat,
-                lng,
-                a.lat,
-                a.lng,
-              ).compareTo(distanceMeters(lat, lng, b.lat, b.lng)),
-            );
-          return list;
-        });
+  Future<List<Masjid>> searchMasjids(String prefix, {int limit = 30}) async {
+    final q = prefix.trim().toLowerCase();
+    if (q.length < 2) return const [];
+    final s = await _masjids
+        .where('status', isEqualTo: MasjidStatus.approved.name)
+        .orderBy('nameLower')
+        .startAt([q])
+        .endAt(['$q\uf8ff'])
+        .limit(limit)
+        .get();
+    return s.docs.map(_masjid).toList();
+  }
+
+  /// Approved masjids within [radiusKm], nearest first.
+  Stream<List<Masjid>> _within(double lat, double lng, double radiusKm) =>
+      GeoCollectionReference<Map<String, dynamic>>(_masjids)
+          .subscribeWithin(
+            center: GeoFirePoint(GeoPoint(lat, lng)),
+            radiusInKm: radiusKm,
+            field: 'geo',
+            geopointFrom: _geopointFrom,
+            queryBuilder: (q) =>
+                q.where('status', isEqualTo: MasjidStatus.approved.name),
+            strictMode: true,
+          )
+          .map(
+            (docs) => docs.map(_masjid).toList()
+              ..sort(
+                (a, b) => distanceMeters(
+                  lat,
+                  lng,
+                  a.lat,
+                  a.lng,
+                ).compareTo(distanceMeters(lat, lng, b.lat, b.lng)),
+              ),
+          );
+
+  /// Home shows the nearest three, so it starts small and widens only
+  /// when there are too few: in a city 5 km holds hundreds of masjids –
+  /// and every one is a read.
+  @override
+  Stream<List<Masjid>> nearbyMasjids(
+    double lat,
+    double lng,
+    double radiusKm,
+  ) async* {
+    var r = 1.0;
+    while (r < radiusKm) {
+      final found = await GeoCollectionReference<Map<String, dynamic>>(_masjids)
+          .fetchWithin(
+            center: GeoFirePoint(GeoPoint(lat, lng)),
+            radiusInKm: r,
+            field: 'geo',
+            geopointFrom: _geopointFrom,
+            queryBuilder: (q) =>
+                q.where('status', isEqualTo: MasjidStatus.approved.name),
+            strictMode: true,
+          );
+      if (found.length >= 3) break;
+      r *= 3;
+    }
+    yield* _within(lat, lng, r < radiusKm ? r : radiusKm);
   }
 
   @override
@@ -408,6 +435,8 @@ class FirebaseBackend implements Backend {
   Stream<List<Masjid>> myMasjids(String uid) => _masjids
       .where('ownerUid', isEqualTo: uid)
       .orderBy('createdAt', descending: true)
+      // The admin owns the thousands of imported masjids.
+      .limit(50)
       .snapshots()
       .map((s) => s.docs.map(_masjid).toList());
 
@@ -472,20 +501,67 @@ class FirebaseBackend implements Backend {
     'address': address,
   });
 
-  @override
-  Future<void> updateJamat(String id, Map<Prayer, HM> jamat) =>
-      _masjids.doc(id).update({
-        'jamat': Masjid.jamatToMap(jamat),
-        'jamatUpdatedAt': FieldValue.serverTimestamp(),
+  /// Writes [changes] to the masjid and logs the edit (who, before, after)
+  /// in one batch.
+  Future<void> _logged(
+    Masjid m,
+    String field,
+    Map<String, dynamic> before,
+    Map<String, dynamic> after,
+    Map<String, dynamic> changes,
+  ) async {
+    final u = _requireUser();
+    final batch = _db.batch()
+      ..update(_masjids.doc(m.id), {
+        ...changes,
+        'updatedBy': u.uid,
+        'updatedByName': u.displayName,
+        'updatedAt': FieldValue.serverTimestamp(),
+      })
+      ..set(_masjids.doc(m.id).collection('edits').doc(), {
+        'masjidId': m.id,
+        'masjidName': m.name,
+        'uid': u.uid,
+        'name': u.displayName,
+        'field': field,
+        'before': before,
+        'after': after,
+        'at': FieldValue.serverTimestamp(),
       });
+    await batch.commit();
+  }
 
   @override
-  Future<void> updateMaktab(String id, Maktab maktab) =>
-      _masjids.doc(id).update({'maktab': maktab.toMap()});
+  Future<void> updateJamat(Masjid m, Map<Prayer, HM> jamat) => _logged(
+    m,
+    'jamat',
+    Masjid.jamatToMap(m.jamat),
+    Masjid.jamatToMap(jamat),
+    {
+      'jamat': Masjid.jamatToMap(jamat),
+      'hasJamat': jamat.isNotEmpty,
+      'jamatUpdatedAt': FieldValue.serverTimestamp(),
+    },
+  );
 
   @override
-  Future<void> updateStaff(String id, Map<StaffRole, StaffMember> staff) =>
-      _masjids.doc(id).update({'staff': Masjid.staffToMap(staff)});
+  Future<void> updateMaktab(Masjid m, Maktab maktab) => _logged(
+    m,
+    'maktab',
+    m.maktab.toMap(),
+    maktab.toMap(),
+    {'maktab': maktab.toMap()},
+  );
+
+  @override
+  Future<void> updateStaff(Masjid m, Map<StaffRole, StaffMember> staff) =>
+      _logged(
+        m,
+        'staff',
+        Masjid.staffToMap(m.staff),
+        Masjid.staffToMap(staff),
+        {'staff': Masjid.staffToMap(staff)},
+      );
 
   @override
   Future<void> updateLive(String id, {String? url, required bool isLive}) =>
@@ -547,6 +623,176 @@ class FirebaseBackend implements Backend {
   Future<void> deleteNotice(String id) => _notices.doc(id).delete();
 
   // ------------------------------------------------------------- channel
+  // ------------------------------------------------------------ volunteers
+  CollectionReference<Map<String, dynamic>> _editors(String masjidId) =>
+      _masjids.doc(masjidId).collection('editors');
+
+  @override
+  Stream<bool> isMasjidEditor(String masjidId) {
+    final uid = _auth.currentUser?.uid;
+    if (uid == null) return Stream.value(false);
+    return _editors(masjidId).doc(uid).snapshots().map((d) => d.exists);
+  }
+
+  @override
+  Future<void> becomeEditor(Masjid m, double lat, double lng) async {
+    final u = _requireUser();
+    final d = distanceMeters(lat, lng, m.lat, m.lng);
+    if (d > kEditorRadiusM) throw BackendException('too-far');
+    await _editors(m.id).doc(u.uid).set({
+      'uid': u.uid,
+      'name': u.displayName,
+      'masjidId': m.id,
+      'masjidName': m.name,
+      'lat': lat,
+      'lng': lng,
+      'distanceM': d.roundToDouble(),
+      'createdAt': FieldValue.serverTimestamp(),
+    });
+  }
+
+  @override
+  Future<void> leaveEditor(String masjidId) async {
+    final uid = _auth.currentUser?.uid;
+    if (uid != null) await _editors(masjidId).doc(uid).delete();
+  }
+
+  @override
+  Stream<List<MasjidEditor>> masjidEditors(String masjidId) =>
+      _editors(masjidId).snapshots().map(
+        (s) => [
+          for (final d in s.docs)
+            MasjidEditor.fromMap(
+              d.data(),
+              createdAt: _ts(d.data()['createdAt']),
+            ),
+        ],
+      );
+
+  @override
+  Future<void> removeEditor(
+    String masjidId,
+    String uid, {
+    bool block = false,
+  }) async {
+    final batch = _db.batch()..delete(_editors(masjidId).doc(uid));
+    if (block) {
+      batch.set(_userDoc(uid), {'editBlocked': true}, SetOptions(merge: true));
+    }
+    await batch.commit();
+  }
+
+  // --------------------------------------------------------------- reports
+  CollectionReference<Map<String, dynamic>> get _reports =>
+      _db.collection('reports');
+
+  @override
+  Future<void> reportMasjid(Masjid m, ReportReason reason, String note) async {
+    final u = _requireUser();
+    await _reports.doc(MasjidReport.idFor(m.id, u.uid)).set({
+      'masjidId': m.id,
+      'masjidName': m.name,
+      'district': m.district,
+      'uid': u.uid,
+      'userName': u.displayName,
+      'reason': reason.name,
+      'note': note.trim(),
+      'status': 'open',
+      'createdAt': FieldValue.serverTimestamp(),
+    });
+  }
+
+  @override
+  Stream<List<MasjidReport>> openReports({int limit = 100}) => _reports
+      .where('status', isEqualTo: 'open')
+      .orderBy('createdAt', descending: true)
+      .limit(limit)
+      .snapshots()
+      .map(
+        (s) => [
+          for (final d in s.docs)
+            MasjidReport.fromMap(
+              d.id,
+              d.data(),
+              createdAt: _ts(d.data()['createdAt']),
+            ),
+        ],
+      );
+
+  @override
+  Future<void> resolveReport(String id) => _reports.doc(id).update({
+    'status': 'resolved',
+    'resolvedBy': _auth.currentUser?.uid,
+    'resolvedAt': FieldValue.serverTimestamp(),
+  });
+
+  // ----------------------------------------------------------- admin report
+  @override
+  Stream<List<MasjidEdit>> recentEdits({int limit = 50}) => _db
+      .collectionGroup('edits')
+      .orderBy('at', descending: true)
+      .limit(limit)
+      .snapshots()
+      .map(
+        (s) => [
+          for (final d in s.docs)
+            MasjidEdit.fromMap(d.id, d.data(), at: _ts(d.data()['at'])),
+        ],
+      );
+
+  @override
+  Future<void> revertEdit(MasjidEdit e) async {
+    final masjid = await _masjids.doc(e.masjidId).get();
+    if (!masjid.exists) return;
+    await _logged(_masjid(masjid), e.field, e.after, e.before, {
+      e.field: e.before,
+      if (e.field == 'jamat') 'hasJamat': e.before.isNotEmpty,
+    });
+  }
+
+  Future<int> _count(Query<Map<String, dynamic>> q) async =>
+      (await q.count().get()).count ?? 0;
+
+  @override
+  Future<AdminStats> adminStats() async {
+    final approved = _masjids.where(
+      'status',
+      isEqualTo: MasjidStatus.approved.name,
+    );
+    final r = await Future.wait([
+      _count(approved),
+      _count(approved.where('hasJamat', isEqualTo: true)),
+      _count(_db.collectionGroup('editors')),
+      _count(_reports.where('status', isEqualTo: 'open')),
+      _count(_masjids.where('status', isEqualTo: MasjidStatus.pending.name)),
+    ]);
+    return AdminStats(
+      masjids: r[0],
+      withTimes: r[1],
+      editors: r[2],
+      openReports: r[3],
+      pending: r[4],
+    );
+  }
+
+  @override
+  Future<List<DistrictCoverage>> districtCoverage(
+    List<String> districts,
+  ) async {
+    Future<DistrictCoverage> one(String d) async {
+      final q = _masjids
+          .where('status', isEqualTo: MasjidStatus.approved.name)
+          .where('district', isEqualTo: d);
+      final r = await Future.wait([
+        _count(q),
+        _count(q.where('hasJamat', isEqualTo: true)),
+      ]);
+      return (district: d, masjids: r[0], withTimes: r[1]);
+    }
+
+    return Future.wait(districts.map(one));
+  }
+
   AppUser _requireUser() =>
       _current ?? (throw BackendException('not-signed-in'));
 

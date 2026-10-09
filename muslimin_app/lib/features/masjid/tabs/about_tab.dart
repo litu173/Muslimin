@@ -16,6 +16,7 @@ import '../../../data/models/masjid.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../state/providers.dart';
 import '../masjid_screen.dart';
+import '../volunteer.dart';
 
 /// Arched window glyph used for staff members (Figma: lattice window).
 class ArchIcon extends StatelessWidget {
@@ -36,10 +37,16 @@ class MasjidAboutTab extends ConsumerStatefulWidget {
     super.key,
     required this.masjid,
     required this.canEdit,
+    this.canManage = false,
   });
 
   final Masjid masjid;
+
+  /// Staff: owner, admin or volunteer editor.
   final bool canEdit;
+
+  /// Owner or admin: also sees (and removes) the volunteer editors.
+  final bool canManage;
 
   @override
   ConsumerState<MasjidAboutTab> createState() => _MasjidAboutTabState();
@@ -89,6 +96,15 @@ class _MasjidAboutTabState extends ConsumerState<MasjidAboutTab> {
                 else
                   InfoTile(leading: const ArchIcon(), title: t.notAdded),
               ],
+              if (widget.canManage) EditorsSection(masjid: widget.masjid),
+              if (widget.masjid.imported)
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(4, Gap.l, 4, 0),
+                  child: Text(
+                    t.fromOsm,
+                    style: AppText.micro.copyWith(color: AppColors.muted),
+                  ),
+                ),
               const SizedBox(height: Gap.l),
               AppCard(
                 child: Row(
@@ -163,7 +179,7 @@ class _StaffEditorState extends ConsumerState<_StaffEditor> {
   Future<void> _save() async {
     setState(() => _saving = true);
     try {
-      await ref.read(backendProvider).updateStaff(widget.masjid.id, {
+      await ref.read(backendProvider).updateStaff(widget.masjid, {
         for (final r in StaffRole.values)
           if (_names[r]!.text.trim().isNotEmpty)
             r: StaffMember(

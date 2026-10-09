@@ -2147,4 +2147,174 @@ class L10nBn extends L10n {
   @override
   String get approxLocation =>
       'আনুমানিক অবস্থান – সঠিক অবস্থান চালু করতে চাপুন';
+
+  @override
+  String get signInFirst => 'আগে সাইন ইন করুন।';
+
+  @override
+  String get volunteerTitleEmpty => 'জামাতের সময় এখনো যোগ করা হয়নি';
+
+  @override
+  String get volunteerBodyEmpty =>
+      'এই মসজিদের কাছে থাকেন বা নামাজ পড়েন? সবার জন্য জামাতের সময় যোগ করুন ও হালনাগাদ রাখুন।';
+
+  @override
+  String get volunteerTitle => 'এখানে নিয়মিত নামাজ পড়েন?';
+
+  @override
+  String get volunteerBody =>
+      'এই মসজিদের জামাতের সময় সঠিক রাখতে সাহায্য করুন।';
+
+  @override
+  String get volunteerButton => 'আমি জামাতের সময় আপডেট করতে চাই';
+
+  @override
+  String get volunteerCheckTitle => 'এই মসজিদের সময় আপডেট করুন';
+
+  @override
+  String volunteerCheckBody(String km) {
+    return 'মসজিদের আশেপাশের মানুষ এর সময় হালনাগাদ রাখতে পারেন। আপনি মসজিদের $km কিমির মধ্যে আছেন কি না আমরা যাচাই করব – আপনার অবস্থান শুধু এই যাচাইয়ে ব্যবহার হবে।';
+  }
+
+  @override
+  String get volunteerCheckButton => 'আমার অবস্থান যাচাই করুন';
+
+  @override
+  String get volunteerChecking => 'আপনার অবস্থান যাচাই হচ্ছে…';
+
+  @override
+  String volunteerTooFar(String distance, String km) {
+    return 'আপনি $distance দূরে আছেন। সময় আপডেট করতে মসজিদের $km কিমির মধ্যে আসুন।';
+  }
+
+  @override
+  String get volunteerApprox =>
+      'আপনার ফোন শুধু আনুমানিক অবস্থান দিচ্ছে। Muslimin-এর জন্য সঠিক অবস্থান চালু করে আবার চেষ্টা করুন।';
+
+  @override
+  String get volunteerBlocked =>
+      'আপনি এখন মসজিদের সময় আপডেট করতে পারবেন না। ভুল হলে অ্যাডমিনের সাথে যোগাযোগ করুন।';
+
+  @override
+  String get volunteerWelcome =>
+      'ধন্যবাদ! এখন আপনি এই মসজিদের সময় আপডেট করতে পারবেন।';
+
+  @override
+  String get stopEditing => 'এই মসজিদ আপডেট করা বন্ধ করুন';
+
+  @override
+  String get reportProblem => 'সমস্যা জানান';
+
+  @override
+  String get reportTitle => 'কী ভুল আছে?';
+
+  @override
+  String get reportWrongTime => 'জামাতের সময় ভুল';
+
+  @override
+  String get reportWrongLocation => 'মানচিত্রে অবস্থান ভুল';
+
+  @override
+  String get reportWrongInfo => 'নাম বা তথ্য ভুল';
+
+  @override
+  String get reportClosed => 'বন্ধ বা অস্তিত্ব নেই';
+
+  @override
+  String get reportDuplicate => 'দুইবার আছে';
+
+  @override
+  String get reportOther => 'অন্য কিছু';
+
+  @override
+  String get reportNote => 'বিস্তারিত (ঐচ্ছিক) – যেমন সঠিক সময়';
+
+  @override
+  String get reportSend => 'রিপোর্ট পাঠান';
+
+  @override
+  String get reportThanks => 'ধন্যবাদ – অ্যাডমিন বিষয়টি দেখবেন।';
+
+  @override
+  String get volunteers => 'স্বেচ্ছাসেবী এডিটর';
+
+  @override
+  String get noVolunteers => 'এখনো কোনো স্বেচ্ছাসেবী নেই।';
+
+  @override
+  String editorDistance(String distance) {
+    return 'যোগ দেওয়ার সময় মসজিদ থেকে $distance';
+  }
+
+  @override
+  String get removeEditor => 'সরিয়ে দিন';
+
+  @override
+  String get removeAndBlock => 'সরিয়ে দিন ও এডিট বন্ধ করুন';
+
+  @override
+  String lastUpdatedBy(String when, String name) {
+    return '$when আপডেট করেছেন $name';
+  }
+
+  @override
+  String get adminReport => 'রিপোর্ট';
+
+  @override
+  String get adminProblems => 'সমস্যা';
+
+  @override
+  String get adminEdits => 'পরিবর্তন';
+
+  @override
+  String get statMasjids => 'মসজিদ';
+
+  @override
+  String get statWithTimes => 'জামাতের সময়সহ';
+
+  @override
+  String get statVolunteers => 'স্বেচ্ছাসেবী';
+
+  @override
+  String get statOpenReports => 'খোলা সমস্যা';
+
+  @override
+  String get statPending => 'যাচাইয়ের অপেক্ষায়';
+
+  @override
+  String get shareReport => 'রিপোর্ট শেয়ার করুন';
+
+  @override
+  String get coverageTitle => 'জেলাভিত্তিক';
+
+  @override
+  String get coverageLoad => 'জেলাগুলো দেখুন';
+
+  @override
+  String get resolve => 'সমাধান হয়েছে';
+
+  @override
+  String get revert => 'পরিবর্তন ফেরান';
+
+  @override
+  String get reverted => 'পরিবর্তন ফেরানো হয়েছে';
+
+  @override
+  String get editFieldStaff => 'দায়িত্বশীল';
+
+  @override
+  String get editFieldMaktab => 'মক্তব';
+
+  @override
+  String timeLooksWrong(String prayers) {
+    return 'এই সময়গুলো ভুল মনে হচ্ছে: $prayers। AM/PM দেখে নিন।';
+  }
+
+  @override
+  String get dataCredits =>
+      'মসজিদের অবস্থান: © OpenStreetMap contributors (ODbL)। জেলা ও উপজেলার সীমানা: বাংলাদেশ পরিসংখ্যান ব্যুরো / OCHA, geoBoundaries (CC BY 3.0 IGO)।';
+
+  @override
+  String get fromOsm =>
+      'OpenStreetMap থেকে যোগ করা (© OpenStreetMap contributors)। সময় যোগ করেন আশেপাশের মানুষ।';
 }

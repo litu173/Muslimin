@@ -21,6 +21,7 @@ import '../../l10n/app_localizations.dart';
 import '../../services/location_service.dart';
 import '../../state/channel.dart';
 import '../../state/follows.dart';
+import '../../state/volunteer.dart';
 import '../../state/providers.dart';
 import 'edit_masjid_info_screen.dart';
 import 'follow_badge.dart';
@@ -28,6 +29,7 @@ import 'tabs/about_tab.dart';
 import 'tabs/home_tab.dart';
 import 'channel/channel_tab.dart';
 import 'tabs/notice_tab.dart';
+import 'volunteer.dart';
 
 /// Turn-by-turn directions in the phone's own maps app, which follows the
 /// phone's GPS. (The Google Maps web page used before opened in Safari on
@@ -112,6 +114,8 @@ class _MasjidScreenState extends ConsumerState<MasjidScreen>
     }
     final isOwner = user != null && user.uid == masjid.ownerUid;
     final canEdit = isOwner || (user?.isSuperAdmin ?? false);
+    // Owner, admin or a volunteer editor living nearby.
+    final canEditTimes = ref.watch(canEditTimesProvider(masjid));
 
     return Scaffold(
       // The titled header stays; the masjid info scrolls away under it and
@@ -146,7 +150,12 @@ class _MasjidScreenState extends ConsumerState<MasjidScreen>
                       children: [
                         MasjidHomeTab(
                           masjid: masjid,
-                          canEdit: canEdit,
+                          canEdit: canEditTimes,
+                          canVolunteer:
+                              user != null &&
+                              !canEditTimes &&
+                              masjid.status == MasjidStatus.approved,
+                          canReport: user != null && !isOwner,
                           onOpenChannel: () => _tabs.animateTo(2),
                         ),
                         MasjidNoticeTab(
@@ -156,7 +165,11 @@ class _MasjidScreenState extends ConsumerState<MasjidScreen>
                         ),
                         // Live is hidden for now (live_tab.dart is kept).
                         MasjidChannelTab(masjid: masjid),
-                        MasjidAboutTab(masjid: masjid, canEdit: canEdit),
+                        MasjidAboutTab(
+                          masjid: masjid,
+                          canEdit: canEditTimes,
+                          canManage: canEdit,
+                        ),
                       ],
                     ),
                   ),
@@ -181,6 +194,8 @@ class _MoreMenu extends ConsumerWidget {
     final t = L10n.of(context);
     // The owner is always an admin – nothing to leave.
     final member = ref.watch(channelMembershipProvider(masjid.id)).value;
+    final user = ref.watch(authProvider).value;
+    final editor = ref.watch(isEditorProvider(masjid.id)).value ?? false;
     return PopupMenuButton<String>(
       icon: Icon(Icons.more_horiz_rounded, color: AppColors.onHeader),
       color: AppColors.card,
@@ -196,6 +211,10 @@ class _MoreMenu extends ConsumerWidget {
           openDirections(masjid, ref.read(locationProvider).value);
         } else if (v == 'leave') {
           leaveChannel(context, ref, masjid);
+        } else if (v == 'report') {
+          reportProblem(context, masjid);
+        } else if (v == 'stopEditing') {
+          ref.read(backendProvider).leaveEditor(masjid.id);
         }
       },
       itemBuilder: (_) => [
@@ -203,6 +222,10 @@ class _MoreMenu extends ConsumerWidget {
         PopupMenuItem(value: 'dir', child: Text(t.directions)),
         if (member != null)
           PopupMenuItem(value: 'leave', child: Text(t.leaveChannel)),
+        if (user != null && user.uid != masjid.ownerUid)
+          PopupMenuItem(value: 'report', child: Text(t.reportProblem)),
+        if (editor)
+          PopupMenuItem(value: 'stopEditing', child: Text(t.stopEditing)),
       ],
     );
   }

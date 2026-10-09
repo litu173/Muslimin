@@ -2140,4 +2140,173 @@ class L10nAr extends L10n {
 
   @override
   String get approxLocation => 'موقع تقريبي – اضغط لتفعيل الموقع الدقيق';
+
+  @override
+  String get signInFirst => 'يرجى تسجيل الدخول أولاً.';
+
+  @override
+  String get volunteerTitleEmpty => 'لم تُضف أوقات الجماعة بعد';
+
+  @override
+  String get volunteerBodyEmpty =>
+      'هل تسكن أو تصلي قرب هذا المسجد؟ أضف أوقات الجماعة وحدّثها للجميع.';
+
+  @override
+  String get volunteerTitle => 'هل تصلي هنا بانتظام؟';
+
+  @override
+  String get volunteerBody =>
+      'ساعد في إبقاء أوقات الجماعة في هذا المسجد صحيحة.';
+
+  @override
+  String get volunteerButton => 'أريد تحديث وقت الجماعة';
+
+  @override
+  String get volunteerCheckTitle => 'تحديث أوقات هذا المسجد';
+
+  @override
+  String volunteerCheckBody(String km) {
+    return 'يمكن لمن هم قرب المسجد تحديث أوقاته. سنتحقق من أنك على بُعد $km كم منه – يُستخدم موقعك لهذا التحقق فقط.';
+  }
+
+  @override
+  String get volunteerCheckButton => 'تحقق من موقعي';
+
+  @override
+  String get volunteerChecking => 'جارٍ التحقق من موقعك…';
+
+  @override
+  String volunteerTooFar(String distance, String km) {
+    return 'أنت على بُعد $distance. اقترب إلى $km كم من المسجد لتحديث أوقاته.';
+  }
+
+  @override
+  String get volunteerApprox =>
+      'هاتفك يشارك موقعاً تقريبياً فقط. فعّل الموقع الدقيق لتطبيق Muslimin وحاول مجدداً.';
+
+  @override
+  String get volunteerBlocked =>
+      'لا يمكنك تحديث أوقات المساجد حالياً. تواصل مع المشرف إن كان هذا خطأ.';
+
+  @override
+  String get volunteerWelcome => 'شكراً لك! يمكنك الآن تحديث أوقات هذا المسجد.';
+
+  @override
+  String get stopEditing => 'التوقف عن تحديث هذا المسجد';
+
+  @override
+  String get reportProblem => 'الإبلاغ عن مشكلة';
+
+  @override
+  String get reportTitle => 'ما المشكلة؟';
+
+  @override
+  String get reportWrongTime => 'وقت الجماعة خاطئ';
+
+  @override
+  String get reportWrongLocation => 'الموقع على الخريطة خاطئ';
+
+  @override
+  String get reportWrongInfo => 'الاسم أو التفاصيل خاطئة';
+
+  @override
+  String get reportClosed => 'مغلق أو غير موجود';
+
+  @override
+  String get reportDuplicate => 'مكرر';
+
+  @override
+  String get reportOther => 'شيء آخر';
+
+  @override
+  String get reportNote => 'تفاصيل (اختياري) – مثل الوقت الصحيح';
+
+  @override
+  String get reportSend => 'إرسال البلاغ';
+
+  @override
+  String get reportThanks => 'شكراً – سيراجعه المشرف.';
+
+  @override
+  String get volunteers => 'المحررون المتطوعون';
+
+  @override
+  String get noVolunteers => 'لا يوجد متطوعون بعد.';
+
+  @override
+  String editorDistance(String distance) {
+    return '$distance من المسجد عند الانضمام';
+  }
+
+  @override
+  String get removeEditor => 'إزالة';
+
+  @override
+  String get removeAndBlock => 'إزالة ومنعه من التحرير';
+
+  @override
+  String lastUpdatedBy(String when, String name) {
+    return 'حُدّث $when بواسطة $name';
+  }
+
+  @override
+  String get adminReport => 'التقرير';
+
+  @override
+  String get adminProblems => 'المشكلات';
+
+  @override
+  String get adminEdits => 'التعديلات';
+
+  @override
+  String get statMasjids => 'المساجد';
+
+  @override
+  String get statWithTimes => 'بأوقات الجماعة';
+
+  @override
+  String get statVolunteers => 'المتطوعون';
+
+  @override
+  String get statOpenReports => 'مشكلات مفتوحة';
+
+  @override
+  String get statPending => 'بانتظار المراجعة';
+
+  @override
+  String get shareReport => 'مشاركة التقرير';
+
+  @override
+  String get coverageTitle => 'حسب المنطقة';
+
+  @override
+  String get coverageLoad => 'عرض المناطق';
+
+  @override
+  String get resolve => 'تم الحل';
+
+  @override
+  String get revert => 'تراجع عن التغيير';
+
+  @override
+  String get reverted => 'تم التراجع عن التغيير';
+
+  @override
+  String get editFieldStaff => 'الأئمة والمؤذنون';
+
+  @override
+  String get editFieldMaktab => 'المكتب';
+
+  @override
+  String timeLooksWrong(String prayers) {
+    return 'هذه الأوقات تبدو خاطئة: $prayers. يرجى التحقق من ص/م.';
+  }
+
+  @override
+  String get dataCredits =>
+      'مواقع المساجد: © OpenStreetMap contributors (ODbL). حدود المناطق: مكتب الإحصاء البنغلاديشي / OCHA عبر geoBoundaries (CC BY 3.0 IGO).';
+
+  @override
+  String get fromOsm =>
+      'أُضيف من OpenStreetMap (© OpenStreetMap contributors). يضيف الأوقات أهل الحي.';
 }

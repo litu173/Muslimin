@@ -6,6 +6,7 @@ import '../models/hm.dart';
 import '../models/masjid.dart';
 import '../models/notice.dart';
 import '../models/prayer.dart';
+import '../models/volunteer.dart';
 
 class BackendException implements Exception {
   BackendException(this.code, [this.message]);
@@ -73,8 +74,12 @@ abstract class Backend {
   /// Approved masjids within [radiusKm] of the point.
   Stream<List<Masjid>> nearbyMasjids(double lat, double lng, double radiusKm);
 
-  /// Every approved masjid, nearest to the point first ("View All").
+  /// Approved masjids around the point, nearest first ("View All"). Limited
+  /// to [kAllMasjidsRadiusKm] – there are thousands across the country.
   Stream<List<Masjid>> allMasjids(double lat, double lng);
+
+  /// Approved masjids whose name starts with [prefix] (anywhere).
+  Future<List<Masjid>> searchMasjids(String prefix, {int limit = 30});
   Stream<Masjid?> watchMasjid(String id);
   Stream<List<Masjid>> myMasjids(String uid);
 
@@ -97,12 +102,44 @@ abstract class Backend {
     (double, double, double)? location,
     String? locationSource,
   });
-  Future<void> updateJamat(String id, Map<Prayer, HM> jamat);
-  Future<void> updateMaktab(String id, Maktab maktab);
-  Future<void> updateStaff(String id, Map<StaffRole, StaffMember> staff);
+
+  /// Times, maktab and staff can also be changed by the masjid's volunteer
+  /// editors; every change is logged (who, before, after) for the admin.
+  Future<void> updateJamat(Masjid masjid, Map<Prayer, HM> jamat);
+  Future<void> updateMaktab(Masjid masjid, Maktab maktab);
+  Future<void> updateStaff(Masjid masjid, Map<StaffRole, StaffMember> staff);
   Future<void> updateLive(String id, {String? url, required bool isLive});
 
+  // ---- Volunteer editors ----
+  /// Whether I am a volunteer editor of [masjidId].
+  Stream<bool> isMasjidEditor(String masjidId);
+
+  /// Become an editor of [masjid], standing at (lat, lng) – which must be
+  /// within [kEditorRadiusM] of it (checked here and by the rules).
+  Future<void> becomeEditor(Masjid masjid, double lat, double lng);
+  Future<void> leaveEditor(String masjidId);
+
+  /// The masjid's editors – its owner and the admin.
+  Stream<List<MasjidEditor>> masjidEditors(String masjidId);
+
+  /// Removes an editor; [block] also stops them volunteering again.
+  Future<void> removeEditor(String masjidId, String uid, {bool block = false});
+
+  // ---- Reports ----
+  /// One report per user and masjid; reporting again replaces it.
+  Future<void> reportMasjid(Masjid masjid, ReportReason reason, String note);
+  Stream<List<MasjidReport>> openReports({int limit = 100});
+  Future<void> resolveReport(String id);
+
   // ---- Admin ----
+  /// Latest changes made by editors and owners, newest first.
+  Stream<List<MasjidEdit>> recentEdits({int limit = 50});
+
+  /// Puts the field back to how it was before [edit].
+  Future<void> revertEdit(MasjidEdit edit);
+  Future<AdminStats> adminStats();
+  Future<List<DistrictCoverage>> districtCoverage(List<String> districts);
+
   Stream<List<Masjid>> masjidsByStatus(MasjidStatus status);
   Future<void> setStatus(String id, MasjidStatus status, {String? reason});
 
@@ -153,6 +190,9 @@ const kMaxMasjidsPerUser = 3;
 
 /// Required GPS accuracy (metres) while registering a masjid.
 const kRequiredAccuracyM = 50.0;
+
+/// "View All" covers masjids within this distance.
+const kAllMasjidsRadiusKm = 3.0;
 
 /// Any existing masjid closer than this is treated as a potential duplicate.
 const kDuplicateRadiusM = 40.0;

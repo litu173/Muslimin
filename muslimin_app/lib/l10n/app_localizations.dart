@@ -3938,6 +3938,312 @@ abstract class L10n {
   /// In en, this message translates to:
   /// **'Approximate location – tap to turn on Precise Location'**
   String get approxLocation;
+
+  /// No description provided for @signInFirst.
+  ///
+  /// In en, this message translates to:
+  /// **'Please sign in first.'**
+  String get signInFirst;
+
+  /// No description provided for @volunteerTitleEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Jamat times not added yet'**
+  String get volunteerTitleEmpty;
+
+  /// No description provided for @volunteerBodyEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Live or pray near this masjid? Add its jamat times and keep them up to date for everyone.'**
+  String get volunteerBodyEmpty;
+
+  /// No description provided for @volunteerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Pray here regularly?'**
+  String get volunteerTitle;
+
+  /// No description provided for @volunteerBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Help keep this masjid\'s jamat times correct.'**
+  String get volunteerBody;
+
+  /// No description provided for @volunteerButton.
+  ///
+  /// In en, this message translates to:
+  /// **'I want to update jamat time'**
+  String get volunteerButton;
+
+  /// No description provided for @volunteerCheckTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Update this masjid\'s times'**
+  String get volunteerCheckTitle;
+
+  /// No description provided for @volunteerCheckBody.
+  ///
+  /// In en, this message translates to:
+  /// **'People near a masjid can keep its times up to date. We\'ll check that you are within {km} km of it – your location is used only for this check.'**
+  String volunteerCheckBody(String km);
+
+  /// No description provided for @volunteerCheckButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Check my location'**
+  String get volunteerCheckButton;
+
+  /// No description provided for @volunteerChecking.
+  ///
+  /// In en, this message translates to:
+  /// **'Checking your location…'**
+  String get volunteerChecking;
+
+  /// No description provided for @volunteerTooFar.
+  ///
+  /// In en, this message translates to:
+  /// **'You are {distance} away. Come within {km} km of the masjid to update its times.'**
+  String volunteerTooFar(String distance, String km);
+
+  /// No description provided for @volunteerApprox.
+  ///
+  /// In en, this message translates to:
+  /// **'Your phone is sharing only an approximate location. Turn on Precise Location for Muslimin and try again.'**
+  String get volunteerApprox;
+
+  /// No description provided for @volunteerBlocked.
+  ///
+  /// In en, this message translates to:
+  /// **'You can\'t update masjid times right now. Contact the admin if this is a mistake.'**
+  String get volunteerBlocked;
+
+  /// No description provided for @volunteerWelcome.
+  ///
+  /// In en, this message translates to:
+  /// **'Thank you! You can now update this masjid\'s times.'**
+  String get volunteerWelcome;
+
+  /// No description provided for @stopEditing.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop updating this masjid'**
+  String get stopEditing;
+
+  /// No description provided for @reportProblem.
+  ///
+  /// In en, this message translates to:
+  /// **'Report a problem'**
+  String get reportProblem;
+
+  /// No description provided for @reportTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'What\'s wrong?'**
+  String get reportTitle;
+
+  /// No description provided for @reportWrongTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Wrong jamat time'**
+  String get reportWrongTime;
+
+  /// No description provided for @reportWrongLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Wrong location on the map'**
+  String get reportWrongLocation;
+
+  /// No description provided for @reportWrongInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Wrong name or details'**
+  String get reportWrongInfo;
+
+  /// No description provided for @reportClosed.
+  ///
+  /// In en, this message translates to:
+  /// **'Closed or doesn\'t exist'**
+  String get reportClosed;
+
+  /// No description provided for @reportDuplicate.
+  ///
+  /// In en, this message translates to:
+  /// **'Listed twice'**
+  String get reportDuplicate;
+
+  /// No description provided for @reportOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Something else'**
+  String get reportOther;
+
+  /// No description provided for @reportNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Details (optional) – e.g. the correct time'**
+  String get reportNote;
+
+  /// No description provided for @reportSend.
+  ///
+  /// In en, this message translates to:
+  /// **'Send report'**
+  String get reportSend;
+
+  /// No description provided for @reportThanks.
+  ///
+  /// In en, this message translates to:
+  /// **'Thank you – the admin will check it.'**
+  String get reportThanks;
+
+  /// No description provided for @volunteers.
+  ///
+  /// In en, this message translates to:
+  /// **'Volunteer editors'**
+  String get volunteers;
+
+  /// No description provided for @noVolunteers.
+  ///
+  /// In en, this message translates to:
+  /// **'No volunteers yet.'**
+  String get noVolunteers;
+
+  /// No description provided for @editorDistance.
+  ///
+  /// In en, this message translates to:
+  /// **'{distance} from the masjid when they joined'**
+  String editorDistance(String distance);
+
+  /// No description provided for @removeEditor.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove'**
+  String get removeEditor;
+
+  /// No description provided for @removeAndBlock.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove and block from editing'**
+  String get removeAndBlock;
+
+  /// No description provided for @lastUpdatedBy.
+  ///
+  /// In en, this message translates to:
+  /// **'Updated {when} by {name}'**
+  String lastUpdatedBy(String when, String name);
+
+  /// No description provided for @adminReport.
+  ///
+  /// In en, this message translates to:
+  /// **'Report'**
+  String get adminReport;
+
+  /// No description provided for @adminProblems.
+  ///
+  /// In en, this message translates to:
+  /// **'Problems'**
+  String get adminProblems;
+
+  /// No description provided for @adminEdits.
+  ///
+  /// In en, this message translates to:
+  /// **'Edits'**
+  String get adminEdits;
+
+  /// No description provided for @statMasjids.
+  ///
+  /// In en, this message translates to:
+  /// **'Masjids'**
+  String get statMasjids;
+
+  /// No description provided for @statWithTimes.
+  ///
+  /// In en, this message translates to:
+  /// **'With jamat times'**
+  String get statWithTimes;
+
+  /// No description provided for @statVolunteers.
+  ///
+  /// In en, this message translates to:
+  /// **'Volunteers'**
+  String get statVolunteers;
+
+  /// No description provided for @statOpenReports.
+  ///
+  /// In en, this message translates to:
+  /// **'Open problems'**
+  String get statOpenReports;
+
+  /// No description provided for @statPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for review'**
+  String get statPending;
+
+  /// No description provided for @shareReport.
+  ///
+  /// In en, this message translates to:
+  /// **'Share report'**
+  String get shareReport;
+
+  /// No description provided for @coverageTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'By district'**
+  String get coverageTitle;
+
+  /// No description provided for @coverageLoad.
+  ///
+  /// In en, this message translates to:
+  /// **'Show districts'**
+  String get coverageLoad;
+
+  /// No description provided for @resolve.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark resolved'**
+  String get resolve;
+
+  /// No description provided for @revert.
+  ///
+  /// In en, this message translates to:
+  /// **'Undo change'**
+  String get revert;
+
+  /// No description provided for @reverted.
+  ///
+  /// In en, this message translates to:
+  /// **'Change undone'**
+  String get reverted;
+
+  /// No description provided for @editFieldStaff.
+  ///
+  /// In en, this message translates to:
+  /// **'Staff'**
+  String get editFieldStaff;
+
+  /// No description provided for @editFieldMaktab.
+  ///
+  /// In en, this message translates to:
+  /// **'Maktab'**
+  String get editFieldMaktab;
+
+  /// No description provided for @timeLooksWrong.
+  ///
+  /// In en, this message translates to:
+  /// **'These times look wrong: {prayers}. Please check AM/PM.'**
+  String timeLooksWrong(String prayers);
+
+  /// No description provided for @dataCredits.
+  ///
+  /// In en, this message translates to:
+  /// **'Masjid locations: © OpenStreetMap contributors (ODbL). District and upazila boundaries: Bangladesh Bureau of Statistics / OCHA via geoBoundaries (CC BY 3.0 IGO).'**
+  String get dataCredits;
+
+  /// No description provided for @fromOsm.
+  ///
+  /// In en, this message translates to:
+  /// **'Added from OpenStreetMap (© OpenStreetMap contributors). Times are filled in by people nearby.'**
+  String get fromOsm;
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {

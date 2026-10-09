@@ -1100,5 +1100,97 @@
     }
   },
   "duaForNowSub": "Remembrance for this time of day",
-  "approxLocation": "Approximate location – tap to turn on Precise Location"
+  "approxLocation": "Approximate location – tap to turn on Precise Location",
+  "signInFirst": "Please sign in first.",
+  "volunteerTitleEmpty": "Jamat times not added yet",
+  "volunteerBodyEmpty": "Live or pray near this masjid? Add its jamat times and keep them up to date for everyone.",
+  "volunteerTitle": "Pray here regularly?",
+  "volunteerBody": "Help keep this masjid's jamat times correct.",
+  "volunteerButton": "I want to update jamat time",
+  "volunteerCheckTitle": "Update this masjid's times",
+  "volunteerCheckBody": "People near a masjid can keep its times up to date. We'll check that you are within {km} km of it – your location is used only for this check.",
+  "@volunteerCheckBody": {
+    "placeholders": {
+      "km": {
+        "type": "String"
+      }
+    }
+  },
+  "volunteerCheckButton": "Check my location",
+  "volunteerChecking": "Checking your location…",
+  "volunteerTooFar": "You are {distance} away. Come within {km} km of the masjid to update its times.",
+  "@volunteerTooFar": {
+    "placeholders": {
+      "distance": {
+        "type": "String"
+      },
+      "km": {
+        "type": "String"
+      }
+    }
+  },
+  "volunteerApprox": "Your phone is sharing only an approximate location. Turn on Precise Location for Muslimin and try again.",
+  "volunteerBlocked": "You can't update masjid times right now. Contact the admin if this is a mistake.",
+  "volunteerWelcome": "Thank you! You can now update this masjid's times.",
+  "stopEditing": "Stop updating this masjid",
+  "reportProblem": "Report a problem",
+  "reportTitle": "What's wrong?",
+  "reportWrongTime": "Wrong jamat time",
+  "reportWrongLocation": "Wrong location on the map",
+  "reportWrongInfo": "Wrong name or details",
+  "reportClosed": "Closed or doesn't exist",
+  "reportDuplicate": "Listed twice",
+  "reportOther": "Something else",
+  "reportNote": "Details (optional) – e.g. the correct time",
+  "reportSend": "Send report",
+  "reportThanks": "Thank you – the admin will check it.",
+  "volunteers": "Volunteer editors",
+  "noVolunteers": "No volunteers yet.",
+  "editorDistance": "{distance} from the masjid when they joined",
+  "@editorDistance": {
+    "placeholders": {
+      "distance": {
+        "type": "String"
+      }
+    }
+  },
+  "removeEditor": "Remove",
+  "removeAndBlock": "Remove and block from editing",
+  "lastUpdatedBy": "Updated {when} by {name}",
+  "@lastUpdatedBy": {
+    "placeholders": {
+      "when": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "adminReport": "Report",
+  "adminProblems": "Problems",
+  "adminEdits": "Edits",
+  "statMasjids": "Masjids",
+  "statWithTimes": "With jamat times",
+  "statVolunteers": "Volunteers",
+  "statOpenReports": "Open problems",
+  "statPending": "Waiting for review",
+  "shareReport": "Share report",
+  "coverageTitle": "By district",
+  "coverageLoad": "Show districts",
+  "resolve": "Mark resolved",
+  "revert": "Undo change",
+  "reverted": "Change undone",
+  "editFieldStaff": "Staff",
+  "editFieldMaktab": "Maktab",
+  "timeLooksWrong": "These times look wrong: {prayers}. Please check AM/PM.",
+  "@timeLooksWrong": {
+    "placeholders": {
+      "prayers": {
+        "type": "String"
+      }
+    }
+  },
+  "dataCredits": "Masjid locations: © OpenStreetMap contributors (ODbL). District and upazila boundaries: Bangladesh Bureau of Statistics / OCHA via geoBoundaries (CC BY 3.0 IGO).",
+  "fromOsm": "Added from OpenStreetMap (© OpenStreetMap contributors). Times are filled in by people nearby."
 }

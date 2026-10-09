@@ -28,7 +28,8 @@ service cloud.firestore {
       function isSelf() { return signedIn() && request.auth.uid == uid; }
       function validProfile() {
         return request.resource.data.keys().hasOnly(
-                 ['name', 'email', 'phone', 'role', 'createdAt', 'follows', 'fcmTokens'])
+                 ['name', 'email', 'phone', 'role', 'createdAt', 'follows', 'fcmTokens',
+                  'editBlocked'])
           && (!('name' in request.resource.data) || request.resource.data.name is string
               && request.resource.data.name.size() <= 80);
       }
@@ -36,7 +37,9 @@ service cloud.firestore {
       allow read: if isSelf() || isSuperAdmin();
       // Users can create their own profile but never promote themselves.
       allow create: if isSelf() && request.resource.data.role == 'user' && validProfile();
-      allow update: if (isSelf() && unchanged(['role', 'createdAt']) && validProfile()) || isSuperAdmin();
+      // `editBlocked` (no volunteering) is set by the admin only.
+      allow update: if (isSelf() && unchanged(['role', 'createdAt', 'editBlocked']) && validProfile())
+        || isSuperAdmin();
       allow delete: if isSelf() || isSuperAdmin();
     }
 
@@ -76,9 +79,57 @@ service cloud.firestore {
           && (unchanged(['geo', 'locationAccuracyM'])
             || (request.resource.data.locationAccuracyM <= 50
               && request.resource.data.geo.geopoint is latlng)))
-        || isSuperAdmin();
+        || isSuperAdmin()
+        // Volunteer editors (people near the masjid): jamat times, maktab
+        // and staff only, signed with their uid.
+        || (isEditor()
+          && resource.data.status == 'approved'
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(
+               ['jamat', 'jamatUpdatedAt', 'hasJamat', 'maktab', 'staff',
+                'updatedBy', 'updatedByName', 'updatedAt'])
+          && request.resource.data.updatedBy == request.auth.uid);
 
       allow delete: if isSuperAdmin();
+
+      function isEditor() {
+        return signedIn() && exists(/databases/$(database)/documents/masjids/$(masjidId)/editors/$(request.auth.uid));
+      }
+      function editBlocked() {
+        return exists(/databases/$(database)/documents/users/$(request.auth.uid))
+          && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get('editBlocked', false) == true;
+      }
+
+      // ---- Volunteer editors: anyone standing within ~2 km of an approved
+      // masjid may keep its times up to date. The app measures a fresh GPS
+      // fix; the rules check the stated position is near the masjid.
+      match /editors/{uid} {
+        allow read: if signedIn() && (request.auth.uid == uid
+          || masjidDoc().ownerUid == request.auth.uid || isSuperAdmin());
+        allow create: if signedIn() && request.auth.uid == uid
+          && masjidDoc().status == 'approved'
+          && !editBlocked()
+          && request.resource.data.keys().hasOnly(
+               ['uid', 'name', 'masjidId', 'masjidName', 'lat', 'lng', 'distanceM', 'createdAt'])
+          && request.resource.data.uid == uid
+          && request.resource.data.masjidId == masjidId
+          && request.resource.data.lat is number
+          && request.resource.data.lng is number
+          && math.abs(request.resource.data.lat - masjidDoc().geo.geopoint.latitude()) < 0.025
+          && math.abs(request.resource.data.lng - masjidDoc().geo.geopoint.longitude()) < 0.025;
+        allow delete: if signedIn() && (request.auth.uid == uid
+          || masjidDoc().ownerUid == request.auth.uid || isSuperAdmin());
+      }
+
+      // ---- Edit history: who changed times / staff / maktab, before and
+      // after. Written with the change; read by the owner and the admin.
+      match /edits/{editId} {
+        allow read: if signedIn() && (masjidDoc().ownerUid == request.auth.uid || isSuperAdmin());
+        allow create: if signedIn()
+          && request.resource.data.uid == request.auth.uid
+          && request.resource.data.masjidId == masjidId
+          && request.resource.data.field in ['jamat', 'staff', 'maktab']
+          && (masjidDoc().ownerUid == request.auth.uid || isEditor() || isSuperAdmin());
+      }
 
       // ---- Channel: the masjid's Imam / Khatib / committee message the
       // people who joined. Only members read; editors and admins post;
@@ -135,6 +186,37 @@ service cloud.firestore {
           allow delete: if canPost();
         }
       }
+    }
+
+    // Admin report: every edit and every editor, across masjids.
+    match /{path=**}/edits/{editId} {
+      allow read: if isSuperAdmin();
+    }
+    match /{path=**}/editors/{uid} {
+      allow read: if isSuperAdmin() || (signedIn() && resource.data.uid == request.auth.uid);
+    }
+
+    // Problems reported by users ("wrong jamat time"…): one per user and
+    // masjid (id = masjidId_uid); only the admin reads and resolves them.
+    match /reports/{reportId} {
+      function validReport() {
+        return signedIn()
+          && reportId == request.resource.data.masjidId + '_' + request.auth.uid
+          && request.resource.data.uid == request.auth.uid
+          && request.resource.data.status == 'open'
+          && request.resource.data.keys().hasOnly(
+               ['masjidId', 'masjidName', 'district', 'uid', 'userName', 'reason',
+                'note', 'status', 'createdAt'])
+          && request.resource.data.reason in
+               ['wrongTime', 'wrongLocation', 'wrongInfo', 'closed', 'duplicate', 'other']
+          && request.resource.data.note is string
+          && request.resource.data.note.size() <= 500;
+      }
+      allow read: if isSuperAdmin() || (signedIn() && resource.data.uid == request.auth.uid);
+      allow create: if validReport();
+      // Reporting again replaces your own report (and reopens it).
+      allow update: if validReport() || isSuperAdmin();
+      allow delete: if isSuperAdmin();
     }
 
     // "My channels": a user can list their own memberships across masjids.

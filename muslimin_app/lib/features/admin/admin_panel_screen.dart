@@ -16,6 +16,8 @@ import '../../data/models/masjid.dart';
 import '../../l10n/app_localizations.dart';
 import '../../state/providers.dart';
 import '../masjid/masjid_screen.dart';
+import '../../state/volunteer.dart';
+import 'admin_report.dart';
 
 /// Super-admin review queue. Only users whose `users/{uid}.role` is
 /// `superAdmin` see the entry point, and Firestore rules enforce it.
@@ -26,12 +28,16 @@ class AdminPanelScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final t = L10n.of(context);
+    final f = Fmt.of(context);
     final pending = ref
         .watch(masjidsByStatusProvider(MasjidStatus.pending))
         .value
         ?.length;
+    final problems = ref.watch(openReportsProvider).value?.length ?? 0;
+    String count(String label, int? n) =>
+        n == null || n == 0 ? label : '$label (${f.digits(n)})';
     return DefaultTabController(
-      length: 4,
+      length: 7,
       child: Scaffold(
         appBar: PatternAppBar(
           title: Text(t.adminPanel),
@@ -43,11 +49,10 @@ class AdminPanelScreen extends ConsumerWidget {
             indicatorColor: AppColors.goldLight,
             dividerColor: Colors.transparent,
             tabs: [
-              Tab(
-                text: pending == null || pending == 0
-                    ? t.adminPending
-                    : '${t.adminPending} (${Fmt.of(context).digits(pending)})',
-              ),
+              Tab(text: t.adminReport),
+              Tab(text: count(t.adminProblems, problems)),
+              Tab(text: count(t.adminPending, pending)),
+              Tab(text: t.adminEdits),
               Tab(text: t.adminApproved),
               Tab(text: t.adminRejected),
               Tab(text: t.statusSuspended),
@@ -59,7 +64,10 @@ class AdminPanelScreen extends ConsumerWidget {
             constraints: const BoxConstraints(maxWidth: 720),
             child: const TabBarView(
               children: [
+                AdminReportTab(),
+                AdminProblemsTab(),
                 _Queue(status: MasjidStatus.pending),
+                AdminEditsTab(),
                 _Queue(status: MasjidStatus.approved),
                 _Queue(status: MasjidStatus.rejected),
                 _Queue(status: MasjidStatus.suspended),

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -5,6 +7,7 @@ import '../../core/widgets/page_header.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/widgets/refresh.dart';
 import '../../core/widgets/surfaces.dart';
+import '../../data/models/masjid.dart';
 import '../../l10n/app_localizations.dart';
 import '../../state/providers.dart';
 import 'masjid_card.dart';
@@ -20,9 +23,11 @@ class MasjidListScreen extends ConsumerStatefulWidget {
 class _MasjidListScreenState extends ConsumerState<MasjidListScreen> {
   final _search = TextEditingController();
   String _q = '';
+  Timer? _debounce;
 
   @override
   void dispose() {
+    _debounce?.cancel();
     _search.dispose();
     super.dispose();
   }
@@ -41,7 +46,15 @@ class _MasjidListScreenState extends ConsumerState<MasjidListScreen> {
             bottom: AppSearchField(
               controller: _search,
               hint: t.searchMasjid,
-              onChanged: (v) => setState(() => _q = v.trim().toLowerCase()),
+              // Each country-wide search is a database query: wait until
+              // the typing pauses.
+              onChanged: (v) {
+                _debounce?.cancel();
+                _debounce = Timer(
+                  const Duration(milliseconds: 400),
+                  () => setState(() => _q = v.trim().toLowerCase()),
+                );
+              },
             ),
           ),
           const SizedBox(height: Gap.l),
@@ -50,7 +63,7 @@ class _MasjidListScreenState extends ConsumerState<MasjidListScreen> {
               loading: () => const Loader(),
               error: (_, _) => EmptyState(message: t.somethingWrong),
               data: (all) {
-                final list = _q.isEmpty
+                final local = _q.isEmpty
                     ? all
                     : all
                           .where(
@@ -60,6 +73,16 @@ class _MasjidListScreenState extends ConsumerState<MasjidListScreen> {
                                 m.fullAddress.toLowerCase().contains(_q),
                           )
                           .toList();
+                // Beyond the area around you: names across the country.
+                final far = _q.length < 3
+                    ? const <Masjid>[]
+                    : ref.watch(searchMasjidsProvider(_q)).value ?? const [];
+                final seen = {for (final m in local) m.id};
+                final list = [
+                  ...local,
+                  for (final m in far)
+                    if (!seen.contains(m.id)) m,
+                ];
                 if (list.isEmpty) {
                   return EmptyState(
                     message: t.noMasjidNearby,

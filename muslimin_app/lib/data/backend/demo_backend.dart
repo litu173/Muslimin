@@ -9,6 +9,7 @@ import '../models/hm.dart';
 import '../models/masjid.dart';
 import '../models/notice.dart';
 import '../models/prayer.dart';
+import '../models/volunteer.dart';
 import 'backend.dart';
 
 /// In-memory backend with realistic seed data. Used automatically when
@@ -34,6 +35,12 @@ class DemoBackend implements Backend {
   /// masjidId → uid → member, and masjidId → messages (oldest first).
   final _members = <String, Map<String, ChannelMember>>{};
   final _messages = <String, List<ChannelMessage>>{};
+
+  /// masjidId → uid → editor; reports by id; edits (newest first).
+  final _editors = <String, Map<String, MasjidEditor>>{};
+  final _reports = <String, MasjidReport>{};
+  final _edits = <MasjidEdit>[];
+  final _editBlocked = <String>{};
   final _changes = StreamController<void>.broadcast();
   final _auth = StreamController<AppUser?>.broadcast();
   AppUser? _user;
@@ -103,15 +110,20 @@ class DemoBackend implements Backend {
         ownerUid: i == 0 ? 'demo_owner' : 'someone_$i',
         ownerPhone: '+8801730273573',
         nid: '1234567890',
-        jamat: {
-          Prayer.fajr: HM(5, 30 + i * 2),
-          Prayer.dhuhr: HM(13, 15 + i * 5),
-          Prayer.asr: HM(16, 45 + i * 2),
-          Prayer.maghrib: const HM(18, 5),
-          Prayer.isha: HM(19, 45 + i * 3),
-          Prayer.jumuah: HM(13, 30 + i * 5),
-        },
-        jamatUpdatedAt: now.subtract(Duration(days: 3 + i * 4)),
+        // Taqwa Masjid: added from the map, no times yet – volunteers fill
+        // them in.
+        imported: i == 4,
+        jamat: i == 4
+            ? const {}
+            : {
+                Prayer.fajr: HM(5, 30 + i * 2),
+                Prayer.dhuhr: HM(13, 15 + i * 5),
+                Prayer.asr: HM(16, 45 + i * 2),
+                Prayer.maghrib: const HM(18, 5),
+                Prayer.isha: HM(19, 45 + i * 3),
+                Prayer.jumuah: HM(13, 30 + i * 5),
+              },
+        jamatUpdatedAt: i == 4 ? null : now.subtract(Duration(days: 3 + i * 4)),
         maktab: i.isEven
             ? Maktab(
                 days: const [6, 7, 1, 2, 3, 4],
@@ -462,6 +474,19 @@ class DemoBackend implements Backend {
   );
 
   @override
+  Future<List<Masjid>> searchMasjids(String prefix, {int limit = 30}) async {
+    final q = prefix.trim().toLowerCase();
+    return _masjids.values
+        .where(
+          (m) =>
+              m.status == MasjidStatus.approved &&
+              m.name.toLowerCase().startsWith(q),
+        )
+        .take(limit)
+        .toList();
+  }
+
+  @override
   Stream<Masjid?> watchMasjid(String id) => _watch(() => _masjids[id]);
 
   @override
@@ -523,21 +548,61 @@ class DemoBackend implements Backend {
     ),
   );
 
-  @override
-  Future<void> updateJamat(String id, Map<Prayer, HM> jamat) async => _patch(
-    id,
-    (m) => m.copyWith(jamat: jamat, jamatUpdatedAt: DateTime.now()),
-  );
+  void _log(
+    Masjid m,
+    String field,
+    Map<String, dynamic> before,
+    Map<String, dynamic> after,
+  ) {
+    final u = _user;
+    _edits.insert(
+      0,
+      MasjidEdit(
+        id: _id(),
+        masjidId: m.id,
+        masjidName: m.name,
+        uid: u?.uid ?? '',
+        name: u?.displayName ?? '',
+        field: field,
+        before: before,
+        after: after,
+        at: DateTime.now(),
+      ),
+    );
+  }
 
   @override
-  Future<void> updateMaktab(String id, Maktab maktab) async =>
-      _patch(id, (m) => m.copyWith(maktab: maktab));
+  Future<void> updateJamat(Masjid m, Map<Prayer, HM> jamat) async {
+    _log(m, 'jamat', Masjid.jamatToMap(m.jamat), Masjid.jamatToMap(jamat));
+    _patch(
+      m.id,
+      (x) => Masjid.fromMap(
+        x.id,
+        {
+          ...x.toMap(),
+          'jamat': Masjid.jamatToMap(jamat),
+          'updatedByName': _user?.displayName ?? '',
+          'source': x.imported ? 'osm' : null,
+        },
+        lat: x.lat,
+        lng: x.lng,
+        createdAt: x.createdAt,
+        jamatUpdatedAt: DateTime.now(),
+      ),
+    );
+  }
 
   @override
-  Future<void> updateStaff(
-    String id,
-    Map<StaffRole, StaffMember> staff,
-  ) async => _patch(id, (m) => m.copyWith(staff: staff));
+  Future<void> updateMaktab(Masjid m, Maktab maktab) async {
+    _log(m, 'maktab', m.maktab.toMap(), maktab.toMap());
+    _patch(m.id, (x) => x.copyWith(maktab: maktab));
+  }
+
+  @override
+  Future<void> updateStaff(Masjid m, Map<StaffRole, StaffMember> staff) async {
+    _log(m, 'staff', Masjid.staffToMap(m.staff), Masjid.staffToMap(staff));
+    _patch(m.id, (x) => x.copyWith(staff: staff));
+  }
 
   @override
   Future<void> updateLive(
@@ -723,4 +788,154 @@ class DemoBackend implements Backend {
     _notices.remove(id);
     _emit();
   }
+
+  // ------------------------------------------------------------ volunteers
+  @override
+  Stream<bool> isMasjidEditor(String masjidId) => _watch(
+    () =>
+        _user != null && (_editors[masjidId]?.containsKey(_user!.uid) ?? false),
+  );
+
+  @override
+  Future<void> becomeEditor(Masjid m, double lat, double lng) async {
+    final u = _user ?? (throw BackendException('not-signed-in'));
+    if (_editBlocked.contains(u.uid)) {
+      throw BackendException('permission-denied');
+    }
+    final d = distanceMeters(lat, lng, m.lat, m.lng);
+    if (d > kEditorRadiusM) throw BackendException('too-far');
+    await Future<void>.delayed(const Duration(milliseconds: 400));
+    (_editors[m.id] ??= {})[u.uid] = MasjidEditor(
+      uid: u.uid,
+      name: u.displayName,
+      masjidId: m.id,
+      masjidName: m.name,
+      distanceM: d.roundToDouble(),
+      createdAt: DateTime.now(),
+    );
+    _emit();
+  }
+
+  @override
+  Future<void> leaveEditor(String masjidId) async {
+    _editors[masjidId]?.remove(_user?.uid);
+    _emit();
+  }
+
+  @override
+  Stream<List<MasjidEditor>> masjidEditors(String masjidId) =>
+      _watch(() => [...?_editors[masjidId]?.values]);
+
+  @override
+  Future<void> removeEditor(
+    String masjidId,
+    String uid, {
+    bool block = false,
+  }) async {
+    _editors[masjidId]?.remove(uid);
+    if (block) _editBlocked.add(uid);
+    _emit();
+  }
+
+  // --------------------------------------------------------------- reports
+  @override
+  Future<void> reportMasjid(Masjid m, ReportReason reason, String note) async {
+    final u = _user ?? (throw BackendException('not-signed-in'));
+    final id = MasjidReport.idFor(m.id, u.uid);
+    _reports[id] = MasjidReport(
+      id: id,
+      masjidId: m.id,
+      masjidName: m.name,
+      district: m.district,
+      uid: u.uid,
+      userName: u.displayName,
+      reason: reason,
+      note: note.trim(),
+      open: true,
+      createdAt: DateTime.now(),
+    );
+    _emit();
+  }
+
+  @override
+  Stream<List<MasjidReport>> openReports({int limit = 100}) => _watch(
+    () =>
+        _reports.values.where((r) => r.open).toList()
+          ..sort((a, b) => b.createdAt!.compareTo(a.createdAt!)),
+  );
+
+  @override
+  Future<void> resolveReport(String id) async {
+    final r = _reports[id];
+    if (r == null) return;
+    _reports[id] = MasjidReport(
+      id: r.id,
+      masjidId: r.masjidId,
+      masjidName: r.masjidName,
+      district: r.district,
+      uid: r.uid,
+      userName: r.userName,
+      reason: r.reason,
+      note: r.note,
+      open: false,
+      createdAt: r.createdAt,
+    );
+    _emit();
+  }
+
+  // ----------------------------------------------------------- admin report
+  @override
+  Stream<List<MasjidEdit>> recentEdits({int limit = 50}) =>
+      _watch(() => _edits.take(limit).toList());
+
+  @override
+  Future<void> revertEdit(MasjidEdit e) async {
+    final m = _masjids[e.masjidId];
+    if (m == null) return;
+    switch (e.field) {
+      case 'jamat':
+        await updateJamat(m, Masjid.jamatFromMap(e.before));
+      case 'staff':
+        await updateStaff(m, Masjid.staffFromMap(e.before));
+      case 'maktab':
+        await updateMaktab(m, Maktab.fromMap(e.before));
+    }
+  }
+
+  @override
+  Future<AdminStats> adminStats() async {
+    final approved = _masjids.values.where(
+      (m) => m.status == MasjidStatus.approved,
+    );
+    return AdminStats(
+      masjids: approved.length,
+      withTimes: approved.where((m) => m.jamat.isNotEmpty).length,
+      editors: _editors.values.fold(0, (a, e) => a + e.length),
+      openReports: _reports.values.where((r) => r.open).length,
+      pending: _masjids.values
+          .where((m) => m.status == MasjidStatus.pending)
+          .length,
+    );
+  }
+
+  @override
+  Future<List<DistrictCoverage>> districtCoverage(
+    List<String> districts,
+  ) async => [
+    for (final d in districts)
+      (
+        district: d,
+        masjids: _masjids.values
+            .where((m) => m.status == MasjidStatus.approved && m.district == d)
+            .length,
+        withTimes: _masjids.values
+            .where(
+              (m) =>
+                  m.status == MasjidStatus.approved &&
+                  m.district == d &&
+                  m.jamat.isNotEmpty,
+            )
+            .length,
+      ),
+  ];
 }

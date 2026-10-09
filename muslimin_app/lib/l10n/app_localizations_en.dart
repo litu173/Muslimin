@@ -2166,4 +2166,173 @@ class L10nEn extends L10n {
   @override
   String get approxLocation =>
       'Approximate location – tap to turn on Precise Location';
+
+  @override
+  String get signInFirst => 'Please sign in first.';
+
+  @override
+  String get volunteerTitleEmpty => 'Jamat times not added yet';
+
+  @override
+  String get volunteerBodyEmpty =>
+      'Live or pray near this masjid? Add its jamat times and keep them up to date for everyone.';
+
+  @override
+  String get volunteerTitle => 'Pray here regularly?';
+
+  @override
+  String get volunteerBody => 'Help keep this masjid\'s jamat times correct.';
+
+  @override
+  String get volunteerButton => 'I want to update jamat time';
+
+  @override
+  String get volunteerCheckTitle => 'Update this masjid\'s times';
+
+  @override
+  String volunteerCheckBody(String km) {
+    return 'People near a masjid can keep its times up to date. We\'ll check that you are within $km km of it – your location is used only for this check.';
+  }
+
+  @override
+  String get volunteerCheckButton => 'Check my location';
+
+  @override
+  String get volunteerChecking => 'Checking your location…';
+
+  @override
+  String volunteerTooFar(String distance, String km) {
+    return 'You are $distance away. Come within $km km of the masjid to update its times.';
+  }
+
+  @override
+  String get volunteerApprox =>
+      'Your phone is sharing only an approximate location. Turn on Precise Location for Muslimin and try again.';
+
+  @override
+  String get volunteerBlocked =>
+      'You can\'t update masjid times right now. Contact the admin if this is a mistake.';
+
+  @override
+  String get volunteerWelcome =>
+      'Thank you! You can now update this masjid\'s times.';
+
+  @override
+  String get stopEditing => 'Stop updating this masjid';
+
+  @override
+  String get reportProblem => 'Report a problem';
+
+  @override
+  String get reportTitle => 'What\'s wrong?';
+
+  @override
+  String get reportWrongTime => 'Wrong jamat time';
+
+  @override
+  String get reportWrongLocation => 'Wrong location on the map';
+
+  @override
+  String get reportWrongInfo => 'Wrong name or details';
+
+  @override
+  String get reportClosed => 'Closed or doesn\'t exist';
+
+  @override
+  String get reportDuplicate => 'Listed twice';
+
+  @override
+  String get reportOther => 'Something else';
+
+  @override
+  String get reportNote => 'Details (optional) – e.g. the correct time';
+
+  @override
+  String get reportSend => 'Send report';
+
+  @override
+  String get reportThanks => 'Thank you – the admin will check it.';
+
+  @override
+  String get volunteers => 'Volunteer editors';
+
+  @override
+  String get noVolunteers => 'No volunteers yet.';
+
+  @override
+  String editorDistance(String distance) {
+    return '$distance from the masjid when they joined';
+  }
+
+  @override
+  String get removeEditor => 'Remove';
+
+  @override
+  String get removeAndBlock => 'Remove and block from editing';
+
+  @override
+  String lastUpdatedBy(String when, String name) {
+    return 'Updated $when by $name';
+  }
+
+  @override
+  String get adminReport => 'Report';
+
+  @override
+  String get adminProblems => 'Problems';
+
+  @override
+  String get adminEdits => 'Edits';
+
+  @override
+  String get statMasjids => 'Masjids';
+
+  @override
+  String get statWithTimes => 'With jamat times';
+
+  @override
+  String get statVolunteers => 'Volunteers';
+
+  @override
+  String get statOpenReports => 'Open problems';
+
+  @override
+  String get statPending => 'Waiting for review';
+
+  @override
+  String get shareReport => 'Share report';
+
+  @override
+  String get coverageTitle => 'By district';
+
+  @override
+  String get coverageLoad => 'Show districts';
+
+  @override
+  String get resolve => 'Mark resolved';
+
+  @override
+  String get revert => 'Undo change';
+
+  @override
+  String get reverted => 'Change undone';
+
+  @override
+  String get editFieldStaff => 'Staff';
+
+  @override
+  String get editFieldMaktab => 'Maktab';
+
+  @override
+  String timeLooksWrong(String prayers) {
+    return 'These times look wrong: $prayers. Please check AM/PM.';
+  }
+
+  @override
+  String get dataCredits =>
+      'Masjid locations: © OpenStreetMap contributors (ODbL). District and upazila boundaries: Bangladesh Bureau of Statistics / OCHA via geoBoundaries (CC BY 3.0 IGO).';
+
+  @override
+  String get fromOsm =>
+      'Added from OpenStreetMap (© OpenStreetMap contributors). Times are filled in by people nearby.';
 }

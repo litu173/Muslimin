@@ -17,7 +17,9 @@ import '../../../l10n/app_localizations.dart';
 import '../../../state/follows.dart';
 import '../../../state/providers.dart';
 import '../channel/channel_invite_card.dart';
+import '../../../services/time_board_reader.dart';
 import '../time_board_scan.dart';
+import '../volunteer.dart';
 
 Future<HM?> pickTime(BuildContext context, HM? initial) async {
   final r = await showTimePicker(
@@ -35,10 +37,20 @@ class MasjidHomeTab extends ConsumerStatefulWidget {
     required this.masjid,
     required this.canEdit,
     required this.onOpenChannel,
+    this.canVolunteer = false,
+    this.canReport = false,
   });
 
   final Masjid masjid;
+
+  /// Times, maktab: owner, admin or volunteer editor.
   final bool canEdit;
+
+  /// Signed-in, not an editor yet: "I want to update jamat time".
+  final bool canVolunteer;
+
+  /// "Report a problem" (anyone but the owner).
+  final bool canReport;
 
   /// Switches to the Channel tab.
   final VoidCallback onOpenChannel;
@@ -67,7 +79,26 @@ class _MasjidHomeTabState extends ConsumerState<MasjidHomeTab> {
                 canEdit: widget.canEdit,
                 onEdit: () => setState(() => _editJamat = true),
               ),
-        const SizedBox(height: 10),
+        if (widget.canReport && !_editJamat)
+          Align(
+            alignment: AlignmentDirectional.centerEnd,
+            child: TextButton.icon(
+              onPressed: () => reportProblem(context, widget.masjid),
+              icon: Icon(Icons.flag_outlined, size: 18, color: AppColors.muted),
+              label: Text(
+                L10n.of(context).reportProblem,
+                style: AppText.caption.copyWith(color: AppColors.muted),
+              ),
+            ),
+          ),
+        if (widget.canVolunteer) ...[
+          VolunteerCard(
+            masjid: widget.masjid,
+            onEditor: () => setState(() => _editJamat = true),
+          ),
+          const SizedBox(height: 10),
+        ] else
+          const SizedBox(height: 10),
         if (_editMaktab)
           _MaktabEditor(
             masjid: widget.masjid,
@@ -209,7 +240,12 @@ class _JamatCard extends ConsumerWidget {
             title: t.jamatTime,
             subtitle: masjid.jamatUpdatedAt == null
                 ? null
-                : t.lastUpdated(f.relativeDays(masjid.jamatUpdatedAt!, now)),
+                : masjid.updatedByName.isEmpty
+                ? t.lastUpdated(f.relativeDays(masjid.jamatUpdatedAt!, now))
+                : t.lastUpdatedBy(
+                    f.relativeDays(masjid.jamatUpdatedAt!, now),
+                    masjid.updatedByName,
+                  ),
             trailing: canEdit
                 ? AppButton(t.edit, onPressed: onEdit, dense: true, pill: true)
                 : CircleIconButton(
@@ -245,6 +281,7 @@ class _TimePill extends StatelessWidget {
     required this.text,
     required this.onTap,
     this.highlight = false,
+    this.wrong = false,
   });
 
   final String text;
@@ -252,6 +289,9 @@ class _TimePill extends StatelessWidget {
 
   /// Gold outline for a value filled in from a scanned photo.
   final bool highlight;
+
+  /// Red: a time that can't be this prayer's (e.g. Fajr at 5:30 PM).
+  final bool wrong;
 
   @override
   Widget build(BuildContext context) => Material(
@@ -268,7 +308,10 @@ class _TimePill extends StatelessWidget {
         constraints: const BoxConstraints(minWidth: 80),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         alignment: Alignment.center,
-        child: Text(text, style: AppText.label),
+        child: Text(
+          text,
+          style: AppText.label.copyWith(color: wrong ? AppColors.danger : null),
+        ),
       ),
     ),
   );
@@ -303,9 +346,21 @@ class _JamatEditorState extends ConsumerState<_JamatEditor> {
   }
 
   Future<void> _save() async {
+    final t = L10n.of(context);
+    final f = Fmt.of(context);
+    // Volunteers type these by hand: stop impossible ones (Fajr at noon,
+    // Isha in the afternoon) before everyone nearby sees them.
+    final wrong = [
+      for (final e in _jamat.entries)
+        if (!jamatTimePlausible(e.key, e.value)) f.prayer(e.key),
+    ];
+    if (wrong.isNotEmpty) {
+      toast(context, t.timeLooksWrong(wrong.join(', ')));
+      return;
+    }
     setState(() => _saving = true);
     try {
-      await ref.read(backendProvider).updateJamat(widget.masjid.id, _jamat);
+      await ref.read(backendProvider).updateJamat(widget.masjid, _jamat);
       if (mounted) toast(context, L10n.of(context).updated);
       widget.onDone();
     } catch (_) {
@@ -416,8 +471,13 @@ class _JamatEditorState extends ConsumerState<_JamatEditor> {
                       ),
                     ),
                   _TimePill(
-                    text: _jamat[p] == null ? t.tapToSet : f.hm(_jamat[p]!),
+                    // With AM/PM, so a wrong half of the day shows.
+                    text: _jamat[p] == null
+                        ? t.tapToSet
+                        : f.timeUpper(_jamat[p]!.on(DateTime.now())),
                     highlight: _fromPhoto.contains(p),
+                    wrong:
+                        _jamat[p] != null && !jamatTimePlausible(p, _jamat[p]!),
                     onTap: () async {
                       final v = await pickTime(context, _jamat[p]);
                       if (v != null) {
@@ -556,7 +616,7 @@ class _MaktabEditorState extends ConsumerState<_MaktabEditor> {
       await ref
           .read(backendProvider)
           .updateMaktab(
-            widget.masjid.id,
+            widget.masjid,
             Maktab(
               days: _days.toList()..sort(),
               morning: _showMorning ? _morning : null,

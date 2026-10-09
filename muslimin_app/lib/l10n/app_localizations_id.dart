@@ -2170,4 +2170,174 @@ class L10nId extends L10n {
   @override
   String get approxLocation =>
       'Lokasi perkiraan – ketuk untuk menyalakan Lokasi Akurat';
+
+  @override
+  String get signInFirst => 'Silakan masuk terlebih dahulu.';
+
+  @override
+  String get volunteerTitleEmpty => 'Waktu jamaah belum ditambahkan';
+
+  @override
+  String get volunteerBodyEmpty =>
+      'Tinggal atau salat di dekat masjid ini? Tambahkan waktu jamaahnya dan perbarui untuk semua orang.';
+
+  @override
+  String get volunteerTitle => 'Rutin salat di sini?';
+
+  @override
+  String get volunteerBody =>
+      'Bantu jaga agar waktu jamaah masjid ini tetap benar.';
+
+  @override
+  String get volunteerButton => 'Saya ingin memperbarui waktu jamaah';
+
+  @override
+  String get volunteerCheckTitle => 'Perbarui waktu masjid ini';
+
+  @override
+  String volunteerCheckBody(String km) {
+    return 'Orang di sekitar masjid dapat memperbarui waktunya. Kami akan memeriksa bahwa Anda berada dalam $km km darinya – lokasi Anda hanya dipakai untuk pemeriksaan ini.';
+  }
+
+  @override
+  String get volunteerCheckButton => 'Periksa lokasi saya';
+
+  @override
+  String get volunteerChecking => 'Memeriksa lokasi Anda…';
+
+  @override
+  String volunteerTooFar(String distance, String km) {
+    return 'Anda berjarak $distance. Mendekatlah hingga $km km dari masjid untuk memperbarui waktunya.';
+  }
+
+  @override
+  String get volunteerApprox =>
+      'Ponsel Anda hanya membagikan lokasi perkiraan. Aktifkan Lokasi Akurat untuk Muslimin lalu coba lagi.';
+
+  @override
+  String get volunteerBlocked =>
+      'Anda tidak dapat memperbarui waktu masjid saat ini. Hubungi admin jika ini keliru.';
+
+  @override
+  String get volunteerWelcome =>
+      'Terima kasih! Kini Anda dapat memperbarui waktu masjid ini.';
+
+  @override
+  String get stopEditing => 'Berhenti memperbarui masjid ini';
+
+  @override
+  String get reportProblem => 'Laporkan masalah';
+
+  @override
+  String get reportTitle => 'Apa yang salah?';
+
+  @override
+  String get reportWrongTime => 'Waktu jamaah salah';
+
+  @override
+  String get reportWrongLocation => 'Lokasi di peta salah';
+
+  @override
+  String get reportWrongInfo => 'Nama atau detail salah';
+
+  @override
+  String get reportClosed => 'Tutup atau tidak ada';
+
+  @override
+  String get reportDuplicate => 'Tercantum dua kali';
+
+  @override
+  String get reportOther => 'Lainnya';
+
+  @override
+  String get reportNote => 'Detail (opsional) – mis. waktu yang benar';
+
+  @override
+  String get reportSend => 'Kirim laporan';
+
+  @override
+  String get reportThanks => 'Terima kasih – admin akan memeriksanya.';
+
+  @override
+  String get volunteers => 'Editor sukarelawan';
+
+  @override
+  String get noVolunteers => 'Belum ada sukarelawan.';
+
+  @override
+  String editorDistance(String distance) {
+    return '$distance dari masjid saat bergabung';
+  }
+
+  @override
+  String get removeEditor => 'Hapus';
+
+  @override
+  String get removeAndBlock => 'Hapus dan blokir dari mengedit';
+
+  @override
+  String lastUpdatedBy(String when, String name) {
+    return 'Diperbarui $when oleh $name';
+  }
+
+  @override
+  String get adminReport => 'Laporan';
+
+  @override
+  String get adminProblems => 'Masalah';
+
+  @override
+  String get adminEdits => 'Perubahan';
+
+  @override
+  String get statMasjids => 'Masjid';
+
+  @override
+  String get statWithTimes => 'Dengan waktu jamaah';
+
+  @override
+  String get statVolunteers => 'Sukarelawan';
+
+  @override
+  String get statOpenReports => 'Masalah terbuka';
+
+  @override
+  String get statPending => 'Menunggu ditinjau';
+
+  @override
+  String get shareReport => 'Bagikan laporan';
+
+  @override
+  String get coverageTitle => 'Per distrik';
+
+  @override
+  String get coverageLoad => 'Tampilkan distrik';
+
+  @override
+  String get resolve => 'Tandai selesai';
+
+  @override
+  String get revert => 'Batalkan perubahan';
+
+  @override
+  String get reverted => 'Perubahan dibatalkan';
+
+  @override
+  String get editFieldStaff => 'Pengurus';
+
+  @override
+  String get editFieldMaktab => 'Maktab';
+
+  @override
+  String timeLooksWrong(String prayers) {
+    return 'Waktu ini tampak salah: $prayers. Periksa AM/PM.';
+  }
+
+  @override
+  String get dataCredits =>
+      'Lokasi masjid: © OpenStreetMap contributors (ODbL). Batas distrik dan upazila: Biro Statistik Bangladesh / OCHA melalui geoBoundaries (CC BY 3.0 IGO).';
+
+  @override
+  String get fromOsm =>
+      'Ditambahkan dari OpenStreetMap (© OpenStreetMap contributors). Waktu diisi oleh warga sekitar.';
 }

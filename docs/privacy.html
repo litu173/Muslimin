@@ -33,6 +33,8 @@
       <li><b>Location</b> — used on your device to find nearby masjids and calculate prayer times. We do not store your location history.</li>
       <li><b>Notification token</b> — to send notices from masjids you follow.</li>
       <li><b>Masjid channels you join</b> — your name and role in that channel, and the messages posted there. Only the channel's members can read its messages; only its admins see who has joined. Leaving the channel removes your membership.</li>
+      <li><b>Volunteer editors:</b> when you offer to update a masjid's times, the app measures your position once to check you are within 2 km of it. Your name, that position and its distance are saved with your volunteer role and shown only to the masjid's owner and the Muslimin admin. Changes you make to times, staff or maktab are recorded with your name, and your name appears on the masjid page as the last person who updated it.</li>
+      <li><b>Problem reports:</b> your name, the masjid, the reason and your note, seen only by the Muslimin admin.</li>
       <li><b>Masjid authorities only:</b> phone number, NID number and role, used only to verify the masjid and never shown publicly; and the masjid's location (taken by GPS with its accuracy, or pinned on the map), which is shown on the public masjid profile and can be updated by the masjid's owner.</li>
     </ul>
 
@@ -42,6 +44,8 @@
     <p>When you choose a masjid location on the map, the map tiles, nearby masjids and search results come from OpenStreetMap services (tile.openstreetmap.org, Overpass API and Nominatim). They receive the map area you view, what you type in the map search and the spot you tap (to name the place there) — not your account details.</p>
 
     <p>When a masjid authority scans a photo of the salat time board, the photo is first read on the phone itself (Apple Vision on iPhone, Google ML Kit on Android). It is also sent to Google's Gemini model through Firebase AI Logic to read Bangla digits and labels. The photo is used only to read the times and is not stored by Muslimin.</p>
+
+    <p>Most masjid profiles were added from OpenStreetMap (© OpenStreetMap contributors, ODbL) and are kept up to date by volunteers who live nearby.</p>
 
     <h2>Where it is stored</h2>
     <p>Data is stored in Google Firebase (Cloud Firestore, asia-south1). Access is protected by security rules: only you can read your account data; NID and phone numbers of masjid authorities are visible only to them and to Muslimin administrators.</p>

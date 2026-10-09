@@ -101,6 +101,11 @@ class _AboutScreenState extends State<AboutScreen> {
                         ),
                         const SizedBox(height: Gap.xs),
                         Text(
+                          t.dataCredits,
+                          style: AppText.caption.copyWith(height: 1.6),
+                        ),
+                        const SizedBox(height: Gap.xs),
+                        Text(
                           t.designInspired,
                           style: AppText.caption.copyWith(
                             color: AppColors.muted,

@@ -75,6 +75,8 @@ class Masjid {
     this.createdAt,
     this.reviewedAt,
     this.rejectionReason,
+    this.updatedByName = '',
+    this.imported = false,
   });
 
   final String id;
@@ -108,6 +110,12 @@ class Masjid {
   final DateTime? createdAt;
   final DateTime? reviewedAt;
   final String? rejectionReason;
+
+  /// Who last changed the times, staff or maktab (an editor, the owner…).
+  final String updatedByName;
+
+  /// Added from OpenStreetMap by the admin, not registered by the masjid.
+  final bool imported;
 
   String displayName(bool bangla) =>
       bangla && nameBn.trim().isNotEmpty ? nameBn : name;
@@ -195,6 +203,8 @@ class Masjid {
     createdAt: createdAt,
     reviewedAt: reviewedAt ?? this.reviewedAt,
     rejectionReason: rejectionReason ?? this.rejectionReason,
+    updatedByName: updatedByName,
+    imported: imported,
   );
 
   static Map<Prayer, HM> jamatFromMap(Map<String, dynamic>? m) => {
@@ -254,6 +264,8 @@ class Masjid {
     createdAt: createdAt,
     reviewedAt: reviewedAt,
     rejectionReason: m['rejectionReason'] as String?,
+    updatedByName: (m['updatedByName'] ?? '') as String,
+    imported: m['source'] == 'osm',
   );
 
   /// Fields common to every backend (geo & timestamps are added by the backend).
@@ -274,6 +286,7 @@ class Masjid {
     'locationSource': locationSource,
     'agreedToTerms': true,
     'jamat': jamatToMap(jamat),
+    'hasJamat': jamat.isNotEmpty,
     'maktab': maktab.toMap(),
     'staff': staffToMap(staff),
     'liveUrl': liveUrl,

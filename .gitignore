@@ -10,3 +10,7 @@ firebase/*.log
 **/*.jks
 **/*.keystore
 .claude/
+firebase/tools/node_modules/
+# Service-account keys (never commit)
+**/*service-account*.json
+**/*-admin*.json

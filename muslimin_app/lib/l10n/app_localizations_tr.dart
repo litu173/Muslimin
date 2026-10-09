@@ -2164,4 +2164,174 @@ class L10nTr extends L10n {
   @override
   String get approxLocation =>
       'Yaklaşık konum – Kesin Konum\'u açmak için dokunun';
+
+  @override
+  String get signInFirst => 'Lütfen önce giriş yapın.';
+
+  @override
+  String get volunteerTitleEmpty => 'Cemaat vakitleri henüz eklenmedi';
+
+  @override
+  String get volunteerBodyEmpty =>
+      'Bu caminin yakınında mı yaşıyor ya da namaz kılıyorsunuz? Cemaat vakitlerini ekleyin ve herkes için güncel tutun.';
+
+  @override
+  String get volunteerTitle => 'Burada düzenli namaz kılıyor musunuz?';
+
+  @override
+  String get volunteerBody =>
+      'Bu caminin cemaat vakitlerinin doğru kalmasına yardım edin.';
+
+  @override
+  String get volunteerButton => 'Cemaat vaktini güncellemek istiyorum';
+
+  @override
+  String get volunteerCheckTitle => 'Bu caminin vakitlerini güncelle';
+
+  @override
+  String volunteerCheckBody(String km) {
+    return 'Caminin yakınındakiler vakitlerini güncel tutabilir. Camiye $km km içinde olduğunuzu kontrol edeceğiz – konumunuz yalnızca bu kontrol için kullanılır.';
+  }
+
+  @override
+  String get volunteerCheckButton => 'Konumumu kontrol et';
+
+  @override
+  String get volunteerChecking => 'Konumunuz kontrol ediliyor…';
+
+  @override
+  String volunteerTooFar(String distance, String km) {
+    return '$distance uzaktasınız. Vakitleri güncellemek için camiye $km km yaklaşın.';
+  }
+
+  @override
+  String get volunteerApprox =>
+      'Telefonunuz yalnızca yaklaşık konum paylaşıyor. Muslimin için Kesin Konum\'u açıp tekrar deneyin.';
+
+  @override
+  String get volunteerBlocked =>
+      'Şu anda cami vakitlerini güncelleyemezsiniz. Bir hata olduğunu düşünüyorsanız yöneticiye başvurun.';
+
+  @override
+  String get volunteerWelcome =>
+      'Teşekkürler! Artık bu caminin vakitlerini güncelleyebilirsiniz.';
+
+  @override
+  String get stopEditing => 'Bu camiyi güncellemeyi bırak';
+
+  @override
+  String get reportProblem => 'Sorun bildir';
+
+  @override
+  String get reportTitle => 'Sorun nedir?';
+
+  @override
+  String get reportWrongTime => 'Cemaat vakti yanlış';
+
+  @override
+  String get reportWrongLocation => 'Haritadaki konum yanlış';
+
+  @override
+  String get reportWrongInfo => 'Ad veya bilgiler yanlış';
+
+  @override
+  String get reportClosed => 'Kapalı veya yok';
+
+  @override
+  String get reportDuplicate => 'İki kez listelenmiş';
+
+  @override
+  String get reportOther => 'Başka bir şey';
+
+  @override
+  String get reportNote => 'Ayrıntı (isteğe bağlı) – ör. doğru vakit';
+
+  @override
+  String get reportSend => 'Bildirimi gönder';
+
+  @override
+  String get reportThanks => 'Teşekkürler – yönetici inceleyecek.';
+
+  @override
+  String get volunteers => 'Gönüllü editörler';
+
+  @override
+  String get noVolunteers => 'Henüz gönüllü yok.';
+
+  @override
+  String editorDistance(String distance) {
+    return 'Katıldığında camiye $distance';
+  }
+
+  @override
+  String get removeEditor => 'Kaldır';
+
+  @override
+  String get removeAndBlock => 'Kaldır ve düzenlemeyi engelle';
+
+  @override
+  String lastUpdatedBy(String when, String name) {
+    return '$when güncelledi: $name';
+  }
+
+  @override
+  String get adminReport => 'Rapor';
+
+  @override
+  String get adminProblems => 'Sorunlar';
+
+  @override
+  String get adminEdits => 'Düzenlemeler';
+
+  @override
+  String get statMasjids => 'Camiler';
+
+  @override
+  String get statWithTimes => 'Cemaat vakti olan';
+
+  @override
+  String get statVolunteers => 'Gönüllüler';
+
+  @override
+  String get statOpenReports => 'Açık sorunlar';
+
+  @override
+  String get statPending => 'İnceleme bekliyor';
+
+  @override
+  String get shareReport => 'Raporu paylaş';
+
+  @override
+  String get coverageTitle => 'İlçeye göre';
+
+  @override
+  String get coverageLoad => 'İlçeleri göster';
+
+  @override
+  String get resolve => 'Çözüldü olarak işaretle';
+
+  @override
+  String get revert => 'Değişikliği geri al';
+
+  @override
+  String get reverted => 'Değişiklik geri alındı';
+
+  @override
+  String get editFieldStaff => 'Görevliler';
+
+  @override
+  String get editFieldMaktab => 'Mektep';
+
+  @override
+  String timeLooksWrong(String prayers) {
+    return 'Bu vakitler yanlış görünüyor: $prayers. Lütfen ÖÖ/ÖS\'yi kontrol edin.';
+  }
+
+  @override
+  String get dataCredits =>
+      'Cami konumları: © OpenStreetMap contributors (ODbL). İlçe sınırları: Bangladeş İstatistik Bürosu / OCHA, geoBoundaries (CC BY 3.0 IGO).';
+
+  @override
+  String get fromOsm =>
+      'OpenStreetMap\'ten eklendi (© OpenStreetMap contributors). Vakitleri yakındakiler girer.';
 }

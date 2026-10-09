@@ -207,3 +207,15 @@ HM? normalizeBoardTime(Prayer p, Object? raw) {
   };
   return ok ? HM(h, min) : null;
 }
+
+/// Whether [t] can be [p]'s jamat in Bangladesh, any season (generous).
+bool jamatTimePlausible(Prayer p, HM t) {
+  final h = t.hour;
+  return switch (p) {
+    Prayer.fajr => h >= 3 && h <= 7,
+    Prayer.dhuhr || Prayer.jumuah => h >= 11 && h <= 15,
+    Prayer.asr => h >= 14 && h <= 18,
+    Prayer.maghrib => h >= 16 && h <= 20,
+    Prayer.isha => h >= 18 && h <= 23,
+  };
+}

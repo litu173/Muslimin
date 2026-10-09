@@ -2180,4 +2180,174 @@ class L10nEs extends L10n {
   @override
   String get approxLocation =>
       'Ubicación aproximada – toca para activar la ubicación exacta';
+
+  @override
+  String get signInFirst => 'Primero inicia sesión.';
+
+  @override
+  String get volunteerTitleEmpty => 'Aún no hay horarios de jamaat';
+
+  @override
+  String get volunteerBodyEmpty =>
+      '¿Vives o rezas cerca de esta mezquita? Añade sus horarios de jamaat y mantenlos al día para todos.';
+
+  @override
+  String get volunteerTitle => '¿Rezas aquí con frecuencia?';
+
+  @override
+  String get volunteerBody =>
+      'Ayuda a que los horarios de jamaat de esta mezquita sean correctos.';
+
+  @override
+  String get volunteerButton => 'Quiero actualizar el horario';
+
+  @override
+  String get volunteerCheckTitle => 'Actualizar los horarios de esta mezquita';
+
+  @override
+  String volunteerCheckBody(String km) {
+    return 'Quienes viven cerca de una mezquita pueden actualizar sus horarios. Comprobaremos que estás a menos de $km km – tu ubicación solo se usa para esta comprobación.';
+  }
+
+  @override
+  String get volunteerCheckButton => 'Comprobar mi ubicación';
+
+  @override
+  String get volunteerChecking => 'Comprobando tu ubicación…';
+
+  @override
+  String volunteerTooFar(String distance, String km) {
+    return 'Estás a $distance. Acércate a menos de $km km de la mezquita para actualizar sus horarios.';
+  }
+
+  @override
+  String get volunteerApprox =>
+      'Tu teléfono solo comparte una ubicación aproximada. Activa la ubicación exacta para Muslimin e inténtalo de nuevo.';
+
+  @override
+  String get volunteerBlocked =>
+      'Ahora no puedes actualizar horarios. Contacta con el administrador si es un error.';
+
+  @override
+  String get volunteerWelcome =>
+      '¡Gracias! Ya puedes actualizar los horarios de esta mezquita.';
+
+  @override
+  String get stopEditing => 'Dejar de actualizar esta mezquita';
+
+  @override
+  String get reportProblem => 'Informar de un problema';
+
+  @override
+  String get reportTitle => '¿Qué está mal?';
+
+  @override
+  String get reportWrongTime => 'Horario de jamaat incorrecto';
+
+  @override
+  String get reportWrongLocation => 'Ubicación incorrecta en el mapa';
+
+  @override
+  String get reportWrongInfo => 'Nombre o datos incorrectos';
+
+  @override
+  String get reportClosed => 'Cerrada o no existe';
+
+  @override
+  String get reportDuplicate => 'Aparece dos veces';
+
+  @override
+  String get reportOther => 'Otra cosa';
+
+  @override
+  String get reportNote => 'Detalles (opcional): p. ej. la hora correcta';
+
+  @override
+  String get reportSend => 'Enviar';
+
+  @override
+  String get reportThanks => 'Gracias: el administrador lo revisará.';
+
+  @override
+  String get volunteers => 'Editores voluntarios';
+
+  @override
+  String get noVolunteers => 'Aún no hay voluntarios.';
+
+  @override
+  String editorDistance(String distance) {
+    return 'A $distance de la mezquita al unirse';
+  }
+
+  @override
+  String get removeEditor => 'Quitar';
+
+  @override
+  String get removeAndBlock => 'Quitar y bloquear la edición';
+
+  @override
+  String lastUpdatedBy(String when, String name) {
+    return 'Actualizado $when por $name';
+  }
+
+  @override
+  String get adminReport => 'Informe';
+
+  @override
+  String get adminProblems => 'Problemas';
+
+  @override
+  String get adminEdits => 'Cambios';
+
+  @override
+  String get statMasjids => 'Mezquitas';
+
+  @override
+  String get statWithTimes => 'Con horarios';
+
+  @override
+  String get statVolunteers => 'Voluntarios';
+
+  @override
+  String get statOpenReports => 'Problemas abiertos';
+
+  @override
+  String get statPending => 'Pendientes de revisión';
+
+  @override
+  String get shareReport => 'Compartir informe';
+
+  @override
+  String get coverageTitle => 'Por distrito';
+
+  @override
+  String get coverageLoad => 'Mostrar distritos';
+
+  @override
+  String get resolve => 'Marcar resuelto';
+
+  @override
+  String get revert => 'Deshacer cambio';
+
+  @override
+  String get reverted => 'Cambio deshecho';
+
+  @override
+  String get editFieldStaff => 'Personal';
+
+  @override
+  String get editFieldMaktab => 'Maktab';
+
+  @override
+  String timeLooksWrong(String prayers) {
+    return 'Estos horarios parecen incorrectos: $prayers. Revisa AM/PM.';
+  }
+
+  @override
+  String get dataCredits =>
+      'Ubicación de las mezquitas: © OpenStreetMap contributors (ODbL). Límites de distritos y upazilas: Oficina de Estadística de Bangladés / OCHA vía geoBoundaries (CC BY 3.0 IGO).';
+
+  @override
+  String get fromOsm =>
+      'Añadida desde OpenStreetMap (© OpenStreetMap contributors). Los horarios los añaden vecinos.';
 }

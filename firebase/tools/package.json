@@ -1,0 +1,9 @@
+{
+  "name": "muslimin-tools",
+  "private": true,
+  "type": "module",
+  "description": "One-off admin scripts (masjid import). Run with Node 20+.",
+  "dependencies": {
+    "firebase-admin": "^13.0.0"
+  }
+}

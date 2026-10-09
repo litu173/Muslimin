@@ -261,6 +261,11 @@ final allMasjidsProvider = StreamProvider<List<Masjid>>((ref) {
   return ref.watch(backendProvider).allMasjids(loc.lat, loc.lng);
 });
 
+/// Masjids anywhere whose name starts with the text ("View All" search).
+final searchMasjidsProvider = FutureProvider.family<List<Masjid>, String>(
+  (ref, q) => ref.watch(backendProvider).searchMasjids(q),
+);
+
 final masjidProvider = StreamProvider.family<Masjid?, String>(
   (ref, id) => ref.watch(backendProvider).watchMasjid(id),
 );
