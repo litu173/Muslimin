@@ -295,20 +295,37 @@ class AchievementsScreen extends ConsumerWidget {
     final f = Fmt.of(context);
     final earnedAt = p.achievedAt[a.id];
     final done = a.progress(p).clamp(0, a.target);
+    // Full-width sheet from the bottom edge (no side gaps, any screen).
     showModalBottomSheet<void>(
       context: context,
       useSafeArea: true,
+      constraints: const BoxConstraints(maxWidth: double.infinity),
       builder: (ctx) => Container(
+        width: double.infinity,
         decoration: BoxDecoration(
           color: AppColors.card,
           borderRadius: BorderRadius.vertical(
             top: Radius.circular(Radii.sheet),
           ),
         ),
-        padding: const EdgeInsets.fromLTRB(Gap.xl, Gap.xl, Gap.xl, Gap.xxl),
+        padding: EdgeInsets.fromLTRB(
+          Gap.xl,
+          Gap.m,
+          Gap.xl,
+          Gap.xxl + MediaQuery.paddingOf(ctx).bottom,
+        ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            Container(
+              width: 40,
+              height: 4,
+              margin: const EdgeInsets.only(bottom: Gap.l),
+              decoration: BoxDecoration(
+                color: AppColors.muted.withValues(alpha: 0.35),
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
             TweenAnimationBuilder<double>(
               tween: Tween(begin: 0.6, end: 1),
               duration: const Duration(milliseconds: 600),
