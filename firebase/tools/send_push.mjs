@@ -22,6 +22,17 @@ initializeApp(
       : { credential: applicationDefault(), projectId },
 );
 const db = getFirestore();
+
+// Out of the free plan's daily reads: skip this run quietly (no failed run
+// e-mails); the next run after the daily reset sends everything new.
+process.on('unhandledRejection', (e) => {
+  if (e?.code === 8 || /RESOURCE_EXHAUSTED|Quota exceeded/.test(String(e))) {
+    console.log('Daily Firestore quota used up – skipping until it resets.');
+    process.exit(0);
+  }
+  console.error(e);
+  process.exit(1);
+});
 const fcm = getMessaging();
 const dryRun = process.argv.includes('--dry-run') || !!process.env.FIRESTORE_EMULATOR_HOST;
 
