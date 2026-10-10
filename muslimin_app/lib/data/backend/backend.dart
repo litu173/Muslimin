@@ -74,9 +74,9 @@ abstract class Backend {
   /// Approved masjids within [radiusKm] of the point.
   Stream<List<Masjid>> nearbyMasjids(double lat, double lng, double radiusKm);
 
-  /// Approved masjids around the point, nearest first ("View All"). Limited
-  /// to [kAllMasjidsRadiusKm] – there are thousands across the country.
-  Stream<List<Masjid>> allMasjids(double lat, double lng);
+  /// Approved masjids of one thana / upazila ("All Masjids"); the screen
+  /// sorts them nearest first. One thana at a time keeps the reads small.
+  Stream<List<Masjid>> masjidsInThana(String district, String thana);
 
   /// Approved masjids whose name starts with [prefix] (anywhere).
   Future<List<Masjid>> searchMasjids(String prefix, {int limit = 30});
@@ -124,6 +124,16 @@ abstract class Backend {
 
   /// Removes an editor; [block] also stops them volunteering again.
   Future<void> removeEditor(String masjidId, String uid, {bool block = false});
+
+  // ---- Missing masjids ----
+  /// A user pins a masjid that is not in the app; the admin approves it.
+  Future<void> suggestMasjid(MasjidSuggestion s);
+  Stream<List<MasjidSuggestion>> openSuggestions();
+
+  /// Admin: creates the masjid (approved, owned by the admin) and makes the
+  /// person who suggested it its volunteer editor.
+  Future<void> approveSuggestion(MasjidSuggestion s);
+  Future<void> rejectSuggestion(String id);
 
   // ---- Reports ----
   /// One report per user and masjid; reporting again replaces it.
@@ -190,9 +200,6 @@ const kMaxMasjidsPerUser = 3;
 
 /// Required GPS accuracy (metres) while registering a masjid.
 const kRequiredAccuracyM = 50.0;
-
-/// "View All" covers masjids within this distance.
-const kAllMasjidsRadiusKm = 3.0;
 
 /// Any existing masjid closer than this is treated as a potential duplicate.
 const kDuplicateRadiusM = 40.0;

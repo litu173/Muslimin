@@ -2309,4 +2309,59 @@ class L10nAr extends L10n {
   @override
   String get fromOsm =>
       'أُضيف من OpenStreetMap (© OpenStreetMap contributors). يضيف الأوقات أهل الحي.';
+
+  @override
+  String get jumuahNote => 'يوم الجمعة، بدلاً من الظهر';
+
+  @override
+  String get chooseThana => 'اختر المنطقة';
+
+  @override
+  String get chooseThanaHint => 'يعرض مساجد تلك المنطقة – يبقى موقعك كما هو.';
+
+  @override
+  String get searchThana => 'ابحث عن منطقة';
+
+  @override
+  String get myThana => 'موقعك الحالي';
+
+  @override
+  String get missingMasjidTitle => 'المسجد غير موجود؟';
+
+  @override
+  String get missingMasjidBody =>
+      'أضف مسجداً قريباً غير مدرج – حدده على الخريطة واكتب اسمه.';
+
+  @override
+  String get addMissingMasjid => 'إضافة مسجد';
+
+  @override
+  String alreadyListed(String name) {
+    return '\"$name\" موجود بالفعل في هذا الموقع.';
+  }
+
+  @override
+  String get openIt => 'فتحه';
+
+  @override
+  String get addAnyway => 'مسجد آخر';
+
+  @override
+  String get suggestReviewNote =>
+      'يراجعه المشرف قبل ظهوره. بعد الموافقة يمكنك إضافة أوقات الجماعة.';
+
+  @override
+  String get suggestNameShort => 'يرجى كتابة اسم المسجد.';
+
+  @override
+  String get suggestThanks => 'شكراً! سيضيفه المشرف قريباً.';
+
+  @override
+  String get adminNewMasjids => 'مساجد جديدة';
+
+  @override
+  String get seeOnMap => 'الخريطة';
+
+  @override
+  String get noMasjidInThana => 'لا توجد مساجد مدرجة في هذه المنطقة بعد.';
 }

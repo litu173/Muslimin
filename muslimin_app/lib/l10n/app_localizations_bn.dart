@@ -2317,4 +2317,60 @@ class L10nBn extends L10n {
   @override
   String get fromOsm =>
       'OpenStreetMap থেকে যোগ করা (© OpenStreetMap contributors)। সময় যোগ করেন আশেপাশের মানুষ।';
+
+  @override
+  String get jumuahNote => 'শুক্রবার, যোহরের পরিবর্তে';
+
+  @override
+  String get chooseThana => 'থানা বেছে নিন';
+
+  @override
+  String get chooseThanaHint =>
+      'সেই থানার মসজিদ দেখাবে – আপনার অবস্থান বদলাবে না।';
+
+  @override
+  String get searchThana => 'থানা বা জেলা খুঁজুন';
+
+  @override
+  String get myThana => 'আপনি এখন যেখানে আছেন';
+
+  @override
+  String get missingMasjidTitle => 'মসজিদ খুঁজে পাচ্ছেন না?';
+
+  @override
+  String get missingMasjidBody =>
+      'আশেপাশের কোনো মসজিদ তালিকায় না থাকলে যোগ করুন – মানচিত্রে পিন দিন ও নাম লিখুন।';
+
+  @override
+  String get addMissingMasjid => 'মসজিদ যোগ করুন';
+
+  @override
+  String alreadyListed(String name) {
+    return 'এই জায়গায় \"$name\" আগে থেকেই অ্যাপে আছে।';
+  }
+
+  @override
+  String get openIt => 'খুলুন';
+
+  @override
+  String get addAnyway => 'এটা আলাদা মসজিদ';
+
+  @override
+  String get suggestReviewNote =>
+      'অ্যাপে দেখানোর আগে অ্যাডমিন যাচাই করবেন। অনুমোদনের পর আপনি জামাতের সময় যোগ করতে পারবেন।';
+
+  @override
+  String get suggestNameShort => 'মসজিদের নাম লিখুন।';
+
+  @override
+  String get suggestThanks => 'ধন্যবাদ! অ্যাডমিন শীঘ্রই যোগ করবেন।';
+
+  @override
+  String get adminNewMasjids => 'নতুন মসজিদ';
+
+  @override
+  String get seeOnMap => 'মানচিত্র';
+
+  @override
+  String get noMasjidInThana => 'এই থানায় এখনো কোনো মসজিদ তালিকায় নেই।';
 }

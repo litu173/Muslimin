@@ -2340,4 +2340,60 @@ class L10nUr extends L10n {
   @override
   String get fromOsm =>
       'OpenStreetMap سے شامل کیا گیا (© OpenStreetMap contributors)۔ اوقات آس پاس کے لوگ شامل کرتے ہیں۔';
+
+  @override
+  String get jumuahNote => 'جمعہ کے دن، ظہر کی جگہ';
+
+  @override
+  String get chooseThana => 'تھانہ منتخب کریں';
+
+  @override
+  String get chooseThanaHint =>
+      'اس تھانے کی مساجد دکھائے گا – آپ کا مقام نہیں بدلے گا۔';
+
+  @override
+  String get searchThana => 'تھانہ یا ضلع تلاش کریں';
+
+  @override
+  String get myThana => 'آپ ابھی جہاں ہیں';
+
+  @override
+  String get missingMasjidTitle => 'مسجد نہیں ملی؟';
+
+  @override
+  String get missingMasjidBody =>
+      'قریب کی کوئی مسجد فہرست میں نہیں؟ نقشے پر نشان لگائیں اور نام لکھیں۔';
+
+  @override
+  String get addMissingMasjid => 'مسجد شامل کریں';
+
+  @override
+  String alreadyListed(String name) {
+    return 'اس جگہ \"$name\" پہلے سے ایپ میں ہے۔';
+  }
+
+  @override
+  String get openIt => 'کھولیں';
+
+  @override
+  String get addAnyway => 'یہ دوسری مسجد ہے';
+
+  @override
+  String get suggestReviewNote =>
+      'ایپ میں دکھانے سے پہلے ایڈمن جانچیں گے۔ منظوری کے بعد آپ جماعت کے اوقات شامل کر سکیں گے۔';
+
+  @override
+  String get suggestNameShort => 'مسجد کا نام لکھیں۔';
+
+  @override
+  String get suggestThanks => 'شکریہ! ایڈمن جلد شامل کریں گے۔';
+
+  @override
+  String get adminNewMasjids => 'نئی مساجد';
+
+  @override
+  String get seeOnMap => 'نقشہ';
+
+  @override
+  String get noMasjidInThana => 'اس تھانے میں ابھی کوئی مسجد درج نہیں۔';
 }

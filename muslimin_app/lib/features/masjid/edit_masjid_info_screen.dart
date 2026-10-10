@@ -10,6 +10,7 @@ import '../../core/widgets/form_fields.dart';
 import '../../core/widgets/surfaces.dart';
 import '../../data/backend/backend.dart' show kRequiredAccuracyM;
 import '../../data/bd_districts.dart';
+import '../../services/thana_service.dart';
 import '../../data/models/masjid.dart';
 import '../../l10n/app_localizations.dart';
 import '../../services/location_service.dart';
@@ -103,14 +104,16 @@ class _EditMasjidInfoScreenState extends ConsumerState<EditMasjidInfoScreen> {
     }
     setState(() => _saving = true);
     try {
+      // District and thana as the "All Masjids" lists know them.
+      final area = (await ThanaService.load()).at(_fix.lat, _fix.lng);
       await ref
           .read(backendProvider)
           .updateInfo(
             widget.masjid.id,
             name: _name.text.trim(),
             nameBn: _nameBn.text.trim(),
-            district: _district ?? '',
-            thana: _thana.text.trim(),
+            district: area?.district ?? _district ?? '',
+            thana: area?.name ?? _thana.text.trim(),
             address: _address.text.trim(),
             location: _moved
                 ? (_fix.lat, _fix.lng, _fix.fromMap ? 0 : _fix.accuracy)

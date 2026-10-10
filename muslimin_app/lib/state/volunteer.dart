@@ -42,3 +42,8 @@ final adminStatsProvider = FutureProvider<AdminStats>(
   (ref) => ref.watch(backendProvider).adminStats(),
   retry: _noRetry,
 );
+
+final openSuggestionsProvider = StreamProvider<List<MasjidSuggestion>>(
+  (ref) => ref.watch(backendProvider).openSuggestions(),
+  retry: _noRetry,
+);

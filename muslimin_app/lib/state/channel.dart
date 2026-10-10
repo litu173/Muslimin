@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/misc.dart' show ProviderListenable;
 
 import '../data/models/channel.dart';
 import '../data/models/masjid.dart';
+import '../data/models/notice.dart';
+import 'follows.dart';
 import '../services/notification_service.dart';
 import 'providers.dart';
 
@@ -40,11 +42,23 @@ final _channelRole = Provider.family<ChannelRole?, (String, String)>((
   return ref.watch(channelMembershipProvider(masjidId)).value?.role;
 });
 
+/// Re-opened whenever my membership changes (joined, left, new role), so a
+/// refused read from before joining doesn't stick.
 final channelMessagesProvider =
-    StreamProvider.family<List<ChannelMessage>, String>(
-      (ref, masjidId) => ref.watch(backendProvider).channelMessages(masjidId),
-      retry: _noRetry,
-    );
+    StreamProvider.family<List<ChannelMessage>, String>((ref, masjidId) {
+      ref.watch(
+        channelMembershipProvider(masjidId)
+            .select((m) => m.value?.role.name ?? (m.isLoading ? '…' : '')),
+      );
+      return ref.watch(backendProvider).channelMessages(masjidId);
+    }, retry: _retryRefused);
+
+/// A read refused right after joining (the server not caught up yet): try
+/// again a few times; other errors fail straight away.
+Duration? _retryRefused(int count, Object error) =>
+    isPermissionError(error) && count < 3
+    ? Duration(seconds: 1 + count * 2)
+    : null;
 
 final channelMembersProvider =
     StreamProvider.family<List<ChannelMember>, String>(
@@ -112,6 +126,80 @@ final channelNotifierProvider = Provider<void>((ref) {
         m.text,
         payload: 'masjid:${m.masjidId}',
       );
+    }
+  }, fireImmediately: true);
+});
+
+// ------------------------------------------------------------------- inbox
+/// Notices from the masjids I follow, newest first.
+final followedNoticesProvider = Provider<List<Notice>>((ref) {
+  final ids = ref.watch(followsProvider).keys;
+  if (ids.isEmpty) return const [];
+  return ref.watch(noticesProvider(noticeKey(ids))).value ?? const [];
+});
+
+/// When the notifications page was last opened.
+final inboxOpenedProvider = NotifierProvider<InboxOpened, int>(InboxOpened.new);
+
+class InboxOpened extends Notifier<int> {
+  @override
+  int build() {
+    final p = ref.read(prefsProvider);
+    // First run: older items are not "new".
+    if (p.inboxOpenedAt == 0) {
+      p.inboxOpenedAt = DateTime.now().millisecondsSinceEpoch;
+    }
+    return p.inboxOpenedAt;
+  }
+
+  void markRead() {
+    final now = DateTime.now().millisecondsSinceEpoch;
+    ref.read(prefsProvider).inboxOpenedAt = now;
+    state = now;
+  }
+}
+
+/// The number on the bell: notices and channel messages since the
+/// notifications page was last opened.
+final unreadCountProvider = Provider<int>((ref) {
+  final since = ref.watch(inboxOpenedProvider);
+  bool fresh(DateTime d) => d.millisecondsSinceEpoch > since;
+  return ref
+          .watch(followedNoticesProvider)
+          .where((n) => fresh(n.createdAt))
+          .length +
+      ref.watch(channelInboxProvider).where((m) => fresh(m.createdAt)).length;
+});
+
+/// While the app is open (or kept alive in the background): a phone
+/// notification for each new notice from a followed masjid – and the
+/// channel topics re-subscribed (new phone, reinstall).
+final noticeNotifierProvider = Provider<void>((ref) {
+  final prefs = ref.read(prefsProvider);
+  ref.listen(followedNoticesProvider, (prev, next) {
+    if (next.isEmpty) return;
+    final seen = prefs.noticeSeenAt;
+    if (seen == 0) {
+      prefs.noticeSeenAt = next.first.createdAt.millisecondsSinceEpoch;
+      return;
+    }
+    final fresh = next
+        .where((n) => n.createdAt.millisecondsSinceEpoch > seen)
+        .toList();
+    if (fresh.isEmpty) return;
+    prefs.noticeSeenAt = fresh.first.createdAt.millisecondsSinceEpoch;
+    for (final n in fresh.reversed.take(3)) {
+      NotificationService.instance.show(
+        n.id.hashCode,
+        n.masjidName,
+        n.title,
+        payload: 'masjid:${n.masjidId}',
+      );
+    }
+  }, fireImmediately: true);
+  ref.listen(myChannelsProvider, (prev, next) {
+    for (final c in next.value ?? const <ChannelMember>[]) {
+      ref.read(pushProvider).joinChannel(c.masjidId);
     }
   }, fireImmediately: true);
 });

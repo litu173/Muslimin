@@ -4244,6 +4244,108 @@ abstract class L10n {
   /// In en, this message translates to:
   /// **'Added from OpenStreetMap (© OpenStreetMap contributors). Times are filled in by people nearby.'**
   String get fromOsm;
+
+  /// No description provided for @jumuahNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Fridays, in place of Dhuhr'**
+  String get jumuahNote;
+
+  /// No description provided for @chooseThana.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose thana'**
+  String get chooseThana;
+
+  /// No description provided for @chooseThanaHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Shows that thana\'s masjids – your location stays the same.'**
+  String get chooseThanaHint;
+
+  /// No description provided for @searchThana.
+  ///
+  /// In en, this message translates to:
+  /// **'Search thana or district'**
+  String get searchThana;
+
+  /// No description provided for @myThana.
+  ///
+  /// In en, this message translates to:
+  /// **'Where you are now'**
+  String get myThana;
+
+  /// No description provided for @missingMasjidTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Masjid missing?'**
+  String get missingMasjidTitle;
+
+  /// No description provided for @missingMasjidBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a masjid near you that isn\'t listed – pin it on the map and give its name.'**
+  String get missingMasjidBody;
+
+  /// No description provided for @addMissingMasjid.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a missing masjid'**
+  String get addMissingMasjid;
+
+  /// No description provided for @alreadyListed.
+  ///
+  /// In en, this message translates to:
+  /// **'\"{name}\" is already in the app at this spot.'**
+  String alreadyListed(String name);
+
+  /// No description provided for @openIt.
+  ///
+  /// In en, this message translates to:
+  /// **'Open it'**
+  String get openIt;
+
+  /// No description provided for @addAnyway.
+  ///
+  /// In en, this message translates to:
+  /// **'It\'s a different masjid'**
+  String get addAnyway;
+
+  /// No description provided for @suggestReviewNote.
+  ///
+  /// In en, this message translates to:
+  /// **'The admin checks it before it shows in the app. Once approved you can add its jamat times.'**
+  String get suggestReviewNote;
+
+  /// No description provided for @suggestNameShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Please write the masjid\'s name.'**
+  String get suggestNameShort;
+
+  /// No description provided for @suggestThanks.
+  ///
+  /// In en, this message translates to:
+  /// **'Thank you! The admin will add it soon.'**
+  String get suggestThanks;
+
+  /// No description provided for @adminNewMasjids.
+  ///
+  /// In en, this message translates to:
+  /// **'New masjids'**
+  String get adminNewMasjids;
+
+  /// No description provided for @seeOnMap.
+  ///
+  /// In en, this message translates to:
+  /// **'Map'**
+  String get seeOnMap;
+
+  /// No description provided for @noMasjidInThana.
+  ///
+  /// In en, this message translates to:
+  /// **'No masjids listed in this thana yet.'**
+  String get noMasjidInThana;
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {

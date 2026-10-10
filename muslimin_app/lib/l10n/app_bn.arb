@@ -688,5 +688,22 @@
   "editFieldMaktab": "মক্তব",
   "timeLooksWrong": "এই সময়গুলো ভুল মনে হচ্ছে: {prayers}। AM/PM দেখে নিন।",
   "dataCredits": "মসজিদের অবস্থান: © OpenStreetMap contributors (ODbL)। জেলা ও উপজেলার সীমানা: বাংলাদেশ পরিসংখ্যান ব্যুরো / OCHA, geoBoundaries (CC BY 3.0 IGO)।",
-  "fromOsm": "OpenStreetMap থেকে যোগ করা (© OpenStreetMap contributors)। সময় যোগ করেন আশেপাশের মানুষ।"
+  "fromOsm": "OpenStreetMap থেকে যোগ করা (© OpenStreetMap contributors)। সময় যোগ করেন আশেপাশের মানুষ।",
+  "jumuahNote": "শুক্রবার, যোহরের পরিবর্তে",
+  "chooseThana": "থানা বেছে নিন",
+  "chooseThanaHint": "সেই থানার মসজিদ দেখাবে – আপনার অবস্থান বদলাবে না।",
+  "searchThana": "থানা বা জেলা খুঁজুন",
+  "myThana": "আপনি এখন যেখানে আছেন",
+  "missingMasjidTitle": "মসজিদ খুঁজে পাচ্ছেন না?",
+  "missingMasjidBody": "আশেপাশের কোনো মসজিদ তালিকায় না থাকলে যোগ করুন – মানচিত্রে পিন দিন ও নাম লিখুন।",
+  "addMissingMasjid": "মসজিদ যোগ করুন",
+  "alreadyListed": "এই জায়গায় \"{name}\" আগে থেকেই অ্যাপে আছে।",
+  "openIt": "খুলুন",
+  "addAnyway": "এটা আলাদা মসজিদ",
+  "suggestReviewNote": "অ্যাপে দেখানোর আগে অ্যাডমিন যাচাই করবেন। অনুমোদনের পর আপনি জামাতের সময় যোগ করতে পারবেন।",
+  "suggestNameShort": "মসজিদের নাম লিখুন।",
+  "suggestThanks": "ধন্যবাদ! অ্যাডমিন শীঘ্রই যোগ করবেন।",
+  "adminNewMasjids": "নতুন মসজিদ",
+  "seeOnMap": "মানচিত্র",
+  "noMasjidInThana": "এই থানায় এখনো কোনো মসজিদ তালিকায় নেই।"
 }

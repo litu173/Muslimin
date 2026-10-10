@@ -28,10 +28,16 @@ class AllPrayersScreen extends ConsumerWidget {
     final loc = ref.watch(locationProvider).value;
     final cream = AppColors.onHeader;
 
-    bool isNow(Prayer p) =>
-        waqt?.isCurrent == true &&
-        (waqt!.prayer == p ||
-            (waqt.prayer == Prayer.jumuah && p == Prayer.dhuhr));
+    final friday = DateTime.now().weekday == DateTime.friday;
+    // On Fridays the midday "Now" belongs to Jum'ah.
+    bool isNow(Prayer p) {
+      if (waqt?.isCurrent != true) return false;
+      final midday =
+          waqt!.prayer == Prayer.dhuhr || waqt.prayer == Prayer.jumuah;
+      if (p == Prayer.jumuah) return midday && friday;
+      if (p == Prayer.dhuhr) return midday && !friday;
+      return waqt.prayer == p;
+    }
 
     return Scaffold(
       appBar: PatternAppBar(
@@ -83,6 +89,21 @@ class AllPrayersScreen extends ConsumerWidget {
                               endIndent: Gap.l,
                               color: AppColors.gold.withValues(alpha: 0.25),
                             ),
+                          // Jum'ah: Fridays, in Dhuhr's time.
+                          if (e.key == Prayer.dhuhr) ...[
+                            _PrayerRow(
+                              name: f.prayer(Prayer.jumuah),
+                              note: t.jumuahNote,
+                              time: f.range(e.value.start, e.value.end),
+                              now: isNow(Prayer.jumuah) ? t.now : null,
+                            ),
+                            Divider(
+                              height: 1,
+                              indent: Gap.l,
+                              endIndent: Gap.l,
+                              color: AppColors.gold.withValues(alpha: 0.25),
+                            ),
+                          ],
                         ],
                       ],
                     ),
@@ -190,10 +211,18 @@ class AllPrayersScreen extends ConsumerWidget {
 }
 
 class _PrayerRow extends StatelessWidget {
-  const _PrayerRow({required this.name, required this.time, this.now});
+  const _PrayerRow({
+    required this.name,
+    required this.time,
+    this.now,
+    this.note,
+  });
 
   final String name;
   final String time;
+
+  /// Small line under the name ("Fridays, in place of Dhuhr").
+  final String? note;
 
   /// "Now" label when this is the current waqt.
   final String? now;
@@ -206,12 +235,22 @@ class _PrayerRow extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: Gap.m, vertical: 14),
       child: Row(
         children: [
-          Text(
-            name,
-            style: AppText.subtitle.copyWith(
-              color: AppColors.ink,
-              fontWeight: FontWeight.w600,
-            ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                name,
+                style: AppText.subtitle.copyWith(
+                  color: AppColors.ink,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              if (note != null)
+                Text(
+                  note!,
+                  style: AppText.micro.copyWith(color: AppColors.muted),
+                ),
+            ],
           ),
           if (current) ...[
             const SizedBox(width: Gap.s),

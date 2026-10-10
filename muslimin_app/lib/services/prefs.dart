@@ -58,6 +58,15 @@ class Prefs {
   int get channelSeenAt => _p.getInt('channelSeenAt') ?? 0;
   set channelSeenAt(int v) => _p.setInt('channelSeenAt', v);
 
+  /// Newest notice already shown as a notification (ms epoch).
+  int get noticeSeenAt => _p.getInt('noticeSeenAt') ?? 0;
+  set noticeSeenAt(int v) => _p.setInt('noticeSeenAt', v);
+
+  /// When the notifications page was last opened (ms epoch): anything
+  /// newer counts on the bell's badge.
+  int get inboxOpenedAt => _p.getInt('inboxOpenedAt') ?? 0;
+  set inboxOpenedAt(int v) => _p.setInt('inboxOpenedAt', v);
+
   int get reciter => _p.getInt('reciter') ?? 7;
   set reciter(int v) => _p.setInt('reciter', v);
 

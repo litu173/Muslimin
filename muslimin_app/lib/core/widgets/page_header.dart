@@ -15,12 +15,17 @@ class AppSearchField extends StatelessWidget {
     required this.hint,
     required this.onChanged,
     this.autofocus = false,
+    this.iconRight = false,
   });
 
   final TextEditingController controller;
   final String hint;
   final ValueChanged<String> onChanged;
   final bool autofocus;
+
+  /// Search icon at the right end (where the clear button shows once
+  /// something is typed) instead of the left.
+  final bool iconRight;
 
   @override
   Widget build(BuildContext context) {
@@ -41,11 +46,18 @@ class AppSearchField extends StatelessWidget {
         hintStyle: AppText.body.copyWith(color: AppColors.muted),
         isDense: true,
         contentPadding: const EdgeInsets.symmetric(vertical: 12),
-        prefixIcon: Icon(Icons.search_rounded, color: AppColors.muted),
+        prefixIcon: iconRight
+            ? const SizedBox(width: Gap.l)
+            : Icon(Icons.search_rounded, color: AppColors.muted),
+        prefixIconConstraints: iconRight
+            ? const BoxConstraints(minWidth: Gap.l)
+            : null,
         suffixIcon: ValueListenableBuilder(
           valueListenable: controller,
           builder: (_, v, _) => v.text.isEmpty
-              ? const SizedBox.shrink()
+              ? (iconRight
+                    ? Icon(Icons.search_rounded, color: AppColors.muted)
+                    : const SizedBox.shrink())
               : IconButton(
                   tooltip: MaterialLocalizations.of(context)
                       .deleteButtonTooltip,

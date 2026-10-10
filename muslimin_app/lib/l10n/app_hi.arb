@@ -688,5 +688,22 @@
   "editFieldMaktab": "मकतब",
   "timeLooksWrong": "ये समय गलत लगते हैं: {prayers}। कृपया AM/PM जाँच लें।",
   "dataCredits": "मस्जिदों के स्थान: © OpenStreetMap contributors (ODbL)। ज़िला और उपज़िला सीमाएँ: बांग्लादेश सांख्यिकी ब्यूरो / OCHA, geoBoundaries (CC BY 3.0 IGO)।",
-  "fromOsm": "OpenStreetMap से जोड़ा गया (© OpenStreetMap contributors)। समय आसपास के लोग जोड़ते हैं।"
+  "fromOsm": "OpenStreetMap से जोड़ा गया (© OpenStreetMap contributors)। समय आसपास के लोग जोड़ते हैं।",
+  "jumuahNote": "शुक्रवार, ज़ुहर की जगह",
+  "chooseThana": "थाना चुनें",
+  "chooseThanaHint": "उस थाने की मस्जिदें दिखेंगी – आपका स्थान नहीं बदलेगा।",
+  "searchThana": "थाना या ज़िला खोजें",
+  "myThana": "आप अभी जहाँ हैं",
+  "missingMasjidTitle": "मस्जिद नहीं मिली?",
+  "missingMasjidBody": "पास की कोई मस्जिद सूची में नहीं? नक्शे पर पिन करें और नाम लिखें।",
+  "addMissingMasjid": "मस्जिद जोड़ें",
+  "alreadyListed": "इस जगह \"{name}\" पहले से ऐप में है।",
+  "openIt": "खोलें",
+  "addAnyway": "यह अलग मस्जिद है",
+  "suggestReviewNote": "ऐप में दिखाने से पहले एडमिन जाँचेंगे। मंज़ूरी के बाद आप जमात का समय जोड़ सकेंगे।",
+  "suggestNameShort": "मस्जिद का नाम लिखें।",
+  "suggestThanks": "धन्यवाद! एडमिन जल्द जोड़ेंगे।",
+  "adminNewMasjids": "नई मस्जिदें",
+  "seeOnMap": "नक्शा",
+  "noMasjidInThana": "इस थाने में अभी कोई मस्जिद दर्ज नहीं।"
 }

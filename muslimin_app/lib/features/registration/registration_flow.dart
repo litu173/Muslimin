@@ -16,6 +16,7 @@ import '../../core/widgets/form_fields.dart';
 import '../../core/widgets/surfaces.dart';
 import '../../data/backend/backend.dart';
 import '../../data/bd_districts.dart';
+import '../../services/thana_service.dart';
 import '../../data/models/masjid.dart';
 import '../../l10n/app_localizations.dart';
 import 'location_field.dart';
@@ -286,6 +287,14 @@ class _RegistrationFlowState extends ConsumerState<RegistrationFlow> {
     }
     setState(() => _busy = true);
     try {
+      // District and thana as the "All Masjids" lists know them, from the
+      // masjid's own position (what was typed is kept in the address).
+      final area = (await ThanaService.load()).at(_fix!.lat, _fix!.lng);
+      final typed = _thana.text.trim();
+      final address = [
+        _address.text.trim(),
+        if (area != null && typed.isNotEmpty && typed != area.name) typed,
+      ].where((s) => s.isNotEmpty).join(', ');
       await ref
           .read(backendProvider)
           .createMasjid(
@@ -293,9 +302,9 @@ class _RegistrationFlowState extends ConsumerState<RegistrationFlow> {
               id: '',
               name: _name.text.trim(),
               nameBn: _nameBn.text.trim(),
-              address: _address.text.trim(),
-              district: _district ?? '',
-              thana: _thana.text.trim(),
+              address: address,
+              district: area?.district ?? _district ?? '',
+              thana: area?.name ?? typed,
               lat: _fix!.lat,
               lng: _fix!.lng,
               status: MasjidStatus.pending,

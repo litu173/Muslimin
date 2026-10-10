@@ -2335,4 +2335,60 @@ class L10nEn extends L10n {
   @override
   String get fromOsm =>
       'Added from OpenStreetMap (© OpenStreetMap contributors). Times are filled in by people nearby.';
+
+  @override
+  String get jumuahNote => 'Fridays, in place of Dhuhr';
+
+  @override
+  String get chooseThana => 'Choose thana';
+
+  @override
+  String get chooseThanaHint =>
+      'Shows that thana\'s masjids – your location stays the same.';
+
+  @override
+  String get searchThana => 'Search thana or district';
+
+  @override
+  String get myThana => 'Where you are now';
+
+  @override
+  String get missingMasjidTitle => 'Masjid missing?';
+
+  @override
+  String get missingMasjidBody =>
+      'Add a masjid near you that isn\'t listed – pin it on the map and give its name.';
+
+  @override
+  String get addMissingMasjid => 'Add a missing masjid';
+
+  @override
+  String alreadyListed(String name) {
+    return '\"$name\" is already in the app at this spot.';
+  }
+
+  @override
+  String get openIt => 'Open it';
+
+  @override
+  String get addAnyway => 'It\'s a different masjid';
+
+  @override
+  String get suggestReviewNote =>
+      'The admin checks it before it shows in the app. Once approved you can add its jamat times.';
+
+  @override
+  String get suggestNameShort => 'Please write the masjid\'s name.';
+
+  @override
+  String get suggestThanks => 'Thank you! The admin will add it soon.';
+
+  @override
+  String get adminNewMasjids => 'New masjids';
+
+  @override
+  String get seeOnMap => 'Map';
+
+  @override
+  String get noMasjidInThana => 'No masjids listed in this thana yet.';
 }

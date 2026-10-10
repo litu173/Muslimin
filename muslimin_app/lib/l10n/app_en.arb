@@ -1192,5 +1192,29 @@
     }
   },
   "dataCredits": "Masjid locations: © OpenStreetMap contributors (ODbL). District and upazila boundaries: Bangladesh Bureau of Statistics / OCHA via geoBoundaries (CC BY 3.0 IGO).",
-  "fromOsm": "Added from OpenStreetMap (© OpenStreetMap contributors). Times are filled in by people nearby."
+  "fromOsm": "Added from OpenStreetMap (© OpenStreetMap contributors). Times are filled in by people nearby.",
+  "jumuahNote": "Fridays, in place of Dhuhr",
+  "chooseThana": "Choose thana",
+  "chooseThanaHint": "Shows that thana's masjids – your location stays the same.",
+  "searchThana": "Search thana or district",
+  "myThana": "Where you are now",
+  "missingMasjidTitle": "Masjid missing?",
+  "missingMasjidBody": "Add a masjid near you that isn't listed – pin it on the map and give its name.",
+  "addMissingMasjid": "Add a missing masjid",
+  "alreadyListed": "\"{name}\" is already in the app at this spot.",
+  "openIt": "Open it",
+  "addAnyway": "It's a different masjid",
+  "suggestReviewNote": "The admin checks it before it shows in the app. Once approved you can add its jamat times.",
+  "suggestNameShort": "Please write the masjid's name.",
+  "suggestThanks": "Thank you! The admin will add it soon.",
+  "adminNewMasjids": "New masjids",
+  "seeOnMap": "Map",
+  "@alreadyListed": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "noMasjidInThana": "No masjids listed in this thana yet."
 }

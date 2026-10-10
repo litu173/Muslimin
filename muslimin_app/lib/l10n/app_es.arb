@@ -688,5 +688,22 @@
   "editFieldMaktab": "Maktab",
   "timeLooksWrong": "Estos horarios parecen incorrectos: {prayers}. Revisa AM/PM.",
   "dataCredits": "Ubicación de las mezquitas: © OpenStreetMap contributors (ODbL). Límites de distritos y upazilas: Oficina de Estadística de Bangladés / OCHA vía geoBoundaries (CC BY 3.0 IGO).",
-  "fromOsm": "Añadida desde OpenStreetMap (© OpenStreetMap contributors). Los horarios los añaden vecinos."
+  "fromOsm": "Añadida desde OpenStreetMap (© OpenStreetMap contributors). Los horarios los añaden vecinos.",
+  "jumuahNote": "Los viernes, en lugar del Dhuhr",
+  "chooseThana": "Elegir zona",
+  "chooseThanaHint": "Muestra las mezquitas de esa zona; tu ubicación no cambia.",
+  "searchThana": "Buscar zona o distrito",
+  "myThana": "Donde estás ahora",
+  "missingMasjidTitle": "¿Falta una mezquita?",
+  "missingMasjidBody": "Añade una mezquita cercana que no aparece: márcala en el mapa y pon su nombre.",
+  "addMissingMasjid": "Añadir mezquita",
+  "alreadyListed": "\"{name}\" ya está en este lugar.",
+  "openIt": "Abrir",
+  "addAnyway": "Es otra mezquita",
+  "suggestReviewNote": "El administrador la revisa antes de mostrarla. Una vez aprobada podrás añadir sus horarios.",
+  "suggestNameShort": "Escribe el nombre de la mezquita.",
+  "suggestThanks": "¡Gracias! El administrador la añadirá pronto.",
+  "adminNewMasjids": "Nuevas mezquitas",
+  "seeOnMap": "Mapa",
+  "noMasjidInThana": "Aún no hay mezquitas en esta zona."
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../core/nav.dart';
 import '../../core/theme/app_colors.dart';
@@ -420,6 +421,102 @@ class AdminEditsTab extends ConsumerWidget {
                                 }
                               },
                             ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+        );
+  }
+}
+
+/// Admin → New masjids: masjids users found missing and pinned on the map.
+class AdminSuggestionsTab extends ConsumerWidget {
+  const AdminSuggestionsTab({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final t = L10n.of(context);
+    final f = Fmt.of(context);
+    final now = ref.watch(minuteProvider);
+    return ref
+        .watch(openSuggestionsProvider)
+        .when(
+          loading: () => const Loader(),
+          error: (e, _) => EmptyState(message: '${t.somethingWrong}\n$e'),
+          data: (list) => list.isEmpty
+              ? EmptyState(message: t.nothingHere, icon: Icons.mosque_outlined)
+              : RefreshList.separated(
+                  onRefresh: () async =>
+                      ref.invalidate(openSuggestionsProvider),
+                  padding: const EdgeInsets.all(Gap.l),
+                  itemCount: list.length,
+                  separatorBuilder: (_, _) => const SizedBox(height: 10),
+                  itemBuilder: (_, i) {
+                    final s = list[i];
+                    Future<void> act(Future<void> Function() a) async {
+                      try {
+                        await a();
+                      } catch (_) {
+                        if (context.mounted) toast(context, t.somethingWrong);
+                      }
+                    }
+
+                    return AppCard(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(s.name, style: AppText.label),
+                          if (s.nameBn.isNotEmpty)
+                            Text(s.nameBn, style: AppText.caption),
+                          Text(
+                            '${s.thana}, ${s.district}',
+                            style: AppText.micro.copyWith(
+                              color: AppColors.muted,
+                            ),
+                          ),
+                          const SizedBox(height: Gap.s),
+                          Text(
+                            '${s.userName} · '
+                            '${s.createdAt == null ? '' : f.relativeDays(s.createdAt!, now)}',
+                            style: AppText.micro.copyWith(
+                              color: AppColors.muted,
+                            ),
+                          ),
+                          Row(
+                            children: [
+                              TextButton.icon(
+                                icon: const Icon(Icons.map_outlined, size: 18),
+                                label: Text(t.seeOnMap),
+                                onPressed: () => launchUrl(
+                                  Uri.parse(
+                                    'https://www.openstreetmap.org/?mlat=${s.lat}&mlon=${s.lng}#map=19/${s.lat}/${s.lng}',
+                                  ),
+                                  mode: LaunchMode.externalApplication,
+                                ),
+                              ),
+                              const Spacer(),
+                              TextButton(
+                                onPressed: () => act(
+                                  () => ref
+                                      .read(backendProvider)
+                                      .rejectSuggestion(s.id),
+                                ),
+                                child: Text(
+                                  t.reject,
+                                  style: TextStyle(color: AppColors.danger),
+                                ),
+                              ),
+                              TextButton(
+                                onPressed: () => act(
+                                  () => ref
+                                      .read(backendProvider)
+                                      .approveSuggestion(s),
+                                ),
+                                child: Text(t.approve),
+                              ),
+                            ],
                           ),
                         ],
                       ),

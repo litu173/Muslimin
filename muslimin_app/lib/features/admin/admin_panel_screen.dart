@@ -34,10 +34,11 @@ class AdminPanelScreen extends ConsumerWidget {
         .value
         ?.length;
     final problems = ref.watch(openReportsProvider).value?.length ?? 0;
+    final added = ref.watch(openSuggestionsProvider).value?.length ?? 0;
     String count(String label, int? n) =>
         n == null || n == 0 ? label : '$label (${f.digits(n)})';
     return DefaultTabController(
-      length: 7,
+      length: 8,
       child: Scaffold(
         appBar: PatternAppBar(
           title: Text(t.adminPanel),
@@ -51,6 +52,7 @@ class AdminPanelScreen extends ConsumerWidget {
             tabs: [
               Tab(text: t.adminReport),
               Tab(text: count(t.adminProblems, problems)),
+              Tab(text: count(t.adminNewMasjids, added)),
               Tab(text: count(t.adminPending, pending)),
               Tab(text: t.adminEdits),
               Tab(text: t.adminApproved),
@@ -66,6 +68,7 @@ class AdminPanelScreen extends ConsumerWidget {
               children: [
                 AdminReportTab(),
                 AdminProblemsTab(),
+                AdminSuggestionsTab(),
                 _Queue(status: MasjidStatus.pending),
                 AdminEditsTab(),
                 _Queue(status: MasjidStatus.approved),

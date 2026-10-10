@@ -2334,4 +2334,60 @@ class L10nTr extends L10n {
   @override
   String get fromOsm =>
       'OpenStreetMap\'ten eklendi (© OpenStreetMap contributors). Vakitleri yakındakiler girer.';
+
+  @override
+  String get jumuahNote => 'Cuma günleri, öğle yerine';
+
+  @override
+  String get chooseThana => 'İlçe seçin';
+
+  @override
+  String get chooseThanaHint =>
+      'O ilçenin camilerini gösterir – konumunuz değişmez.';
+
+  @override
+  String get searchThana => 'İlçe veya il ara';
+
+  @override
+  String get myThana => 'Şu an bulunduğunuz yer';
+
+  @override
+  String get missingMasjidTitle => 'Cami eksik mi?';
+
+  @override
+  String get missingMasjidBody =>
+      'Listede olmayan yakındaki bir camiyi ekleyin – haritada işaretleyip adını yazın.';
+
+  @override
+  String get addMissingMasjid => 'Cami ekle';
+
+  @override
+  String alreadyListed(String name) {
+    return '\"$name\" bu noktada zaten var.';
+  }
+
+  @override
+  String get openIt => 'Aç';
+
+  @override
+  String get addAnyway => 'Farklı bir cami';
+
+  @override
+  String get suggestReviewNote =>
+      'Yönetici görünmeden önce kontrol eder. Onaydan sonra cemaat vakitlerini ekleyebilirsiniz.';
+
+  @override
+  String get suggestNameShort => 'Caminin adını yazın.';
+
+  @override
+  String get suggestThanks => 'Teşekkürler! Yönetici yakında ekleyecek.';
+
+  @override
+  String get adminNewMasjids => 'Yeni camiler';
+
+  @override
+  String get seeOnMap => 'Harita';
+
+  @override
+  String get noMasjidInThana => 'Bu ilçede henüz cami yok.';
 }

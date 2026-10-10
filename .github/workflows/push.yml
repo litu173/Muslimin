@@ -1,0 +1,39 @@
+# Sends push notifications (new notices, channel messages, jamat changes)
+# every 5 minutes – the free stand-in for Cloud Functions, which need the
+# paid Blaze plan. Needs the repository secret FIREBASE_SERVICE_ACCOUNT
+# (see firebase/tools/README.md). GitHub may run it a few minutes late.
+name: Push notifications
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+concurrency:
+  group: push
+  cancel-in-progress: false
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    if: ${{ github.repository == 'litu173/Muslimin' }}
+    # Until the key is added, the job does nothing (no failed runs).
+    env:
+      HAS_KEY: ${{ secrets.FIREBASE_SERVICE_ACCOUNT != '' }}
+    steps:
+      - uses: actions/checkout@v4
+        if: env.HAS_KEY == 'true'
+        with:
+          sparse-checkout: firebase/tools
+      - uses: actions/setup-node@v4
+        if: env.HAS_KEY == 'true'
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: firebase/tools/package-lock.json
+      - run: npm ci --omit=dev
+        if: env.HAS_KEY == 'true'
+        working-directory: firebase/tools
+      - run: node send_push.mjs
+        if: env.HAS_KEY == 'true'
+        working-directory: firebase/tools
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}

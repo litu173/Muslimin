@@ -46,3 +46,27 @@ python3 prepare_osm_masjids.py overpass.json ADM2.geojson ADM3.geojson masjids_b
 
 `overpass.json`: Overpass API, `[out:json];nwr["amenity"="place_of_worship"]["religion"="muslim"](20.5,88.0,26.7,92.7);out center tags;`.
 `ADM2/ADM3.geojson`: geoBoundaries `gbOpen/BGD/ADM2` and `ADM3`.
+
+## Push notifications without the paid plan
+
+Cloud Functions (in `../functions`) would send pushes instantly, but need the
+Blaze plan. Instead, `.github/workflows/push.yml` runs `send_push.mjs` every
+5 minutes on GitHub (free for public repositories). It sends new notices,
+channel messages and jamat-time changes to the followers' / members' phones,
+and approval news to masjid owners. GitHub can start a run a few minutes
+late, so a push may take 5–15 minutes.
+
+To switch it on, add the service-account key as a repository secret:
+
+1. Firebase console → Project settings → Service accounts → **Generate new
+   private key** (one click – each click makes another key).
+2. Upload it as the secret (then delete the downloaded file):
+
+   ```bash
+   gh secret set FIREBASE_SERVICE_ACCOUNT --repo litu173/Muslimin < ~/Downloads/muslimin-app-bd-firebase-adminsdk-*.json && rm ~/Downloads/muslimin-app-bd-firebase-adminsdk-*.json
+   ```
+
+3. GitHub → Actions → **Push notifications** → **Run workflow** to try it.
+
+GitHub pauses scheduled workflows after 60 days without any commit; re-enable
+it on the Actions page if that happens.

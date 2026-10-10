@@ -688,5 +688,22 @@
   "editFieldMaktab": "Maktab",
   "timeLooksWrong": "Waktu ini tampak salah: {prayers}. Periksa AM/PM.",
   "dataCredits": "Lokasi masjid: © OpenStreetMap contributors (ODbL). Batas distrik dan upazila: Biro Statistik Bangladesh / OCHA melalui geoBoundaries (CC BY 3.0 IGO).",
-  "fromOsm": "Ditambahkan dari OpenStreetMap (© OpenStreetMap contributors). Waktu diisi oleh warga sekitar."
+  "fromOsm": "Ditambahkan dari OpenStreetMap (© OpenStreetMap contributors). Waktu diisi oleh warga sekitar.",
+  "jumuahNote": "Hari Jumat, pengganti Zuhur",
+  "chooseThana": "Pilih kecamatan",
+  "chooseThanaHint": "Menampilkan masjid di sana – lokasi Anda tetap.",
+  "searchThana": "Cari kecamatan atau distrik",
+  "myThana": "Lokasi Anda sekarang",
+  "missingMasjidTitle": "Masjid tidak ada?",
+  "missingMasjidBody": "Tambahkan masjid di dekat Anda yang belum ada – tandai di peta dan beri nama.",
+  "addMissingMasjid": "Tambah masjid",
+  "alreadyListed": "\"{name}\" sudah ada di lokasi ini.",
+  "openIt": "Buka",
+  "addAnyway": "Masjid lain",
+  "suggestReviewNote": "Admin memeriksanya sebelum tampil. Setelah disetujui Anda bisa menambah waktu jamaah.",
+  "suggestNameShort": "Tulis nama masjid.",
+  "suggestThanks": "Terima kasih! Admin akan segera menambahkannya.",
+  "adminNewMasjids": "Masjid baru",
+  "seeOnMap": "Peta",
+  "noMasjidInThana": "Belum ada masjid di kecamatan ini."
 }

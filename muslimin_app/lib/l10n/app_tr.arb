@@ -688,5 +688,22 @@
   "editFieldMaktab": "Mektep",
   "timeLooksWrong": "Bu vakitler yanlış görünüyor: {prayers}. Lütfen ÖÖ/ÖS'yi kontrol edin.",
   "dataCredits": "Cami konumları: © OpenStreetMap contributors (ODbL). İlçe sınırları: Bangladeş İstatistik Bürosu / OCHA, geoBoundaries (CC BY 3.0 IGO).",
-  "fromOsm": "OpenStreetMap'ten eklendi (© OpenStreetMap contributors). Vakitleri yakındakiler girer."
+  "fromOsm": "OpenStreetMap'ten eklendi (© OpenStreetMap contributors). Vakitleri yakındakiler girer.",
+  "jumuahNote": "Cuma günleri, öğle yerine",
+  "chooseThana": "İlçe seçin",
+  "chooseThanaHint": "O ilçenin camilerini gösterir – konumunuz değişmez.",
+  "searchThana": "İlçe veya il ara",
+  "myThana": "Şu an bulunduğunuz yer",
+  "missingMasjidTitle": "Cami eksik mi?",
+  "missingMasjidBody": "Listede olmayan yakındaki bir camiyi ekleyin – haritada işaretleyip adını yazın.",
+  "addMissingMasjid": "Cami ekle",
+  "alreadyListed": "\"{name}\" bu noktada zaten var.",
+  "openIt": "Aç",
+  "addAnyway": "Farklı bir cami",
+  "suggestReviewNote": "Yönetici görünmeden önce kontrol eder. Onaydan sonra cemaat vakitlerini ekleyebilirsiniz.",
+  "suggestNameShort": "Caminin adını yazın.",
+  "suggestThanks": "Teşekkürler! Yönetici yakında ekleyecek.",
+  "adminNewMasjids": "Yeni camiler",
+  "seeOnMap": "Harita",
+  "noMasjidInThana": "Bu ilçede henüz cami yok."
 }

@@ -359,8 +359,13 @@ class FirebaseBackend implements Backend {
       (data['geo'] as Map<String, dynamic>)['geopoint'] as GeoPoint;
 
   @override
-  Stream<List<Masjid>> allMasjids(double lat, double lng) =>
-      _within(lat, lng, kAllMasjidsRadiusKm);
+  Stream<List<Masjid>> masjidsInThana(String district, String thana) => _masjids
+      .where('status', isEqualTo: MasjidStatus.approved.name)
+      .where('district', isEqualTo: district)
+      .where('thana', isEqualTo: thana)
+      .limit(600)
+      .snapshots()
+      .map((s) => s.docs.map(_masjid).toList());
 
   @override
   Future<List<Masjid>> searchMasjids(String prefix, {int limit = 30}) async {
@@ -682,6 +687,85 @@ class FirebaseBackend implements Backend {
     await batch.commit();
   }
 
+  // ------------------------------------------------------- missing masjids
+  CollectionReference<Map<String, dynamic>> get _suggestions =>
+      _db.collection('suggestions');
+
+  @override
+  Future<void> suggestMasjid(MasjidSuggestion s) async {
+    _requireUser();
+    await _suggestions.add({
+      ...s.toMap(),
+      'createdAt': FieldValue.serverTimestamp(),
+    });
+  }
+
+  @override
+  Stream<List<MasjidSuggestion>> openSuggestions() => _suggestions
+      .where('status', isEqualTo: 'open')
+      .orderBy('createdAt', descending: true)
+      .limit(100)
+      .snapshots()
+      .map(
+        (q) => [
+          for (final d in q.docs)
+            MasjidSuggestion.fromMap(
+              d.id,
+              d.data(),
+              createdAt: _ts(d.data()['createdAt']),
+            ),
+        ],
+      );
+
+  @override
+  Future<void> approveSuggestion(MasjidSuggestion s) async {
+    final admin = _requireUser();
+    final ref = _masjids.doc();
+    final draft = Masjid(
+      id: ref.id,
+      name: s.name,
+      nameBn: s.nameBn,
+      address: '',
+      district: s.district,
+      thana: s.thana,
+      lat: s.lat,
+      lng: s.lng,
+      status: MasjidStatus.approved,
+      ownerUid: admin.uid,
+      locationSource: 'map',
+    );
+    final batch = _db.batch()
+      ..set(ref, {
+        ...draft.toMap(),
+        'geo': GeoFirePoint(GeoPoint(s.lat, s.lng)).data,
+        'source': 'user',
+        'suggestedBy': s.uid,
+        'createdAt': FieldValue.serverTimestamp(),
+        'reviewedBy': admin.uid,
+        'reviewedAt': FieldValue.serverTimestamp(),
+      })
+      // Whoever found it can fill in its times straight away.
+      ..set(ref.collection('editors').doc(s.uid), {
+        'uid': s.uid,
+        'name': s.userName,
+        'masjidId': ref.id,
+        'masjidName': s.name,
+        'lat': s.lat,
+        'lng': s.lng,
+        'distanceM': 0.0,
+        'createdAt': FieldValue.serverTimestamp(),
+      })
+      ..update(_suggestions.doc(s.id), {
+        'status': 'approved',
+        'masjidId': ref.id,
+      });
+    await batch.commit();
+  }
+
+  @override
+  Future<void> rejectSuggestion(String id) =>
+      _suggestions.doc(id).update({'status': 'rejected'});
+
   // --------------------------------------------------------------- reports
   CollectionReference<Map<String, dynamic>> get _reports =>
       _db.collection('reports');
@@ -811,10 +895,15 @@ class FirebaseBackend implements Backend {
   Stream<ChannelMember?> channelMembership(String masjidId) {
     final uid = _auth.currentUser?.uid;
     if (uid == null) return Stream.value(null);
+    // Only what the server has: right after "Join" the phone already shows
+    // the membership while it is still on its way, and reading the
+    // messages then is refused (and the listener dies).
     return _members(masjidId)
         .doc(uid)
-        .snapshots()
-        .map((d) => d.exists ? _member(d) : null);
+        .snapshots(includeMetadataChanges: true)
+        .where((d) => !d.metadata.hasPendingWrites)
+        .map((d) => d.exists ? _member(d) : null)
+        .distinct((a, b) => a?.role == b?.role && (a == null) == (b == null));
   }
 
   @override

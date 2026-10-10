@@ -8,6 +8,7 @@ import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text.dart';
 import '../../core/utils/format.dart';
 import '../../l10n/app_localizations.dart';
+import '../../state/channel.dart';
 import '../../state/providers.dart';
 import '../notifications/notifications_screen.dart';
 
@@ -108,10 +109,23 @@ class LocationBar extends ConsumerWidget {
             ),
           ),
         ),
-        IconButton(
-          tooltip: t.notifications,
-          onPressed: () => push(context, const NotificationsScreen()),
-          icon: Icon(Icons.notifications_none_rounded, color: AppColors.ink),
+        Consumer(
+          builder: (context, ref, _) {
+            final unread = ref.watch(unreadCountProvider);
+            return IconButton(
+              tooltip: t.notifications,
+              onPressed: () => push(context, const NotificationsScreen()),
+              icon: Badge(
+                isLabelVisible: unread > 0,
+                backgroundColor: AppColors.danger,
+                label: Text(unread > 99 ? '99+' : f.digits(unread)),
+                child: Icon(
+                  Icons.notifications_none_rounded,
+                  color: AppColors.ink,
+                ),
+              ),
+            );
+          },
         ),
       ],
     );

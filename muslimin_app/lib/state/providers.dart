@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../core/languages.dart';
+import '../core/utils/geo.dart';
 import '../data/backend/backend.dart';
 import '../data/models/app_user.dart';
 import '../data/models/masjid.dart';
@@ -12,6 +13,7 @@ import '../services/location_service.dart';
 import '../services/prayer_time_service.dart';
 import '../services/prefs.dart';
 import '../services/push_service.dart';
+import '../services/thana_service.dart';
 
 // ---------------------------------------------------------------- singletons
 /// Overridden in main() with the real instances.
@@ -255,10 +257,51 @@ final nearbyMasjidsProvider = StreamProvider<List<Masjid>>((ref) {
 });
 
 /// "View All": every verified masjid, nearest first.
-final allMasjidsProvider = StreamProvider<List<Masjid>>((ref) {
+/// The thana the user's GPS position is in (null until located / outside
+/// Bangladesh). Found on the phone from the bundled boundaries.
+final myThanaProvider = FutureProvider<Thana?>((ref) async {
   final loc = ref.watch(locationProvider).value;
-  if (loc == null) return const Stream.empty();
-  return ref.watch(backendProvider).allMasjids(loc.lat, loc.lng);
+  if (loc == null) return null;
+  return (await ThanaService.load()).at(loc.lat, loc.lng);
+});
+
+/// The thana picked on "All Masjids"; null = the user's own. Only the list
+/// follows it – the user's location stays as it is.
+final pickedThanaProvider = NotifierProvider<PickedThana, Thana?>(
+  PickedThana.new,
+);
+
+class PickedThana extends Notifier<Thana?> {
+  @override
+  Thana? build() => null;
+
+  void pick(Thana? t) => state = t;
+}
+
+/// Masjids of the shown thana, nearest to the user first.
+final thanaMasjidsProvider = StreamProvider<List<Masjid>>((ref) async* {
+  final thana =
+      ref.watch(pickedThanaProvider) ?? await ref.watch(myThanaProvider.future);
+  if (thana == null) {
+    yield const [];
+    return;
+  }
+  final loc = ref.watch(locationProvider).value;
+  yield* ref
+      .watch(backendProvider)
+      .masjidsInThana(thana.district, thana.name)
+      .map(
+        (list) => loc == null
+            ? list
+            : (list..sort(
+                (a, b) => distanceMeters(
+                  loc.lat,
+                  loc.lng,
+                  a.lat,
+                  a.lng,
+                ).compareTo(distanceMeters(loc.lat, loc.lng, b.lat, b.lng)),
+              )),
+      );
 });
 
 /// Masjids anywhere whose name starts with the text ("View All" search).

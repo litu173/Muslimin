@@ -688,5 +688,22 @@
   "editFieldMaktab": "المكتب",
   "timeLooksWrong": "هذه الأوقات تبدو خاطئة: {prayers}. يرجى التحقق من ص/م.",
   "dataCredits": "مواقع المساجد: © OpenStreetMap contributors (ODbL). حدود المناطق: مكتب الإحصاء البنغلاديشي / OCHA عبر geoBoundaries (CC BY 3.0 IGO).",
-  "fromOsm": "أُضيف من OpenStreetMap (© OpenStreetMap contributors). يضيف الأوقات أهل الحي."
+  "fromOsm": "أُضيف من OpenStreetMap (© OpenStreetMap contributors). يضيف الأوقات أهل الحي.",
+  "jumuahNote": "يوم الجمعة، بدلاً من الظهر",
+  "chooseThana": "اختر المنطقة",
+  "chooseThanaHint": "يعرض مساجد تلك المنطقة – يبقى موقعك كما هو.",
+  "searchThana": "ابحث عن منطقة",
+  "myThana": "موقعك الحالي",
+  "missingMasjidTitle": "المسجد غير موجود؟",
+  "missingMasjidBody": "أضف مسجداً قريباً غير مدرج – حدده على الخريطة واكتب اسمه.",
+  "addMissingMasjid": "إضافة مسجد",
+  "alreadyListed": "\"{name}\" موجود بالفعل في هذا الموقع.",
+  "openIt": "فتحه",
+  "addAnyway": "مسجد آخر",
+  "suggestReviewNote": "يراجعه المشرف قبل ظهوره. بعد الموافقة يمكنك إضافة أوقات الجماعة.",
+  "suggestNameShort": "يرجى كتابة اسم المسجد.",
+  "suggestThanks": "شكراً! سيضيفه المشرف قريباً.",
+  "adminNewMasjids": "مساجد جديدة",
+  "seeOnMap": "الخريطة",
+  "noMasjidInThana": "لا توجد مساجد مدرجة في هذه المنطقة بعد."
 }

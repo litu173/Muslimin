@@ -20,11 +20,24 @@ import '../notices/notice_card.dart';
 
 /// Inbox: notices from followed masjids and messages from joined channels,
 /// newest first.
-class NotificationsScreen extends ConsumerWidget {
+class NotificationsScreen extends ConsumerStatefulWidget {
   const NotificationsScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<NotificationsScreen> createState() =>
+      _NotificationsScreenState();
+}
+
+class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // Opening the page clears the bell's number.
+    Future.microtask(() => ref.read(inboxOpenedProvider.notifier).markRead());
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final t = L10n.of(context);
     final ids = ref.watch(followsProvider).keys;
     final notices = ref.watch(noticesProvider(noticeKey(ids)));

@@ -688,5 +688,22 @@
   "editFieldMaktab": "مکتب",
   "timeLooksWrong": "یہ اوقات غلط لگ رہے ہیں: {prayers}۔ براہ کرم AM/PM دیکھ لیں۔",
   "dataCredits": "مساجد کے مقامات: © OpenStreetMap contributors (ODbL)۔ ضلع اور اپ ضلع کی حدود: بنگلہ دیش بیورو آف اسٹیٹسٹکس / OCHA بذریعہ geoBoundaries (CC BY 3.0 IGO)۔",
-  "fromOsm": "OpenStreetMap سے شامل کیا گیا (© OpenStreetMap contributors)۔ اوقات آس پاس کے لوگ شامل کرتے ہیں۔"
+  "fromOsm": "OpenStreetMap سے شامل کیا گیا (© OpenStreetMap contributors)۔ اوقات آس پاس کے لوگ شامل کرتے ہیں۔",
+  "jumuahNote": "جمعہ کے دن، ظہر کی جگہ",
+  "chooseThana": "تھانہ منتخب کریں",
+  "chooseThanaHint": "اس تھانے کی مساجد دکھائے گا – آپ کا مقام نہیں بدلے گا۔",
+  "searchThana": "تھانہ یا ضلع تلاش کریں",
+  "myThana": "آپ ابھی جہاں ہیں",
+  "missingMasjidTitle": "مسجد نہیں ملی؟",
+  "missingMasjidBody": "قریب کی کوئی مسجد فہرست میں نہیں؟ نقشے پر نشان لگائیں اور نام لکھیں۔",
+  "addMissingMasjid": "مسجد شامل کریں",
+  "alreadyListed": "اس جگہ \"{name}\" پہلے سے ایپ میں ہے۔",
+  "openIt": "کھولیں",
+  "addAnyway": "یہ دوسری مسجد ہے",
+  "suggestReviewNote": "ایپ میں دکھانے سے پہلے ایڈمن جانچیں گے۔ منظوری کے بعد آپ جماعت کے اوقات شامل کر سکیں گے۔",
+  "suggestNameShort": "مسجد کا نام لکھیں۔",
+  "suggestThanks": "شکریہ! ایڈمن جلد شامل کریں گے۔",
+  "adminNewMasjids": "نئی مساجد",
+  "seeOnMap": "نقشہ",
+  "noMasjidInThana": "اس تھانے میں ابھی کوئی مسجد درج نہیں۔"
 }

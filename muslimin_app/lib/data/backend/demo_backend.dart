@@ -460,17 +460,15 @@ class DemoBackend implements Backend {
   }
 
   @override
-  Stream<List<Masjid>> allMasjids(double lat, double lng) => _watch(
-    () =>
-        _masjids.values.where((m) => m.status == MasjidStatus.approved).toList()
-          ..sort(
-            (a, b) => distanceMeters(
-              lat,
-              lng,
-              a.lat,
-              a.lng,
-            ).compareTo(distanceMeters(lat, lng, b.lat, b.lng)),
-          ),
+  Stream<List<Masjid>> masjidsInThana(String district, String thana) => _watch(
+    () => _masjids.values
+        .where(
+          (m) =>
+              m.status == MasjidStatus.approved &&
+              m.district == district &&
+              m.thana == thana,
+        )
+        .toList(),
   );
 
   @override
@@ -834,6 +832,66 @@ class DemoBackend implements Backend {
   }) async {
     _editors[masjidId]?.remove(uid);
     if (block) _editBlocked.add(uid);
+    _emit();
+  }
+
+  // ------------------------------------------------------- missing masjids
+  final _suggestions = <String, MasjidSuggestion>{};
+
+  @override
+  Future<void> suggestMasjid(MasjidSuggestion s) async {
+    final id = _id();
+    _suggestions[id] = MasjidSuggestion(
+      id: id,
+      name: s.name,
+      nameBn: s.nameBn,
+      lat: s.lat,
+      lng: s.lng,
+      district: s.district,
+      thana: s.thana,
+      uid: s.uid,
+      userName: s.userName,
+      createdAt: DateTime.now(),
+    );
+    _emit();
+  }
+
+  @override
+  Stream<List<MasjidSuggestion>> openSuggestions() =>
+      _watch(() => _suggestions.values.toList());
+
+  @override
+  Future<void> approveSuggestion(MasjidSuggestion s) async {
+    final id = _id();
+    _masjids[id] = Masjid(
+      id: id,
+      name: s.name,
+      nameBn: s.nameBn,
+      address: '',
+      district: s.district,
+      thana: s.thana,
+      lat: s.lat,
+      lng: s.lng,
+      status: MasjidStatus.approved,
+      ownerUid: _user?.uid ?? '',
+      locationSource: 'map',
+      createdAt: DateTime.now(),
+    );
+    (_editors[id] ??= {})[s.uid] = MasjidEditor(
+      uid: s.uid,
+      name: s.userName,
+      masjidId: id,
+      masjidName: s.name,
+      distanceM: 0,
+      createdAt: DateTime.now(),
+    );
+    _suggestions.remove(s.id);
+    _emit();
+  }
+
+  @override
+  Future<void> rejectSuggestion(String id) async {
+    _suggestions.remove(id);
     _emit();
   }
 

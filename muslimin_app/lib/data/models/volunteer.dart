@@ -155,3 +155,59 @@ class AdminStats {
 
 /// One district in the admin report: masjids, and how many have times.
 typedef DistrictCoverage = ({String district, int masjids, int withTimes});
+
+/// "This masjid is missing": a user pinned it on the map; the admin adds it.
+class MasjidSuggestion {
+  const MasjidSuggestion({
+    required this.id,
+    required this.name,
+    required this.nameBn,
+    required this.lat,
+    required this.lng,
+    required this.district,
+    required this.thana,
+    required this.uid,
+    required this.userName,
+    this.createdAt,
+  });
+
+  final String id;
+  final String name;
+  final String nameBn;
+  final double lat;
+  final double lng;
+  final String district;
+  final String thana;
+  final String uid;
+  final String userName;
+  final DateTime? createdAt;
+
+  Map<String, dynamic> toMap() => {
+    'name': name,
+    'nameBn': nameBn,
+    'lat': lat,
+    'lng': lng,
+    'district': district,
+    'thana': thana,
+    'uid': uid,
+    'userName': userName,
+    'status': 'open',
+  };
+
+  factory MasjidSuggestion.fromMap(
+    String id,
+    Map<String, dynamic> m, {
+    DateTime? createdAt,
+  }) => MasjidSuggestion(
+    id: id,
+    name: (m['name'] ?? '') as String,
+    nameBn: (m['nameBn'] ?? '') as String,
+    lat: ((m['lat'] ?? 0) as num).toDouble(),
+    lng: ((m['lng'] ?? 0) as num).toDouble(),
+    district: (m['district'] ?? '') as String,
+    thana: (m['thana'] ?? '') as String,
+    uid: (m['uid'] ?? '') as String,
+    userName: (m['userName'] ?? '') as String,
+    createdAt: createdAt,
+  );
+}

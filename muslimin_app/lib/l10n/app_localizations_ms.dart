@@ -2344,4 +2344,61 @@ class L10nMs extends L10n {
   @override
   String get fromOsm =>
       'Ditambah daripada OpenStreetMap (© OpenStreetMap contributors). Waktu diisi oleh penduduk berhampiran.';
+
+  @override
+  String get jumuahNote => 'Hari Jumaat, menggantikan Zohor';
+
+  @override
+  String get chooseThana => 'Pilih kawasan';
+
+  @override
+  String get chooseThanaHint =>
+      'Memaparkan masjid di sana – lokasi anda kekal.';
+
+  @override
+  String get searchThana => 'Cari kawasan atau daerah';
+
+  @override
+  String get myThana => 'Lokasi anda sekarang';
+
+  @override
+  String get missingMasjidTitle => 'Masjid tiada?';
+
+  @override
+  String get missingMasjidBody =>
+      'Tambah masjid berhampiran yang belum disenaraikan – tanda pada peta dan beri nama.';
+
+  @override
+  String get addMissingMasjid => 'Tambah masjid';
+
+  @override
+  String alreadyListed(String name) {
+    return '\"$name\" sudah ada di lokasi ini.';
+  }
+
+  @override
+  String get openIt => 'Buka';
+
+  @override
+  String get addAnyway => 'Masjid lain';
+
+  @override
+  String get suggestReviewNote =>
+      'Admin menyemaknya dahulu. Selepas diluluskan anda boleh menambah waktu jemaah.';
+
+  @override
+  String get suggestNameShort => 'Tulis nama masjid.';
+
+  @override
+  String get suggestThanks =>
+      'Terima kasih! Admin akan menambahnya tidak lama lagi.';
+
+  @override
+  String get adminNewMasjids => 'Masjid baharu';
+
+  @override
+  String get seeOnMap => 'Peta';
+
+  @override
+  String get noMasjidInThana => 'Belum ada masjid disenaraikan di kawasan ini.';
 }

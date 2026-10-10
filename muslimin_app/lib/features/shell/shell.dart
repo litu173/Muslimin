@@ -35,6 +35,7 @@ class _ShellState extends ConsumerState<Shell> {
     final t = L10n.of(context);
     // New channel messages → phone notifications while the app runs.
     ref.watch(channelNotifierProvider);
+    ref.watch(noticeNotifierProvider);
     ref.listen(shellTabProvider, (prev, next) {
       if (prev != next) setState(() => _visits[next]++);
     });

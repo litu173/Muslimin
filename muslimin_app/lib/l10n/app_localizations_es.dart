@@ -2350,4 +2350,60 @@ class L10nEs extends L10n {
   @override
   String get fromOsm =>
       'Añadida desde OpenStreetMap (© OpenStreetMap contributors). Los horarios los añaden vecinos.';
+
+  @override
+  String get jumuahNote => 'Los viernes, en lugar del Dhuhr';
+
+  @override
+  String get chooseThana => 'Elegir zona';
+
+  @override
+  String get chooseThanaHint =>
+      'Muestra las mezquitas de esa zona; tu ubicación no cambia.';
+
+  @override
+  String get searchThana => 'Buscar zona o distrito';
+
+  @override
+  String get myThana => 'Donde estás ahora';
+
+  @override
+  String get missingMasjidTitle => '¿Falta una mezquita?';
+
+  @override
+  String get missingMasjidBody =>
+      'Añade una mezquita cercana que no aparece: márcala en el mapa y pon su nombre.';
+
+  @override
+  String get addMissingMasjid => 'Añadir mezquita';
+
+  @override
+  String alreadyListed(String name) {
+    return '\"$name\" ya está en este lugar.';
+  }
+
+  @override
+  String get openIt => 'Abrir';
+
+  @override
+  String get addAnyway => 'Es otra mezquita';
+
+  @override
+  String get suggestReviewNote =>
+      'El administrador la revisa antes de mostrarla. Una vez aprobada podrás añadir sus horarios.';
+
+  @override
+  String get suggestNameShort => 'Escribe el nombre de la mezquita.';
+
+  @override
+  String get suggestThanks => '¡Gracias! El administrador la añadirá pronto.';
+
+  @override
+  String get adminNewMasjids => 'Nuevas mezquitas';
+
+  @override
+  String get seeOnMap => 'Mapa';
+
+  @override
+  String get noMasjidInThana => 'Aún no hay mezquitas en esta zona.';
 }
