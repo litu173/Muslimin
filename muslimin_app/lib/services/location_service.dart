@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 
+import 'thana_service.dart';
+
 class UserLocation {
   const UserLocation({
     required this.lat,
@@ -133,24 +135,46 @@ class LocationService {
     );
   }
 
+  /// "Kazi Office Lane, Ramna, Dhaka": the street or area, then the thana
+  /// and district the masjid lists use (no country).
   Future<String> labelFor(double lat, double lng) async {
+    final area = await ThanaService.load()
+        .then((s) => s.at(lat, lng))
+        .catchError((Object _) => null);
+    String? place;
+    String? town;
     try {
       final marks = await _geocoding.placemarkFromCoordinates(lat, lng);
-      if (marks.isEmpty) return _coords(lat, lng);
-      final p = marks.first;
-      String? first(List<String?> xs) => xs.firstWhere(
-        (x) => x != null && x.trim().isNotEmpty,
-        orElse: () => null,
-      );
-      final parts = <String?>[
-        first([p.subLocality, p.thoroughfare, p.name]),
-        first([p.locality, p.subAdministrativeArea, p.administrativeArea]),
-        p.country,
-      ].whereType<String>().where((s) => s.trim().isNotEmpty).toSet().toList();
-      return parts.isEmpty ? _coords(lat, lng) : parts.join(', ');
-    } catch (_) {
-      return _coords(lat, lng);
+      if (marks.isNotEmpty) {
+        final p = marks.first;
+        String? first(List<String?> xs) => xs.firstWhere(
+          (x) =>
+              x != null &&
+              x.trim().isNotEmpty &&
+              !RegExp(r'^[0-9+ ]+\w?$').hasMatch(x.trim()),
+          orElse: () => null,
+        );
+        place = first([p.thoroughfare, p.subLocality, p.name]);
+        town = first([
+          p.locality,
+          p.subAdministrativeArea,
+          p.administrativeArea,
+        ]);
+      }
+    } catch (_) {}
+    final parts = <String>[];
+    void add(String? s) {
+      final v = s?.trim() ?? '';
+      if (v.isEmpty) return;
+      final low = v.toLowerCase();
+      if (parts.any((p) => p.toLowerCase() == low)) return;
+      parts.add(v);
     }
+
+    add(place);
+    add(area?.name);
+    add(area?.district ?? town);
+    return parts.isEmpty ? _coords(lat, lng) : parts.join(', ');
   }
 
   String _coords(double lat, double lng) =>

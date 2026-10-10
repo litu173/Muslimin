@@ -19,6 +19,10 @@
 	<string>Choose audio to send to your masjid's channel.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Take a photo of the masjid's salat time board to fill in the jamat times.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Hold the mic in a masjid channel to speak your message; it is written as text.</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>Turns what you say into a text message for the masjid channel.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Choose a photo of the masjid's salat time board to fill in the jamat times.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>

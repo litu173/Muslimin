@@ -25,6 +25,15 @@ final osmServiceProvider = Provider((_) => OsmService());
 /// the map reads light and the pins stand out.
 final _lightTiles = ColorFilter.matrix(_wash(saturation: 0.4, veil: 0.25));
 
+/// The app's light OpenStreetMap layer (map picker, directions).
+TileLayer lightTileLayer() => TileLayer(
+  urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+  userAgentPackageName: 'com.muslimin.muslimin_app',
+  maxNativeZoom: 19,
+  tileBuilder: (_, tile, _) =>
+      ColorFiltered(colorFilter: _lightTiles, child: tile),
+);
+
 List<double> _wash({required double saturation, required double veil}) {
   const lum = [0.2126, 0.7152, 0.0722];
   final k = 1 - veil;
@@ -291,14 +300,7 @@ class _MapPickerScreenState extends ConsumerState<MapPickerScreen> {
                     onTap: (_, p) => _tapAt(p),
                   ),
                   children: [
-                    TileLayer(
-                      urlTemplate:
-                          'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                      userAgentPackageName: 'com.muslimin.muslimin_app',
-                      maxNativeZoom: 19,
-                      tileBuilder: (_, tile, _) =>
-                          ColorFiltered(colorFilter: _lightTiles, child: tile),
-                    ),
+                    lightTileLayer(),
                     MarkerLayer(
                       markers: [
                         for (final m in _masjids)

@@ -2390,4 +2390,66 @@ class L10nTr extends L10n {
 
   @override
   String get noMasjidInThana => 'Bu ilçede henüz cami yok.';
+
+  @override
+  String get allAreas => 'Tüm bölgeler';
+
+  @override
+  String get errorBusy =>
+      'Uygulama şu an çok yoğun. Biraz sonra tekrar deneyin.';
+
+  @override
+  String get errorNoAccess => 'Buna erişiminiz yok.';
+
+  @override
+  String get errorOffline => 'İnternet bağlantısı yok.';
+
+  @override
+  String get walk => 'Yürüyerek';
+
+  @override
+  String get drive => 'Araçla';
+
+  @override
+  String get routeUnavailable => 'Rota yok – kuş uçuşu mesafe';
+
+  @override
+  String get openInMapsApp => 'Haritalar uygulamasında aç';
+
+  @override
+  String minutesShort(String minutes) {
+    return '$minutes dk';
+  }
+
+  @override
+  String hoursMinutes(String hours, String minutes) {
+    return '$hours sa $minutes dk';
+  }
+
+  @override
+  String get fixLocation => 'Konum yanlış mı? Düzelt';
+
+  @override
+  String get editFieldLocation => 'Konum';
+
+  @override
+  String get attachAnyFile => 'Dosya (video, ses, PDF…)';
+
+  @override
+  String get speechUnavailable => 'Bu telefonda konuşmayı yazıya çevirme yok.';
+
+  @override
+  String get speechNothing => 'Anlaşılmadı – mikrofona basılı tutup konuşun.';
+
+  @override
+  String get holdToTalk => 'Konuşmak için basılı tutun';
+
+  @override
+  String get listening => 'Dinleniyor…';
+
+  @override
+  String get slideToCancel => 'İptal için kaydırın';
+
+  @override
+  String get channelMembers => 'Kanal üyeleri';
 }

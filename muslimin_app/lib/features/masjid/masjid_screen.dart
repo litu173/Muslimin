@@ -23,10 +23,13 @@ import '../../state/channel.dart';
 import '../../state/follows.dart';
 import '../../state/volunteer.dart';
 import '../../state/providers.dart';
+import 'directions_screen.dart';
 import 'edit_masjid_info_screen.dart';
 import 'follow_badge.dart';
 import 'tabs/about_tab.dart';
 import 'tabs/home_tab.dart';
+import '../../data/models/channel.dart';
+import 'channel/channel_members_screen.dart';
 import 'channel/channel_tab.dart';
 import 'tabs/notice_tab.dart';
 import 'volunteer.dart';
@@ -196,8 +199,10 @@ class _MoreMenu extends ConsumerWidget {
     final member = ref.watch(channelMembershipProvider(masjid.id)).value;
     final user = ref.watch(authProvider).value;
     final editor = ref.watch(isEditorProvider(masjid.id)).value ?? false;
+    final channelAdmin =
+        ref.watch(channelRoleProvider(masjid))?.canManage ?? false;
     return PopupMenuButton<String>(
-      icon: Icon(Icons.more_horiz_rounded, color: AppColors.onHeader),
+      icon: Icon(Icons.more_vert_rounded, color: AppColors.onHeader),
       color: AppColors.card,
       onSelected: (v) {
         if (v == 'share') {
@@ -208,9 +213,11 @@ class _MoreMenu extends ConsumerWidget {
             ),
           );
         } else if (v == 'dir') {
-          openDirections(masjid, ref.read(locationProvider).value);
+          push(context, DirectionsScreen(masjid: masjid));
         } else if (v == 'leave') {
           leaveChannel(context, ref, masjid);
+        } else if (v == 'members') {
+          push(context, ChannelMembersScreen(masjid: masjid));
         } else if (v == 'report') {
           reportProblem(context, masjid);
         } else if (v == 'stopEditing') {
@@ -220,6 +227,8 @@ class _MoreMenu extends ConsumerWidget {
       itemBuilder: (_) => [
         PopupMenuItem(value: 'share', child: Text(t.share)),
         PopupMenuItem(value: 'dir', child: Text(t.directions)),
+        if (channelAdmin)
+          PopupMenuItem(value: 'members', child: Text(t.channelMembers)),
         if (member != null)
           PopupMenuItem(value: 'leave', child: Text(t.leaveChannel)),
         if (user != null && user.uid != masjid.ownerUid)
@@ -320,8 +329,7 @@ class _Info extends ConsumerWidget {
             ),
             IconButton(
               tooltip: t.directions,
-              onPressed: () =>
-                  openDirections(masjid, ref.read(locationProvider).value),
+              onPressed: () => push(context, DirectionsScreen(masjid: masjid)),
               icon: Icon(Icons.explore_outlined, color: AppColors.onHeader),
             ),
           ],

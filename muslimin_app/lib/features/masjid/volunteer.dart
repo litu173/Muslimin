@@ -16,6 +16,9 @@ import '../../l10n/app_localizations.dart';
 import '../../state/follows.dart';
 import '../../state/providers.dart';
 import '../../state/volunteer.dart';
+import '../../services/location_service.dart';
+import '../../services/thana_service.dart';
+import '../registration/map_picker_screen.dart';
 
 /// "640 m", "1.4 km" (Fmt.distance says "away" and skips short ones).
 String meters(Fmt f, double m) => m < 1000
@@ -415,5 +418,53 @@ class EditorsSection extends ConsumerWidget {
           ],
       ],
     );
+  }
+}
+
+/// Owner or volunteer editor: put the masjid's pin where it really is
+/// (within [kEditorRadiusM] of where it was). Logged; the admin can undo.
+Future<void> fixMasjidLocation(
+  BuildContext context,
+  WidgetRef ref,
+  Masjid masjid,
+) async {
+  final t = L10n.of(context);
+  final picked = await pickOnMap(
+    context,
+    initial: UserLocation(
+      lat: masjid.lat,
+      lng: masjid.lng,
+      label: masjid.name,
+      fromMap: true,
+    ),
+  );
+  if (picked == null || !context.mounted) return;
+  final d = distanceMeters(masjid.lat, masjid.lng, picked.lat, picked.lng);
+  if (d < 3) return;
+  if (d > kEditorRadiusM) {
+    final f = Fmt.of(context);
+    toast(
+      context,
+      t.volunteerTooFar(
+        meters(f, d),
+        f.digits((kEditorRadiusM / 1000).toStringAsFixed(0)),
+      ),
+    );
+    return;
+  }
+  try {
+    final area = (await ThanaService.load()).at(picked.lat, picked.lng);
+    await ref
+        .read(backendProvider)
+        .updateLocation(
+          masjid,
+          picked.lat,
+          picked.lng,
+          district: area?.district ?? masjid.district,
+          thana: area?.name ?? masjid.thana,
+        );
+    if (context.mounted) toast(context, t.updated);
+  } catch (_) {
+    if (context.mounted) toast(context, t.somethingWrong);
   }
 }

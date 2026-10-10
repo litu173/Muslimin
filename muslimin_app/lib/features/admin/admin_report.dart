@@ -88,7 +88,10 @@ class _AdminReportTabState extends ConsumerState<AdminReportTab> {
       children: [
         stats.when(
           loading: () => const Loader(),
-          error: (e, _) => EmptyState(message: '${t.somethingWrong}\n$e'),
+          error: (e, _) => LoadError(
+            error: e,
+            onRetry: () => ref.invalidate(adminStatsProvider),
+          ),
           data: (s) {
             final pct = s.masjids == 0 ? 0.0 : s.withTimes / s.masjids;
             return Column(
@@ -248,7 +251,10 @@ class AdminProblemsTab extends ConsumerWidget {
         .watch(openReportsProvider)
         .when(
           loading: () => const Loader(),
-          error: (e, _) => EmptyState(message: '${t.somethingWrong}\n$e'),
+          error: (e, _) => LoadError(
+            error: e,
+            onRetry: () => ref.invalidate(openReportsProvider),
+          ),
           data: (list) {
             if (list.isEmpty) {
               return EmptyState(
@@ -346,6 +352,7 @@ class AdminEditsTab extends ConsumerWidget {
     'jamat' => t.jamatTime,
     'staff' => t.editFieldStaff,
     'maktab' => t.editFieldMaktab,
+    'location' => t.editFieldLocation,
     _ => f,
   };
 
@@ -374,7 +381,10 @@ class AdminEditsTab extends ConsumerWidget {
         .watch(recentEditsProvider)
         .when(
           loading: () => const Loader(),
-          error: (e, _) => EmptyState(message: '${t.somethingWrong}\n$e'),
+          error: (e, _) => LoadError(
+            error: e,
+            onRetry: () => ref.invalidate(recentEditsProvider),
+          ),
           data: (list) => list.isEmpty
               ? EmptyState(message: t.nothingHere, icon: Icons.history_rounded)
               : RefreshList.separated(
@@ -444,7 +454,10 @@ class AdminSuggestionsTab extends ConsumerWidget {
         .watch(openSuggestionsProvider)
         .when(
           loading: () => const Loader(),
-          error: (e, _) => EmptyState(message: '${t.somethingWrong}\n$e'),
+          error: (e, _) => LoadError(
+            error: e,
+            onRetry: () => ref.invalidate(openSuggestionsProvider),
+          ),
           data: (list) => list.isEmpty
               ? EmptyState(message: t.nothingHere, icon: Icons.mosque_outlined)
               : RefreshList.separated(

@@ -460,6 +460,18 @@ class DemoBackend implements Backend {
   }
 
   @override
+  Stream<List<Masjid>> masjidsAround(double lat, double lng, double radiusKm) =>
+      _watch(
+        () => _masjids.values
+            .where(
+              (m) =>
+                  m.status == MasjidStatus.approved &&
+                  distanceMeters(lat, lng, m.lat, m.lng) <= radiusKm * 1000,
+            )
+            .toList(),
+      );
+
+  @override
   Stream<List<Masjid>> masjidsInThana(String district, String thana) => _watch(
     () => _masjids.values
         .where(
@@ -490,6 +502,27 @@ class DemoBackend implements Backend {
   @override
   Stream<List<Masjid>> myMasjids(String uid) =>
       _watch(() => _masjids.values.where((m) => m.ownerUid == uid).toList());
+
+  @override
+  Stream<List<Masjid>> myMasjidsIn(String uid, String district, String thana) =>
+      _watch(
+        () => _masjids.values
+            .where(
+              (m) =>
+                  m.ownerUid == uid &&
+                  m.district == district &&
+                  m.thana == thana,
+            )
+            .toList(),
+      );
+
+  @override
+  Future<List<Masjid>> searchMyMasjids(String uid, String prefix) async => [
+    for (final m in _masjids.values)
+      if (m.ownerUid == uid &&
+          m.name.toLowerCase().startsWith(prefix.trim().toLowerCase()))
+        m,
+  ];
 
   @override
   Future<List<Masjid>> masjidsNear(
@@ -586,6 +619,31 @@ class DemoBackend implements Backend {
         lng: x.lng,
         createdAt: x.createdAt,
         jamatUpdatedAt: DateTime.now(),
+      ),
+    );
+  }
+
+  @override
+  Future<void> updateLocation(
+    Masjid m,
+    double lat,
+    double lng, {
+    required String district,
+    required String thana,
+  }) async {
+    _log(
+      m,
+      'location',
+      {'lat': m.lat, 'lng': m.lng, 'district': m.district, 'thana': m.thana},
+      {'lat': lat, 'lng': lng, 'district': district, 'thana': thana},
+    );
+    _patch(
+      m.id,
+      (x) => x.copyWith(
+        location: (lat, lng, 0),
+        locationSource: 'map',
+        district: district,
+        thana: thana,
       ),
     );
   }
@@ -957,6 +1015,14 @@ class DemoBackend implements Backend {
         await updateStaff(m, Masjid.staffFromMap(e.before));
       case 'maktab':
         await updateMaktab(m, Maktab.fromMap(e.before));
+      case 'location':
+        await updateLocation(
+          m,
+          (e.before['lat'] as num).toDouble(),
+          (e.before['lng'] as num).toDouble(),
+          district: '${e.before['district'] ?? ''}',
+          thana: '${e.before['thana'] ?? ''}',
+        );
     }
   }
 

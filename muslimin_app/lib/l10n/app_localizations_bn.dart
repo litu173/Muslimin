@@ -2373,4 +2373,65 @@ class L10nBn extends L10n {
 
   @override
   String get noMasjidInThana => 'এই থানায় এখনো কোনো মসজিদ তালিকায় নেই।';
+
+  @override
+  String get allAreas => 'সব এলাকা';
+
+  @override
+  String get errorBusy => 'অ্যাপ এখন খুব ব্যস্ত। কিছুক্ষণ পর আবার চেষ্টা করুন।';
+
+  @override
+  String get errorNoAccess => 'এটি দেখার অনুমতি আপনার নেই।';
+
+  @override
+  String get errorOffline => 'ইন্টারনেট সংযোগ নেই।';
+
+  @override
+  String get walk => 'হেঁটে';
+
+  @override
+  String get drive => 'গাড়িতে';
+
+  @override
+  String get routeUnavailable => 'পথ পাওয়া যায়নি – সরাসরি দূরত্ব';
+
+  @override
+  String get openInMapsApp => 'ম্যাপস অ্যাপে খুলুন';
+
+  @override
+  String minutesShort(String minutes) {
+    return '$minutes মিনিট';
+  }
+
+  @override
+  String hoursMinutes(String hours, String minutes) {
+    return '$hours ঘণ্টা $minutes মিনিট';
+  }
+
+  @override
+  String get fixLocation => 'ভুল জায়গায়? অবস্থান ঠিক করুন';
+
+  @override
+  String get editFieldLocation => 'অবস্থান';
+
+  @override
+  String get attachAnyFile => 'ফাইল (ভিডিও, অডিও, পিডিএফ…)';
+
+  @override
+  String get speechUnavailable => 'এই ফোনে কথা থেকে লেখা চালু নেই।';
+
+  @override
+  String get speechNothing => 'শোনা যায়নি – মাইক চেপে ধরে কথা বলুন।';
+
+  @override
+  String get holdToTalk => 'চেপে ধরে কথা বলুন';
+
+  @override
+  String get listening => 'শুনছি…';
+
+  @override
+  String get slideToCancel => 'বাতিল করতে সরান';
+
+  @override
+  String get channelMembers => 'চ্যানেলের সদস্য';
 }

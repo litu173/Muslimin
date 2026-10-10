@@ -279,29 +279,79 @@ class PickedThana extends Notifier<Thana?> {
 }
 
 /// Masjids of the shown thana, nearest to the user first.
+/// Around the user, whatever the thana says: the nearest masjids must be
+/// in "All Masjids" even when a (2011) thana line runs between them.
+const kAroundMeKm = 2.0;
+
+/// Masjids of the shown thana – plus, for the user's own thana, every
+/// masjid within [kAroundMeKm] – nearest to the user first.
 final thanaMasjidsProvider = StreamProvider<List<Masjid>>((ref) async* {
-  final thana =
-      ref.watch(pickedThanaProvider) ?? await ref.watch(myThanaProvider.future);
+  final picked = ref.watch(pickedThanaProvider);
+  final thana = picked ?? await ref.watch(myThanaProvider.future);
   if (thana == null) {
     yield const [];
     return;
   }
   final loc = ref.watch(locationProvider).value;
-  yield* ref
-      .watch(backendProvider)
-      .masjidsInThana(thana.district, thana.name)
-      .map(
-        (list) => loc == null
-            ? list
-            : (list..sort(
-                (a, b) => distanceMeters(
-                  loc.lat,
-                  loc.lng,
-                  a.lat,
-                  a.lng,
-                ).compareTo(distanceMeters(loc.lat, loc.lng, b.lat, b.lng)),
-              )),
-      );
+  final backend = ref.watch(backendProvider);
+  List<Masjid> sorted(Iterable<Masjid> list) {
+    final out = {for (final m in list) m.id: m}.values.toList();
+    if (loc == null) return out;
+    return out..sort(
+      (a, b) => distanceMeters(
+        loc.lat,
+        loc.lng,
+        a.lat,
+        a.lng,
+      ).compareTo(distanceMeters(loc.lat, loc.lng, b.lat, b.lng)),
+    );
+  }
+
+  final inThana = backend.masjidsInThana(thana.district, thana.name);
+  if (picked != null || loc == null) {
+    yield* inThana.map(sorted);
+    return;
+  }
+  // Both lists, merged as either one changes.
+  var a = const <Masjid>[], b = const <Masjid>[];
+  final out = StreamController<List<Masjid>>();
+  final subs = [
+    inThana.listen((v) {
+      a = v;
+      out.add(sorted([...a, ...b]));
+    }, onError: out.addError),
+    backend.masjidsAround(loc.lat, loc.lng, kAroundMeKm).listen((v) {
+      b = v;
+      out.add(sorted([...a, ...b]));
+    }, onError: out.addError),
+  ];
+  ref.onDispose(() {
+    for (final s in subs) {
+      s.cancel();
+    }
+    out.close();
+  });
+  yield* out.stream;
+});
+
+/// Masjids I manage in one thana (Manage Masjids).
+final myMasjidsInProvider = StreamProvider.family<List<Masjid>, Thana>((
+  ref,
+  t,
+) {
+  final uid = ref.watch(authProvider).value?.uid;
+  if (uid == null) return Stream.value(const []);
+  return ref.watch(backendProvider).myMasjidsIn(uid, t.district, t.name);
+});
+
+/// Masjids I manage whose name starts with the text.
+final searchMyMasjidsProvider = FutureProvider.family<List<Masjid>, String>((
+  ref,
+  q,
+) {
+  final uid = ref.watch(authProvider).value?.uid;
+  if (uid == null) return const [];
+  return ref.watch(backendProvider).searchMyMasjids(uid, q);
 });
 
 /// Masjids anywhere whose name starts with the text ("View All" search).

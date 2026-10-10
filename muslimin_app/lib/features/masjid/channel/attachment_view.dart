@@ -56,25 +56,49 @@ class AttachmentView extends ConsumerWidget {
     final key = (masjidId, m.id, a.chunks);
     final bytes = ref.watch(attachmentBytesProvider(key));
 
+    // Square thumbnails in the chat; a tap opens the full photo, plays the
+    // video / audio, or opens the file.
+    const side = 200.0;
     if (a.kind == AttachmentKind.image) {
       return ClipRRect(
         borderRadius: BorderRadius.circular(Radii.button),
-        child: bytes.when(
-          loading: () => _box(const CircularProgressIndicator(strokeWidth: 2)),
-          error: (_, _) =>
-              _box(Icon(Icons.broken_image_outlined, color: AppColors.muted)),
-          data: (b) => GestureDetector(
-            onTap: () => push(context, _ImageScreen(bytes: b)),
-            child: Image.memory(b, fit: BoxFit.cover, width: double.infinity),
+        child: SizedBox.square(
+          dimension: side,
+          child: bytes.when(
+            loading: () =>
+                _box(const CircularProgressIndicator(strokeWidth: 2)),
+            error: (_, _) =>
+                _box(Icon(Icons.broken_image_outlined, color: AppColors.muted)),
+            data: (b) => GestureDetector(
+              onTap: () => push(context, _ImageScreen(bytes: b)),
+              child: Image.memory(b, fit: BoxFit.cover),
+            ),
           ),
         ),
       );
     }
 
-    final (icon, label) = switch (a.kind) {
-      AttachmentKind.video => (Icons.play_circle_fill_rounded, t.attachVideo),
-      AttachmentKind.audio => (Icons.graphic_eq_rounded, t.attachAudio),
-      _ => (Icons.insert_drive_file_rounded, t.attachFile),
+    final ext = a.name.contains('.')
+        ? a.name.split('.').last.toUpperCase()
+        : '';
+    final (icon, label, tint) = switch (a.kind) {
+      AttachmentKind.video => (
+        Icons.play_circle_fill_rounded,
+        t.attachVideo,
+        AppColors.header,
+      ),
+      AttachmentKind.audio => (
+        Icons.graphic_eq_rounded,
+        t.attachAudio,
+        AppColors.gold,
+      ),
+      _ => (
+        ext == 'PDF'
+            ? Icons.picture_as_pdf_rounded
+            : Icons.insert_drive_file_rounded,
+        ext.isEmpty ? t.attachFile : ext,
+        ext == 'PDF' ? AppColors.danger : AppColors.gold,
+      ),
     };
 
     Future<void> open() async {
@@ -99,46 +123,55 @@ class AttachmentView extends ConsumerWidget {
       }
     }
 
-    return Material(
-      color: AppColors.gold.withValues(alpha: 0.10),
-      borderRadius: BorderRadius.circular(Radii.button),
-      child: InkWell(
+    final dark = a.kind == AttachmentKind.video;
+    final fg = dark ? Colors.white : AppColors.ink;
+    return SizedBox.square(
+      dimension: side,
+      child: Material(
+        color: dark ? AppColors.header : tint.withValues(alpha: 0.10),
         borderRadius: BorderRadius.circular(Radii.button),
-        onTap: bytes.hasValue ? open : null,
-        child: Padding(
-          padding: const EdgeInsets.all(Gap.m),
-          child: Row(
-            children: [
-              Icon(icon, color: AppColors.gold, size: 34),
-              const SizedBox(width: Gap.m),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      a.name,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: AppText.label,
-                    ),
-                    Text(
-                      '$label · ${fileSize(a.size)}',
-                      style: AppText.micro.copyWith(color: AppColors.muted),
-                    ),
-                  ],
+        clipBehavior: Clip.antiAlias,
+        child: InkWell(
+          onTap: bytes.hasValue ? open : null,
+          child: Padding(
+            padding: const EdgeInsets.all(Gap.m),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: Center(
+                    child: bytes.isLoading
+                        ? const SizedBox.square(
+                            dimension: 28,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          )
+                        : bytes.hasError
+                        ? IconButton(
+                            icon: Icon(Icons.refresh_rounded, color: fg),
+                            onPressed: () =>
+                                ref.invalidate(attachmentBytesProvider(key)),
+                          )
+                        : Icon(
+                            icon,
+                            size: 64,
+                            color: dark ? AppColors.goldLight : tint,
+                          ),
+                  ),
                 ),
-              ),
-              if (bytes.isLoading)
-                const SizedBox.square(
-                  dimension: 20,
-                  child: CircularProgressIndicator(strokeWidth: 2),
-                )
-              else if (bytes.hasError)
-                IconButton(
-                  icon: Icon(Icons.refresh_rounded, color: AppColors.muted),
-                  onPressed: () => ref.invalidate(attachmentBytesProvider(key)),
+                Text(
+                  a.name,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppText.caption.copyWith(color: fg),
                 ),
-            ],
+                Text(
+                  '$label · ${fileSize(a.size)}',
+                  style: AppText.micro.copyWith(
+                    color: dark ? Colors.white70 : AppColors.muted,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -146,7 +179,6 @@ class AttachmentView extends ConsumerWidget {
   }
 
   Widget _box(Widget child) => Container(
-    height: 180,
     color: AppColors.gold.withValues(alpha: 0.08),
     alignment: Alignment.center,
     child: child,

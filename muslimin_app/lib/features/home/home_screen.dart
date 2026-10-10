@@ -9,6 +9,7 @@ import '../../core/utils/format.dart';
 import '../../core/widgets/brand.dart';
 import '../../core/widgets/buttons.dart';
 import '../../core/widgets/countdown_ring.dart';
+import '../../core/widgets/entrance.dart';
 import '../../core/widgets/islamic_pattern.dart';
 import '../../core/widgets/refresh.dart';
 import '../../core/widgets/surfaces.dart';
@@ -31,7 +32,7 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin, ReturnAware {
   bool _bannerClosed = false;
 
   /// Entrance: body sections slide up and fade in, one after another.
@@ -39,6 +40,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
     vsync: this,
     duration: const Duration(milliseconds: 1100),
   )..forward();
+
+  /// Back from another page: play the entrance again.
+  @override
+  void onReturn() => _intro.forward(from: 0);
 
   @override
   void dispose() {

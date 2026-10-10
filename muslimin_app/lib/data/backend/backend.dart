@@ -78,10 +78,19 @@ abstract class Backend {
   /// sorts them nearest first. One thana at a time keeps the reads small.
   Stream<List<Masjid>> masjidsInThana(String district, String thana);
 
+  /// Approved masjids within [radiusKm] of the point, whatever their thana.
+  Stream<List<Masjid>> masjidsAround(double lat, double lng, double radiusKm);
+
   /// Approved masjids whose name starts with [prefix] (anywhere).
   Future<List<Masjid>> searchMasjids(String prefix, {int limit = 30});
   Stream<Masjid?> watchMasjid(String id);
   Stream<List<Masjid>> myMasjids(String uid);
+
+  /// My masjids in one thana (the admin owns thousands).
+  Stream<List<Masjid>> myMasjidsIn(String uid, String district, String thana);
+
+  /// My masjids whose name starts with [prefix].
+  Future<List<Masjid>> searchMyMasjids(String uid, String prefix);
 
   /// Masjids already registered within [meters] of the point (any status).
   Future<List<Masjid>> masjidsNear(double lat, double lng, double meters);
@@ -107,6 +116,16 @@ abstract class Backend {
   /// editors; every change is logged (who, before, after) for the admin.
   Future<void> updateJamat(Masjid masjid, Map<Prayer, HM> jamat);
   Future<void> updateMaktab(Masjid masjid, Maktab maktab);
+
+  /// Moves the masjid's pin (owner or volunteer editor; logged). District
+  /// and thana follow the new position.
+  Future<void> updateLocation(
+    Masjid masjid,
+    double lat,
+    double lng, {
+    required String district,
+    required String thana,
+  });
   Future<void> updateStaff(Masjid masjid, Map<StaffRole, StaffMember> staff);
   Future<void> updateLive(String id, {String? url, required bool isLive});
 

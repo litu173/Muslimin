@@ -2396,4 +2396,66 @@ class L10nId extends L10n {
 
   @override
   String get noMasjidInThana => 'Belum ada masjid di kecamatan ini.';
+
+  @override
+  String get allAreas => 'Semua wilayah';
+
+  @override
+  String get errorBusy => 'Aplikasi sedang sangat sibuk. Coba lagi nanti.';
+
+  @override
+  String get errorNoAccess => 'Anda tidak punya akses ke sini.';
+
+  @override
+  String get errorOffline => 'Tidak ada koneksi internet.';
+
+  @override
+  String get walk => 'Jalan kaki';
+
+  @override
+  String get drive => 'Berkendara';
+
+  @override
+  String get routeUnavailable => 'Rute tidak tersedia – jarak garis lurus';
+
+  @override
+  String get openInMapsApp => 'Buka di aplikasi Peta';
+
+  @override
+  String minutesShort(String minutes) {
+    return '$minutes mnt';
+  }
+
+  @override
+  String hoursMinutes(String hours, String minutes) {
+    return '$hours j $minutes mnt';
+  }
+
+  @override
+  String get fixLocation => 'Lokasi salah? Perbaiki';
+
+  @override
+  String get editFieldLocation => 'Lokasi';
+
+  @override
+  String get attachAnyFile => 'File (video, audio, PDF…)';
+
+  @override
+  String get speechUnavailable =>
+      'Ucapan ke teks tidak tersedia di ponsel ini.';
+
+  @override
+  String get speechNothing => 'Tidak terdengar – tahan mikrofon dan bicara.';
+
+  @override
+  String get holdToTalk => 'Tahan untuk bicara';
+
+  @override
+  String get listening => 'Mendengarkan…';
+
+  @override
+  String get slideToCancel => 'Geser untuk batal';
+
+  @override
+  String get channelMembers => 'Anggota saluran';
 }

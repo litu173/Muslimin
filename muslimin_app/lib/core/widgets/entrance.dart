@@ -1,8 +1,47 @@
 import 'package:flutter/material.dart';
 
+/// Tells pages when the user comes back to them (a page on top closed), so
+/// their entrance plays again. Registered in MaterialApp.navigatorObservers.
+final routeObserver = RouteObserver<ModalRoute<void>>();
+
+/// Calls [onReturn] each time the page holding [context] shows again after
+/// a page pushed on top of it is closed.
+mixin ReturnAware<T extends StatefulWidget> on State<T> implements RouteAware {
+  ModalRoute<void>? _route;
+
+  void onReturn();
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final r = ModalRoute.of(context);
+    if (r != null && r != _route) {
+      if (_route != null) routeObserver.unsubscribe(this);
+      _route = r;
+      routeObserver.subscribe(this, r);
+    }
+  }
+
+  @override
+  void dispose() {
+    routeObserver.unsubscribe(this);
+    super.dispose();
+  }
+
+  @override
+  void didPopNext() => onReturn();
+  @override
+  void didPush() {}
+  @override
+  void didPop() {}
+  @override
+  void didPushNext() {}
+}
+
 /// Home's entrance for any page: content slides up and fades in, one piece
-/// after another. Put [EntranceScope] around the page and [Entrance] around
-/// each section.
+/// after another – when the page opens, and again when the user comes back
+/// to it. Put [EntranceScope] around the page and [Entrance] around each
+/// section.
 class EntranceScope extends StatefulWidget {
   const EntranceScope({super.key, required this.child});
 
@@ -12,11 +51,26 @@ class EntranceScope extends StatefulWidget {
   State<EntranceScope> createState() => _EntranceScopeState();
 }
 
-class _EntranceScopeState extends State<EntranceScope> {
-  final start = DateTime.now();
+class _EntranceScopeState extends State<EntranceScope> with ReturnAware {
+  DateTime start = DateTime.now();
 
   /// Sections without an index take the next one, in build order.
   int next = 0;
+
+  /// Bumped on each return to the page; sections listen and play again.
+  final replay = ValueNotifier(0);
+
+  @override
+  void onReturn() {
+    start = DateTime.now();
+    replay.value++;
+  }
+
+  @override
+  void dispose() {
+    replay.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) => _Scope(this, child: widget.child);
@@ -53,54 +107,73 @@ class Entrance extends StatefulWidget {
 
 class _EntranceState extends State<Entrance>
     with SingleTickerProviderStateMixin {
-  AnimationController? _c;
-  late final Animation<double> _a;
-  bool _started = false;
+  late final _c = AnimationController(
+    vsync: this,
+    duration: Entrance.length,
+    value: 1,
+  );
+  late final _a = CurvedAnimation(parent: _c, curve: Curves.easeOutCubic);
+  _EntranceScopeState? _page;
+  int _gen = 0;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    if (_started) return;
-    _started = true;
-    final scope = context.getInheritedWidgetOfExactType<_Scope>();
-    if (scope == null) return;
-    final page = scope.state;
+    if (_page != null) return;
+    final page = _page = context.getInheritedWidgetOfExactType<_Scope>()?.state;
+    if (page == null) return;
+    page.replay.addListener(_onReplay);
     final index = widget.index ?? page.next++;
-    final due =
-        Entrance.step * index.clamp(0, Entrance.maxIndex) -
-        DateTime.now().difference(page.start);
+    _play(
+      Entrance.step * index.clamp(0, Entrance.maxIndex) -
+          DateTime.now().difference(page.start),
+    );
+  }
+
+  /// Back on the page: sections on screen rise again, top to bottom.
+  void _onReplay() {
+    final box = context.findRenderObject();
+    if (box is! RenderBox || !box.attached) return;
+    final y = box.localToGlobal(Offset.zero).dy;
+    final h = MediaQuery.sizeOf(context).height;
+    if (y > h || y + box.size.height < 0) return; // off screen
+    final order = (y / 110).clamp(0, Entrance.maxIndex).round();
+    _play(Entrance.step * order, force: true);
+  }
+
+  void _play(Duration due, {bool force = false}) {
     // Too late: the page has already shown up.
-    if (due < -const Duration(milliseconds: 150)) return;
-    final c = _c = AnimationController(vsync: this, duration: Entrance.length);
-    _a = CurvedAnimation(parent: c, curve: Curves.easeOutCubic);
+    if (!force && due < -const Duration(milliseconds: 150)) return;
+    final gen = ++_gen;
+    _c.value = 0;
     if (due <= Duration.zero) {
-      c.forward();
+      _c.forward();
     } else {
       Future.delayed(due, () {
-        if (mounted) c.forward();
+        if (mounted && gen == _gen) _c.forward();
       });
     }
   }
 
   @override
   void dispose() {
-    _c?.dispose();
+    _page?.replay.removeListener(_onReplay);
+    _c.dispose();
     super.dispose();
   }
 
   @override
-  Widget build(BuildContext context) {
-    if (_c == null) return widget.child;
-    return AnimatedBuilder(
-      animation: _a,
-      child: widget.child,
-      builder: (_, child) => Opacity(
-        opacity: _a.value,
-        child: Transform.translate(
-          offset: Offset(0, Entrance.rise * (1 - _a.value)),
-          child: child,
-        ),
-      ),
-    );
-  }
+  Widget build(BuildContext context) => AnimatedBuilder(
+    animation: _a,
+    child: widget.child,
+    builder: (_, child) => _c.isCompleted
+        ? child!
+        : Opacity(
+            opacity: _a.value,
+            child: Transform.translate(
+              offset: Offset(0, Entrance.rise * (1 - _a.value)),
+              child: child,
+            ),
+          ),
+  );
 }

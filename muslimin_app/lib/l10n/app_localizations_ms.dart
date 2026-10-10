@@ -2401,4 +2401,66 @@ class L10nMs extends L10n {
 
   @override
   String get noMasjidInThana => 'Belum ada masjid disenaraikan di kawasan ini.';
+
+  @override
+  String get allAreas => 'Semua kawasan';
+
+  @override
+  String get errorBusy =>
+      'Aplikasi sangat sibuk sekarang. Cuba lagi sebentar lagi.';
+
+  @override
+  String get errorNoAccess => 'Anda tiada akses ke sini.';
+
+  @override
+  String get errorOffline => 'Tiada sambungan internet.';
+
+  @override
+  String get walk => 'Berjalan';
+
+  @override
+  String get drive => 'Memandu';
+
+  @override
+  String get routeUnavailable => 'Laluan tiada – jarak garis lurus';
+
+  @override
+  String get openInMapsApp => 'Buka dalam aplikasi Peta';
+
+  @override
+  String minutesShort(String minutes) {
+    return '$minutes min';
+  }
+
+  @override
+  String hoursMinutes(String hours, String minutes) {
+    return '$hours j $minutes min';
+  }
+
+  @override
+  String get fixLocation => 'Lokasi salah? Betulkan';
+
+  @override
+  String get editFieldLocation => 'Lokasi';
+
+  @override
+  String get attachAnyFile => 'Fail (video, audio, PDF…)';
+
+  @override
+  String get speechUnavailable => 'Pertuturan ke teks tiada pada telefon ini.';
+
+  @override
+  String get speechNothing => 'Tidak kedengaran – tekan mikrofon dan bercakap.';
+
+  @override
+  String get holdToTalk => 'Tekan untuk bercakap';
+
+  @override
+  String get listening => 'Mendengar…';
+
+  @override
+  String get slideToCancel => 'Leret untuk batal';
+
+  @override
+  String get channelMembers => 'Ahli saluran';
 }

@@ -2406,4 +2406,67 @@ class L10nEs extends L10n {
 
   @override
   String get noMasjidInThana => 'Aún no hay mezquitas en esta zona.';
+
+  @override
+  String get allAreas => 'Todas las zonas';
+
+  @override
+  String get errorBusy => 'La app está muy ocupada ahora. Inténtalo más tarde.';
+
+  @override
+  String get errorNoAccess => 'No tienes acceso a esto.';
+
+  @override
+  String get errorOffline => 'Sin conexión a internet.';
+
+  @override
+  String get walk => 'A pie';
+
+  @override
+  String get drive => 'En coche';
+
+  @override
+  String get routeUnavailable => 'Ruta no disponible: distancia en línea recta';
+
+  @override
+  String get openInMapsApp => 'Abrir en la app de mapas';
+
+  @override
+  String minutesShort(String minutes) {
+    return '$minutes min';
+  }
+
+  @override
+  String hoursMinutes(String hours, String minutes) {
+    return '$hours h $minutes min';
+  }
+
+  @override
+  String get fixLocation => '¿Ubicación errónea? Corregir';
+
+  @override
+  String get editFieldLocation => 'Ubicación';
+
+  @override
+  String get attachAnyFile => 'Archivo (vídeo, audio, PDF…)';
+
+  @override
+  String get speechUnavailable =>
+      'La voz a texto no está disponible en este teléfono.';
+
+  @override
+  String get speechNothing =>
+      'No se oyó nada: mantén pulsado el micro y habla.';
+
+  @override
+  String get holdToTalk => 'Mantén pulsado para hablar';
+
+  @override
+  String get listening => 'Escuchando…';
+
+  @override
+  String get slideToCancel => 'Desliza para cancelar';
+
+  @override
+  String get channelMembers => 'Miembros del canal';
 }

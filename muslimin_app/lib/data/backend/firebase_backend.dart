@@ -381,6 +381,10 @@ class FirebaseBackend implements Backend {
     return s.docs.map(_masjid).toList();
   }
 
+  @override
+  Stream<List<Masjid>> masjidsAround(double lat, double lng, double radiusKm) =>
+      _within(lat, lng, radiusKm);
+
   /// Approved masjids within [radiusKm], nearest first.
   Stream<List<Masjid>> _within(double lat, double lng, double radiusKm) =>
       GeoCollectionReference<Map<String, dynamic>>(_masjids)
@@ -444,6 +448,30 @@ class FirebaseBackend implements Backend {
       .limit(50)
       .snapshots()
       .map((s) => s.docs.map(_masjid).toList());
+
+  @override
+  Stream<List<Masjid>> myMasjidsIn(String uid, String district, String thana) =>
+      _masjids
+          .where('ownerUid', isEqualTo: uid)
+          .where('district', isEqualTo: district)
+          .where('thana', isEqualTo: thana)
+          .limit(600)
+          .snapshots()
+          .map((s) => s.docs.map(_masjid).toList());
+
+  @override
+  Future<List<Masjid>> searchMyMasjids(String uid, String prefix) async {
+    final q = prefix.trim().toLowerCase();
+    if (q.length < 2) return const [];
+    final s = await _masjids
+        .where('ownerUid', isEqualTo: uid)
+        .orderBy('nameLower')
+        .startAt([q])
+        .endAt(['$q\uf8ff'])
+        .limit(40)
+        .get();
+    return s.docs.map(_masjid).toList();
+  }
 
   @override
   Future<List<Masjid>> masjidsNear(
@@ -547,6 +575,34 @@ class FirebaseBackend implements Backend {
       'hasJamat': jamat.isNotEmpty,
       'jamatUpdatedAt': FieldValue.serverTimestamp(),
     },
+  );
+
+  Map<String, dynamic> _locationChange(
+    double lat,
+    double lng,
+    String district,
+    String thana,
+  ) => {
+    'geo': GeoFirePoint(GeoPoint(lat, lng)).data,
+    'locationSource': 'map',
+    'locationAccuracyM': 0,
+    'district': district,
+    'thana': thana,
+  };
+
+  @override
+  Future<void> updateLocation(
+    Masjid m,
+    double lat,
+    double lng, {
+    required String district,
+    required String thana,
+  }) => _logged(
+    m,
+    'location',
+    {'lat': m.lat, 'lng': m.lng, 'district': m.district, 'thana': m.thana},
+    {'lat': lat, 'lng': lng, 'district': district, 'thana': thana},
+    _locationChange(lat, lng, district, thana),
   );
 
   @override
@@ -828,10 +884,21 @@ class FirebaseBackend implements Backend {
   Future<void> revertEdit(MasjidEdit e) async {
     final masjid = await _masjids.doc(e.masjidId).get();
     if (!masjid.exists) return;
-    await _logged(_masjid(masjid), e.field, e.after, e.before, {
-      e.field: e.before,
-      if (e.field == 'jamat') 'hasJamat': e.before.isNotEmpty,
-    });
+    final b = e.before;
+    await _logged(
+      _masjid(masjid),
+      e.field,
+      e.after,
+      b,
+      e.field == 'location'
+          ? _locationChange(
+              (b['lat'] as num).toDouble(),
+              (b['lng'] as num).toDouble(),
+              '${b['district'] ?? ''}',
+              '${b['thana'] ?? ''}',
+            )
+          : {e.field: b, if (e.field == 'jamat') 'hasJamat': b.isNotEmpty},
+    );
   }
 
   Future<int> _count(Query<Map<String, dynamic>> q) async =>

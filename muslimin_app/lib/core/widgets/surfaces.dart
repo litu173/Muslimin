@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+
+import 'buttons.dart';
+
+import '../../l10n/app_localizations.dart';
+
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../theme/app_colors.dart';
@@ -369,4 +374,31 @@ class Dots extends StatelessWidget {
         ),
     ],
   );
+}
+
+/// A load that failed: what happened in plain words, and Retry.
+/// [error] decides the wording (busy / no access / offline).
+class LoadError extends StatelessWidget {
+  const LoadError({super.key, required this.error, required this.onRetry});
+
+  final Object error;
+  final VoidCallback onRetry;
+
+  @override
+  Widget build(BuildContext context) {
+    final t = L10n.of(context);
+    final e = '$error';
+    final message = e.contains('resource-exhausted') || e.contains('Quota')
+        ? t.errorBusy
+        : e.contains('permission-denied')
+        ? t.errorNoAccess
+        : e.contains('unavailable') || e.contains('network')
+        ? t.errorOffline
+        : t.somethingWrong;
+    return EmptyState(
+      message: message,
+      icon: Icons.cloud_off_rounded,
+      action: AppButton(t.retry, onPressed: onRetry, dense: true),
+    );
+  }
 }

@@ -4346,6 +4346,120 @@ abstract class L10n {
   /// In en, this message translates to:
   /// **'No masjids listed in this thana yet.'**
   String get noMasjidInThana;
+
+  /// No description provided for @allAreas.
+  ///
+  /// In en, this message translates to:
+  /// **'All areas'**
+  String get allAreas;
+
+  /// No description provided for @errorBusy.
+  ///
+  /// In en, this message translates to:
+  /// **'The app is very busy right now. Please try again in a while.'**
+  String get errorBusy;
+
+  /// No description provided for @errorNoAccess.
+  ///
+  /// In en, this message translates to:
+  /// **'You don\'t have access to this.'**
+  String get errorNoAccess;
+
+  /// No description provided for @errorOffline.
+  ///
+  /// In en, this message translates to:
+  /// **'No internet connection.'**
+  String get errorOffline;
+
+  /// No description provided for @walk.
+  ///
+  /// In en, this message translates to:
+  /// **'Walk'**
+  String get walk;
+
+  /// No description provided for @drive.
+  ///
+  /// In en, this message translates to:
+  /// **'Drive'**
+  String get drive;
+
+  /// No description provided for @routeUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Route not available – straight-line distance'**
+  String get routeUnavailable;
+
+  /// No description provided for @openInMapsApp.
+  ///
+  /// In en, this message translates to:
+  /// **'Open in Maps app'**
+  String get openInMapsApp;
+
+  /// No description provided for @minutesShort.
+  ///
+  /// In en, this message translates to:
+  /// **'{minutes} min'**
+  String minutesShort(String minutes);
+
+  /// No description provided for @hoursMinutes.
+  ///
+  /// In en, this message translates to:
+  /// **'{hours} h {minutes} min'**
+  String hoursMinutes(String hours, String minutes);
+
+  /// No description provided for @fixLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Wrong pin? Fix location'**
+  String get fixLocation;
+
+  /// No description provided for @editFieldLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Location'**
+  String get editFieldLocation;
+
+  /// No description provided for @attachAnyFile.
+  ///
+  /// In en, this message translates to:
+  /// **'File (video, audio, PDF…)'**
+  String get attachAnyFile;
+
+  /// No description provided for @speechUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Speech to text isn\'t available on this phone.'**
+  String get speechUnavailable;
+
+  /// No description provided for @speechNothing.
+  ///
+  /// In en, this message translates to:
+  /// **'Didn\'t catch that – hold the mic and speak.'**
+  String get speechNothing;
+
+  /// No description provided for @holdToTalk.
+  ///
+  /// In en, this message translates to:
+  /// **'Hold to talk'**
+  String get holdToTalk;
+
+  /// No description provided for @listening.
+  ///
+  /// In en, this message translates to:
+  /// **'Listening…'**
+  String get listening;
+
+  /// No description provided for @slideToCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Slide to cancel'**
+  String get slideToCancel;
+
+  /// No description provided for @channelMembers.
+  ///
+  /// In en, this message translates to:
+  /// **'Channel members'**
+  String get channelMembers;
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {

@@ -2364,4 +2364,66 @@ class L10nAr extends L10n {
 
   @override
   String get noMasjidInThana => 'لا توجد مساجد مدرجة في هذه المنطقة بعد.';
+
+  @override
+  String get allAreas => 'كل المناطق';
+
+  @override
+  String get errorBusy => 'التطبيق مشغول جداً الآن. حاول لاحقاً.';
+
+  @override
+  String get errorNoAccess => 'ليس لديك صلاحية لهذا.';
+
+  @override
+  String get errorOffline => 'لا يوجد اتصال بالإنترنت.';
+
+  @override
+  String get walk => 'مشياً';
+
+  @override
+  String get drive => 'بالسيارة';
+
+  @override
+  String get routeUnavailable => 'الطريق غير متاح – المسافة المباشرة';
+
+  @override
+  String get openInMapsApp => 'فتح في تطبيق الخرائط';
+
+  @override
+  String minutesShort(String minutes) {
+    return '$minutes د';
+  }
+
+  @override
+  String hoursMinutes(String hours, String minutes) {
+    return '$hours س $minutes د';
+  }
+
+  @override
+  String get fixLocation => 'الموقع خاطئ؟ صحّحه';
+
+  @override
+  String get editFieldLocation => 'الموقع';
+
+  @override
+  String get attachAnyFile => 'ملف (فيديو، صوت، PDF…)';
+
+  @override
+  String get speechUnavailable =>
+      'تحويل الكلام إلى نص غير متاح على هذا الهاتف.';
+
+  @override
+  String get speechNothing => 'لم يُسمع شيء – اضغط على الميكروفون وتحدث.';
+
+  @override
+  String get holdToTalk => 'اضغط مطولاً للتحدث';
+
+  @override
+  String get listening => 'جارٍ الاستماع…';
+
+  @override
+  String get slideToCancel => 'اسحب للإلغاء';
+
+  @override
+  String get channelMembers => 'أعضاء القناة';
 }

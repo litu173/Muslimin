@@ -15,7 +15,7 @@ import '../../../core/widgets/surfaces.dart';
 import '../../../data/models/masjid.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../state/providers.dart';
-import '../masjid_screen.dart';
+import '../directions_screen.dart';
 import '../volunteer.dart';
 
 /// Arched window glyph used for staff members (Figma: lattice window).
@@ -118,15 +118,29 @@ class _MasjidAboutTabState extends ConsumerState<MasjidAboutTab> {
                       ),
                     ),
                     TextButton(
-                      onPressed: () => openDirections(
-                        widget.masjid,
-                        ref.read(locationProvider).value,
+                      onPressed: () => push(
+                        context,
+                        DirectionsScreen(masjid: widget.masjid),
                       ),
                       child: Text(t.directions),
                     ),
                   ],
                 ),
               ),
+              // Pins from OpenStreetMap are sometimes a little off.
+              if (widget.canEdit)
+                Align(
+                  alignment: AlignmentDirectional.centerEnd,
+                  child: TextButton.icon(
+                    icon: const Icon(
+                      Icons.edit_location_alt_outlined,
+                      size: 18,
+                    ),
+                    label: Text(t.fixLocation),
+                    onPressed: () =>
+                        fixMasjidLocation(context, ref, widget.masjid),
+                  ),
+                ),
             ],
           ),
         ),

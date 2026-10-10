@@ -50,6 +50,8 @@
 
     <p>Your thana for the masjid list is worked out on your phone from bundled boundary data (BBS / OCHA via geoBoundaries); it is not sent anywhere. Push notifications are sent through Google Firebase Cloud Messaging by a small scheduled job on GitHub, which reads only the new notices and messages to send.</p>
 
+    <p>In-app directions use the OpenStreetMap routing service run by FOSSGIS (routing.openstreetmap.de), which receives your position and the masjid's to draw the way. Hold-to-talk in channels uses your phone's own speech recognition (Apple or Google); the text is sent as an ordinary message and no recording is kept by Muslimin.</p>
+
     <h2>Where it is stored</h2>
     <p>Data is stored in Google Firebase (Cloud Firestore, asia-south1). Access is protected by security rules: only you can read your account data; NID and phone numbers of masjid authorities are visible only to them and to Muslimin administrators.</p>
 

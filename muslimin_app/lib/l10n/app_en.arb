@@ -1216,5 +1216,41 @@
       }
     }
   },
-  "noMasjidInThana": "No masjids listed in this thana yet."
+  "noMasjidInThana": "No masjids listed in this thana yet.",
+  "allAreas": "All areas",
+  "errorBusy": "The app is very busy right now. Please try again in a while.",
+  "errorNoAccess": "You don't have access to this.",
+  "errorOffline": "No internet connection.",
+  "walk": "Walk",
+  "drive": "Drive",
+  "routeUnavailable": "Route not available – straight-line distance",
+  "openInMapsApp": "Open in Maps app",
+  "minutesShort": "{minutes} min",
+  "hoursMinutes": "{hours} h {minutes} min",
+  "@minutesShort": {
+    "placeholders": {
+      "minutes": {
+        "type": "String"
+      }
+    }
+  },
+  "@hoursMinutes": {
+    "placeholders": {
+      "hours": {
+        "type": "String"
+      },
+      "minutes": {
+        "type": "String"
+      }
+    }
+  },
+  "fixLocation": "Wrong pin? Fix location",
+  "editFieldLocation": "Location",
+  "attachAnyFile": "File (video, audio, PDF…)",
+  "speechUnavailable": "Speech to text isn't available on this phone.",
+  "speechNothing": "Didn't catch that – hold the mic and speak.",
+  "holdToTalk": "Hold to talk",
+  "listening": "Listening…",
+  "slideToCancel": "Slide to cancel",
+  "channelMembers": "Channel members"
 }

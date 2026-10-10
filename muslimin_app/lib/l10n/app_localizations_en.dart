@@ -2391,4 +2391,67 @@ class L10nEn extends L10n {
 
   @override
   String get noMasjidInThana => 'No masjids listed in this thana yet.';
+
+  @override
+  String get allAreas => 'All areas';
+
+  @override
+  String get errorBusy =>
+      'The app is very busy right now. Please try again in a while.';
+
+  @override
+  String get errorNoAccess => 'You don\'t have access to this.';
+
+  @override
+  String get errorOffline => 'No internet connection.';
+
+  @override
+  String get walk => 'Walk';
+
+  @override
+  String get drive => 'Drive';
+
+  @override
+  String get routeUnavailable => 'Route not available – straight-line distance';
+
+  @override
+  String get openInMapsApp => 'Open in Maps app';
+
+  @override
+  String minutesShort(String minutes) {
+    return '$minutes min';
+  }
+
+  @override
+  String hoursMinutes(String hours, String minutes) {
+    return '$hours h $minutes min';
+  }
+
+  @override
+  String get fixLocation => 'Wrong pin? Fix location';
+
+  @override
+  String get editFieldLocation => 'Location';
+
+  @override
+  String get attachAnyFile => 'File (video, audio, PDF…)';
+
+  @override
+  String get speechUnavailable =>
+      'Speech to text isn\'t available on this phone.';
+
+  @override
+  String get speechNothing => 'Didn\'t catch that – hold the mic and speak.';
+
+  @override
+  String get holdToTalk => 'Hold to talk';
+
+  @override
+  String get listening => 'Listening…';
+
+  @override
+  String get slideToCancel => 'Slide to cancel';
+
+  @override
+  String get channelMembers => 'Channel members';
 }

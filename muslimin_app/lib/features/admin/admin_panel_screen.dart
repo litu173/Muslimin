@@ -95,7 +95,10 @@ class _Queue extends ConsumerWidget {
         .watch(masjidsByStatusProvider(status))
         .when(
           loading: () => const Loader(),
-          error: (e, _) => EmptyState(message: '${t.somethingWrong}\n$e'),
+          error: (e, _) => LoadError(
+            error: e,
+            onRetry: () => ref.invalidate(masjidsByStatusProvider(status)),
+          ),
           data: (list) => list.isEmpty
               ? EmptyState(message: t.nothingHere, icon: Icons.inbox_outlined)
               : RefreshList.separated(

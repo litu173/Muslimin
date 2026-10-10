@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:speech_to_text/speech_to_text.dart';
 
 import '../../../core/nav.dart';
 import '../../../core/theme/app_colors.dart';
@@ -18,7 +19,6 @@ import '../../../state/channel.dart';
 import '../../../state/providers.dart';
 import 'attachment_view.dart';
 import 'channel_invite_card.dart';
-import 'channel_members_screen.dart';
 
 String roleName(L10n t, ChannelRole r) => switch (r) {
   ChannelRole.member => t.roleMember,
@@ -76,48 +76,11 @@ class MasjidChannelTab extends ConsumerWidget {
     }
     return Column(
       children: [
-        _Bar(masjid: masjid, role: role),
         Expanded(
           child: _Messages(masjid: masjid, role: role),
         ),
         if (role.canPost) _Composer(masjid: masjid, role: role),
       ],
-    );
-  }
-}
-
-/// Who posts here, and Members for admins. (Leave is in the header menu.)
-class _Bar extends ConsumerWidget {
-  const _Bar({required this.masjid, required this.role});
-
-  final Masjid masjid;
-  final ChannelRole role;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final t = L10n.of(context);
-    return Container(
-      color: AppColors.card,
-      padding: const EdgeInsets.fromLTRB(Gap.l, Gap.s, Gap.s, Gap.s),
-      child: Row(
-        children: [
-          Icon(Icons.forum_rounded, size: 18, color: AppColors.gold),
-          const SizedBox(width: Gap.s),
-          Expanded(
-            child: Text(
-              role.canPost ? roleName(t, role) : t.channelReadOnly,
-              style: AppText.caption.copyWith(color: AppColors.muted),
-            ),
-          ),
-          if (role.canManage)
-            TextButton.icon(
-              onPressed: () =>
-                  push(context, ChannelMembersScreen(masjid: masjid)),
-              icon: const Icon(Icons.group_rounded, size: 18),
-              label: Text(t.members),
-            ),
-        ],
-      ),
     );
   }
 }
@@ -293,6 +256,10 @@ class _Composer extends ConsumerStatefulWidget {
   ConsumerState<_Composer> createState() => _ComposerState();
 }
 
+/// WhatsApp-style input: a round text field with attach and camera inside,
+/// and one round button – send when there is something to send, otherwise a
+/// microphone: hold to talk (your words are written out and sent on
+/// release), slide left to cancel.
 class _ComposerState extends ConsumerState<_Composer> {
   final _text = TextEditingController();
   bool _sending = false;
@@ -300,15 +267,32 @@ class _ComposerState extends ConsumerState<_Composer> {
   /// Picked attachment: (name, bytes).
   (String, Uint8List)? _file;
 
+  final _stt = SpeechToText();
+  bool _listening = false;
+  String _heard = '';
+  double _dragX = 0;
+
+  static const _cancelDrag = -90.0;
+
+  @override
+  void initState() {
+    super.initState();
+    _text.addListener(() => setState(() {}));
+  }
+
   @override
   void dispose() {
+    _stt.cancel();
     _text.dispose();
     super.dispose();
   }
 
+  bool get _canSend => _text.text.trim().isNotEmpty || _file != null;
+
+  // ------------------------------------------------------------ attach
   Future<void> _attach() async {
     final t = L10n.of(context);
-    final kind = await showModalBottomSheet<AttachmentKind>(
+    final pick = await showModalBottomSheet<String>(
       context: context,
       backgroundColor: AppColors.card,
       builder: (ctx) => SafeArea(
@@ -316,10 +300,9 @@ class _ComposerState extends ConsumerState<_Composer> {
           mainAxisSize: MainAxisSize.min,
           children: [
             for (final (k, icon, label) in [
-              (AttachmentKind.image, Icons.image_outlined, t.attachPhoto),
-              (AttachmentKind.video, Icons.videocam_outlined, t.attachVideo),
-              (AttachmentKind.audio, Icons.audiotrack_outlined, t.attachAudio),
-              (AttachmentKind.file, Icons.attach_file_rounded, t.attachFile),
+              ('photo', Icons.image_outlined, t.attachPhoto),
+              ('camera', Icons.photo_camera_outlined, t.takePhoto),
+              ('file', Icons.attach_file_rounded, t.attachAnyFile),
             ])
               ListTile(
                 leading: Icon(icon, color: AppColors.gold),
@@ -330,61 +313,62 @@ class _ComposerState extends ConsumerState<_Composer> {
         ),
       ),
     );
-    if (kind == null) return;
-    (String, Uint8List)? picked;
-    if (kind == AttachmentKind.image) {
-      // Photos are shrunk before sending (small, quick to load).
-      final x = await ImagePicker().pickImage(
-        source: ImageSource.gallery,
-        maxWidth: 1600,
-        imageQuality: 80,
+    if (pick == 'file') {
+      await _pickFile();
+    } else if (pick != null) {
+      await _pickPhoto(
+        pick == 'camera' ? ImageSource.camera : ImageSource.gallery,
       );
-      if (x != null) {
-        final ext = x.name.split('.').last;
-        picked = (
-          'photo_${DateTime.now().millisecondsSinceEpoch}.$ext',
-          await x.readAsBytes(),
-        );
-      }
-    } else {
-      final XFile? f;
-      if (kind == AttachmentKind.video) {
-        f = await ImagePicker().pickVideo(source: ImageSource.gallery);
-      } else {
-        f = await openFile(
-          acceptedTypeGroups: [
-            kind == AttachmentKind.audio
-                ? const XTypeGroup(
-                    label: 'audio',
-                    extensions: ['mp3', 'm4a', 'aac', 'wav', 'ogg', 'opus'],
-                    uniformTypeIdentifiers: ['public.audio'],
-                  )
-                : const XTypeGroup(
-                    label: 'any',
-                    uniformTypeIdentifiers: ['public.item'],
-                  ),
-          ],
-        );
-      }
-      if (f != null) {
-        // Check the size before loading a huge file into memory.
-        if (await f.length() > kMaxAttachmentBytes) {
-          if (mounted) {
-            toast(context, t.fileTooLarge(fileSize(kMaxAttachmentBytes)));
-          }
-          return;
-        }
-        picked = (f.name, await f.readAsBytes());
-      }
     }
-    if (picked == null || !mounted) return;
+  }
+
+  Future<void> _pickPhoto(ImageSource source) async {
+    // Photos are shrunk before sending (small, quick to load).
+    final x = await ImagePicker().pickImage(
+      source: source,
+      maxWidth: 1600,
+      imageQuality: 80,
+    );
+    if (x == null || !mounted) return;
+    final ext = x.name.contains('.') ? x.name.split('.').last : 'jpg';
+    _setFile((
+      'photo_${DateTime.now().millisecondsSinceEpoch}.$ext',
+      await x.readAsBytes(),
+    ));
+  }
+
+  /// Any file: video, audio, PDF, documents…
+  Future<void> _pickFile() async {
+    final t = L10n.of(context);
+    final f = await openFile(
+      acceptedTypeGroups: const [
+        XTypeGroup(label: 'any', uniformTypeIdentifiers: ['public.item']),
+      ],
+    );
+    if (f == null || !mounted) return;
+    // Check the size before loading a huge file into memory.
+    if (await f.length() > kMaxAttachmentBytes) {
+      if (mounted) {
+        toast(context, t.fileTooLarge(fileSize(kMaxAttachmentBytes)));
+      }
+      return;
+    }
+    _setFile((f.name, await f.readAsBytes()));
+  }
+
+  void _setFile((String, Uint8List) picked) {
+    if (!mounted) return;
     if (picked.$2.length > kMaxAttachmentBytes) {
-      toast(context, t.fileTooLarge(fileSize(kMaxAttachmentBytes)));
+      toast(
+        context,
+        L10n.of(context).fileTooLarge(fileSize(kMaxAttachmentBytes)),
+      );
       return;
     }
     setState(() => _file = picked);
   }
 
+  // -------------------------------------------------------------- send
   Future<void> _send() async {
     final text = _text.text.trim();
     if ((text.isEmpty && _file == null) || _sending) return;
@@ -397,10 +381,9 @@ class _ComposerState extends ConsumerState<_Composer> {
       setState(() => _file = null);
     } catch (e) {
       if (mounted) {
-        final denied = e.toString().contains('permission-denied');
         toast(
           context,
-          denied
+          isPermissionError(e)
               ? L10n.of(context).channelNotAllowed
               : L10n.of(context).somethingWrong,
         );
@@ -410,9 +393,79 @@ class _ComposerState extends ConsumerState<_Composer> {
     }
   }
 
+  // ------------------------------------------------------- hold to talk
+  /// The recognizer's locale for the app language (bn_BD, ar_SA…), when
+  /// the phone has it.
+  Future<String?> _locale() async {
+    final lang = Localizations.localeOf(context).languageCode;
+    final all = await _stt.locales();
+    for (final l in all) {
+      if (l.localeId.toLowerCase().startsWith(lang)) return l.localeId;
+    }
+    return null;
+  }
+
+  Future<void> _startTalk() async {
+    final t = L10n.of(context);
+    final ok = await _stt.initialize(
+      onError: (_) {
+        if (mounted && _listening) setState(() => _listening = false);
+      },
+    );
+    if (!mounted) return;
+    if (!ok) {
+      toast(context, t.speechUnavailable);
+      return;
+    }
+    final locale = await _locale();
+    if (!mounted) return;
+    HapticFeedback.mediumImpact();
+    setState(() {
+      _listening = true;
+      _heard = '';
+      _dragX = 0;
+    });
+    await _stt.listen(
+      onResult: (r) {
+        if (mounted) setState(() => _heard = r.recognizedWords);
+      },
+      listenOptions: SpeechListenOptions(
+        localeId: locale,
+        listenMode: ListenMode.dictation,
+        partialResults: true,
+        cancelOnError: true,
+      ),
+    );
+  }
+
+  Future<void> _endTalk() async {
+    if (!_listening) return;
+    final cancel = _dragX < _cancelDrag;
+    if (cancel) {
+      await _stt.cancel();
+    } else {
+      await _stt.stop();
+      // The last words arrive just after stopping.
+      await Future<void>.delayed(const Duration(milliseconds: 400));
+    }
+    if (!mounted) return;
+    final words = _heard.trim();
+    setState(() => _listening = false);
+    if (cancel) return;
+    if (words.isEmpty) {
+      toast(context, L10n.of(context).speechNothing);
+      return;
+    }
+    // Like typing it: whatever is already in the box stays in front.
+    final typed = _text.text.trim();
+    _text.text = typed.isEmpty ? words : '$typed $words';
+    await _send();
+  }
+
   @override
   Widget build(BuildContext context) {
     final t = L10n.of(context);
+    final fieldColor = AppColors.field;
     return Container(
       color: AppColors.card,
       padding: EdgeInsets.fromLTRB(
@@ -426,7 +479,7 @@ class _ComposerState extends ConsumerState<_Composer> {
         children: [
           if (_file != null)
             Padding(
-              padding: const EdgeInsets.only(bottom: Gap.s, right: Gap.s),
+              padding: const EdgeInsets.fromLTRB(Gap.s, 0, 0, Gap.s),
               child: Row(
                 children: [
                   Icon(Icons.attach_file_rounded, color: AppColors.gold),
@@ -450,47 +503,185 @@ class _ComposerState extends ConsumerState<_Composer> {
           Row(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              IconButton(
-                tooltip: t.attach,
-                onPressed: _sending ? null : _attach,
-                icon: Icon(
-                  Icons.add_circle_outline_rounded,
-                  color: AppColors.gold,
-                ),
-              ),
               Expanded(
-                child: TextField(
-                  controller: _text,
-                  minLines: 1,
-                  maxLines: 5,
-                  maxLength: kMaxChannelMessage,
-                  textCapitalization: TextCapitalization.sentences,
-                  decoration: InputDecoration(
-                    hintText: t.messageHint,
-                    counterText: '',
-                    isDense: true,
+                child: Container(
+                  constraints: const BoxConstraints(minHeight: 48),
+                  decoration: BoxDecoration(
+                    color: fieldColor,
+                    borderRadius: BorderRadius.circular(24),
+                    border: Border.all(color: AppColors.divider),
                   ),
+                  child: _listening
+                      ? _Listening(heard: _heard, dragX: _dragX)
+                      : Row(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            const SizedBox(width: Gap.l),
+                            Expanded(
+                              child: TextField(
+                                controller: _text,
+                                minLines: 1,
+                                maxLines: 5,
+                                maxLength: kMaxChannelMessage,
+                                textCapitalization:
+                                    TextCapitalization.sentences,
+                                style: AppText.body,
+                                decoration: InputDecoration(
+                                  hintText: t.messageHint,
+                                  counterText: '',
+                                  border: InputBorder.none,
+                                  enabledBorder: InputBorder.none,
+                                  focusedBorder: InputBorder.none,
+                                  filled: false,
+                                  isDense: true,
+                                  contentPadding: const EdgeInsets.symmetric(
+                                    vertical: 14,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            IconButton(
+                              tooltip: t.attach,
+                              onPressed: _sending ? null : _attach,
+                              icon: Transform.rotate(
+                                angle: -0.6,
+                                child: Icon(
+                                  Icons.attach_file_rounded,
+                                  color: AppColors.muted,
+                                ),
+                              ),
+                            ),
+                            if (_text.text.isEmpty)
+                              IconButton(
+                                tooltip: t.takePhoto,
+                                onPressed: _sending
+                                    ? null
+                                    : () => _pickPhoto(ImageSource.camera),
+                                icon: Icon(
+                                  Icons.photo_camera_outlined,
+                                  color: AppColors.muted,
+                                ),
+                              ),
+                          ],
+                        ),
                 ),
               ),
-              const SizedBox(width: Gap.s),
-              IconButton.filled(
-                tooltip: t.send,
-                onPressed: _sending ? null : _send,
-                style: IconButton.styleFrom(backgroundColor: AppColors.gold),
-                icon: _sending
-                    ? const SizedBox.square(
-                        dimension: 18,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          color: Colors.white,
+              const SizedBox(width: 6),
+              _canSend || _sending
+                  ? _RoundButton(
+                      tooltip: t.send,
+                      onTap: _sending ? null : _send,
+                      child: _sending
+                          ? const SizedBox.square(
+                              dimension: 20,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: Colors.white,
+                              ),
+                            )
+                          : const Icon(Icons.send_rounded, color: Colors.white),
+                    )
+                  : GestureDetector(
+                      onTap: () => toast(context, t.holdToTalk),
+                      onLongPressStart: (_) => _startTalk(),
+                      onLongPressMoveUpdate: (d) => setState(
+                        () => _dragX = d.offsetFromOrigin.dx.clamp(-200, 0),
+                      ),
+                      onLongPressEnd: (_) => _endTalk(),
+                      onLongPressCancel: _endTalk,
+                      child: AnimatedScale(
+                        scale: _listening ? 1.35 : 1,
+                        duration: const Duration(milliseconds: 150),
+                        child: _RoundButton(
+                          tooltip: t.holdToTalk,
+                          color: _listening ? AppColors.danger : null,
+                          child: const Icon(
+                            Icons.mic_rounded,
+                            color: Colors.white,
+                          ),
                         ),
-                      )
-                    : const Icon(Icons.send_rounded, color: Colors.white),
-              ),
+                      ),
+                    ),
             ],
           ),
         ],
       ),
     );
   }
+}
+
+/// While holding the mic: what has been heard so far, and how to cancel.
+class _Listening extends StatelessWidget {
+  const _Listening({required this.heard, required this.dragX});
+
+  final String heard;
+  final double dragX;
+
+  @override
+  Widget build(BuildContext context) {
+    final t = L10n.of(context);
+    final cancelling = dragX < _ComposerState._cancelDrag;
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: Gap.l, vertical: 12),
+      child: Row(
+        children: [
+          Icon(
+            cancelling
+                ? Icons.delete_outline_rounded
+                : Icons.fiber_manual_record,
+            size: 16,
+            color: AppColors.danger,
+          ),
+          const SizedBox(width: Gap.s),
+          Expanded(
+            child: Text(
+              heard.isEmpty ? t.listening : heard,
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
+              style: AppText.body.copyWith(
+                color: heard.isEmpty ? AppColors.muted : AppColors.ink,
+              ),
+            ),
+          ),
+          Transform.translate(
+            offset: Offset(dragX / 3, 0),
+            child: Text(
+              '‹ ${t.slideToCancel}',
+              style: AppText.caption.copyWith(
+                color: cancelling ? AppColors.danger : AppColors.muted,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _RoundButton extends StatelessWidget {
+  const _RoundButton({
+    required this.child,
+    required this.tooltip,
+    this.onTap,
+    this.color,
+  });
+
+  final Widget child;
+  final String tooltip;
+  final VoidCallback? onTap;
+  final Color? color;
+
+  @override
+  Widget build(BuildContext context) => Tooltip(
+    message: tooltip,
+    child: Material(
+      color: color ?? AppColors.gold,
+      shape: const CircleBorder(),
+      child: InkWell(
+        customBorder: const CircleBorder(),
+        onTap: onTap,
+        child: SizedBox.square(dimension: 48, child: Center(child: child)),
+      ),
+    ),
+  );
 }

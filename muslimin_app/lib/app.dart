@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'core/config.dart';
 import 'core/nav.dart';
+import 'core/widgets/entrance.dart';
 import 'core/theme/app_colors.dart';
 import 'core/theme/app_theme.dart';
 import 'core/widgets/refresh.dart';
@@ -60,6 +61,8 @@ class _MusliminAppState extends ConsumerState<MusliminApp> {
       title: kAppName,
       debugShowCheckedModeBanner: false,
       navigatorKey: navigatorKey,
+      // Pages replay their entrance when the user comes back to them.
+      navigatorObservers: [routeObserver],
       locale: locale,
       supportedLocales: L10n.supportedLocales,
       localizationsDelegates: const [
