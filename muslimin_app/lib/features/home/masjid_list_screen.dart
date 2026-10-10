@@ -118,7 +118,7 @@ class _MasjidListScreenState extends ConsumerState<MasjidListScreen> {
                 ];
                 return RefreshList.separated(
                   onRefresh: () async {
-                    ref.invalidate(thanaMasjidsProvider);
+                    ref.invalidate(myThanaMasjidsProvider);
                     await refreshAll(ref);
                   },
                   padding: const EdgeInsets.fromLTRB(Gap.l, 0, Gap.l, Gap.xxl),

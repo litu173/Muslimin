@@ -9,6 +9,7 @@ simplified outline (~150 m) and bounding box, so the phone can tell which
 thana a GPS point is in without any server.
 """
 import json, sys
+sys.setrecursionlimit(100000)
 
 adm2, adm3, out = sys.argv[1:4]
 
@@ -27,6 +28,18 @@ def rdp(pts, eps):
     if dmax <= eps:
         return [pts[0], pts[-1]]
     return rdp(pts[:idx + 1], eps)[:-1] + rdp(pts[idx:], eps)
+
+def simplify_ring(pts, eps):
+    # A closed ring starts and ends on the same point: simplify its two
+    # halves (split at the point farthest from the start).
+    if len(pts) < 8:
+        return pts
+    x0, y0 = pts[0]
+    far = max(range(len(pts)), key=lambda i: (pts[i][0] - x0) ** 2 + (pts[i][1] - y0) ** 2)
+    a = rdp(pts[:far + 1], eps)
+    b = rdp(pts[far:], eps)
+    return a[:-1] + b
+
 
 def polys(g):
     return [g['coordinates']] if g['type'] == 'Polygon' else g['coordinates']
@@ -61,9 +74,9 @@ for f in json.load(open(adm3))['features']:
             if d: break
     out_p = []
     # Small city thanas need a finer outline than big rural upazilas.
-    for eps in (0.0015, 0.0004, 0.0001):
+    for eps in (0.0001, 0.00001):
         for p in ps:
-            ring = rdp([(round(x, 4), round(y, 4)) for x, y in p[0]], eps)
+            ring = simplify_ring([(round(x, 5), round(y, 5)) for x, y in p[0]], eps)
             if len(ring) >= 4:
                 out_p.append([v for xy in ring for v in xy])
         if out_p:
@@ -75,4 +88,11 @@ for f in json.load(open(adm3))['features']:
                 'b': [min(xs), min(ys), max(xs), max(ys)], 'p': out_p})
 res.sort(key=lambda r: (r['d'] or '', r['t']))
 json.dump(res, open(out, 'w'), separators=(',', ':'))
+# The names only, by district (form dropdowns): thanas.json next to it.
+names = {}
+for r in res:
+    names.setdefault(r['d'], set()).add(r['t'])
+json.dump({k: sorted(v) for k, v in sorted(names.items())},
+          open(out.rsplit('/', 1)[0] + '/thanas.json', 'w'),
+          ensure_ascii=False, separators=(',', ':'))
 print(len(res), 'upazilas; no district:', [r['t'] for r in res if not r['d']])

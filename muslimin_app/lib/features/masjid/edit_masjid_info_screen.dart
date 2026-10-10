@@ -55,11 +55,22 @@ class _EditMasjidInfoScreenState extends ConsumerState<EditMasjidInfoScreen> {
   bool _locating = false;
   String? _locError;
 
+  /// District and thana from the masjid's position (still editable).
+  Future<void> _fillArea(double lat, double lng) async {
+    final area = (await ThanaService.load()).at(lat, lng);
+    if (area == null || !mounted) return;
+    setState(() {
+      _district = area.district;
+      _thana.text = area.name;
+    });
+  }
+
   Future<void> _pickOnMap() async {
     final picked = await pickOnMap(context, initial: _fix);
     if (picked == null || !mounted) return;
     setState(() {
       _fix = picked;
+      _fillArea(picked.lat, picked.lng);
       _moved = true;
       _locError = null;
     });
@@ -75,6 +86,7 @@ class _EditMasjidInfoScreenState extends ConsumerState<EditMasjidInfoScreen> {
       if (!mounted) return;
       setState(() {
         _fix = fix;
+        _fillArea(fix.lat, fix.lng);
         _moved = true;
       });
     } catch (_) {
@@ -104,16 +116,14 @@ class _EditMasjidInfoScreenState extends ConsumerState<EditMasjidInfoScreen> {
     }
     setState(() => _saving = true);
     try {
-      // District and thana as the "All Masjids" lists know them.
-      final area = (await ThanaService.load()).at(_fix.lat, _fix.lng);
       await ref
           .read(backendProvider)
           .updateInfo(
             widget.masjid.id,
             name: _name.text.trim(),
             nameBn: _nameBn.text.trim(),
-            district: area?.district ?? _district ?? '',
-            thana: area?.name ?? _thana.text.trim(),
+            district: _district ?? '',
+            thana: _thana.text.trim(),
             address: _address.text.trim(),
             location: _moved
                 ? (_fix.lat, _fix.lng, _fix.fromMap ? 0 : _fix.accuracy)
@@ -172,12 +182,18 @@ class _EditMasjidInfoScreenState extends ConsumerState<EditMasjidInfoScreen> {
                             ? bdDistricts.firstWhere((d) => d.$1 == en).$2
                             : en,
                         validator: (v) => v == null ? t.required : null,
-                        onChanged: (v) => setState(() => _district = v),
+                        onChanged: (v) => setState(() {
+                          _district = v;
+                          _thana.clear();
+                        }),
                       ),
-                      AppTextField(
+                      ThanaDropdown(
                         label: t.thana,
-                        controller: _thana,
-                        validator: req,
+                        district: _district,
+                        value: _thana.text,
+                        hint: t.select,
+                        validator: (v) => v == null ? t.required : null,
+                        onChanged: (v) => setState(() => _thana.text = v ?? ''),
                       ),
                       AppTextField(
                         label: t.address,

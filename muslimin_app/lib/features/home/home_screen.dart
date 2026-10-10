@@ -75,7 +75,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
   Widget build(BuildContext context) {
     final t = L10n.of(context);
     final loc = ref.watch(locationProvider);
-    final masjids = ref.watch(nearbyMasjidsProvider);
+    final masjids = ref.watch(myThanaMasjidsProvider);
     // Only for users who have not registered a masjid yet.
     final mine = ref.watch(myMasjidsProvider);
     final showBanner =
@@ -149,7 +149,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                     icon: Icons.wifi_off_rounded,
                     action: AppButton(
                       t.retry,
-                      onPressed: () => ref.invalidate(nearbyMasjidsProvider),
+                      onPressed: () => ref.invalidate(myThanaMasjidsProvider),
                       dense: true,
                     ),
                   ),

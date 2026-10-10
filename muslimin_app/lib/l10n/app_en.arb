@@ -1252,5 +1252,6 @@
   "holdToTalk": "Hold to talk",
   "listening": "Listening…",
   "slideToCancel": "Slide to cancel",
-  "channelMembers": "Channel members"
+  "channelMembers": "Channel members",
+  "markAllRead": "Mark all read"
 }

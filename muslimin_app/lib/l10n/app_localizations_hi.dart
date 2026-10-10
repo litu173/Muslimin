@@ -2453,4 +2453,7 @@ class L10nHi extends L10n {
 
   @override
   String get channelMembers => 'चैनल के सदस्य';
+
+  @override
+  String get markAllRead => 'सब पढ़ा हुआ';
 }

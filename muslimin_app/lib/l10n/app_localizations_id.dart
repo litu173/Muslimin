@@ -2458,4 +2458,7 @@ class L10nId extends L10n {
 
   @override
   String get channelMembers => 'Anggota saluran';
+
+  @override
+  String get markAllRead => 'Tandai semua dibaca';
 }

@@ -67,6 +67,10 @@ class Prefs {
   int get inboxOpenedAt => _p.getInt('inboxOpenedAt') ?? 0;
   set inboxOpenedAt(int v) => _p.setInt('inboxOpenedAt', v);
 
+  /// Notifications opened one by one (ids), newest kept.
+  List<String> get readIds => _p.getStringList('readIds') ?? const [];
+  set readIds(List<String> v) => _p.setStringList('readIds', v);
+
   int get reciter => _p.getInt('reciter') ?? 7;
   set reciter(int v) => _p.setInt('reciter', v);
 

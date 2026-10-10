@@ -2426,4 +2426,7 @@ class L10nAr extends L10n {
 
   @override
   String get channelMembers => 'أعضاء القناة';
+
+  @override
+  String get markAllRead => 'تحديد الكل كمقروء';
 }

@@ -724,5 +724,6 @@
   "holdToTalk": "Konuşmak için basılı tutun",
   "listening": "Dinleniyor…",
   "slideToCancel": "İptal için kaydırın",
-  "channelMembers": "Kanal üyeleri"
+  "channelMembers": "Kanal üyeleri",
+  "markAllRead": "Tümünü okundu say"
 }

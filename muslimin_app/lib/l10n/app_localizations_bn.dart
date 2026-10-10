@@ -2434,4 +2434,7 @@ class L10nBn extends L10n {
 
   @override
   String get channelMembers => 'চ্যানেলের সদস্য';
+
+  @override
+  String get markAllRead => 'সব পড়া হয়েছে';
 }

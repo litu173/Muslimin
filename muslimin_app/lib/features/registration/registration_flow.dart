@@ -201,6 +201,7 @@ class _RegistrationFlowState extends ConsumerState<RegistrationFlow> {
     try {
       final fix = await ref.read(locationServiceProvider).preciseFix();
       setState(() => _fix = fix);
+      _fillArea(fix.lat, fix.lng);
     } catch (_) {
       if (mounted) setState(() => _locError = L10n.of(context).somethingWrong);
     } finally {
@@ -210,11 +211,22 @@ class _RegistrationFlowState extends ConsumerState<RegistrationFlow> {
 
   /// Location chosen on the map – a masjid tapped there also fills in the
   /// English or Bangla name if it is still empty.
+  /// District and thana from the masjid's position (still editable).
+  Future<void> _fillArea(double lat, double lng) async {
+    final area = (await ThanaService.load()).at(lat, lng);
+    if (area == null || !mounted) return;
+    setState(() {
+      _district = area.district;
+      _thana.text = area.name;
+    });
+  }
+
   Future<void> _pickOnMap() async {
     final picked = await pickOnMap(context, initial: _fix);
     if (picked == null || !mounted) return;
     setState(() {
       _fix = picked;
+      _fillArea(picked.lat, picked.lng);
       _locError = null;
       final label = picked.label;
       if (label.isNotEmpty && !label.contains(',')) {
@@ -287,14 +299,6 @@ class _RegistrationFlowState extends ConsumerState<RegistrationFlow> {
     }
     setState(() => _busy = true);
     try {
-      // District and thana as the "All Masjids" lists know them, from the
-      // masjid's own position (what was typed is kept in the address).
-      final area = (await ThanaService.load()).at(_fix!.lat, _fix!.lng);
-      final typed = _thana.text.trim();
-      final address = [
-        _address.text.trim(),
-        if (area != null && typed.isNotEmpty && typed != area.name) typed,
-      ].where((s) => s.isNotEmpty).join(', ');
       await ref
           .read(backendProvider)
           .createMasjid(
@@ -302,9 +306,9 @@ class _RegistrationFlowState extends ConsumerState<RegistrationFlow> {
               id: '',
               name: _name.text.trim(),
               nameBn: _nameBn.text.trim(),
-              address: address,
-              district: area?.district ?? _district ?? '',
-              thana: area?.name ?? typed,
+              address: _address.text.trim(),
+              district: _district ?? '',
+              thana: _thana.text.trim(),
               lat: _fix!.lat,
               lng: _fix!.lng,
               status: MasjidStatus.pending,
@@ -594,9 +598,19 @@ class _RegistrationFlowState extends ConsumerState<RegistrationFlow> {
             itemLabel: (en) =>
                 bn ? bdDistricts.firstWhere((d) => d.$1 == en).$2 : en,
             validator: (v) => v == null ? t.required : null,
-            onChanged: (v) => setState(() => _district = v),
+            onChanged: (v) => setState(() {
+              _district = v;
+              _thana.clear();
+            }),
           ),
-          AppTextField(label: t.thana, controller: _thana, validator: req),
+          ThanaDropdown(
+            label: t.thana,
+            district: _district,
+            value: _thana.text,
+            hint: t.select,
+            validator: (v) => v == null ? t.required : null,
+            onChanged: (v) => setState(() => _thana.text = v ?? ''),
+          ),
           AppTextField(label: t.address, controller: _address, validator: req),
           LocationField(
             fix: _fix,

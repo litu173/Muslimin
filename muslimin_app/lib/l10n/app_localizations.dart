@@ -4460,6 +4460,12 @@ abstract class L10n {
   /// In en, this message translates to:
   /// **'Channel members'**
   String get channelMembers;
+
+  /// No description provided for @markAllRead.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark all read'**
+  String get markAllRead;
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {

@@ -2454,4 +2454,7 @@ class L10nEn extends L10n {
 
   @override
   String get channelMembers => 'Channel members';
+
+  @override
+  String get markAllRead => 'Mark all read';
 }

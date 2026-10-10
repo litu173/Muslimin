@@ -724,5 +724,6 @@
   "holdToTalk": "اضغط مطولاً للتحدث",
   "listening": "جارٍ الاستماع…",
   "slideToCancel": "اسحب للإلغاء",
-  "channelMembers": "أعضاء القناة"
+  "channelMembers": "أعضاء القناة",
+  "markAllRead": "تحديد الكل كمقروء"
 }

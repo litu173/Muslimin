@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+
+import '../../services/thana_service.dart';
+
 import 'package:flutter/services.dart';
 
 import '../theme/app_colors.dart';
@@ -208,5 +211,64 @@ class TickCircle extends StatelessWidget {
     child: checked
         ? Icon(Icons.check_rounded, size: size * 0.66, color: Colors.white)
         : null,
+  );
+}
+
+/// Thana / upazila of [district], as a dropdown – the same names the
+/// masjid lists use. Empty until a district is chosen.
+class ThanaDropdown extends StatefulWidget {
+  const ThanaDropdown({
+    super.key,
+    required this.label,
+    required this.district,
+    required this.value,
+    required this.onChanged,
+    this.hint,
+    this.validator,
+  });
+
+  final String label;
+  final String? district;
+  final String? value;
+  final ValueChanged<String?> onChanged;
+  final String? hint;
+  final String? Function(String?)? validator;
+
+  @override
+  State<ThanaDropdown> createState() => _ThanaDropdownState();
+}
+
+class _ThanaDropdownState extends State<ThanaDropdown> {
+  List<String> _names = const [];
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  @override
+  void didUpdateWidget(ThanaDropdown old) {
+    super.didUpdateWidget(old);
+    if (old.district != widget.district) _load();
+  }
+
+  Future<void> _load() async {
+    final d = widget.district;
+    final names = d == null ? const <String>[] : await ThanaNames.of(d);
+    if (mounted && d == widget.district) setState(() => _names = names);
+  }
+
+  @override
+  Widget build(BuildContext context) => AppDropdown<String>(
+    // A new district (or loaded list) starts a fresh field.
+    key: ValueKey('${widget.district}|${_names.length}|${widget.value}'),
+    label: widget.label,
+    value: _names.contains(widget.value) ? widget.value : null,
+    hint: widget.hint,
+    items: _names,
+    itemLabel: (s) => s,
+    validator: widget.validator,
+    onChanged: widget.onChanged,
   );
 }

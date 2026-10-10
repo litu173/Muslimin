@@ -2452,4 +2452,7 @@ class L10nTr extends L10n {
 
   @override
   String get channelMembers => 'Kanal üyeleri';
+
+  @override
+  String get markAllRead => 'Tümünü okundu say';
 }

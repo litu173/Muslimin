@@ -70,3 +70,16 @@ To switch it on, add the service-account key as a repository secret:
 
 GitHub pauses scheduled workflows after 60 days without any commit; re-enable
 it on the Actions page if that happens.
+
+## Thana boundaries
+
+`build_upazilas.py` makes `muslimin_app/assets/geo/upazilas.json` (outlines,
+~11 m precision) and `thanas.json` (names by district) from the **full-detail**
+geoBoundaries files (`gjDownloadURL`, not the simplified ones):
+
+```bash
+python3 build_upazilas.py ADM2_full.geojson ADM3_full.geojson ../../muslimin_app/assets/geo/upazilas.json
+```
+
+When the boundaries change, re-check the masjids and fix those that moved
+(`thana_fix.json` → GitHub Actions → **Fix masjid thanas**, ~1 write each).

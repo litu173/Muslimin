@@ -246,16 +246,25 @@ class _JamatCard extends ConsumerWidget {
                     f.relativeDays(masjid.jamatUpdatedAt!, now),
                     masjid.updatedByName,
                   ),
-            trailing: canEdit
-                ? AppButton(t.edit, onPressed: onEdit, dense: true, pill: true)
-                : CircleIconButton(
-                    icon: reminder > 0
-                        ? Icons.notifications_active_outlined
-                        : Icons.notifications_off_outlined,
-                    active: reminder > 0,
-                    tooltip: t.jamatReminder,
-                    onTap: () => _reminderSheet(context, ref, reminder),
-                  ),
+            // Everyone can set a reminder; owners, admins and editors
+            // also get Edit.
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                CircleIconButton(
+                  icon: reminder > 0
+                      ? Icons.notifications_active_outlined
+                      : Icons.notifications_off_outlined,
+                  active: reminder > 0,
+                  tooltip: t.jamatReminder,
+                  onTap: () => _reminderSheet(context, ref, reminder),
+                ),
+                if (canEdit) ...[
+                  const SizedBox(width: Gap.s),
+                  AppButton(t.edit, onPressed: onEdit, dense: true, pill: true),
+                ],
+              ],
+            ),
           ),
           const SizedBox(height: Gap.s),
           for (final p in Prayer.values) ...[

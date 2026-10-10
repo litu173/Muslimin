@@ -2458,4 +2458,7 @@ class L10nUr extends L10n {
 
   @override
   String get channelMembers => 'چینل کے ارکان';
+
+  @override
+  String get markAllRead => 'سب پڑھا ہوا';
 }

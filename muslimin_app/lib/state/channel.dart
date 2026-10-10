@@ -138,37 +138,58 @@ final followedNoticesProvider = Provider<List<Notice>>((ref) {
   return ref.watch(noticesProvider(noticeKey(ids))).value ?? const [];
 });
 
-/// When the notifications page was last opened.
-final inboxOpenedProvider = NotifierProvider<InboxOpened, int>(InboxOpened.new);
+/// What has been read in the notifications inbox: everything up to
+/// `before` ("Mark all read", or first run) plus single items opened.
+typedef InboxRead = ({int before, Set<String> ids});
 
-class InboxOpened extends Notifier<int> {
+final inboxReadProvider = NotifierProvider<InboxReadNotifier, InboxRead>(
+  InboxReadNotifier.new,
+);
+
+class InboxReadNotifier extends Notifier<InboxRead> {
   @override
-  int build() {
+  InboxRead build() {
     final p = ref.read(prefsProvider);
     // First run: older items are not "new".
     if (p.inboxOpenedAt == 0) {
       p.inboxOpenedAt = DateTime.now().millisecondsSinceEpoch;
     }
-    return p.inboxOpenedAt;
+    return (before: p.inboxOpenedAt, ids: p.readIds.toSet());
   }
 
-  void markRead() {
+  bool isUnread(String id, DateTime at) =>
+      at.millisecondsSinceEpoch > state.before && !state.ids.contains(id);
+
+  void markRead(String id) {
+    if (state.ids.contains(id)) return;
+    final ids = [...ref.read(prefsProvider).readIds, id];
+    final kept = ids.length > 500 ? ids.sublist(ids.length - 500) : ids;
+    ref.read(prefsProvider).readIds = kept;
+    state = (before: state.before, ids: kept.toSet());
+  }
+
+  void markAllRead() {
     final now = DateTime.now().millisecondsSinceEpoch;
-    ref.read(prefsProvider).inboxOpenedAt = now;
-    state = now;
+    final p = ref.read(prefsProvider)
+      ..inboxOpenedAt = now
+      ..readIds = const [];
+    state = (before: p.inboxOpenedAt, ids: const {});
   }
 }
 
-/// The number on the bell: notices and channel messages since the
-/// notifications page was last opened.
+/// The number on the bell: unread notices and channel messages.
 final unreadCountProvider = Provider<int>((ref) {
-  final since = ref.watch(inboxOpenedProvider);
-  bool fresh(DateTime d) => d.millisecondsSinceEpoch > since;
+  final read = ref.watch(inboxReadProvider);
+  bool unread(String id, DateTime d) =>
+      d.millisecondsSinceEpoch > read.before && !read.ids.contains(id);
   return ref
           .watch(followedNoticesProvider)
-          .where((n) => fresh(n.createdAt))
+          .where((n) => unread(n.id, n.createdAt))
           .length +
-      ref.watch(channelInboxProvider).where((m) => fresh(m.createdAt)).length;
+      ref
+          .watch(channelInboxProvider)
+          .where((m) => unread(m.id, m.createdAt))
+          .length;
 });
 
 /// While the app is open (or kept alive in the background): a phone

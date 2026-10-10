@@ -87,3 +87,21 @@ class ThanaService {
     return c;
   }
 }
+
+/// Thana / upazila names by district (`assets/geo/thanas.json`) – small,
+/// for the district → thana dropdowns.
+class ThanaNames {
+  static Future<Map<String, List<String>>>? _loading;
+
+  static Future<Map<String, List<String>>> load() => _loading ??= () async {
+    final raw = await rootBundle.loadString('assets/geo/thanas.json');
+    return {
+      for (final e in (jsonDecode(raw) as Map<String, dynamic>).entries)
+        e.key: [for (final t in e.value as List) t as String],
+    };
+  }();
+
+  /// The district's thanas, by name (empty for an unknown district).
+  static Future<List<String>> of(String district) async =>
+      (await load())[district] ?? const [];
+}

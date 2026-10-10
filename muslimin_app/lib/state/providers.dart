@@ -278,60 +278,53 @@ class PickedThana extends Notifier<Thana?> {
   void pick(Thana? t) => state = t;
 }
 
-/// Masjids of the shown thana, nearest to the user first.
-/// Around the user, whatever the thana says: the nearest masjids must be
-/// in "All Masjids" even when a (2011) thana line runs between them.
-const kAroundMeKm = 2.0;
-
-/// Masjids of the shown thana – plus, for the user's own thana, every
-/// masjid within [kAroundMeKm] – nearest to the user first.
-final thanaMasjidsProvider = StreamProvider<List<Masjid>>((ref) async* {
-  final picked = ref.watch(pickedThanaProvider);
-  final thana = picked ?? await ref.watch(myThanaProvider.future);
-  if (thana == null) {
-    yield const [];
-    return;
-  }
+/// Masjids of [thana], nearest to the user first.
+Stream<List<Masjid>> _thanaList(Ref ref, Thana thana) {
   final loc = ref.watch(locationProvider).value;
-  final backend = ref.watch(backendProvider);
-  List<Masjid> sorted(Iterable<Masjid> list) {
-    final out = {for (final m in list) m.id: m}.values.toList();
-    if (loc == null) return out;
-    return out..sort(
-      (a, b) => distanceMeters(
-        loc.lat,
-        loc.lng,
-        a.lat,
-        a.lng,
-      ).compareTo(distanceMeters(loc.lat, loc.lng, b.lat, b.lng)),
-    );
-  }
+  return ref
+      .watch(backendProvider)
+      .masjidsInThana(thana.district, thana.name)
+      .map(
+        (list) => loc == null
+            ? list
+            : (list..sort(
+                (a, b) => distanceMeters(
+                  loc.lat,
+                  loc.lng,
+                  a.lat,
+                  a.lng,
+                ).compareTo(distanceMeters(loc.lat, loc.lng, b.lat, b.lng)),
+              )),
+      );
+}
 
-  final inThana = backend.masjidsInThana(thana.district, thana.name);
-  if (picked != null || loc == null) {
-    yield* inThana.map(sorted);
+/// Masjids of the thana the user is in (Home), nearest first. Outside any
+/// thana (or none listed there yet): the nearest by distance.
+final myThanaMasjidsProvider = StreamProvider<List<Masjid>>((ref) async* {
+  final thana = await ref.watch(myThanaProvider.future);
+  if (thana == null) {
+    yield* ref.watch(nearbyMasjidsProvider.future).asStream();
     return;
   }
-  // Both lists, merged as either one changes.
-  var a = const <Masjid>[], b = const <Masjid>[];
-  final out = StreamController<List<Masjid>>();
-  final subs = [
-    inThana.listen((v) {
-      a = v;
-      out.add(sorted([...a, ...b]));
-    }, onError: out.addError),
-    backend.masjidsAround(loc.lat, loc.lng, kAroundMeKm).listen((v) {
-      b = v;
-      out.add(sorted([...a, ...b]));
-    }, onError: out.addError),
-  ];
-  ref.onDispose(() {
-    for (final s in subs) {
-      s.cancel();
-    }
-    out.close();
-  });
-  yield* out.stream;
+  await for (final list in _thanaList(ref, thana)) {
+    yield list.isNotEmpty
+        ? list
+        : await ref.watch(nearbyMasjidsProvider.future);
+  }
+});
+
+/// Masjids of one picked thana, nearest to the user first.
+final _pickedThanaMasjidsProvider = StreamProvider.family<List<Masjid>, Thana>(
+  _thanaList,
+);
+
+/// Masjids of the shown thana – the user's own (from GPS) or one picked on
+/// "All Masjids" – nearest to the user first.
+final thanaMasjidsProvider = Provider<AsyncValue<List<Masjid>>>((ref) {
+  final picked = ref.watch(pickedThanaProvider);
+  return picked == null
+      ? ref.watch(myThanaMasjidsProvider)
+      : ref.watch(_pickedThanaMasjidsProvider(picked));
 });
 
 /// Masjids I manage in one thana (Manage Masjids).
@@ -392,6 +385,7 @@ final nearbyNoticesProvider = Provider<AsyncValue<List<Notice>>>((ref) {
 /// masjid / notice streams (they keep showing old data while reloading).
 Future<void> refreshAll(WidgetRef ref) async {
   ref.invalidate(nearbyMasjidsProvider);
+  ref.invalidate(myThanaMasjidsProvider);
   ref.invalidate(myMasjidsProvider);
   ref.invalidate(masjidProvider);
   ref.invalidate(noticesProvider);

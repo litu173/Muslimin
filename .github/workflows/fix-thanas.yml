@@ -1,0 +1,24 @@
+# One-off: put imported masjids in the right thana (precise boundaries).
+# Run it from GitHub → Actions → "Fix masjid thanas" → Run workflow.
+name: Fix masjid thanas
+on:
+  workflow_dispatch:
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: firebase/tools
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: firebase/tools/package-lock.json
+      - run: npm ci --omit=dev
+        working-directory: firebase/tools
+      - run: node fix_thanas.mjs
+        working-directory: firebase/tools
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}

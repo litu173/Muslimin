@@ -724,5 +724,6 @@
   "holdToTalk": "Mantén pulsado para hablar",
   "listening": "Escuchando…",
   "slideToCancel": "Desliza para cancelar",
-  "channelMembers": "Miembros del canal"
+  "channelMembers": "Miembros del canal",
+  "markAllRead": "Marcar todo leído"
 }

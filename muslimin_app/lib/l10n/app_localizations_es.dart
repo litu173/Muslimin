@@ -2469,4 +2469,7 @@ class L10nEs extends L10n {
 
   @override
   String get channelMembers => 'Miembros del canal';
+
+  @override
+  String get markAllRead => 'Marcar todo leído';
 }

@@ -6264,7 +6264,7 @@
 "name": "Chattogram Port Dock Workers A/A Jame Masjid",
 "nameBn": "",
 "district": "Chattogram",
-"thana": "Chittagong Port",
+"thana": "Patenga",
 "address": "Labor Colony Rd, Chattogram",
 "lat": 22.2910849,
 "lng": 91.7829151
@@ -6624,7 +6624,7 @@
 "name": "ঐতিহ্যবাহী হযরত জাফর আলি মালুম জামে মসজিদ",
 "nameBn": "ঐতিহ্যবাহী হযরত জাফর আলি মালুম জামে মসজিদ",
 "district": "Chattogram",
-"thana": "Patenga",
+"thana": "Chittagong Port",
 "address": "",
 "lat": 22.3018315,
 "lng": 91.7782986
@@ -6644,7 +6644,7 @@
 "name": "Hajrat Jafar Ali Malum Moshjid",
 "nameBn": "",
 "district": "Chattogram",
-"thana": "Patenga",
+"thana": "Chittagong Port",
 "address": "",
 "lat": 22.3019407,
 "lng": 91.77843
@@ -7714,7 +7714,7 @@
 "name": "Monsur Market Mosque",
 "nameBn": "",
 "district": "Chattogram",
-"thana": "Double Mooring",
+"thana": "Chittagong Port",
 "address": "Halishahar Rd, Chattogram",
 "lat": 22.3261136,
 "lng": 91.7922214
@@ -10124,7 +10124,7 @@
 "name": "Nur Begom Jame Masjid",
 "nameBn": "",
 "district": "Chattogram",
-"thana": "Bakalia",
+"thana": "Chandgaon",
 "address": "",
 "lat": 22.359066,
 "lng": 91.8487194
@@ -11874,7 +11874,7 @@
 "name": "Gausia Toyabiya Jame Masjid",
 "nameBn": "",
 "district": "Chattogram",
-"thana": "Bayejid Bostami",
+"thana": "Panchlaish",
 "address": "",
 "lat": 22.3902564,
 "lng": 91.8239248
@@ -12104,7 +12104,7 @@
 "name": "West Amorbunia Kudroti jame Mosque",
 "nameBn": "",
 "district": "Bagerhat",
-"thana": "Morrelganj",
+"thana": "Mongla",
 "address": "Nishanbaria Union",
 "lat": 22.3962194,
 "lng": 89.748956
@@ -12864,7 +12864,7 @@
 "name": "West Bajikar Khondo Forest Station Jame Mosque",
 "nameBn": "",
 "district": "Bagerhat",
-"thana": "Mongla",
+"thana": "Morrelganj",
 "address": "Sundorban Union",
 "lat": 22.4141107,
 "lng": 89.7098628
@@ -13234,7 +13234,7 @@
 "name": "Aman Bazar Jame Mosque",
 "nameBn": "",
 "district": "Chattogram",
-"thana": "Hathazari",
+"thana": "Bayejid Bostami",
 "address": "",
 "lat": 22.4206489,
 "lng": 91.8197807
@@ -13254,7 +13254,7 @@
 "name": "Baitul Aman Jame Masjid",
 "nameBn": "",
 "district": "Chattogram",
-"thana": "Hathazari",
+"thana": "Bayejid Bostami",
 "address": "Hathazari Road, Chattogram",
 "lat": 22.421102,
 "lng": 91.8198523
@@ -14114,7 +14114,7 @@
 "name": "Chowdhuryhat Mosque",
 "nameBn": "",
 "district": "Chattogram",
-"thana": "Bayejid Bostami",
+"thana": "Hathazari",
 "address": "",
 "lat": 22.4415285,
 "lng": 91.8198434
@@ -14674,7 +14674,7 @@
 "name": "Mohammad toki jame mosjid",
 "nameBn": "",
 "district": "Chattogram",
-"thana": "Bayejid Bostami",
+"thana": "Hathazari",
 "address": "Chittagong - Rangamati-Khagrachhari Rd, Chattogram",
 "lat": 22.4575925,
 "lng": 91.8174474
@@ -20944,7 +20944,7 @@
 "name": "Al-Rifai Jame Masjid",
 "nameBn": "",
 "district": "Bhola",
-"thana": "Daulatkhan",
+"thana": "Bhola Sadar",
 "address": "Uttar Joynagar Union",
 "lat": 22.5915493,
 "lng": 90.6578721
@@ -27683,7 +27683,7 @@
 "osm": "node/4183632110",
 "name": "Agarpur Enayet Jame Masjid",
 "nameBn": "",
-"district": "Barishal",
+"district": "Madaripur",
 "thana": "Gaurnadi",
 "address": "Agarpur Bazar Road (আগরপুর বাজার রোড)",
 "lat": 22.898218,
@@ -27713,7 +27713,7 @@
 "osm": "node/4183627289",
 "name": "Agarpur Bazar Jame Masjid",
 "nameBn": "",
-"district": "Barishal",
+"district": "Madaripur",
 "thana": "Gaurnadi",
 "address": "Agarpur Bazar Road (আগরপুর বাজার রোড)",
 "lat": 22.8993052,
@@ -28313,7 +28313,7 @@
 "osm": "way/527420721",
 "name": "Kasemabad Bazar Mosque",
 "nameBn": "",
-"district": "Barishal",
+"district": "Madaripur",
 "thana": "Gaurnadi",
 "address": "",
 "lat": 22.9478297,
@@ -28323,7 +28323,7 @@
 "osm": "way/527420880",
 "name": "Kashemabad Jame Masjid",
 "nameBn": "",
-"district": "Barishal",
+"district": "Madaripur",
 "thana": "Gaurnadi",
 "address": "",
 "lat": 22.9480154,
@@ -28363,7 +28363,7 @@
 "osm": "way/337316838",
 "name": "Ashokati Mosque",
 "nameBn": "আশোকাঠী মসজিদ",
-"district": "Barishal",
+"district": "Madaripur",
 "thana": "Gaurnadi",
 "address": "Dhaka-Barisal Highway",
 "lat": 22.9620088,
@@ -28473,7 +28473,7 @@
 "osm": "way/337299497",
 "name": "Gournadi Upazila Mosque",
 "nameBn": "উপজেলা মসজিদ",
-"district": "Barishal",
+"district": "Madaripur",
 "thana": "Gaurnadi",
 "address": "Gournadi Upazila Road",
 "lat": 22.9704482,
@@ -28493,7 +28493,7 @@
 "osm": "node/5125779929",
 "name": "Baitul Aksa Jame Masjid",
 "nameBn": "",
-"district": "Barishal",
+"district": "Madaripur",
 "thana": "Gaurnadi",
 "address": "",
 "lat": 22.9727643,
@@ -28513,7 +28513,7 @@
 "osm": "way/527061277",
 "name": "Gournadi Government College Mosque",
 "nameBn": "",
-"district": "Barishal",
+"district": "Madaripur",
 "thana": "Gaurnadi",
 "address": "",
 "lat": 22.9733778,
@@ -28523,7 +28523,7 @@
 "osm": "way/337436301",
 "name": "Gournadi Thana Mosque",
 "nameBn": "গৌরনদী থানা মসজিদ",
-"district": "Barishal",
+"district": "Madaripur",
 "thana": "Gaurnadi",
 "address": "Gournadi Bazar Road",
 "lat": 22.9735939,
@@ -28533,7 +28533,7 @@
 "osm": "way/337436001",
 "name": "Gournadi Sub Register Mosque",
 "nameBn": "গৌরনদী সাব রেজিস্টার মসজিদ",
-"district": "Barishal",
+"district": "Madaripur",
 "thana": "Gaurnadi",
 "address": "Gournadi Bazar Road",
 "lat": 22.9752389,
@@ -28593,7 +28593,7 @@
 "osm": "way/513973213",
 "name": "Kasba Mosque",
 "nameBn": "",
-"district": "Barishal",
+"district": "Madaripur",
 "thana": "Gaurnadi",
 "address": "",
 "lat": 22.9891121,
@@ -28633,7 +28633,7 @@
 "osm": "node/5118826126",
 "name": "হযরত মল্লিক দুত কুমার পীর সাহেবের মাজার",
 "nameBn": "হযরত মল্লিক দুত কুমার পীর সাহেবের মাজার",
-"district": "Barishal",
+"district": "Madaripur",
 "thana": "Gaurnadi",
 "address": "",
 "lat": 22.9972186,
@@ -28763,7 +28763,7 @@
 "osm": "way/542008590",
 "name": "Baitul Mamur Jame Masjid",
 "nameBn": "",
-"district": "Barishal",
+"district": "Madaripur",
 "thana": "Gaurnadi",
 "address": "",
 "lat": 23.0095551,
@@ -28773,7 +28773,7 @@
 "osm": "node/5240498783",
 "name": "Bezgati Aminia Eidgah Jame Mosjid",
 "nameBn": "",
-"district": "Barishal",
+"district": "Madaripur",
 "thana": "Gaurnadi",
 "address": "",
 "lat": 23.0098385,
@@ -29293,7 +29293,7 @@
 "osm": "way/513973210",
 "name": "Kamalapur Mosque",
 "nameBn": "",
-"district": "Barishal",
+"district": "Madaripur",
 "thana": "Gaurnadi",
 "address": "",
 "lat": 23.0465979,
@@ -29343,7 +29343,7 @@
 "osm": "node/5238876159",
 "name": "Umadali Jame Masjid",
 "nameBn": "",
-"district": "Barishal",
+"district": "Madaripur",
 "thana": "Gaurnadi",
 "address": "",
 "lat": 23.0512681,
@@ -32284,7 +32284,7 @@
 "name": "Khan Bari Jame Masjid",
 "nameBn": "",
 "district": "Madaripur",
-"thana": "Shariatpur Sadar",
+"thana": "Madaripur Sadar",
 "address": "Santoshpur",
 "lat": 23.2596302,
 "lng": 90.2346746
@@ -36124,7 +36124,7 @@
 "name": "Dotola Jamay Masjid",
 "nameBn": "",
 "district": "Cumilla",
-"thana": "Chandina",
+"thana": "Debidwar",
 "address": "",
 "lat": 23.501596,
 "lng": 90.9458305
@@ -39073,8 +39073,8 @@
 "osm": "way/536333533",
 "name": "Baitul Falah Jame Mosque",
 "nameBn": "বায়তুল ফালাহ জামে মসজিদ",
-"district": "Narayanganj",
-"thana": "Narayanganj Sadar",
+"district": "Dhaka",
+"thana": "Keraniganj",
 "address": "",
 "lat": 23.6327085,
 "lng": 90.4726852
@@ -40774,7 +40774,7 @@
 "name": "Gosaybare Mosque",
 "nameBn": "",
 "district": "Dhaka",
-"thana": "Shyampur",
+"thana": "Gendaria",
 "address": "Faridabad Lane",
 "lat": 23.6962946,
 "lng": 90.4211449
@@ -41334,7 +41334,7 @@
 "name": "Baitush Sharaf Jame Masjid",
 "nameBn": "",
 "district": "Dhaka",
-"thana": "Shyampur",
+"thana": "Jatrabari",
 "address": "Jatrabari Madrasa Rd, Dhaka",
 "lat": 23.702803,
 "lng": 90.4357023
@@ -41494,7 +41494,7 @@
 "name": "Abu Hazi Jame Masjid",
 "nameBn": "",
 "district": "Dhaka",
-"thana": "Jatrabari",
+"thana": "Shyampur",
 "address": "Mir Hajir Bag Rd, Dhaka",
 "lat": 23.7048675,
 "lng": 90.4324933
@@ -41984,7 +41984,7 @@
 "name": "Huzurpara Mosque",
 "nameBn": "",
 "district": "Dhaka",
-"thana": "Keraniganj",
+"thana": "Kamrangir Char",
 "address": "",
 "lat": 23.7108184,
 "lng": 90.3636052
@@ -42064,7 +42064,7 @@
 "name": "Binat Bibi Masjid",
 "nameBn": "",
 "district": "Dhaka",
-"thana": "Gendaria",
+"thana": "Sutrapur",
 "address": "Narinda Rd, Dhaka",
 "lat": 23.7110526,
 "lng": 90.4182477
@@ -42304,7 +42304,7 @@
 "name": "Baitul Jannah jab Mosjid",
 "nameBn": "",
 "district": "Dhaka",
-"thana": "Kamrangir Char",
+"thana": "Lalbagh",
 "address": "",
 "lat": 23.7132445,
 "lng": 90.371988
@@ -42474,7 +42474,7 @@
 "name": "Begum Shahzadi Masjid",
 "nameBn": "",
 "district": "Dhaka",
-"thana": "Kotwali",
+"thana": "Bangshal",
 "address": "Bagdasa Lane, Dhaka",
 "lat": 23.7143926,
 "lng": 90.4052587
@@ -42554,7 +42554,7 @@
 "name": "Chan Sardar Jame Mosjid",
 "nameBn": "",
 "district": "Dhaka",
-"thana": "Kamrangir Char",
+"thana": "Lalbagh",
 "address": "",
 "lat": 23.7150481,
 "lng": 90.3692352
@@ -42664,7 +42664,7 @@
 "name": "Nobi Nogor Jame Mosjid",
 "nameBn": "",
 "district": "Dhaka",
-"thana": "Kamrangir Char",
+"thana": "Lalbagh",
 "address": "",
 "lat": 23.7159342,
 "lng": 90.3677077
@@ -42834,7 +42834,7 @@
 "name": "Baitul Khayer Jame Moshjid",
 "nameBn": "",
 "district": "Dhaka",
-"thana": "Gendaria",
+"thana": "Sutrapur",
 "address": "23/4, K.M. Das Lane",
 "lat": 23.7176484,
 "lng": 90.4243165
@@ -42854,7 +42854,7 @@
 "name": "Lalbagh Shahi Masjid",
 "nameBn": "",
 "district": "Dhaka",
-"thana": "Chak Bazar",
+"thana": "Lalbagh",
 "address": "",
 "lat": 23.7176861,
 "lng": 90.3894448
@@ -42894,7 +42894,7 @@
 "name": "Abdul Gaffar Jame Mosque",
 "nameBn": "",
 "district": "Dhaka",
-"thana": "Kamrangir Char",
+"thana": "Lalbagh",
 "address": "",
 "lat": 23.7180832,
 "lng": 90.3639192
@@ -42914,7 +42914,7 @@
 "name": "Golapbag Jame Moshjid",
 "nameBn": "গোলাপবাগ জামে মসজিদ",
 "district": "Dhaka",
-"thana": "Sutrapur",
+"thana": "Jatrabari",
 "address": "13, K.M. Das Lane",
 "lat": 23.7184247,
 "lng": 90.4273799
@@ -43074,7 +43074,7 @@
 "name": "Talgach Mosjid",
 "nameBn": "",
 "district": "Dhaka",
-"thana": "Lalbagh",
+"thana": "Chak Bazar",
 "address": "",
 "lat": 23.7194006,
 "lng": 90.3909834
@@ -43484,7 +43484,7 @@
 "name": "Nazimuddin Road Boro Jame Masjid",
 "nameBn": "",
 "district": "Dhaka",
-"thana": "Bangshal",
+"thana": "Chak Bazar",
 "address": "",
 "lat": 23.7218707,
 "lng": 90.3995126
@@ -43744,7 +43744,7 @@
 "name": "Syed FulShah Bogdadi (Ra:) Jame Masjid ~ Gulistan",
 "nameBn": "",
 "district": "Dhaka",
-"thana": "Bangshal",
+"thana": "Shahbagh",
 "address": "A H M Kamruzzaman Sharani, Dhaka",
 "lat": 23.7232745,
 "lng": 90.4075904
@@ -43844,7 +43844,7 @@
 "name": "Anando Bazar Jame Masjid",
 "nameBn": "",
 "district": "Dhaka",
-"thana": "Bangshal",
+"thana": "Shahbagh",
 "address": "A H M Kamruzzaman Sharani, Dhaka",
 "lat": 23.7235881,
 "lng": 90.4031625
@@ -43864,7 +43864,7 @@
 "name": "Telipara Jame Mashjid",
 "nameBn": "তেলিপাড়া জামে মসজিদ",
 "district": "Dhaka",
-"thana": "Lalbagh",
+"thana": "Hazaribagh",
 "address": "66, Nababganj Road",
 "lat": 23.7237835,
 "lng": 90.3766294
@@ -43924,7 +43924,7 @@
 "name": "DMCH Staff Quarter Noor Jame Masjid",
 "nameBn": "",
 "district": "Dhaka",
-"thana": "Lalbagh",
+"thana": "Shahbagh",
 "address": "Zahir Raihan Rd, Dhaka",
 "lat": 23.7244565,
 "lng": 90.3978867
@@ -43944,7 +43944,7 @@
 "name": "Dhaka Medical College Masjid",
 "nameBn": "",
 "district": "Dhaka",
-"thana": "Lalbagh",
+"thana": "Shahbagh",
 "address": "Chankharpul Road",
 "lat": 23.724543,
 "lng": 90.3974772
@@ -45514,7 +45514,7 @@
 "name": "Tin Majar Masjid",
 "nameBn": "",
 "district": "Dhaka",
-"thana": "Hazaribagh",
+"thana": "Dhanmondi",
 "address": "Teenmajar road",
 "lat": 23.7379901,
 "lng": 90.3679748
@@ -45714,7 +45714,7 @@
 "name": "Tanney Mor Shahi Masjid",
 "nameBn": "",
 "district": "Dhaka",
-"thana": "Hazaribagh",
+"thana": "Dhanmondi",
 "address": "",
 "lat": 23.7392074,
 "lng": 90.3675287
@@ -45784,7 +45784,7 @@
 "name": "Mohashorok Jame Masjid",
 "nameBn": "",
 "district": "Dhaka",
-"thana": "Motijheel",
+"thana": "Sabujbagh",
 "address": "অতিশ দীপঙ্কর সড়ক",
 "lat": 23.7397465,
 "lng": 90.4278568
@@ -45864,7 +45864,7 @@
 "name": "Sher-e-Bangla Road Jame Masjid",
 "nameBn": "",
 "district": "Dhaka",
-"thana": "Hazaribagh",
+"thana": "Dhanmondi",
 "address": "",
 "lat": 23.7400645,
 "lng": 90.3671863
@@ -45954,7 +45954,7 @@
 "name": "Darbar-E-Chisti us Saberi",
 "nameBn": "",
 "district": "Dhaka",
-"thana": "Motijheel",
+"thana": "Sabujbagh",
 "address": "Sobujbag Thana Road, Dhaka",
 "lat": 23.7407532,
 "lng": 90.427609
@@ -45974,7 +45974,7 @@
 "name": "Dorbar E Chisti Us",
 "nameBn": "",
 "district": "Dhaka",
-"thana": "Motijheel",
+"thana": "Sabujbagh",
 "address": "",
 "lat": 23.7409231,
 "lng": 90.4275806
@@ -46824,7 +46824,7 @@
 "name": "Bagicha Moshjid",
 "nameBn": "বাগিচা মসজিদ",
 "district": "Dhaka",
-"thana": "Khilgaon",
+"thana": "Motijheel",
 "address": "",
 "lat": 23.7471769,
 "lng": 90.4242267
@@ -46964,7 +46964,7 @@
 "name": "Jafarabad Jame Masjid",
 "nameBn": "",
 "district": "Dhaka",
-"thana": "Hazaribagh",
+"thana": "Mohammadpur",
 "address": "",
 "lat": 23.7484667,
 "lng": 90.3634022
@@ -47204,7 +47204,7 @@
 "name": "West Dhanmondi Jame Mosque",
 "nameBn": "",
 "district": "Dhaka",
-"thana": "Dhanmondi",
+"thana": "Mohammadpur",
 "address": "West Dhanmondi Jame Mosque Road",
 "lat": 23.7507945,
 "lng": 90.366889
@@ -47224,7 +47224,7 @@
 "name": "West Dhanmondi Jaame Masjid",
 "nameBn": "",
 "district": "Dhaka",
-"thana": "Dhanmondi",
+"thana": "Mohammadpur",
 "address": "",
 "lat": 23.7508273,
 "lng": 90.3668121
@@ -48004,7 +48004,7 @@
 "name": "Farmview Super market jame mosjid",
 "nameBn": "",
 "district": "Dhaka",
-"thana": "Tejgaon",
+"thana": "Sher-e-bangla Nagar",
 "address": "",
 "lat": 23.7575998,
 "lng": 90.3898488
@@ -48514,7 +48514,7 @@
 "name": "Masjid-e-Noor",
 "nameBn": "মসজিদ-ই-নূর",
 "district": "Dhaka",
-"thana": "Mohammadpur",
+"thana": "Adabor",
 "address": "Mohammadi Road",
 "lat": 23.7623401,
 "lng": 90.358369
@@ -48874,7 +48874,7 @@
 "name": "Krisi Bazar Taheria Jame Masjid",
 "nameBn": "",
 "district": "Dhaka",
-"thana": "Adabor",
+"thana": "Mohammadpur",
 "address": "",
 "lat": 23.7668927,
 "lng": 90.3588158
@@ -49084,7 +49084,7 @@
 "name": "Baitus Salah Jaame Masjid",
 "nameBn": "বায়তুস সালাহ জামে মসজিদ",
 "district": "Dhaka",
-"thana": "Adabor",
+"thana": "Mohammadpur",
 "address": "19/C, Block # F, Tikka Para, Ring Road",
 "lat": 23.7698285,
 "lng": 90.3591129
@@ -49774,7 +49774,7 @@
 "name": "Radio Colony Mosque",
 "nameBn": "",
 "district": "Dhaka",
-"thana": "Mirpur",
+"thana": "Darus Salam",
 "address": "",
 "lat": 23.7791929,
 "lng": 90.3578236
@@ -52624,7 +52624,7 @@
 "name": "P.W.D Quarter Mosque",
 "nameBn": "",
 "district": "Dhaka",
-"thana": "Mirpur",
+"thana": "Pallabi",
 "address": "Hazi Road",
 "lat": 23.8086395,
 "lng": 90.3584804
@@ -53424,7 +53424,7 @@
 "name": "Baitul Aman Hamidia Jame Masjid",
 "nameBn": "",
 "district": "Dhaka",
-"thana": "Savar",
+"thana": "Shah Ali",
 "address": "",
 "lat": 23.8188303,
 "lng": 90.3407533
@@ -53604,7 +53604,7 @@
 "name": "Kuril Biswa Road Railgate Jame Masjid",
 "nameBn": "",
 "district": "Dhaka",
-"thana": "Badda",
+"thana": "Khilkhet",
 "address": "",
 "lat": 23.8212707,
 "lng": 90.4193455
@@ -54244,7 +54244,7 @@
 "name": "Baitul Aksa Jame Mosque",
 "nameBn": "",
 "district": "Dhaka",
-"thana": "Pallabi",
+"thana": "Cantonment",
 "address": "Balughat Road",
 "lat": 23.8350377,
 "lng": 90.3879747
@@ -54284,7 +54284,7 @@
 "name": "Mirpur DOHS Central Mosque",
 "nameBn": "",
 "district": "Dhaka",
-"thana": "Pallabi",
+"thana": "Turag",
 "address": "",
 "lat": 23.8362845,
 "lng": 90.3674564
@@ -54374,7 +54374,7 @@
 "name": "DOHS No-3 Jamee Masjid مسجد",
 "nameBn": "",
 "district": "Dhaka",
-"thana": "Pallabi",
+"thana": "Turag",
 "address": "",
 "lat": 23.8405826,
 "lng": 90.3663485
@@ -54454,7 +54454,7 @@
 "name": "Al-Madina Jame Masjid",
 "nameBn": "",
 "district": "Dhaka",
-"thana": "Khilkhet",
+"thana": "Biman Bandar",
 "address": "",
 "lat": 23.8433567,
 "lng": 90.4223373
@@ -54794,7 +54794,7 @@
 "name": "Ashiyan City Jame Masjid",
 "nameBn": "",
 "district": "Dhaka",
-"thana": "Biman Bandar",
+"thana": "Dakshinkhan",
 "address": "",
 "lat": 23.8488842,
 "lng": 90.424056
@@ -55494,7 +55494,7 @@
 "name": "Hasan Jam E Masjid",
 "nameBn": "",
 "district": "Dhaka",
-"thana": "Dakshinkhan",
+"thana": "Biman Bandar",
 "address": "",
 "lat": 23.8567389,
 "lng": 90.4181683
@@ -55864,7 +55864,7 @@
 "name": "Baitul Mamur Jame Mosque",
 "nameBn": "",
 "district": "Manikganj",
-"thana": "Ghior",
+"thana": "Manikganj Sadar",
 "address": "",
 "lat": 23.8609956,
 "lng": 89.9622838
@@ -55874,7 +55874,7 @@
 "name": "Ramnagar Jame Mashjid",
 "nameBn": "",
 "district": "Manikganj",
-"thana": "Shibalaya",
+"thana": "Ghior",
 "address": "",
 "lat": 23.861032,
 "lng": 89.8694306
@@ -56114,7 +56114,7 @@
 "name": "Mollabari Masjid",
 "nameBn": "",
 "district": "Dhaka",
-"thana": "Uttar Khan",
+"thana": "Dakshinkhan",
 "address": "",
 "lat": 23.863578,
 "lng": 90.422913
@@ -57553,8 +57553,8 @@
 "osm": "node/12281672068",
 "name": "Khaleda Habib Jame Masjid",
 "nameBn": "",
-"district": "Gazipur",
-"thana": "Gazipur Sadar",
+"district": "Dhaka",
+"thana": "Turag",
 "address": "",
 "lat": 23.8955125,
 "lng": 90.3700209
@@ -60063,8 +60063,8 @@
 "osm": "node/12328202811",
 "name": "Mid-Gachihata Baitul Mamur Jame Masjid",
 "nameBn": "",
-"district": "Gazipur",
-"thana": "Gazipur Sadar",
+"district": "Dhaka",
+"thana": "Savar",
 "address": "",
 "lat": 23.9665595,
 "lng": 90.2693644
@@ -61624,7 +61624,7 @@
 "name": "Gabtoli Bazaar Jameh Masjid",
 "nameBn": "",
 "district": "Narsingdi",
-"thana": "Shibpur",
+"thana": "Roypura",
 "address": "",
 "lat": 24.0304285,
 "lng": 90.8256609
@@ -62664,7 +62664,7 @@
 "name": "C & B Bazar Jame Mosque",
 "nameBn": "সিএন্ডবি বাজার জামে মসজিদ",
 "district": "Pabna",
-"thana": "Bera",
+"thana": "Santhia",
 "address": "",
 "lat": 24.0775741,
 "lng": 89.607565
@@ -67264,7 +67264,7 @@
 "name": "টি-বাঁধ ওয়াক্তিয়া মসজিদ",
 "nameBn": "টি-বাঁধ ওয়াক্তিয়া মসজিদ",
 "district": "Rajshahi",
-"thana": "Rajpara",
+"thana": "Paba",
 "address": "",
 "lat": 24.3624592,
 "lng": 88.569935
@@ -67304,7 +67304,7 @@
 "name": "Keshobpur Dokkhinpara Jame Mosque",
 "nameBn": "কেশবপুর দক্ষিণপাড়া জামে মসজিদ",
 "district": "Rajshahi",
-"thana": "Rajpara",
+"thana": "Paba",
 "address": "",
 "lat": 24.3642085,
 "lng": 88.5663165
@@ -67434,7 +67434,7 @@
 "name": "Public works department Mosque",
 "nameBn": "",
 "district": "Rajshahi",
-"thana": "Rajpara",
+"thana": "Paba",
 "address": "Rajshahi",
 "lat": 24.3663424,
 "lng": 88.5810989
@@ -67444,7 +67444,7 @@
 "name": "School Mosque",
 "nameBn": "",
 "district": "Rajshahi",
-"thana": "Rajpara",
+"thana": "Paba",
 "address": "",
 "lat": 24.3665013,
 "lng": 88.5887309
@@ -67464,7 +67464,7 @@
 "name": "Jail Mosque",
 "nameBn": "",
 "district": "Rajshahi",
-"thana": "Rajpara",
+"thana": "Paba",
 "address": "",
 "lat": 24.3668744,
 "lng": 88.5835072
@@ -67654,7 +67654,7 @@
 "name": "Mosque Range Reserve Force Rajshahi police line",
 "nameBn": "",
 "district": "Rajshahi",
-"thana": "Rajpara",
+"thana": "Paba",
 "address": "Rajshahi",
 "lat": 24.370769,
 "lng": 88.5615352
@@ -67704,7 +67704,7 @@
 "name": "Medical Mosque",
 "nameBn": "",
 "district": "Rajshahi",
-"thana": "Rajpara",
+"thana": "Paba",
 "address": "",
 "lat": 24.3720561,
 "lng": 88.5869283
@@ -67774,7 +67774,7 @@
 "name": "Rajshahi Medical College Central Mosque",
 "nameBn": "",
 "district": "Rajshahi",
-"thana": "Rajpara",
+"thana": "Paba",
 "address": "",
 "lat": 24.3742578,
 "lng": 88.5865237
@@ -67914,7 +67914,7 @@
 "name": "Dingadoba Eidgah",
 "nameBn": "",
 "district": "Rajshahi",
-"thana": "Rajpara",
+"thana": "Paba",
 "address": "",
 "lat": 24.3782797,
 "lng": 88.5764245
@@ -67934,7 +67934,7 @@
 "name": "Baitul Mamur Jame Mosque",
 "nameBn": "",
 "district": "Rajshahi",
-"thana": "Rajpara",
+"thana": "Paba",
 "address": "",
 "lat": 24.3785077,
 "lng": 88.5763035
@@ -67954,7 +67954,7 @@
 "name": "Baitul Falah Boro Jame Mosque",
 "nameBn": "",
 "district": "Rajshahi",
-"thana": "Rajpara",
+"thana": "Paba",
 "address": "",
 "lat": 24.3787555,
 "lng": 88.5796765
@@ -67994,7 +67994,7 @@
 "name": "Horogram Purb Para Jame Mosque",
 "nameBn": "",
 "district": "Rajshahi",
-"thana": "Rajpara",
+"thana": "Paba",
 "address": "",
 "lat": 24.3794298,
 "lng": 88.5682792
@@ -68044,7 +68044,7 @@
 "name": "Horogram Notun Para Jame Masjid",
 "nameBn": "",
 "district": "Rajshahi",
-"thana": "Rajpara",
+"thana": "Paba",
 "address": "Rajshahi",
 "lat": 24.3803776,
 "lng": 88.560653
@@ -68094,7 +68094,7 @@
 "name": "Charkhutar Mor Masjid",
 "nameBn": "",
 "district": "Rajshahi",
-"thana": "Rajpara",
+"thana": "Paba",
 "address": "Rajshahi",
 "lat": 24.3805077,
 "lng": 88.5604233
@@ -68144,7 +68144,7 @@
 "name": "Hilful Fuzul Academy Ahale Hadis Masjid",
 "nameBn": "",
 "district": "Rajshahi",
-"thana": "Rajpara",
+"thana": "Paba",
 "address": "",
 "lat": 24.3810239,
 "lng": 88.5588012
@@ -68184,7 +68184,7 @@
 "name": "উত্তরা জামে মসজিদ",
 "nameBn": "উত্তরা জামে মসজিদ",
 "district": "Rajshahi",
-"thana": "Rajpara",
+"thana": "Paba",
 "address": "",
 "lat": 24.3816374,
 "lng": 88.585673
@@ -68194,7 +68194,7 @@
 "name": "Sayergacha Jame Masjid",
 "nameBn": "",
 "district": "Rajshahi",
-"thana": "Rajpara",
+"thana": "Paba",
 "address": "",
 "lat": 24.3821058,
 "lng": 88.5516625
@@ -68214,7 +68214,7 @@
 "name": "Hargram Paschimpara Jame Masjid",
 "nameBn": "",
 "district": "Rajshahi",
-"thana": "Rajpara",
+"thana": "Paba",
 "address": "Rajshahi",
 "lat": 24.3828769,
 "lng": 88.5553258
@@ -68224,7 +68224,7 @@
 "name": "AYNUL ULOOM MADRASH MOSJID",
 "nameBn": "",
 "district": "Rajshahi",
-"thana": "Rajpara",
+"thana": "Paba",
 "address": "Rajshahi",
 "lat": 24.3830451,
 "lng": 88.5574282
@@ -68294,7 +68294,7 @@
 "name": "Sorok O Jonopoth Complex Jamme Masjid",
 "nameBn": "",
 "district": "Rajshahi",
-"thana": "Shah Makhdum",
+"thana": "Paba",
 "address": "Rajshahi",
 "lat": 24.3840438,
 "lng": 88.6084216
@@ -68404,7 +68404,7 @@
 "name": "Nur E Ala Jame Mosjid",
 "nameBn": "",
 "district": "Rajshahi",
-"thana": "Rajpara",
+"thana": "Paba",
 "address": "Rajshahi",
 "lat": 24.3863969,
 "lng": 88.554996
@@ -68444,7 +68444,7 @@
 "name": "Notunpara Baitul Aman Jame Mosjid",
 "nameBn": "",
 "district": "Rajshahi",
-"thana": "Rajpara",
+"thana": "Paba",
 "address": "",
 "lat": 24.3868909,
 "lng": 88.5579132
@@ -68544,7 +68544,7 @@
 "name": "Ahmed Nagor Jame Masjid.",
 "nameBn": "",
 "district": "Rajshahi",
-"thana": "Shah Makhdum",
+"thana": "Paba",
 "address": "",
 "lat": 24.3881423,
 "lng": 88.6078665
@@ -68554,7 +68554,7 @@
 "name": "Holdarpara Jama Masjid",
 "nameBn": "",
 "district": "Rajshahi",
-"thana": "Rajpara",
+"thana": "Paba",
 "address": "Rajshahi",
 "lat": 24.3882235,
 "lng": 88.5539418
@@ -68584,7 +68584,7 @@
 "name": "Nagarpara Notun Mosjid",
 "nameBn": "",
 "district": "Rajshahi",
-"thana": "Rajpara",
+"thana": "Paba",
 "address": "Rajshahi Bypass, Rajshahi",
 "lat": 24.3889498,
 "lng": 88.5572418
@@ -68784,7 +68784,7 @@
 "name": "T.T.C Mosque",
 "nameBn": "",
 "district": "Rajshahi",
-"thana": "Shah Makhdum",
+"thana": "Boalia",
 "address": "",
 "lat": 24.3913938,
 "lng": 88.6055692
@@ -68924,7 +68924,7 @@
 "name": "Pabapara Ahle Hadith Jame Masjid",
 "nameBn": "",
 "district": "Rajshahi",
-"thana": "Shah Makhdum",
+"thana": "Paba",
 "address": "",
 "lat": 24.3937957,
 "lng": 88.6075044
@@ -68954,7 +68954,7 @@
 "name": "Purbo Horogram Sheikhpara Jame Mosjid",
 "nameBn": "",
 "district": "Rajshahi",
-"thana": "Rajpara",
+"thana": "Paba",
 "address": "Rajshahi",
 "lat": 24.3948115,
 "lng": 88.5608021
@@ -68984,7 +68984,7 @@
 "name": "Hargram Colony Jame Masjid",
 "nameBn": "",
 "district": "Rajshahi",
-"thana": "Rajpara",
+"thana": "Paba",
 "address": "Lily Hall Junction, Rajshahi",
 "lat": 24.3949306,
 "lng": 88.5686763
@@ -69004,7 +69004,7 @@
 "name": "Takurmara Colony Mosque",
 "nameBn": "",
 "district": "Rajshahi",
-"thana": "Rajpara",
+"thana": "Paba",
 "address": "rajshahi city corparation, word no:2., Durusha Road Rajshahi Bypass, Rajshahi",
 "lat": 24.395155,
 "lng": 88.5683931
@@ -69074,7 +69074,7 @@
 "name": "Rajshahi Physical Education College Mosque",
 "nameBn": "",
 "district": "Rajshahi",
-"thana": "Shah Makhdum",
+"thana": "Paba",
 "address": "",
 "lat": 24.395953,
 "lng": 88.6061181
@@ -69154,7 +69154,7 @@
 "name": "Darul Aman Jame Mosjid",
 "nameBn": "",
 "district": "Rajshahi",
-"thana": "Shah Makhdum",
+"thana": "Paba",
 "address": "Koyerdara Road",
 "lat": 24.3968492,
 "lng": 88.6021944
@@ -69194,7 +69194,7 @@
 "name": "Poba Notun Para Shahi Masjid",
 "nameBn": "",
 "district": "Rajshahi",
-"thana": "Shah Makhdum",
+"thana": "Paba",
 "address": "Rajshahi",
 "lat": 24.3976071,
 "lng": 88.613252
@@ -69224,7 +69224,7 @@
 "name": "Poba Natun Para Shahi Jame Masjid",
 "nameBn": "",
 "district": "Rajshahi",
-"thana": "Shah Makhdum",
+"thana": "Paba",
 "address": "Zia Park Rd, Rajshahi, Rajshahi",
 "lat": 24.3979889,
 "lng": 88.6097483
@@ -69234,7 +69234,7 @@
 "name": "Koyerdara Central Mosque",
 "nameBn": "",
 "district": "Rajshahi",
-"thana": "Shah Makhdum",
+"thana": "Paba",
 "address": "Koyerdara Road",
 "lat": 24.3980971,
 "lng": 88.5983277
@@ -69384,7 +69384,7 @@
 "name": "Barabangram Mahaldarpara Ahlehadis Jame Masjid",
 "nameBn": "",
 "district": "Rajshahi",
-"thana": "Shah Makhdum",
+"thana": "Paba",
 "address": "",
 "lat": 24.4008939,
 "lng": 88.6094321
@@ -69404,7 +69404,7 @@
 "name": "Moholdarpara Ahle Hadis Jame Masjid",
 "nameBn": "",
 "district": "Rajshahi",
-"thana": "Shah Makhdum",
+"thana": "Paba",
 "address": "Rajshahi, Rajshahi",
 "lat": 24.401305,
 "lng": 88.608595
@@ -69584,7 +69584,7 @@
 "name": "Ahle Hadith Jame Masjid",
 "nameBn": "আহলে হাদীস জামে মসজিদ",
 "district": "Rajshahi",
-"thana": "Shah Makhdum",
+"thana": "Paba",
 "address": "",
 "lat": 24.4039519,
 "lng": 88.6069393
@@ -69744,7 +69744,7 @@
 "name": "Raypara Jame Masjid",
 "nameBn": "",
 "district": "Rajshahi",
-"thana": "Shah Makhdum",
+"thana": "Paba",
 "address": "",
 "lat": 24.4068058,
 "lng": 88.6140395
@@ -69834,7 +69834,7 @@
 "name": "Uttara Nowdapara",
 "nameBn": "",
 "district": "Rajshahi",
-"thana": "Shah Makhdum",
+"thana": "Paba",
 "address": "hajipara jame Masjid",
 "lat": 24.4086586,
 "lng": 88.6069136
@@ -69854,7 +69854,7 @@
 "name": "Central Truck Terminal Jama Masjid",
 "nameBn": "",
 "district": "Rajshahi",
-"thana": "Shah Makhdum",
+"thana": "Paba",
 "address": "Rajshahi",
 "lat": 24.4091016,
 "lng": 88.6009049
@@ -69864,7 +69864,7 @@
 "name": "Darul Hadeeth University Jama Masjid",
 "nameBn": "",
 "district": "Rajshahi",
-"thana": "Shah Makhdum",
+"thana": "Paba",
 "address": "",
 "lat": 24.4092479,
 "lng": 88.6078305
@@ -70294,7 +70294,7 @@
 "name": "Darus Salam Zame Mosjid",
 "nameBn": "",
 "district": "Tangail",
-"thana": "Kalihati",
+"thana": "Ghatail",
 "address": "",
 "lat": 24.4193807,
 "lng": 89.8935863
@@ -73543,8 +73543,8 @@
 "osm": "node/5147083826",
 "name": "College Masjid",
 "nameBn": "কলেজ মসজিদ",
-"district": "Sirajganj",
-"thana": "Royganj",
+"district": "Bogura",
+"thana": "Sherpur",
 "address": "",
 "lat": 24.5552485,
 "lng": 89.5015027
@@ -78464,7 +78464,7 @@
 "name": "Bashna Eidgah Math",
 "nameBn": "",
 "district": "Mymensingh",
-"thana": "Muktagachha",
+"thana": "Fulbaria",
 "address": "Bashna Eidgah Road",
 "lat": 24.720726,
 "lng": 90.2946355
@@ -79543,8 +79543,8 @@
 "osm": "node/10779089250",
 "name": "Raninagar Bazaar Jame Masjid",
 "nameBn": "",
-"district": "Naogaon",
-"thana": "Raninagar",
+"district": "Bogura",
+"thana": "Adamdighi",
 "address": "Thana Rd, Raninagar, Naogaon",
 "lat": 24.7412016,
 "lng": 88.9681443
@@ -80863,7 +80863,7 @@
 "osm": "node/6124590788",
 "name": "Rahutola jame mosque",
 "nameBn": "",
-"district": "Sunamganj",
+"district": "Netrokona",
 "thana": "Khaliajuri",
 "address": "Atgaon Union",
 "lat": 24.7627245,
@@ -87154,7 +87154,7 @@
 "name": "মন্ডল ধরন বায়তুল মামুর জামে মসজীদ",
 "nameBn": "মন্ডল ধরন বায়তুল মামুর জামে মসজীদ",
 "district": "Bogura",
-"thana": "Gabtali",
+"thana": "Bogra Sadar",
 "address": "",
 "lat": 24.8890616,
 "lng": 89.4113524
@@ -93843,8 +93843,8 @@
 "osm": "node/9530872763",
 "name": "মঙ্গলবাড়ি বাজার কেন্দ্রীয় জামে মসজিদ",
 "nameBn": "মঙ্গলবাড়ি বাজার কেন্দ্রীয় জামে মসজিদ",
-"district": "Naogaon",
-"thana": "Dhamoirhat",
+"district": "Joypurhat",
+"thana": "Joypurhat Sadar",
 "address": "",
 "lat": 25.1169478,
 "lng": 88.9380591
@@ -96013,8 +96013,8 @@
 "osm": "node/5190634962",
 "name": "ধাপেরহাট নায়েবীয়া কেন্দ্রীয় জামে মসজিদ",
 "nameBn": "ধাপেরহাট নায়েবীয়া কেন্দ্রীয় জামে মসজিদ",
-"district": "Rangpur",
-"thana": "Pirganj",
+"district": "Gaibandha",
+"thana": "Sadullapur",
 "address": "",
 "lat": 25.3455366,
 "lng": 89.341773
@@ -97224,7 +97224,7 @@
 "name": "dhushmara mosque thana",
 "nameBn": "",
 "district": "Kurigram",
-"thana": "Char Rajibpur",
+"thana": "Chilmari",
 "address": "",
 "lat": 25.5174543,
 "lng": 89.7681362
@@ -104423,8 +104423,8 @@
 "osm": "way/1289347228",
 "name": "Bairbari Pathanpara North Jame Masjid",
 "nameBn": "",
-"district": "Dinajpur",
-"thana": "Birganj",
+"district": "Thakurgaon",
+"thana": "Thakurgaon Sadar",
 "address": "",
 "lat": 26.0450326,
 "lng": 88.6081968
@@ -105154,7 +105154,7 @@
 "name": "Araji shikar pur puraton jamemosjid",
 "nameBn": "",
 "district": "Panchagarh",
-"thana": "Boda",
+"thana": "Debiganj",
 "address": "",
 "lat": 26.1636308,
 "lng": 88.654295
