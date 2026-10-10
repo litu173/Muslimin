@@ -430,7 +430,7 @@ class FirebaseBackend implements Backend {
                 q.where('status', isEqualTo: MasjidStatus.approved.name),
             strictMode: true,
           );
-      if (found.length >= 3) break;
+      if (found.length >= kHomeMasjids) break;
       r *= 3;
     }
     yield* _within(lat, lng, r < radiusKm ? r : radiusKm);

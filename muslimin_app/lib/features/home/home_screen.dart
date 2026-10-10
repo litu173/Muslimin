@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/nav.dart';
+import '../../data/backend/backend.dart' show kHomeMasjids;
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text.dart';
@@ -75,7 +76,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
   Widget build(BuildContext context) {
     final t = L10n.of(context);
     final loc = ref.watch(locationProvider);
-    final masjids = ref.watch(myThanaMasjidsProvider);
+    // Nearest by GPS distance, whatever the thana.
+    final masjids = ref.watch(nearbyMasjidsProvider);
     // Only for users who have not registered a masjid yet.
     final mine = ref.watch(myMasjidsProvider);
     final showBanner =
@@ -149,7 +151,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                     icon: Icons.wifi_off_rounded,
                     action: AppButton(
                       t.retry,
-                      onPressed: () => ref.invalidate(myThanaMasjidsProvider),
+                      onPressed: () => ref.invalidate(nearbyMasjidsProvider),
                       dense: true,
                     ),
                   ),
@@ -169,7 +171,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                       SliverPadding(
                         padding: const EdgeInsets.symmetric(horizontal: Gap.l),
                         sliver: SliverList.separated(
-                          itemCount: list.length.clamp(0, 3),
+                          itemCount: list.length.clamp(0, kHomeMasjids),
                           separatorBuilder: (_, _) =>
                               const SizedBox(height: 10),
                           itemBuilder: (_, i) =>
@@ -181,10 +183,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
 
             // ---- duas for this part of the day
             const SliverToBoxAdapter(child: SizedBox(height: Gap.l)),
-            SliverToBoxAdapter(child: _in(7, const NowDuaSection())),
+            SliverToBoxAdapter(child: _in(9, const NowDuaSection())),
 
             const SliverToBoxAdapter(child: SizedBox(height: Gap.xl)),
-            SliverToBoxAdapter(child: _in(8, const VerseCarousel())),
+            SliverToBoxAdapter(child: _in(10, const VerseCarousel())),
 
             const SliverToBoxAdapter(child: SizedBox(height: Gap.xxl)),
           ],

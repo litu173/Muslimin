@@ -217,6 +217,9 @@ abstract class Backend {
 /// Max masjid profiles a single phone number may own.
 const kMaxMasjidsPerUser = 3;
 
+/// Home shows this many nearest masjids.
+const kHomeMasjids = 5;
+
 /// Required GPS accuracy (metres) while registering a masjid.
 const kRequiredAccuracyM = 50.0;
 
