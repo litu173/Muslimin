@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 
 /// Tells pages when the user comes back to them (a page on top closed), so
 /// their entrance plays again. Registered in MaterialApp.navigatorObservers.
-final routeObserver = RouteObserver<ModalRoute<void>>();
+/// Only full pages count: closing a dialog, bottom sheet, menu or dropdown
+/// (popup routes) does not replay anything.
+final routeObserver = RouteObserver<PageRoute<dynamic>>();
 
 /// Calls [onReturn] each time the page holding [context] shows again after
 /// a page pushed on top of it is closed.
 mixin ReturnAware<T extends StatefulWidget> on State<T> implements RouteAware {
-  ModalRoute<void>? _route;
+  PageRoute<dynamic>? _route;
 
   void onReturn();
 
@@ -15,7 +17,7 @@ mixin ReturnAware<T extends StatefulWidget> on State<T> implements RouteAware {
   void didChangeDependencies() {
     super.didChangeDependencies();
     final r = ModalRoute.of(context);
-    if (r != null && r != _route) {
+    if (r is PageRoute && r != _route) {
       if (_route != null) routeObserver.unsubscribe(this);
       _route = r;
       routeObserver.subscribe(this, r);
