@@ -725,5 +725,7 @@
   "listening": "Dinleniyor…",
   "slideToCancel": "İptal için kaydırın",
   "channelMembers": "Kanal üyeleri",
-  "markAllRead": "Tümünü okundu say"
+  "markAllRead": "Tümünü okundu say",
+  "timeFrom": "Başlangıç",
+  "timeTo": "Bitiş"
 }

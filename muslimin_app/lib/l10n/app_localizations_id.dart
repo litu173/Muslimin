@@ -2461,4 +2461,10 @@ class L10nId extends L10n {
 
   @override
   String get markAllRead => 'Tandai semua dibaca';
+
+  @override
+  String get timeFrom => 'Dari';
+
+  @override
+  String get timeTo => 'Sampai';
 }

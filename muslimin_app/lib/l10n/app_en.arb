@@ -1253,5 +1253,7 @@
   "listening": "Listening…",
   "slideToCancel": "Slide to cancel",
   "channelMembers": "Channel members",
-  "markAllRead": "Mark all read"
+  "markAllRead": "Mark all read",
+  "timeFrom": "From",
+  "timeTo": "To"
 }

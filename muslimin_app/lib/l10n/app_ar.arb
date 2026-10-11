@@ -725,5 +725,7 @@
   "listening": "جارٍ الاستماع…",
   "slideToCancel": "اسحب للإلغاء",
   "channelMembers": "أعضاء القناة",
-  "markAllRead": "تحديد الكل كمقروء"
+  "markAllRead": "تحديد الكل كمقروء",
+  "timeFrom": "من",
+  "timeTo": "إلى"
 }

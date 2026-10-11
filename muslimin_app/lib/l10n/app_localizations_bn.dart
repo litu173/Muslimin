@@ -2437,4 +2437,10 @@ class L10nBn extends L10n {
 
   @override
   String get markAllRead => 'সব পড়া হয়েছে';
+
+  @override
+  String get timeFrom => 'শুরু';
+
+  @override
+  String get timeTo => 'শেষ';
 }

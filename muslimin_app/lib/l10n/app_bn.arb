@@ -725,5 +725,7 @@
   "listening": "শুনছি…",
   "slideToCancel": "বাতিল করতে সরান",
   "channelMembers": "চ্যানেলের সদস্য",
-  "markAllRead": "সব পড়া হয়েছে"
+  "markAllRead": "সব পড়া হয়েছে",
+  "timeFrom": "শুরু",
+  "timeTo": "শেষ"
 }

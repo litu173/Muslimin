@@ -2466,4 +2466,10 @@ class L10nMs extends L10n {
 
   @override
   String get markAllRead => 'Tanda semua dibaca';
+
+  @override
+  String get timeFrom => 'Dari';
+
+  @override
+  String get timeTo => 'Hingga';
 }

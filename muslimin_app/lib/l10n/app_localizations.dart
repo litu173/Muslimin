@@ -4466,6 +4466,18 @@ abstract class L10n {
   /// In en, this message translates to:
   /// **'Mark all read'**
   String get markAllRead;
+
+  /// No description provided for @timeFrom.
+  ///
+  /// In en, this message translates to:
+  /// **'From'**
+  String get timeFrom;
+
+  /// No description provided for @timeTo.
+  ///
+  /// In en, this message translates to:
+  /// **'To'**
+  String get timeTo;
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {

@@ -725,5 +725,7 @@
   "listening": "Mendengarkan…",
   "slideToCancel": "Geser untuk batal",
   "channelMembers": "Anggota saluran",
-  "markAllRead": "Tandai semua dibaca"
+  "markAllRead": "Tandai semua dibaca",
+  "timeFrom": "Dari",
+  "timeTo": "Sampai"
 }

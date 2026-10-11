@@ -2472,4 +2472,10 @@ class L10nEs extends L10n {
 
   @override
   String get markAllRead => 'Marcar todo leído';
+
+  @override
+  String get timeFrom => 'Desde';
+
+  @override
+  String get timeTo => 'Hasta';
 }

@@ -725,5 +725,7 @@
   "listening": "Escuchando…",
   "slideToCancel": "Desliza para cancelar",
   "channelMembers": "Miembros del canal",
-  "markAllRead": "Marcar todo leído"
+  "markAllRead": "Marcar todo leído",
+  "timeFrom": "Desde",
+  "timeTo": "Hasta"
 }

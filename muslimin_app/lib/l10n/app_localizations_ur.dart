@@ -2461,4 +2461,10 @@ class L10nUr extends L10n {
 
   @override
   String get markAllRead => 'سب پڑھا ہوا';
+
+  @override
+  String get timeFrom => 'سے';
+
+  @override
+  String get timeTo => 'تک';
 }

@@ -2429,4 +2429,10 @@ class L10nAr extends L10n {
 
   @override
   String get markAllRead => 'تحديد الكل كمقروء';
+
+  @override
+  String get timeFrom => 'من';
+
+  @override
+  String get timeTo => 'إلى';
 }

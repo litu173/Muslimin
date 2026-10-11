@@ -2456,4 +2456,10 @@ class L10nHi extends L10n {
 
   @override
   String get markAllRead => 'सब पढ़ा हुआ';
+
+  @override
+  String get timeFrom => 'से';
+
+  @override
+  String get timeTo => 'तक';
 }

@@ -725,5 +725,7 @@
   "listening": "سن رہا ہے…",
   "slideToCancel": "منسوخ کرنے کے لیے سرکائیں",
   "channelMembers": "چینل کے ارکان",
-  "markAllRead": "سب پڑھا ہوا"
+  "markAllRead": "سب پڑھا ہوا",
+  "timeFrom": "سے",
+  "timeTo": "تک"
 }

@@ -20,16 +20,11 @@ import '../channel/channel_invite_card.dart';
 import '../../../services/time_board_reader.dart';
 import '../time_board_scan.dart';
 import '../volunteer.dart';
+import '../../../core/widgets/time_wheel.dart';
 
-Future<HM?> pickTime(BuildContext context, HM? initial) async {
-  final r = await showTimePicker(
-    context: context,
-    initialTime: initial == null
-        ? const TimeOfDay(hour: 12, minute: 0)
-        : TimeOfDay(hour: initial.hour, minute: initial.minute),
-  );
-  return r == null ? null : HM(r.hour, r.minute);
-}
+/// Any time of day (hour, minute and AM/PM wheels).
+Future<HM?> pickTime(BuildContext context, HM? initial) =>
+    pickTimeWheel(context, title: L10n.of(context).time, initial: initial);
 
 class MasjidHomeTab extends ConsumerStatefulWidget {
   const MasjidHomeTab({
@@ -488,7 +483,13 @@ class _JamatEditorState extends ConsumerState<_JamatEditor> {
                     wrong:
                         _jamat[p] != null && !jamatTimePlausible(p, _jamat[p]!),
                     onTap: () async {
-                      final v = await pickTime(context, _jamat[p]);
+                      // AM/PM follows the prayer – only hour and minute.
+                      final v = await pickTimeWheel(
+                        context,
+                        title: f.prayer(p),
+                        initial: _jamat[p],
+                        window: prayerWindow(p),
+                      );
                       if (v != null) {
                         setState(() {
                           _jamat[p] = v;
@@ -609,15 +610,14 @@ class _MaktabEditorState extends ConsumerState<_MaktabEditor> {
   late bool _showEvening = _evening != null;
   bool _saving = false;
 
-  Future<HMRange?> _pickRange(HMRange? current) async {
-    final s = await pickTime(context, current?.start);
-    if (s == null || !mounted) return null;
-    final e = await pickTime(
-      context,
-      current?.end ?? HM((s.hour + 1) % 24, s.minute),
-    );
-    return e == null ? null : HMRange(s, e);
-  }
+  /// From and to in one sheet; morning sessions are AM, evening PM.
+  Future<HMRange?> _pickRange(String title, HMRange? current, bool morning) =>
+      pickRangeWheel(
+        context,
+        title: title,
+        initial: current,
+        window: morning ? morningWindow : eveningWindow,
+      );
 
   Future<void> _save() async {
     setState(() => _saving = true);
@@ -648,6 +648,7 @@ class _MaktabEditorState extends ConsumerState<_MaktabEditor> {
 
     Widget rangeRow(
       String label,
+      bool morning,
       HMRange? value,
       ValueChanged<HMRange> onSet,
       VoidCallback onRemove,
@@ -659,7 +660,7 @@ class _MaktabEditorState extends ConsumerState<_MaktabEditor> {
           _TimePill(
             text: value == null ? t.tapToSet : f.hmRange(value),
             onTap: () async {
-              final r = await _pickRange(value);
+              final r = await _pickRange(label, value, morning);
               if (r != null) setState(() => onSet(r));
             },
           ),
@@ -706,13 +707,13 @@ class _MaktabEditorState extends ConsumerState<_MaktabEditor> {
           ),
           const SizedBox(height: Gap.m),
           if (_showMorning)
-            rangeRow(t.morning, _morning, (r) => _morning = r, () {
+            rangeRow(t.morning, true, _morning, (r) => _morning = r, () {
               _morning = null;
               _showMorning = false;
             }),
           if (_showMorning && _showEvening) const Divider(),
           if (_showEvening)
-            rangeRow(t.evening, _evening, (r) => _evening = r, () {
+            rangeRow(t.evening, false, _evening, (r) => _evening = r, () {
               _evening = null;
               _showEvening = false;
             }),

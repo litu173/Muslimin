@@ -2455,4 +2455,10 @@ class L10nTr extends L10n {
 
   @override
   String get markAllRead => 'Tümünü okundu say';
+
+  @override
+  String get timeFrom => 'Başlangıç';
+
+  @override
+  String get timeTo => 'Bitiş';
 }
