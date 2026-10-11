@@ -22,6 +22,8 @@ initializeApp(
       : { credential: applicationDefault(), projectId },
 );
 const db = getFirestore();
+const fcm = getMessaging();
+const dryRun = process.argv.includes('--dry-run') || !!process.env.FIRESTORE_EMULATOR_HOST;
 
 try {
   const meta = db.doc('meta/push');
@@ -110,8 +112,9 @@ try {
 } catch (e) {
   // Out of the free plan's daily reads: skip this run quietly (no failed
   // run e-mails); the first run after the daily reset sends everything new.
-  if (e?.code === 8 || /RESOURCE_EXHAUSTED|Quota exceeded/.test(String(e))) {
-    console.log('Daily Firestore quota used up – skipping until it resets.');
+  // Also a brief outage (timeout / unavailable): the next run catches up.
+  if ([4, 8, 14].includes(e?.code) || /RESOURCE_EXHAUSTED|Quota exceeded|UNAVAILABLE|DEADLINE/.test(String(e))) {
+    console.log(`Firestore busy or out of daily quota (${e.code}) – skipping this run.`);
   } else {
     throw e;
   }
