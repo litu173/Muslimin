@@ -97,7 +97,28 @@
     .shots { display: flex; gap: 22px; justify-content: center; flex-wrap: wrap; }
     .shot { width: 230px; text-align: center; }
     .shot .frame { border-radius: 30px; padding: 8px; background: #0c0c0c; box-shadow: 0 16px 36px rgba(0,40,40,.25); }
-    .shot img { border-radius: 23px; }
+    .shot img { border-radius: 23px; width: 100%; aspect-ratio: 511 / 1111; object-fit: cover; object-position: top; }
+
+    /* ---------- light / dark compare ---------- */
+    .theme-sec { text-align: center; }
+    .compare { position: relative; width: min(330px, 84vw); margin: 0 auto; border-radius: 40px; padding: 10px; background: #0c0c0c;
+      box-shadow: 0 30px 60px rgba(0,40,40,.28); touch-action: pan-y; user-select: none; -webkit-user-select: none; }
+    .compare-view { position: relative; border-radius: 31px; overflow: hidden; aspect-ratio: 511 / 1111; cursor: ew-resize; }
+    .compare-view img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top; pointer-events: none; }
+    .compare-view .dark { clip-path: inset(0 0 0 var(--pos, 50%)); }
+    .compare-bar { position: absolute; top: 0; bottom: 0; left: var(--pos, 50%); width: 3px; margin-left: -1.5px; background: var(--gold-light);
+      box-shadow: 0 0 12px rgba(0,0,0,.35); pointer-events: none; }
+    .compare-knob { position: absolute; top: 50%; left: var(--pos, 50%); width: 52px; height: 52px; margin: -26px 0 0 -26px; border-radius: 50%;
+      background: var(--gold); color: #fff; display: grid; place-items: center; box-shadow: 0 6px 18px rgba(0,0,0,.35);
+      border: 3px solid var(--gold-light); pointer-events: none; transition: transform .2s ease; }
+    .compare.dragging .compare-knob { transform: scale(1.12); }
+    .compare-knob svg { width: 26px; height: 26px; }
+    .compare-label { position: absolute; bottom: 22px; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; pointer-events: none;
+      background: rgba(0,0,0,.45); color: #fff; backdrop-filter: blur(4px); transition: opacity .3s; }
+    .compare-label.l { left: 22px; } .compare-label.r { right: 22px; }
+    .compare input[type=range] { position: absolute; inset: 0; opacity: 0; width: 100%; height: 100%; margin: 0; pointer-events: none; }
+    .compare:focus-within .compare-knob { outline: 3px solid var(--gold-light); outline-offset: 3px; }
+    .compare-hint { margin-top: 18px; font-size: 14px; opacity: .7; }
     .shot span { display: block; margin-top: 12px; font-size: 14px; font-weight: 500; }
 
     /* ---------- download ---------- */
@@ -355,6 +376,28 @@
     </div>
   </section>
 
+  <!-- ============ LIGHT / DARK ============ -->
+  <section id="themes" class="theme-sec" style="padding-top:0">
+    <div class="wrap">
+      <div class="section-title">
+        <h2 data-i18n="themeTitle">Light by day, dark by night</h2>
+        <p data-i18n="themeSub">A calm cream theme and a deep-green dark theme — or let it follow your phone. Drag to compare.</p>
+      </div>
+      <div class="compare reveal" id="compare">
+        <div class="compare-view">
+          <img class="light" data-shot="home" src="assets/home-en.jpg" alt="Home screen in light theme" loading="lazy" />
+          <img class="dark" data-shot="home-dark" src="assets/home-dark-en.jpg" alt="Home screen in dark theme" loading="lazy" />
+          <span class="compare-label l" data-i18n="themeLight">Light</span>
+          <span class="compare-label r" data-i18n="themeDark">Dark</span>
+          <div class="compare-bar"></div>
+          <div class="compare-knob"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l-6 6 6 6M15 6l6 6-6 6"/></svg></div>
+          <input type="range" min="0" max="100" value="50" step="0.1" aria-label="Compare light and dark theme" />
+        </div>
+      </div>
+      <p class="compare-hint" data-i18n="themeHint">← Drag left for dark · right for light →</p>
+    </div>
+  </section>
+
   <!-- ============ DOWNLOAD ============ -->
   <section id="download" style="padding-top:0">
     <div class="wrap">
@@ -558,6 +601,8 @@
       q5: "অ্যান্ড্রয়েড বলছে অ্যাপটি অজানা উৎস থেকে।", qa5: "প্লে স্টোরের বাইরে থেকে ডাউনলোড করলে এটা স্বাভাবিক। APK আমাদের সাইন করা এবং অফিসিয়াল GitHub পেজে প্রকাশিত।",
       privacy: "প্রাইভেসি পলিসি",
       splashTag: "মসজিদের জামাতের সময়",
+      themeTitle: "দিনে লাইট, রাতে ডার্ক", themeSub: "শান্ত ক্রিম থিম আর গাঢ় সবুজ ডার্ক থিম — অথবা ফোনের সেটিং অনুযায়ী। টেনে তুলনা করুন।",
+      themeLight: "লাইট", themeDark: "ডার্ক", themeHint: "← বাঁয়ে টানুন ডার্ক · ডানে লাইট →",
       f13: "অ্যাপেই দিকনির্দেশনা", f13d: "যেকোনো মসজিদে হেঁটে বা গাড়িতে যাওয়ার পথ ম্যাপে দেখুন — দূরত্ব, সময় ও পরের জামাতসহ। চাইলে Google Maps-এ চালিয়ে যান।",
       f14: "১০,০০০+ মসজিদ, প্রতিবেশীদের হাতে হালনাগাদ", f14d: "৬৪ জেলার মসজিদ। কাছে থাকেন? “আমি জামাতের সময় আপডেট করতে চাই” চাপুন — আপনি ২ কিমির মধ্যে আছেন কি না অ্যাপ যাচাই করবে — আর সবার জন্য সময় সঠিক রাখুন। মসজিদ নেই? যোগ করুন।",
       f15: "দরকারি নোটিফিকেশন", f15d: "নোটিশ ও চ্যানেলের বার্তা এক জায়গায়, নতুনগুলো পড়া না হওয়া পর্যন্ত চিহ্নিত, ঘণ্টায় সংখ্যা — আর অ্যাপ বন্ধ থাকলেও পুশ নোটিফিকেশন।",
@@ -597,6 +642,54 @@
     let saved = null;
     try { saved = localStorage.getItem("lang"); } catch (e) {}
     if (saved === "bn" || (!saved && (navigator.language || "").startsWith("bn"))) setLang(true);
+
+    // ---- Light / dark compare: drag the bar (or use arrow keys) ----
+    (() => {
+      const box = document.getElementById("compare");
+      const range = box.querySelector("input");
+      const labels = box.querySelectorAll(".compare-label");
+      let anim = null;
+      const set = v => {
+        v = Math.max(0, Math.min(100, v));
+        box.style.setProperty("--pos", v + "%");
+        range.value = v;
+        labels[0].style.opacity = v < 12 ? 0 : 1;
+        labels[1].style.opacity = v > 88 ? 0 : 1;
+      };
+      set(50);
+      range.addEventListener("input", () => { if (anim) cancelAnimationFrame(anim); set(+range.value); });
+      // Drag anywhere on the screen image (mouse or finger); vertical swipes still scroll.
+      const view = box.querySelector(".compare-view");
+      const at = e => { const r = view.getBoundingClientRect(); return (e.clientX - r.left) / r.width * 100; };
+      let dragging = false;
+      view.addEventListener("pointerdown", e => {
+        dragging = true; if (anim) cancelAnimationFrame(anim);
+        view.setPointerCapture(e.pointerId); box.classList.add("dragging"); set(at(e));
+      });
+      view.addEventListener("pointermove", e => { if (dragging) set(at(e)); });
+      const end = () => { dragging = false; box.classList.remove("dragging"); };
+      view.addEventListener("pointerup", end);
+      view.addEventListener("pointercancel", end);
+      // A gentle hint the first time it comes into view: sweep left, right, back.
+      const sweep = () => {
+        if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+        const keys = [[0, 50], [700, 22], [1500, 78], [2200, 50]];
+        const t0 = performance.now();
+        const step = now => {
+          const t = now - t0;
+          let i = keys.findIndex(k => k[0] > t);
+          if (i === -1) { set(50); return; }
+          const [ta, va] = keys[i - 1], [tb, vb] = keys[i];
+          const k = (t - ta) / (tb - ta), e = k < .5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;
+          set(va + (vb - va) * e);
+          anim = requestAnimationFrame(step);
+        };
+        anim = requestAnimationFrame(step);
+      };
+      new IntersectionObserver((es, o) => es.forEach(e => {
+        if (e.isIntersecting) { setTimeout(sweep, 500); o.disconnect(); }
+      }), { threshold: 0.5 }).observe(box);
+    })();
 
     // ---- Butter-smooth scrolling (Lenis); anchor links glide too ----
     const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
