@@ -2646,4 +2646,10 @@ class L10nHi extends L10n {
 
   @override
   String get seeAllDuas => 'सारी दुआएँ देखें';
+
+  @override
+  String get appUpdate => 'ऐप अपडेट';
+
+  @override
+  String get updateBadge => 'अपडेट';
 }

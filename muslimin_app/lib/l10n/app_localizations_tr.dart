@@ -2645,4 +2645,10 @@ class L10nTr extends L10n {
 
   @override
   String get seeAllDuas => 'Tüm duaları gör';
+
+  @override
+  String get appUpdate => 'Uygulama güncellemesi';
+
+  @override
+  String get updateBadge => 'Güncelle';
 }

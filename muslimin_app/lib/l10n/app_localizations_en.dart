@@ -2649,4 +2649,10 @@ class L10nEn extends L10n {
 
   @override
   String get seeAllDuas => 'See all duas';
+
+  @override
+  String get appUpdate => 'App update';
+
+  @override
+  String get updateBadge => 'Update';
 }

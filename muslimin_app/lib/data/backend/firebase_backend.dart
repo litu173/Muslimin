@@ -10,6 +10,7 @@ import 'package:geoflutterfire_plus/geoflutterfire_plus.dart';
 
 import '../../core/utils/geo.dart';
 import '../../firebase_options.dart';
+import '../models/announcement.dart';
 import '../models/app_user.dart';
 import '../models/channel.dart';
 import '../models/hm.dart';
@@ -658,6 +659,29 @@ class FirebaseBackend implements Backend {
       diedOn: _ts(m['diedOn']),
     );
   }
+
+  @override
+  Stream<List<Announcement>> announcements({int limit = 10}) => _db
+      .collection('announcements')
+      .orderBy('createdAt', descending: true)
+      .limit(limit)
+      .snapshots()
+      .map(
+        (s) => [
+          for (final d in s.docs)
+            Announcement(
+              id: d.id,
+              title: d.data()['title'] as String? ?? '',
+              body: d.data()['body'] as String? ?? '',
+              type: d.data()['type'] as String? ?? '',
+              createdAt:
+                  (d.data()['createdAt'] as Timestamp?)?.toDate() ??
+                  DateTime.now(),
+            ),
+        ],
+      )
+      // Not readable yet (rules not deployed) or offline: no news.
+      .handleError((_) {});
 
   @override
   Stream<List<Notice>> noticesFor(List<String> masjidIds, {int limit = 30}) {

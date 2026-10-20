@@ -779,5 +779,7 @@
   "partDua_night": "Doa malam",
   "nearestOption": "Terdekat",
   "nearestOptionHint": "Masjid terdekat dari lokasi anda, apa jua kawasannya",
-  "seeAllDuas": "Lihat semua doa"
+  "seeAllDuas": "Lihat semua doa",
+  "appUpdate": "Kemas kini aplikasi",
+  "updateBadge": "Kemas kini"
 }

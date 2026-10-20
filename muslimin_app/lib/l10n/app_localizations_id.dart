@@ -2652,4 +2652,10 @@ class L10nId extends L10n {
 
   @override
   String get seeAllDuas => 'Lihat semua doa';
+
+  @override
+  String get appUpdate => 'Pembaruan aplikasi';
+
+  @override
+  String get updateBadge => 'Perbarui';
 }

@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import '../models/announcement.dart';
 import '../models/app_user.dart';
 import '../models/channel.dart';
 import '../models/hm.dart';
@@ -174,6 +175,9 @@ abstract class Backend {
 
   // ---- Notices ----
   Stream<List<Notice>> noticesFor(List<String> masjidIds, {int limit = 30});
+
+  /// App news for everyone (update announcements), newest first.
+  Stream<List<Announcement>> announcements({int limit = 10});
   Future<void> postNotice(Notice notice);
   Future<void> deleteNotice(String id);
 

@@ -8,6 +8,7 @@ import '../../core/theme/app_text.dart';
 import '../../l10n/app_localizations.dart';
 import '../../state/channel.dart';
 import '../../state/dhikr.dart';
+import '../../state/update.dart';
 import '../../state/quran.dart';
 import '../achievements/achievements.dart';
 import '../dua/dua_screen.dart';
@@ -137,6 +138,8 @@ class _ShellState extends ConsumerState<Shell> {
                   label: t.more,
                   selected: _tab == 4,
                   onTap: () => _go(4),
+                  // A newer version is out (About the App has it).
+                  dot: ref.watch(updateAvailableProvider),
                 ),
               ],
             ),
@@ -153,12 +156,16 @@ class _NavItem extends StatelessWidget {
     required this.label,
     required this.selected,
     required this.onTap,
+    this.dot = false,
   });
 
   final IconData icon;
   final String label;
   final bool selected;
   final VoidCallback onTap;
+
+  /// A small red dot on the icon: something new inside.
+  final bool dot;
 
   @override
   Widget build(BuildContext context) => Expanded(
@@ -168,10 +175,29 @@ class _NavItem extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           // Selected tab in gold, like every other "active" state.
-          Icon(
-            icon,
-            size: 22,
-            color: selected ? AppColors.gold : AppColors.muted,
+          Stack(
+            clipBehavior: Clip.none,
+            children: [
+              Icon(
+                icon,
+                size: 22,
+                color: selected ? AppColors.gold : AppColors.muted,
+              ),
+              if (dot)
+                Positioned(
+                  right: -3,
+                  top: -2,
+                  child: Container(
+                    width: 9,
+                    height: 9,
+                    decoration: BoxDecoration(
+                      color: AppColors.danger,
+                      shape: BoxShape.circle,
+                      border: Border.all(color: AppColors.card, width: 1.5),
+                    ),
+                  ),
+                ),
+            ],
           ),
           const SizedBox(height: 2),
           AnimatedDefaultTextStyle(

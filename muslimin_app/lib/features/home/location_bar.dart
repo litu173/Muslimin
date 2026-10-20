@@ -15,15 +15,49 @@ import '../notifications/notifications_screen.dart';
 /// "Your Location / Dilu Road, Dhaka ⟳" with the notifications bell – shared
 /// by Home and More. On Home the Hijri/Gregorian date sits underneath,
 /// aligned with the location text.
-class LocationBar extends ConsumerWidget {
+class LocationBar extends ConsumerStatefulWidget {
   const LocationBar({super.key, this.showDate = false});
 
   final bool showDate;
 
+  @override
+  ConsumerState<LocationBar> createState() => _LocationBarState();
+}
+
+class _LocationBarState extends ConsumerState<LocationBar>
+    with SingleTickerProviderStateMixin {
   static const _iconWidth = 24.0;
 
+  /// Turns the ⟳ while the location is being found again – only after a
+  /// tap, never on its own.
+  late final _spin = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 800),
+  );
+
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  void dispose() {
+    _spin.dispose();
+    super.dispose();
+  }
+
+  /// Spins at least 2.5 s (or until the new fix arrives, if later), then
+  /// finishes its turn and rests.
+  Future<void> _refresh() async {
+    if (_spin.isAnimating) return;
+    _spin.repeat();
+    await Future.wait([
+      ref.read(locationProvider.notifier).refresh().catchError((_) {}),
+      Future<void>.delayed(const Duration(milliseconds: 2500)),
+    ]);
+    if (!mounted) return;
+    await _spin.animateTo(1);
+    _spin.value = 0;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final showDate = widget.showDate;
     final t = L10n.of(context);
     final f = Fmt.of(context);
     final loc = ref.watch(locationProvider);
@@ -38,7 +72,7 @@ class LocationBar extends ConsumerWidget {
         Expanded(
           child: InkWell(
             borderRadius: BorderRadius.circular(Radii.button),
-            onTap: () => ref.read(locationProvider.notifier).refresh(),
+            onTap: _refresh,
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: Gap.s),
               child: Row(
@@ -71,10 +105,13 @@ class LocationBar extends ConsumerWidget {
                               ),
                             ),
                             const SizedBox(width: 4),
-                            Icon(
-                              Icons.refresh_rounded,
-                              size: 16,
-                              color: AppColors.ink,
+                            RotationTransition(
+                              turns: _spin,
+                              child: Icon(
+                                Icons.refresh_rounded,
+                                size: 16,
+                                color: AppColors.ink,
+                              ),
                             ),
                           ],
                         ),

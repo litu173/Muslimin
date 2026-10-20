@@ -2615,4 +2615,10 @@ class L10nAr extends L10n {
 
   @override
   String get seeAllDuas => 'عرض كل الأدعية';
+
+  @override
+  String get appUpdate => 'تحديث التطبيق';
+
+  @override
+  String get updateBadge => 'تحديث';
 }

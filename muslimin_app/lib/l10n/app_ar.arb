@@ -779,5 +779,7 @@
   "partDua_night": "أدعية الليل",
   "nearestOption": "الأقرب",
   "nearestOptionHint": "أقرب المساجد إلى مكانك، أيًّا كان الحي",
-  "seeAllDuas": "عرض كل الأدعية"
+  "seeAllDuas": "عرض كل الأدعية",
+  "appUpdate": "تحديث التطبيق",
+  "updateBadge": "تحديث"
 }

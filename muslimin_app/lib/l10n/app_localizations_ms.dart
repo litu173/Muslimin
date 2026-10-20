@@ -2658,4 +2658,10 @@ class L10nMs extends L10n {
 
   @override
   String get seeAllDuas => 'Lihat semua doa';
+
+  @override
+  String get appUpdate => 'Kemas kini aplikasi';
+
+  @override
+  String get updateBadge => 'Kemas kini';
 }

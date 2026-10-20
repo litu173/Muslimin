@@ -1383,5 +1383,7 @@
   "partDua_night": "Night duas",
   "nearestOption": "Nearest",
   "nearestOptionHint": "Closest masjids to where you are, whatever the thana",
-  "seeAllDuas": "See all duas"
+  "seeAllDuas": "See all duas",
+  "appUpdate": "App update",
+  "updateBadge": "Update"
 }

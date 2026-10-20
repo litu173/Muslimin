@@ -4790,6 +4790,18 @@ abstract class L10n {
   /// In en, this message translates to:
   /// **'See all duas'**
   String get seeAllDuas;
+
+  /// No description provided for @appUpdate.
+  ///
+  /// In en, this message translates to:
+  /// **'App update'**
+  String get appUpdate;
+
+  /// No description provided for @updateBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'Update'**
+  String get updateBadge;
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {

@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'dart:math' as math;
 
 import '../../core/utils/geo.dart';
+import '../models/announcement.dart';
 import '../models/app_user.dart';
 import '../models/channel.dart';
 import '../models/hm.dart';
@@ -807,6 +808,20 @@ class DemoBackend implements Backend {
     _messages[masjidId]?.removeWhere((m) => m.id == id);
     _emit();
   }
+
+  /// One sample update announcement, so the inbox shows how it looks.
+  @override
+  Stream<List<Announcement>> announcements({int limit = 10}) => Stream.value([
+    Announcement(
+      id: 'demo-update',
+      title: 'মুসলিমিন আপডেট এসেছে 🎉',
+      body:
+          'নতুন: দৈনিক জিকির ও তাসবিহ কাউন্টার, রিফ্রেশে কুরআনের আয়াত, '
+          'সূরার আগে বিসমিল্লাহ ও আরও অনেক কিছু।',
+      type: 'update',
+      createdAt: DateTime.now().subtract(const Duration(hours: 1)),
+    ),
+  ]);
 
   @override
   Stream<List<Notice>> noticesFor(List<String> masjidIds, {int limit = 30}) =>

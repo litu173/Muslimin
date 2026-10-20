@@ -11,6 +11,7 @@ import '../../core/widgets/refresh.dart';
 import '../../core/widgets/surfaces.dart';
 import '../../data/models/masjid.dart';
 import '../../l10n/app_localizations.dart';
+import '../../state/update.dart';
 import '../../state/providers.dart';
 import '../achievements/achievements.dart';
 import '../admin/admin_panel_screen.dart';
@@ -114,6 +115,9 @@ class _MoreScreenState extends ConsumerState<MoreScreen> {
                         _MenuRow(
                           icon: Icons.info_outline_rounded,
                           label: t.aboutApp,
+                          badge: ref.watch(updateAvailableProvider)
+                              ? t.updateBadge
+                              : null,
                           onTap: () => push(context, const AboutScreen()),
                         ),
                         if (user?.isSuperAdmin ?? false) ...[
@@ -145,11 +149,15 @@ class _MenuRow extends StatelessWidget {
     required this.icon,
     required this.label,
     required this.onTap,
+    this.badge,
   });
 
   final IconData icon;
   final String label;
   final VoidCallback onTap;
+
+  /// A small red pill before the arrow ("Update").
+  final String? badge;
 
   @override
   Widget build(BuildContext context) => InkWell(
@@ -161,6 +169,33 @@ class _MenuRow extends StatelessWidget {
           Icon(icon, color: AppColors.gold, size: 22),
           const SizedBox(width: Gap.l),
           Expanded(child: Text(label, style: AppText.body)),
+          if (badge != null)
+            Container(
+              margin: const EdgeInsets.only(right: 4),
+              padding: const EdgeInsets.fromLTRB(6, 2, 8, 2),
+              decoration: BoxDecoration(
+                color: AppColors.danger,
+                borderRadius: BorderRadius.circular(Radii.pill),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(
+                    Icons.arrow_upward_rounded,
+                    size: 12,
+                    color: Colors.white,
+                  ),
+                  const SizedBox(width: 2),
+                  Text(
+                    badge!,
+                    style: AppText.micro.copyWith(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           Icon(Icons.chevron_right_rounded, color: AppColors.ink),
         ],
       ),

@@ -779,5 +779,7 @@
   "partDua_night": "रात की दुआएँ",
   "nearestOption": "सबसे नज़दीक",
   "nearestOptionHint": "आपकी जगह से सबसे नज़दीकी मस्जिदें, थाना कोई भी हो",
-  "seeAllDuas": "सारी दुआएँ देखें"
+  "seeAllDuas": "सारी दुआएँ देखें",
+  "appUpdate": "ऐप अपडेट",
+  "updateBadge": "अपडेट"
 }

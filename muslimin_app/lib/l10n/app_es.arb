@@ -779,5 +779,7 @@
   "partDua_night": "Duas de la noche",
   "nearestOption": "Más cercanas",
   "nearestOptionHint": "Las mezquitas más cercanas a ti, sea cual sea el distrito",
-  "seeAllDuas": "Ver todas las duas"
+  "seeAllDuas": "Ver todas las duas",
+  "appUpdate": "Actualización de la app",
+  "updateBadge": "Actualizar"
 }

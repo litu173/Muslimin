@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../data/models/announcement.dart';
+import '../../state/update.dart';
+import '../more/about_screen.dart';
 import '../../core/nav.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
@@ -29,11 +32,13 @@ class NotificationsScreen extends ConsumerWidget {
     final ids = ref.watch(followsProvider).keys;
     final notices = ref.watch(noticesProvider(noticeKey(ids)));
     final messages = ref.watch(channelInboxProvider);
+    final news = ref.watch(announcementsProvider).value ?? const [];
     final read = ref.watch(inboxReadProvider.notifier);
     ref.watch(inboxReadProvider);
     final items = <(DateTime, Object)>[
       for (final n in notices.value ?? const <Notice>[]) (n.createdAt, n),
       for (final m in messages) (m.createdAt, m),
+      for (final a in news) (a.createdAt, a),
     ]..sort((a, b) => b.$1.compareTo(a.$1));
     final unread = ref.watch(unreadCountProvider);
 
@@ -92,6 +97,18 @@ class NotificationsScreen extends ConsumerWidget {
                   onTap: () {
                     read.markRead(m.id);
                     push(context, MasjidScreen(masjidId: m.masjidId));
+                  },
+                ),
+                final Announcement a => InboxTile(
+                  icon: Icons.system_update_rounded,
+                  kind: t.appUpdate,
+                  title: a.title,
+                  masjid: a.body,
+                  at: a.createdAt,
+                  unread: read.isUnread(a.id, a.createdAt),
+                  onTap: () {
+                    read.markRead(a.id);
+                    if (a.isUpdate) push(context, const AboutScreen());
                   },
                 ),
                 _ => const SizedBox.shrink(),

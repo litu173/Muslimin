@@ -6,6 +6,7 @@ import '../data/models/masjid.dart';
 import '../data/models/notice.dart';
 import 'follows.dart';
 import '../services/notification_service.dart';
+import 'update.dart';
 import 'providers.dart';
 
 /// My membership of a masjid's channel (null = not joined).
@@ -177,7 +178,7 @@ class InboxReadNotifier extends Notifier<InboxRead> {
   }
 }
 
-/// The number on the bell: unread notices and channel messages.
+/// The number on the bell: unread notices, channel messages and app news.
 final unreadCountProvider = Provider<int>((ref) {
   final read = ref.watch(inboxReadProvider);
   bool unread(String id, DateTime d) =>
@@ -189,6 +190,9 @@ final unreadCountProvider = Provider<int>((ref) {
       ref
           .watch(channelInboxProvider)
           .where((m) => unread(m.id, m.createdAt))
+          .length +
+      (ref.watch(announcementsProvider).value ?? const [])
+          .where((a) => unread(a.id, a.createdAt))
           .length;
 });
 

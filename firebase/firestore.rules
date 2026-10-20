@@ -256,6 +256,13 @@ service cloud.firestore {
       allow read: if signedIn() && resource.data.uid == request.auth.uid;
     }
 
+    // App news for everyone (update announcements) – written only by the
+    // admin tools (firebase/tools/broadcast.mjs).
+    match /announcements/{id} {
+      allow read: if true;
+      allow write: if false;
+    }
+
     match /notices/{noticeId} {
       function masjid(id) { return get(/databases/$(database)/documents/masjids/$(id)).data; }
 

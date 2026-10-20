@@ -2626,4 +2626,10 @@ class L10nBn extends L10n {
 
   @override
   String get seeAllDuas => 'সব দো‘আ দেখুন';
+
+  @override
+  String get appUpdate => 'অ্যাপ আপডেট';
+
+  @override
+  String get updateBadge => 'আপডেট';
 }

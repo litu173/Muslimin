@@ -2649,4 +2649,10 @@ class L10nUr extends L10n {
 
   @override
   String get seeAllDuas => 'تمام دعائیں دیکھیں';
+
+  @override
+  String get appUpdate => 'ایپ اپ ڈیٹ';
+
+  @override
+  String get updateBadge => 'اپ ڈیٹ';
 }
