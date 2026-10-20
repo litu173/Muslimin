@@ -4742,6 +4742,48 @@ abstract class L10n {
   /// In en, this message translates to:
   /// **'Listen'**
   String get dhikrListen;
+
+  /// No description provided for @partDua_dawn.
+  ///
+  /// In en, this message translates to:
+  /// **'Dawn duas'**
+  String get partDua_dawn;
+
+  /// No description provided for @partDua_morning.
+  ///
+  /// In en, this message translates to:
+  /// **'Morning duas'**
+  String get partDua_morning;
+
+  /// No description provided for @partDua_day.
+  ///
+  /// In en, this message translates to:
+  /// **'Daytime duas'**
+  String get partDua_day;
+
+  /// No description provided for @partDua_evening.
+  ///
+  /// In en, this message translates to:
+  /// **'Evening duas'**
+  String get partDua_evening;
+
+  /// No description provided for @partDua_night.
+  ///
+  /// In en, this message translates to:
+  /// **'Night duas'**
+  String get partDua_night;
+
+  /// No description provided for @nearestOption.
+  ///
+  /// In en, this message translates to:
+  /// **'Nearest'**
+  String get nearestOption;
+
+  /// No description provided for @nearestOptionHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Closest masjids to where you are, whatever the thana'**
+  String get nearestOptionHint;
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {

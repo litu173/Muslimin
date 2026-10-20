@@ -2624,4 +2624,26 @@ class L10nEn extends L10n {
 
   @override
   String get dhikrListen => 'Listen';
+
+  @override
+  String get partDua_dawn => 'Dawn duas';
+
+  @override
+  String get partDua_morning => 'Morning duas';
+
+  @override
+  String get partDua_day => 'Daytime duas';
+
+  @override
+  String get partDua_evening => 'Evening duas';
+
+  @override
+  String get partDua_night => 'Night duas';
+
+  @override
+  String get nearestOption => 'Nearest';
+
+  @override
+  String get nearestOptionHint =>
+      'Closest masjids to where you are, whatever the thana';
 }

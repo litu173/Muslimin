@@ -771,5 +771,12 @@
   "dhikrCheckSalah": "نشان زد کرنے کے لیے نماز پر ٹیپ کریں",
   "dhikrReset": "گنتی دوبارہ شروع کریں",
   "dhikrOfTarget": "{n} میں سے",
-  "dhikrListen": "سنیں"
+  "dhikrListen": "سنیں",
+  "partDua_dawn": "فجر کی دعائیں",
+  "partDua_morning": "صبح کی دعائیں",
+  "partDua_day": "دن کی دعائیں",
+  "partDua_evening": "شام کی دعائیں",
+  "partDua_night": "رات کی دعائیں",
+  "nearestOption": "قریب ترین",
+  "nearestOptionHint": "آپ کی جگہ سے سب سے قریب مساجد، تھانہ کوئی بھی ہو"
 }

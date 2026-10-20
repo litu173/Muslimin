@@ -2601,4 +2601,26 @@ class L10nBn extends L10n {
 
   @override
   String get dhikrListen => 'শুনুন';
+
+  @override
+  String get partDua_dawn => 'ভোরের দো‘আ';
+
+  @override
+  String get partDua_morning => 'সকালের দো‘আ';
+
+  @override
+  String get partDua_day => 'দিনের দো‘আ';
+
+  @override
+  String get partDua_evening => 'সন্ধ্যার দো‘আ';
+
+  @override
+  String get partDua_night => 'রাতের দো‘আ';
+
+  @override
+  String get nearestOption => 'নিকটতম';
+
+  @override
+  String get nearestOptionHint =>
+      'আপনার অবস্থান থেকে সবচেয়ে কাছের মসজিদ, যে থানারই হোক';
 }

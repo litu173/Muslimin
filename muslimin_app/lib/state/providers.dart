@@ -260,8 +260,8 @@ final myThanaProvider = FutureProvider<Thana?>((ref) async {
   return (await ThanaService.load()).at(loc.lat, loc.lng);
 });
 
-/// The thana picked on "All Masjids"; null = the user's own. Only the list
-/// follows it – the user's location stays as it is.
+/// The thana picked on "All Masjids"; null = "Nearest" (by distance, any
+/// thana). Only the list follows it – the user's location stays as it is.
 final pickedThanaProvider = NotifierProvider<PickedThana, Thana?>(
   PickedThana.new,
 );
@@ -293,32 +293,17 @@ Stream<List<Masjid>> _thanaList(Ref ref, Thana thana) {
       );
 }
 
-/// Masjids of the thana the user is in (Home), nearest first. Outside any
-/// thana (or none listed there yet): the nearest by distance.
-final myThanaMasjidsProvider = StreamProvider<List<Masjid>>((ref) async* {
-  final thana = await ref.watch(myThanaProvider.future);
-  if (thana == null) {
-    yield* ref.watch(nearbyMasjidsProvider.future).asStream();
-    return;
-  }
-  await for (final list in _thanaList(ref, thana)) {
-    yield list.isNotEmpty
-        ? list
-        : await ref.watch(nearbyMasjidsProvider.future);
-  }
-});
-
 /// Masjids of one picked thana, nearest to the user first.
 final _pickedThanaMasjidsProvider = StreamProvider.family<List<Masjid>, Thana>(
   _thanaList,
 );
 
-/// Masjids of the shown thana – the user's own (from GPS) or one picked on
-/// "All Masjids" – nearest to the user first.
+/// "All Masjids": by default the nearest by GPS distance, whatever the
+/// thana; or the masjids of one picked thana, nearest to the user first.
 final thanaMasjidsProvider = Provider<AsyncValue<List<Masjid>>>((ref) {
   final picked = ref.watch(pickedThanaProvider);
   return picked == null
-      ? ref.watch(myThanaMasjidsProvider)
+      ? ref.watch(nearbyMasjidsProvider)
       : ref.watch(_pickedThanaMasjidsProvider(picked));
 });
 
@@ -380,7 +365,6 @@ final nearbyNoticesProvider = Provider<AsyncValue<List<Notice>>>((ref) {
 /// masjid / notice streams (they keep showing old data while reloading).
 Future<void> refreshAll(WidgetRef ref) async {
   ref.invalidate(nearbyMasjidsProvider);
-  ref.invalidate(myThanaMasjidsProvider);
   ref.invalidate(myMasjidsProvider);
   ref.invalidate(masjidProvider);
   ref.invalidate(noticesProvider);

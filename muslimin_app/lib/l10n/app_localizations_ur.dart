@@ -2624,4 +2624,26 @@ class L10nUr extends L10n {
 
   @override
   String get dhikrListen => 'سنیں';
+
+  @override
+  String get partDua_dawn => 'فجر کی دعائیں';
+
+  @override
+  String get partDua_morning => 'صبح کی دعائیں';
+
+  @override
+  String get partDua_day => 'دن کی دعائیں';
+
+  @override
+  String get partDua_evening => 'شام کی دعائیں';
+
+  @override
+  String get partDua_night => 'رات کی دعائیں';
+
+  @override
+  String get nearestOption => 'قریب ترین';
+
+  @override
+  String get nearestOptionHint =>
+      'آپ کی جگہ سے سب سے قریب مساجد، تھانہ کوئی بھی ہو';
 }

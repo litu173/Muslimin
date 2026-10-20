@@ -2621,4 +2621,26 @@ class L10nHi extends L10n {
 
   @override
   String get dhikrListen => 'सुनें';
+
+  @override
+  String get partDua_dawn => 'भोर की दुआएँ';
+
+  @override
+  String get partDua_morning => 'सुबह की दुआएँ';
+
+  @override
+  String get partDua_day => 'दिन की दुआएँ';
+
+  @override
+  String get partDua_evening => 'शाम की दुआएँ';
+
+  @override
+  String get partDua_night => 'रात की दुआएँ';
+
+  @override
+  String get nearestOption => 'सबसे नज़दीक';
+
+  @override
+  String get nearestOptionHint =>
+      'आपकी जगह से सबसे नज़दीकी मस्जिदें, थाना कोई भी हो';
 }

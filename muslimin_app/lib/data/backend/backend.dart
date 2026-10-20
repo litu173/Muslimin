@@ -218,7 +218,11 @@ abstract class Backend {
 const kMaxMasjidsPerUser = 3;
 
 /// Home shows this many nearest masjids.
-const kHomeMasjids = 5;
+const kHomeMasjids = 3;
+
+/// The nearby search widens until it finds at least this many – enough
+/// for the "Nearest" list on All Masjids, which uses the same result.
+const kNearbyMin = 10;
 
 /// Required GPS accuracy (metres) while registering a masjid.
 const kRequiredAccuracyM = 50.0;

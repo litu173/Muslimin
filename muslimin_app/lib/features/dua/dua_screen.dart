@@ -23,6 +23,16 @@ String partName(L10n t, DayPart p) => switch (p) {
   DayPart.night => t.part_night,
 };
 
+/// "Night duas" – the part's card on Home, where no section title says
+/// they are duas.
+String partDuaName(L10n t, DayPart p) => switch (p) {
+  DayPart.dawn => t.partDua_dawn,
+  DayPart.morning => t.partDua_morning,
+  DayPart.day => t.partDua_day,
+  DayPart.evening => t.partDua_evening,
+  DayPart.night => t.partDua_night,
+};
+
 String _partSub(L10n t, DayPart p) => switch (p) {
   DayPart.dawn => t.part_dawn_sub,
   DayPart.morning => t.part_morning_sub,
@@ -223,11 +233,15 @@ class DuaPartCard extends StatelessWidget {
     required this.part,
     required this.isNow,
     required this.scenes,
+    this.home = false,
   });
 
   final DayPart part;
   final bool isNow;
   final List<DuaScene> scenes;
+
+  /// On Home: titled "Night duas" instead of "Night".
+  final bool home;
 
   @override
   Widget build(BuildContext context) {
@@ -266,7 +280,7 @@ class DuaPartCard extends StatelessWidget {
                     Row(
                       children: [
                         Text(
-                          partName(t, part),
+                          home ? partDuaName(t, part) : partName(t, part),
                           style: AppText.headline.copyWith(
                             color: fg,
                             shadows: [

@@ -2620,4 +2620,26 @@ class L10nTr extends L10n {
 
   @override
   String get dhikrListen => 'Dinle';
+
+  @override
+  String get partDua_dawn => 'Seher duaları';
+
+  @override
+  String get partDua_morning => 'Sabah duaları';
+
+  @override
+  String get partDua_day => 'Gündüz duaları';
+
+  @override
+  String get partDua_evening => 'Akşam duaları';
+
+  @override
+  String get partDua_night => 'Gece duaları';
+
+  @override
+  String get nearestOption => 'En yakın';
+
+  @override
+  String get nearestOptionHint =>
+      'Bulunduğunuz yere en yakın camiler, hangi ilçede olursa olsun';
 }

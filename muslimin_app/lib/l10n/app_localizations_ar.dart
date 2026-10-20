@@ -2591,4 +2591,25 @@ class L10nAr extends L10n {
 
   @override
   String get dhikrListen => 'استمع';
+
+  @override
+  String get partDua_dawn => 'أدعية الفجر';
+
+  @override
+  String get partDua_morning => 'أدعية الصباح';
+
+  @override
+  String get partDua_day => 'أدعية النهار';
+
+  @override
+  String get partDua_evening => 'أدعية المساء';
+
+  @override
+  String get partDua_night => 'أدعية الليل';
+
+  @override
+  String get nearestOption => 'الأقرب';
+
+  @override
+  String get nearestOptionHint => 'أقرب المساجد إلى مكانك، أيًّا كان الحي';
 }

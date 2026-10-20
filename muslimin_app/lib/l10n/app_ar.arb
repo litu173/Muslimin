@@ -771,5 +771,12 @@
   "dhikrCheckSalah": "اضغط على صلاة لتحديدها",
   "dhikrReset": "إعادة العدّ",
   "dhikrOfTarget": "من {n}",
-  "dhikrListen": "استمع"
+  "dhikrListen": "استمع",
+  "partDua_dawn": "أدعية الفجر",
+  "partDua_morning": "أدعية الصباح",
+  "partDua_day": "أدعية النهار",
+  "partDua_evening": "أدعية المساء",
+  "partDua_night": "أدعية الليل",
+  "nearestOption": "الأقرب",
+  "nearestOptionHint": "أقرب المساجد إلى مكانك، أيًّا كان الحي"
 }

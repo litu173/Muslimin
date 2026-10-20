@@ -2633,4 +2633,26 @@ class L10nMs extends L10n {
 
   @override
   String get dhikrListen => 'Dengar';
+
+  @override
+  String get partDua_dawn => 'Doa subuh';
+
+  @override
+  String get partDua_morning => 'Doa pagi';
+
+  @override
+  String get partDua_day => 'Doa siang';
+
+  @override
+  String get partDua_evening => 'Doa petang';
+
+  @override
+  String get partDua_night => 'Doa malam';
+
+  @override
+  String get nearestOption => 'Terdekat';
+
+  @override
+  String get nearestOptionHint =>
+      'Masjid terdekat dari lokasi anda, apa jua kawasannya';
 }

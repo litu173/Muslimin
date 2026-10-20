@@ -157,24 +157,6 @@ class DhikrNotifier extends Notifier<DhikrProgress> {
     if (next == m) return;
     _set(day, today..[id] = next);
   }
-
-  /// All five portions of one dhikr at once (said in one sitting) – or
-  /// none, to undo.
-  void setAll(String id, bool done) {
-    final day = dhikrDay(DateTime.now());
-    _set(day, _today(day)..[id] = done ? kAllPortions : 0);
-  }
-
-  /// Every dhikr's portion after the [salah]-th salah, together.
-  void setSalah(int salah, bool done) {
-    final day = dhikrDay(DateTime.now());
-    final today = _today(day);
-    for (final d in kDhikrs) {
-      final m = today[d.id] ?? 0;
-      today[d.id] = done ? m | (1 << salah) : m & ~(1 << salah);
-    }
-    _set(day, today);
-  }
 }
 
 final dhikrProgressProvider = NotifierProvider<DhikrNotifier, DhikrProgress>(

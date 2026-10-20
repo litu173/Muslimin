@@ -10,18 +10,28 @@ import 'page_header.dart';
 /// Picked in [pickThana] to mean "every area" (when offered).
 const allThanas = Thana('', '');
 
+/// Picked in [pickThana] to mean "nearest to me, any thana" (when offered).
+const nearestThana = Thana('*', '*');
+
 /// The list of every thana / upazila, searchable, the user's own first.
-/// Returns the pick, [allThanas] (with [allLabel]) or null (dismissed).
+/// Returns the pick, [allThanas] (with [allLabel]), [nearestThana] (with
+/// [nearest]) or null (dismissed).
 Future<Thana?> pickThana(
   BuildContext context, {
   Thana? mine,
   Thana? current,
   String? allLabel,
+  bool nearest = false,
 }) => showModalBottomSheet<Thana>(
   context: context,
   isScrollControlled: true,
   backgroundColor: AppColors.card,
-  builder: (_) => _ThanaSheet(mine: mine, current: current, allLabel: allLabel),
+  builder: (_) => _ThanaSheet(
+    mine: mine,
+    current: current,
+    allLabel: allLabel,
+    nearest: nearest,
+  ),
 );
 
 /// White pill on the header: "New Market ▾".
@@ -72,10 +82,14 @@ class _ThanaSheet extends StatefulWidget {
     required this.mine,
     required this.current,
     required this.allLabel,
+    required this.nearest,
   });
 
   final Thana? mine;
   final Thana? current;
+
+  /// When set, a first row for "nearest to me" (returns [nearestThana]).
+  final bool nearest;
 
   /// When set, a first row for "every area" (returns [allThanas]).
   final String? allLabel;
@@ -145,6 +159,19 @@ class _ThanaSheetState extends State<_ThanaSheet> {
             child: ListView(
               controller: scroll,
               children: [
+                if (widget.nearest && q.isEmpty)
+                  ListTile(
+                    leading: Icon(Icons.near_me_rounded, color: AppColors.gold),
+                    title: Text(t.nearestOption, style: AppText.label),
+                    subtitle: Text(
+                      t.nearestOptionHint,
+                      style: AppText.micro.copyWith(color: AppColors.muted),
+                    ),
+                    trailing: widget.current == nearestThana
+                        ? Icon(Icons.check_rounded, color: AppColors.gold)
+                        : null,
+                    onTap: () => Navigator.pop(context, nearestThana),
+                  ),
                 if (widget.allLabel != null && q.isEmpty)
                   ListTile(
                     leading: Icon(Icons.public_rounded, color: AppColors.gold),

@@ -771,5 +771,12 @@
   "dhikrCheckSalah": "Ketuk salat untuk mencentangnya",
   "dhikrReset": "Ulangi hitungan",
   "dhikrOfTarget": "dari {n}",
-  "dhikrListen": "Dengarkan"
+  "dhikrListen": "Dengarkan",
+  "partDua_dawn": "Doa subuh",
+  "partDua_morning": "Doa pagi",
+  "partDua_day": "Doa siang",
+  "partDua_evening": "Doa petang",
+  "partDua_night": "Doa malam",
+  "nearestOption": "Terdekat",
+  "nearestOptionHint": "Masjid terdekat dari lokasi Anda, apa pun wilayahnya"
 }

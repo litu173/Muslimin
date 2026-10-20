@@ -409,7 +409,8 @@ class FirebaseBackend implements Backend {
               ),
           );
 
-  /// Home shows the nearest three, so it starts small and widens only
+  /// Home and the "Nearest" list need only the closest few, so it starts
+  /// small and widens only
   /// when there are too few: in a city 5 km holds hundreds of masjids –
   /// and every one is a read.
   @override
@@ -430,7 +431,7 @@ class FirebaseBackend implements Backend {
                 q.where('status', isEqualTo: MasjidStatus.approved.name),
             strictMode: true,
           );
-      if (found.length >= kHomeMasjids) break;
+      if (found.length >= kNearbyMin) break;
       r *= 3;
     }
     yield* _within(lat, lng, r < radiusKm ? r : radiusKm);

@@ -771,5 +771,12 @@
   "dhikrCheckSalah": "İşaretlemek için bir namaza dokunun",
   "dhikrReset": "Sayacı sıfırla",
   "dhikrOfTarget": "{n} içinden",
-  "dhikrListen": "Dinle"
+  "dhikrListen": "Dinle",
+  "partDua_dawn": "Seher duaları",
+  "partDua_morning": "Sabah duaları",
+  "partDua_day": "Gündüz duaları",
+  "partDua_evening": "Akşam duaları",
+  "partDua_night": "Gece duaları",
+  "nearestOption": "En yakın",
+  "nearestOptionHint": "Bulunduğunuz yere en yakın camiler, hangi ilçede olursa olsun"
 }

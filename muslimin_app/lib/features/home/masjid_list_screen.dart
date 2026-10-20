@@ -16,8 +16,9 @@ import '../../state/providers.dart';
 import '../masjid/suggest_masjid.dart';
 import 'masjid_card.dart';
 
-/// "All Masjids": the masjids of one thana / upazila – the user's own by
-/// default, or any other picked from the list – nearest first, searchable.
+/// "All Masjids": the nearest masjids by GPS distance by default ("Nearest"
+/// in the thana list), or those of any thana picked – nearest first,
+/// searchable.
 /// Picking a thana only changes this list, not the user's location.
 class MasjidListScreen extends ConsumerStatefulWidget {
   const MasjidListScreen({super.key});
@@ -42,32 +43,36 @@ class _MasjidListScreenState extends ConsumerState<MasjidListScreen> {
     final picked = await pickThana(
       context,
       mine: ref.read(myThanaProvider).value,
-      current: ref.read(pickedThanaProvider),
+      current: ref.read(pickedThanaProvider) ?? nearestThana,
+      nearest: true,
     );
     if (picked == null) return;
-    final mine = ref.read(myThanaProvider).value;
-    ref.read(pickedThanaProvider.notifier).pick(picked == mine ? null : picked);
+    ref
+        .read(pickedThanaProvider.notifier)
+        .pick(picked == nearestThana ? null : picked);
   }
 
   @override
   Widget build(BuildContext context) {
     final t = L10n.of(context);
     final masjids = ref.watch(thanaMasjidsProvider);
-    final mine = ref.watch(myThanaProvider).value;
-    final shown = ref.watch(pickedThanaProvider) ?? mine;
+    final picked = ref.watch(pickedThanaProvider);
+    final loc = ref.watch(locationProvider).value;
     return Scaffold(
       body: Column(
         children: [
           PageHeader(
             title: t.allMasjids,
-            subtitle: shown == null
+            subtitle: picked != null
+                ? '${picked.label} · ${t.nearestFirst}'
+                : loc == null
                 ? t.locating
-                : '${shown.label} · ${t.nearestFirst}',
+                : '${loc.label} · ${t.nearestFirst}',
             back: true,
             bottom: Row(
               children: [
                 ThanaButton(
-                  label: shown?.name ?? t.chooseThana,
+                  label: picked?.name ?? t.nearestOption,
                   onTap: _pickThana,
                 ),
                 const SizedBox(width: Gap.s),
@@ -118,7 +123,7 @@ class _MasjidListScreenState extends ConsumerState<MasjidListScreen> {
                 ];
                 return RefreshList.separated(
                   onRefresh: () async {
-                    ref.invalidate(myThanaMasjidsProvider);
+                    ref.invalidate(nearbyMasjidsProvider);
                     await refreshAll(ref);
                   },
                   padding: const EdgeInsets.fromLTRB(Gap.l, 0, Gap.l, Gap.xxl),

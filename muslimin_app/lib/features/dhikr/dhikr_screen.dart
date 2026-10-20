@@ -10,7 +10,7 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text.dart';
 import '../../core/utils/format.dart';
-import '../../core/widgets/buttons.dart';
+import '../../core/widgets/islamic_pattern.dart';
 import '../../core/widgets/page_header.dart';
 import '../../core/widgets/refresh.dart';
 import '../../core/widgets/surfaces.dart';
@@ -33,33 +33,31 @@ int? salahNow(WaqtStatus? w) {
 
 String dhikrName(Fmt f, Dhikr d) => f.isBn ? d.nameBn : d.nameEn;
 
+/// The order the list shows (daily targets, then after every salah) – the
+/// counter's arrows walk through it from first to last.
+final kDhikrOrder = [
+  for (final d in kDhikrs)
+    if (!d.afterSalah) d,
+  for (final d in kDhikrs)
+    if (d.afterSalah) d,
+];
+
 String _plan(L10n t, Fmt f, Dhikr d) => d.afterSalah
     ? t.dhikrPerSalah(f.digits(d.perSalah))
     : '${t.dhikrPerDay(f.digits(d.perDay))} · '
           '${t.dhikrPerSalah(f.digits(d.perSalah))}';
 
-/// Home: "Daily Dhikr" with today's card. "View All" opens the list.
+/// Home: today's dhikr card, titled "Daily Dhikr ›" – a tap opens the list.
 class DhikrSection extends StatelessWidget {
   const DhikrSection({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final t = L10n.of(context);
     void open() => push(context, const DhikrScreen());
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        SectionHeader(
-          title: t.dhikrTitle,
-          subtitle: t.dhikrSub,
-          action: t.viewAll,
-          onAction: open,
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: Gap.l),
-          child: DhikrTodayCard(onTap: open),
-        ),
-      ],
+    // Laid out like the Daily Quran card above it: the title inside.
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(Gap.l, Gap.xl, Gap.l, 0),
+      child: DhikrTodayCard(onTap: open, titled: true),
     );
   }
 }
@@ -68,9 +66,17 @@ class DhikrSection extends StatelessWidget {
 /// Three looks – not started (gold call to start), on the way, and done
 /// for today (green). With [onSalah] the salah marks can be tapped.
 class DhikrTodayCard extends ConsumerWidget {
-  const DhikrTodayCard({super.key, this.onTap, this.onSalah});
+  const DhikrTodayCard({
+    super.key,
+    this.onTap,
+    this.onSalah,
+    this.titled = false,
+  });
 
   final VoidCallback? onTap;
+
+  /// Home: "Daily Dhikr ›" on top, the day's status under it.
+  final bool titled;
   final void Function(int salah, bool done)? onSalah;
 
   @override
@@ -142,12 +148,38 @@ class DhikrTodayCard extends ConsumerWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          if (titled) ...[
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    t.dhikrTitle,
+                                    style: AppText.subtitle,
+                                  ),
+                                ),
+                                if (streak > 0) ...[
+                                  _StreakPill(days: streak, color: accent),
+                                  const SizedBox(width: 2),
+                                ],
+                                Icon(
+                                  Icons.chevron_right_rounded,
+                                  color: AppColors.ink,
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 2),
+                          ],
                           Text(
                             title,
-                            style: AppText.label.copyWith(
-                              color: finished ? AppColors.success : null,
-                              fontWeight: FontWeight.w600,
-                            ),
+                            style: (titled ? AppText.caption : AppText.label)
+                                .copyWith(
+                                  color: finished
+                                      ? AppColors.success
+                                      : titled
+                                      ? AppColors.gold
+                                      : null,
+                                  fontWeight: FontWeight.w600,
+                                ),
                           ),
                           const SizedBox(height: 2),
                           Text(
@@ -159,7 +191,9 @@ class DhikrTodayCard extends ConsumerWidget {
                         ],
                       ),
                     ),
-                    if (streak > 0) ...[
+                    if (titled)
+                      const SizedBox.shrink()
+                    else if (streak > 0) ...[
                       const SizedBox(width: Gap.s),
                       _StreakPill(days: streak, color: accent),
                     ] else if (!started && onTap != null) ...[
@@ -519,8 +553,7 @@ class _DhikrTile extends StatelessWidget {
 /// One dhikr as a tasbih counter: the words on top, a big ring with the
 /// count in the middle – a tap anywhere around it counts one – and the five
 /// salah below. A finished round checks off its salah; each salah can also
-/// be checked by hand. Daily targets can be marked done all at once;
-/// after-salah adhkar cannot (they belong after each salah).
+/// be checked by hand – one at a time, never all at once.
 class DhikrCounterScreen extends ConsumerStatefulWidget {
   const DhikrCounterScreen({super.key, required this.dhikr});
 
@@ -733,29 +766,7 @@ class _DhikrCounterState extends ConsumerState<DhikrCounterScreen> {
     return Scaffold(
       body: Column(
         children: [
-          PageHeader(
-            title: dhikrName(f, d),
-            subtitle: _plan(t, f, d),
-            back: true,
-            trailing: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                IconButton(
-                  tooltip: t.dhikrReset,
-                  onPressed: _count == 0 ? null : _reset,
-                  icon: const Icon(Icons.restart_alt_rounded),
-                  color: AppColors.onHeader,
-                  disabledColor: AppColors.onHeader.withValues(alpha: 0.35),
-                ),
-                IconButton(
-                  tooltip: t.dhikrVirtue,
-                  onPressed: _virtue,
-                  icon: const Icon(Icons.info_outline_rounded),
-                  color: AppColors.onHeader,
-                ),
-              ],
-            ),
-          ),
+          _CounterHeader(dhikr: d, onInfo: _virtue),
           // ---- the words (long ones scroll)
           Padding(
             padding: const EdgeInsets.fromLTRB(Gap.l, Gap.l, Gap.l, 0),
@@ -961,28 +972,113 @@ class _DhikrCounterState extends ConsumerState<DhikrCounterScreen> {
                       ],
                     ),
                   ),
-                  if (!d.afterSalah) ...[
-                    const SizedBox(height: Gap.m),
-                    AppButton(
-                      allDone ? t.dhikrClearToday : t.dhikrMarkAll,
-                      icon: allDone
-                          ? Icons.undo_rounded
-                          : Icons.done_all_rounded,
-                      style: allDone
-                          ? AppButtonStyle.outlined
-                          : AppButtonStyle.filled,
-                      expand: true,
-                      onPressed: () {
-                        _reset();
-                        notifier.setAll(d.id, !allDone);
-                      },
-                    ),
-                  ],
                 ],
               ),
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+/// Counter page header, like the Quran page's: back, ‹ name › to step
+/// through the dhikr in list order, and the virtue.
+class _CounterHeader extends StatelessWidget {
+  const _CounterHeader({required this.dhikr, required this.onInfo});
+
+  final Dhikr dhikr;
+  final VoidCallback onInfo;
+
+  void _go(BuildContext context, Dhikr to) =>
+      Navigator.of(context).pushReplacement(
+        PageRouteBuilder(
+          transitionDuration: const Duration(milliseconds: 220),
+          pageBuilder: (_, _, _) => DhikrCounterScreen(dhikr: to),
+          transitionsBuilder: (_, a, _, child) =>
+              FadeTransition(opacity: a, child: child),
+        ),
+      );
+
+  @override
+  Widget build(BuildContext context) {
+    final t = L10n.of(context);
+    final f = Fmt.of(context);
+    final i = kDhikrOrder.indexWhere((x) => x.id == dhikr.id);
+    final prev = i > 0 ? kDhikrOrder[i - 1] : null;
+    final next = i < kDhikrOrder.length - 1 ? kDhikrOrder[i + 1] : null;
+    // Gold rings, so they read differently from Back (as on the Quran page).
+    Widget arrow(IconData icon, Dhikr? to) {
+      final c = to == null
+          ? AppColors.onHeader.withValues(alpha: 0.25)
+          : AppColors.goldLight;
+      return InkResponse(
+        onTap: to == null ? null : () => _go(context, to),
+        radius: 22,
+        child: Container(
+          width: 30,
+          height: 30,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            border: Border.all(color: c, width: 1.2),
+          ),
+          child: Icon(icon, size: 20, color: c),
+        ),
+      );
+    }
+
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle.light,
+      child: IslamicPattern(
+        child: Padding(
+          padding: EdgeInsets.only(
+            top: MediaQuery.of(context).padding.top,
+            bottom: Gap.s,
+          ),
+          child: Row(
+            children: [
+              BackButton(color: AppColors.onHeader),
+              arrow(Icons.chevron_left_rounded, prev),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: Gap.s,
+                    vertical: 4,
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        dhikrName(f, dhikr),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppText.subtitle.copyWith(
+                          color: AppColors.onHeader,
+                        ),
+                      ),
+                      Text(
+                        '${_plan(t, f, dhikr)} · '
+                        '${f.digits(i + 1)}/${f.digits(kDhikrOrder.length)}',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppText.micro.copyWith(
+                          color: AppColors.onHeader.withValues(alpha: 0.8),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              arrow(Icons.chevron_right_rounded, next),
+              IconButton(
+                tooltip: t.dhikrVirtue,
+                onPressed: onInfo,
+                icon: const Icon(Icons.info_outline_rounded),
+                color: AppColors.onHeader,
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

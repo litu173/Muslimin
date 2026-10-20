@@ -1375,5 +1375,12 @@
       }
     }
   },
-  "dhikrListen": "Listen"
+  "dhikrListen": "Listen",
+  "partDua_dawn": "Dawn duas",
+  "partDua_morning": "Morning duas",
+  "partDua_day": "Daytime duas",
+  "partDua_evening": "Evening duas",
+  "partDua_night": "Night duas",
+  "nearestOption": "Nearest",
+  "nearestOptionHint": "Closest masjids to where you are, whatever the thana"
 }

@@ -2641,4 +2641,26 @@ class L10nEs extends L10n {
 
   @override
   String get dhikrListen => 'Escuchar';
+
+  @override
+  String get partDua_dawn => 'Duas del alba';
+
+  @override
+  String get partDua_morning => 'Duas de la mañana';
+
+  @override
+  String get partDua_day => 'Duas del día';
+
+  @override
+  String get partDua_evening => 'Duas de la tarde';
+
+  @override
+  String get partDua_night => 'Duas de la noche';
+
+  @override
+  String get nearestOption => 'Más cercanas';
+
+  @override
+  String get nearestOptionHint =>
+      'Las mezquitas más cercanas a ti, sea cual sea el distrito';
 }
