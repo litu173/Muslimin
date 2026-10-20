@@ -134,7 +134,19 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
               ),
             ),
             ...masjids.when(
-              loading: () => [const SliverToBoxAdapter(child: Loader())],
+              // Placeholders the size of the cards, so the sections below
+              // don't sit up high and then jump down when the list arrives.
+              loading: () => [
+                SliverPadding(
+                  padding: const EdgeInsets.symmetric(horizontal: Gap.l),
+                  sliver: SliverList.separated(
+                    itemCount: kHomeMasjids,
+                    separatorBuilder: (_, _) => const SizedBox(height: 10),
+                    itemBuilder: (_, i) =>
+                        _in(4 + i, const _MasjidPlaceholder()),
+                  ),
+                ),
+              ],
               error: (e, _) => [
                 SliverToBoxAdapter(
                   child: EmptyState(
@@ -197,6 +209,49 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
           ],
         ),
       ),
+    );
+  }
+}
+
+/// A masjid card's outline while the nearest masjids load: same size, a
+/// faint badge and blank lines.
+class _MasjidPlaceholder extends StatelessWidget {
+  const _MasjidPlaceholder();
+
+  @override
+  Widget build(BuildContext context) {
+    Widget bar(double w, double h) => Container(
+      width: w,
+      height: h,
+      decoration: BoxDecoration(
+        color: AppColors.ink.withValues(alpha: 0.07),
+        borderRadius: BorderRadius.circular(6),
+      ),
+    );
+    // A real tile with blank text keeps the exact height; bars on top.
+    return Stack(
+      children: [
+        InfoTile(
+          leading: MasjidBadge(color: AppColors.ink.withValues(alpha: 0.08)),
+          title: ' ',
+          line: ' ',
+          meta: ' ',
+        ),
+        Positioned.fill(
+          left: Gap.l + 40 + Gap.l,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              bar(180, 16),
+              const SizedBox(height: 10),
+              bar(140, 12),
+              const SizedBox(height: 10),
+              bar(70, 10),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

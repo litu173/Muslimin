@@ -287,15 +287,18 @@ class DuaPartCard extends StatelessWidget {
                       children: [
                         Text(
                           home ? partDuaName(t, part) : partName(t, part),
-                          style: AppText.headline.copyWith(
-                            color: fg,
-                            shadows: [
-                              Shadow(
-                                color: Colors.black.withValues(alpha: 0.25),
-                                blurRadius: 8,
+                          // On Home: the same title size as the Daily Quran
+                          // and Daily Dhikr cards.
+                          style: (home ? AppText.subtitle : AppText.headline)
+                              .copyWith(
+                                color: fg,
+                                shadows: [
+                                  Shadow(
+                                    color: Colors.black.withValues(alpha: 0.25),
+                                    blurRadius: 8,
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
                         ),
                         const SizedBox(width: Gap.s),
                         if (isNow)

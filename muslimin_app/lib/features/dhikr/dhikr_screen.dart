@@ -645,6 +645,16 @@ class _DhikrCounterState extends ConsumerState<DhikrCounterScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    // Each tasbih recites itself once when its page opens (arrows and
+    // swipes included).
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) _play();
+    });
+  }
+
+  @override
   void dispose() {
     _player?.dispose();
     super.dispose();

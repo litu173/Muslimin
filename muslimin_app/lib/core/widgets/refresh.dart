@@ -129,29 +129,33 @@ class _PullToRefreshState extends State<PullToRefresh> {
       final ayah = ayat != null && _index != null ? ayat[_index!] : null;
       // OverflowBox: the gap starts at 0 px tall; the card and spinner keep
       // their size and are uncovered from the bottom as the gap opens.
-      return OverflowBox(
-        alignment: Alignment.bottomCenter,
-        minHeight: 0,
-        maxHeight: _extent,
-        child: Opacity(
-          opacity: opacity,
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(16, 0, 16, 6),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                if (ayah != null) _AyahCard(ayah: ayah, height: _card),
-                const SizedBox(height: 8),
-                SizedBox.square(
-                  dimension: 20,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2.2,
-                    strokeCap: StrokeCap.round,
-                    color: AppColors.gold,
-                    backgroundColor: AppColors.gold.withValues(alpha: 0.15),
+      // ClipRect: only the open gap shows it – it slides out from under
+      // whatever sits above the list (tabs, filters), never over it.
+      return ClipRect(
+        child: OverflowBox(
+          alignment: Alignment.bottomCenter,
+          minHeight: 0,
+          maxHeight: _extent,
+          child: Opacity(
+            opacity: opacity,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 6),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (ayah != null) _AyahCard(ayah: ayah, height: _card),
+                  const SizedBox(height: 8),
+                  SizedBox.square(
+                    dimension: 20,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2.2,
+                      strokeCap: StrokeCap.round,
+                      color: AppColors.gold,
+                      backgroundColor: AppColors.gold.withValues(alpha: 0.15),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

@@ -52,9 +52,12 @@ class RecitationPlayer extends ChangeNotifier {
   }) {
     _subs = [
       _player.currentIndexStream.listen((i) {
-        if (i == null || i == _index) return;
-        _index = i;
-        onAyah(i + 1);
+        if (i == null) return;
+        // The Bismillah in front counts as the run-up to ayah 1.
+        final a = (i - _offset).clamp(0, verses - 1);
+        if (a == _index) return;
+        _index = a;
+        onAyah(a + 1);
         notifyListeners();
       }),
       _player.playerStateStream.listen((s) {
@@ -101,6 +104,13 @@ class RecitationPlayer extends ChangeNotifier {
   Reciter reciter;
   int? _loadedFor;
   int _index = 0;
+
+  /// 1 when the playlist starts with the Bismillah, else 0.
+  int _offset = 0;
+
+  /// Every surah is recited after the Bismillah – except Al-Fatihah, where
+  /// it is the first ayah, and At-Tawbah, which has none.
+  bool get _withBasmala => surah != 1 && surah != 9;
   bool _playing = false;
   bool _loading = false;
   bool _started = false;
@@ -135,11 +145,24 @@ class RecitationPlayer extends ChangeNotifier {
     notifyListeners();
     await _configureSession();
     final urls = await repo.audioUrls(surah, reciter.id);
+    // The Bismillah in the same reciter's voice: Al-Fatihah 1:1.
+    String? basmala;
+    if (_withBasmala) {
+      try {
+        basmala = (await repo.audioUrls(1, reciter.id)).first;
+      } catch (_) {}
+    }
+    _offset = basmala == null ? 0 : 1;
     await _player.setAudioSources([
+      if (basmala != null) AudioSource.uri(Uri.parse(basmala)),
       for (final u in urls) AudioSource.uri(Uri.parse(u)),
-    ], initialIndex: startIndex.clamp(0, urls.length - 1));
+    ], initialIndex: _indexFor(startIndex.clamp(0, urls.length - 1)));
     _loadedFor = reciter.id;
   }
+
+  /// Playlist index for 0-based ayah [i]: from the start of the surah the
+  /// Bismillah comes first.
+  int _indexFor(int i) => i == 0 ? 0 : i + _offset;
 
   /// Plays from ayah [n] (1-based), loading the surah if needed.
   Future<void> playFrom(int n) async {
@@ -150,7 +173,7 @@ class RecitationPlayer extends ChangeNotifier {
       if (_loadedFor != reciter.id) {
         await _load(i);
       } else {
-        await _player.seek(Duration.zero, index: i);
+        await _player.seek(Duration.zero, index: _indexFor(i));
       }
       _index = i;
       onAyah(n);
