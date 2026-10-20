@@ -4784,6 +4784,12 @@ abstract class L10n {
   /// In en, this message translates to:
   /// **'Closest masjids to where you are, whatever the thana'**
   String get nearestOptionHint;
+
+  /// No description provided for @seeAllDuas.
+  ///
+  /// In en, this message translates to:
+  /// **'See all duas'**
+  String get seeAllDuas;
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {

@@ -38,9 +38,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
   bool _bannerClosed = false;
 
   /// Entrance: body sections slide up and fade in, one after another.
+  /// Quick: everything is in place within ~0.6 s.
   late final _intro = AnimationController(
     vsync: this,
-    duration: const Duration(milliseconds: 1100),
+    duration: const Duration(milliseconds: 650),
   )..forward();
 
   /// Back from another page: play the entrance again.
@@ -55,10 +56,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
 
   /// Wraps the [i]-th body section in the staggered slide-up entrance.
   Widget _in(int i, Widget child) {
-    final start = (i * 0.09).clamp(0.0, 0.6);
+    final start = (i * 0.05).clamp(0.0, 0.4);
     final a = CurvedAnimation(
       parent: _intro,
-      curve: Interval(start, start + 0.4, curve: Curves.easeOutCubic),
+      curve: Interval(start, start + 0.55, curve: Curves.easeOutCubic),
     );
     return AnimatedBuilder(
       animation: a,
@@ -66,7 +67,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
       builder: (_, child) => Opacity(
         opacity: a.value,
         child: Transform.translate(
-          offset: Offset(0, 48 * (1 - a.value)),
+          offset: Offset(0, Entrance.rise * (1 - a.value)),
           child: child,
         ),
       ),

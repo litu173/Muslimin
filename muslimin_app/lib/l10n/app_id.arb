@@ -778,5 +778,6 @@
   "partDua_evening": "Doa petang",
   "partDua_night": "Doa malam",
   "nearestOption": "Terdekat",
-  "nearestOptionHint": "Masjid terdekat dari lokasi Anda, apa pun wilayahnya"
+  "nearestOptionHint": "Masjid terdekat dari lokasi Anda, apa pun wilayahnya",
+  "seeAllDuas": "Lihat semua doa"
 }

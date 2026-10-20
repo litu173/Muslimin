@@ -778,5 +778,6 @@
   "partDua_evening": "أدعية المساء",
   "partDua_night": "أدعية الليل",
   "nearestOption": "الأقرب",
-  "nearestOptionHint": "أقرب المساجد إلى مكانك، أيًّا كان الحي"
+  "nearestOptionHint": "أقرب المساجد إلى مكانك، أيًّا كان الحي",
+  "seeAllDuas": "عرض كل الأدعية"
 }

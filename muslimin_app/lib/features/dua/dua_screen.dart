@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:just_audio/just_audio.dart';
 
 import '../../core/nav.dart';
@@ -6,10 +7,12 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text.dart';
 import '../../core/utils/format.dart';
+import '../../core/widgets/buttons.dart';
 import '../../core/widgets/page_header.dart';
 import '../../core/widgets/refresh.dart';
 import '../../core/widgets/surfaces.dart';
 import '../../l10n/app_localizations.dart';
+import '../home/quran_energy_card.dart' show shellTabProvider;
 import 'dua_data.dart';
 
 /// Loaded once; shared with Home's "Dua for now".
@@ -256,7 +259,10 @@ class DuaPartCard extends StatelessWidget {
       elevation: 1,
       shadowColor: Colors.black26,
       child: InkWell(
-        onTap: () => push(context, DuaPartScreen(part: part, scenes: scenes)),
+        onTap: () => push(
+          context,
+          DuaPartScreen(part: part, scenes: scenes, fromHome: home),
+        ),
         child: SizedBox(
           height: 132,
           child: Stack(
@@ -358,10 +364,19 @@ class DuaPartCard extends StatelessWidget {
 
 /// One part of the day: its topics as collapsible sections, with search.
 class DuaPartScreen extends StatefulWidget {
-  const DuaPartScreen({super.key, required this.part, required this.scenes});
+  const DuaPartScreen({
+    super.key,
+    required this.part,
+    required this.scenes,
+    this.fromHome = false,
+  });
 
   final DayPart part;
   final List<DuaScene> scenes;
+
+  /// Opened from the Home card: a button at the bottom leads to all duas
+  /// (the Dua tab). Not needed when opened from the Dua tab itself.
+  final bool fromHome;
 
   @override
   State<DuaPartScreen> createState() => _DuaPartScreenState();
@@ -391,7 +406,10 @@ class _DuaPartScreenState extends State<DuaPartScreen> {
       body: Column(
         children: [
           PageHeader(
-            title: partName(t, widget.part),
+            // From Home it keeps the card's title, "Night duas".
+            title: widget.fromHome
+                ? partDuaName(t, widget.part)
+                : partName(t, widget.part),
             subtitle:
                 '${_partSub(t, widget.part)} · ${t.duaPartCount(f.digits(widget.scenes.length), f.digits(duas))}',
             back: true,
@@ -432,6 +450,26 @@ class _DuaPartScreenState extends State<DuaPartScreen> {
                     ],
                   ),
           ),
+          if (widget.fromHome)
+            SafeArea(
+              top: false,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(Gap.l, Gap.s, Gap.l, Gap.m),
+                child: AppButton(
+                  t.seeAllDuas,
+                  icon: Icons.menu_book_outlined,
+                  expand: true,
+                  onPressed: () {
+                    // Back to the app's tabs, on the Dua tab.
+                    ProviderScope.containerOf(
+                      context,
+                      listen: false,
+                    ).read(shellTabProvider.notifier).go(2);
+                    Navigator.of(context).popUntil((r) => r.isFirst);
+                  },
+                ),
+              ),
+            ),
         ],
       ),
     );

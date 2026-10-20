@@ -2623,4 +2623,7 @@ class L10nBn extends L10n {
   @override
   String get nearestOptionHint =>
       'আপনার অবস্থান থেকে সবচেয়ে কাছের মসজিদ, যে থানারই হোক';
+
+  @override
+  String get seeAllDuas => 'সব দো‘আ দেখুন';
 }

@@ -97,11 +97,12 @@ class Entrance extends StatefulWidget {
   final int? index;
   final Widget child;
 
-  /// Same timing as Home: ~100 ms apart, 440 ms each, 48 px rise.
-  static const step = Duration(milliseconds: 99);
-  static const length = Duration(milliseconds: 440);
-  static const maxIndex = 7;
-  static const rise = 48.0;
+  /// Same quick timing as Home: ~35 ms apart, 320 ms each, a 24 px rise –
+  /// the whole page is in place within about half a second.
+  static const step = Duration(milliseconds: 35);
+  static const length = Duration(milliseconds: 320);
+  static const maxIndex = 5;
+  static const rise = 24.0;
 
   @override
   State<Entrance> createState() => _EntranceState();

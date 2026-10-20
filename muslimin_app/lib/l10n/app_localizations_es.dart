@@ -2663,4 +2663,7 @@ class L10nEs extends L10n {
   @override
   String get nearestOptionHint =>
       'Las mezquitas más cercanas a ti, sea cual sea el distrito';
+
+  @override
+  String get seeAllDuas => 'Ver todas las duas';
 }

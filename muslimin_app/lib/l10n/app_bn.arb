@@ -778,5 +778,6 @@
   "partDua_evening": "সন্ধ্যার দো‘আ",
   "partDua_night": "রাতের দো‘আ",
   "nearestOption": "নিকটতম",
-  "nearestOptionHint": "আপনার অবস্থান থেকে সবচেয়ে কাছের মসজিদ, যে থানারই হোক"
+  "nearestOptionHint": "আপনার অবস্থান থেকে সবচেয়ে কাছের মসজিদ, যে থানারই হোক",
+  "seeAllDuas": "সব দো‘আ দেখুন"
 }

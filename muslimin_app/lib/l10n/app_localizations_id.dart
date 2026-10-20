@@ -2649,4 +2649,7 @@ class L10nId extends L10n {
   @override
   String get nearestOptionHint =>
       'Masjid terdekat dari lokasi Anda, apa pun wilayahnya';
+
+  @override
+  String get seeAllDuas => 'Lihat semua doa';
 }

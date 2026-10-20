@@ -2642,4 +2642,7 @@ class L10nTr extends L10n {
   @override
   String get nearestOptionHint =>
       'Bulunduğunuz yere en yakın camiler, hangi ilçede olursa olsun';
+
+  @override
+  String get seeAllDuas => 'Tüm duaları gör';
 }

@@ -2646,4 +2646,7 @@ class L10nUr extends L10n {
   @override
   String get nearestOptionHint =>
       'آپ کی جگہ سے سب سے قریب مساجد، تھانہ کوئی بھی ہو';
+
+  @override
+  String get seeAllDuas => 'تمام دعائیں دیکھیں';
 }

@@ -778,5 +778,6 @@
   "partDua_evening": "Akşam duaları",
   "partDua_night": "Gece duaları",
   "nearestOption": "En yakın",
-  "nearestOptionHint": "Bulunduğunuz yere en yakın camiler, hangi ilçede olursa olsun"
+  "nearestOptionHint": "Bulunduğunuz yere en yakın camiler, hangi ilçede olursa olsun",
+  "seeAllDuas": "Tüm duaları gör"
 }

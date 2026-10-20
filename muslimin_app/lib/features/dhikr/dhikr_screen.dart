@@ -33,8 +33,37 @@ int? salahNow(WaqtStatus? w) {
 
 String dhikrName(Fmt f, Dhikr d) => f.isBn ? d.nameBn : d.nameEn;
 
+/// Opens [to] in place of the current counter, sliding in from the side it
+/// lies on (the arrows and a sideways swipe).
+void openDhikr(BuildContext context, Dhikr to, {required bool forward}) =>
+    Navigator.of(context).pushReplacement(
+      PageRouteBuilder(
+        transitionDuration: const Duration(milliseconds: 260),
+        pageBuilder: (_, _, _) => DhikrCounterScreen(dhikr: to),
+        transitionsBuilder: (_, a, _, child) {
+          final c = CurvedAnimation(parent: a, curve: Curves.easeOutCubic);
+          return SlideTransition(
+            position: Tween(
+              begin: Offset(forward ? 0.25 : -0.25, 0),
+              end: Offset.zero,
+            ).animate(c),
+            child: FadeTransition(opacity: c, child: child),
+          );
+        },
+      ),
+    );
+
+/// The dhikr before and after [d] in list order (null at the ends).
+(Dhikr?, Dhikr?) dhikrNeighbours(Dhikr d) {
+  final i = kDhikrOrder.indexWhere((x) => x.id == d.id);
+  return (
+    i > 0 ? kDhikrOrder[i - 1] : null,
+    i < kDhikrOrder.length - 1 ? kDhikrOrder[i + 1] : null,
+  );
+}
+
 /// The order the list shows (daily targets, then after every salah) – the
-/// counter's arrows walk through it from first to last.
+/// counter's arrows and swipes walk through it from first to last.
 final kDhikrOrder = [
   for (final d in kDhikrs)
     if (!d.afterSalah) d,
@@ -575,6 +604,19 @@ class _DhikrCounterState extends ConsumerState<DhikrCounterScreen> {
 
   Dhikr get _d => widget.dhikr;
 
+  /// Where each finger went down (counting happens on lift).
+  final _touches = <int, Offset>{};
+
+  /// A sideways swipe: right-to-left for the next dhikr, left-to-right for
+  /// the previous one.
+  void _swipe(DragEndDetails e) {
+    final v = e.primaryVelocity ?? 0;
+    if (v.abs() < 300) return;
+    final (prev, next) = dhikrNeighbours(_d);
+    final to = v < 0 ? next : prev;
+    if (to != null) openDhikr(context, to, forward: v < 0);
+  }
+
   /// This dhikr's recitation (a clip bundled with the app), made on first
   /// play.
   AudioPlayer? _player;
@@ -764,219 +806,238 @@ class _DhikrCounterState extends ConsumerState<DhikrCounterScreen> {
         : t.dhikrAllSalahDone;
 
     return Scaffold(
-      body: Column(
-        children: [
-          _CounterHeader(dhikr: d, onInfo: _virtue),
-          // ---- the words (long ones scroll)
-          Padding(
-            padding: const EdgeInsets.fromLTRB(Gap.l, Gap.l, Gap.l, 0),
-            child: AppCard(
-              padding: EdgeInsets.zero,
-              child: Stack(
-                children: [
-                  ConstrainedBox(
-                    constraints: BoxConstraints(
-                      maxHeight: MediaQuery.sizeOf(context).height * 0.26,
-                    ),
-                    child: SingleChildScrollView(
-                      padding: const EdgeInsets.fromLTRB(44, Gap.l, 44, Gap.l),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Text(
-                            d.ar,
-                            textAlign: TextAlign.center,
-                            textDirection: TextDirection.rtl,
-                            style: TextStyle(
-                              fontFamily: AppText.arabic,
-                              fontSize: d.ar.length > 60 ? 22 : 30,
-                              height: 1.9,
-                              color: AppColors.ink,
-                            ),
-                          ),
-                          if (!f.isBn && f.lang != 'ar') ...[
-                            const SizedBox(height: Gap.xs),
+      body: GestureDetector(
+        // Swipe sideways for the next / previous dhikr.
+        onHorizontalDragEnd: _swipe,
+        child: Column(
+          children: [
+            _CounterHeader(dhikr: d, onInfo: _virtue),
+            // ---- the words (long ones scroll)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(Gap.l, Gap.l, Gap.l, 0),
+              child: AppCard(
+                padding: EdgeInsets.zero,
+                child: Stack(
+                  children: [
+                    ConstrainedBox(
+                      constraints: BoxConstraints(
+                        maxHeight: MediaQuery.sizeOf(context).height * 0.26,
+                      ),
+                      child: SingleChildScrollView(
+                        padding: const EdgeInsets.fromLTRB(
+                          44,
+                          Gap.l,
+                          44,
+                          Gap.l,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
                             Text(
-                              d.tr,
+                              d.ar,
                               textAlign: TextAlign.center,
-                              textDirection: TextDirection.ltr,
-                              style: AppText.caption.copyWith(
-                                color: AppColors.gold,
-                                fontStyle: FontStyle.italic,
+                              textDirection: TextDirection.rtl,
+                              style: TextStyle(
+                                fontFamily: AppText.arabic,
+                                fontSize: d.ar.length > 60 ? 22 : 30,
+                                height: 1.9,
+                                color: AppColors.ink,
                               ),
                             ),
-                          ],
-                          if (meaning.isNotEmpty) ...[
-                            const SizedBox(height: Gap.xs),
-                            Text(
-                              meaning,
-                              textAlign: TextAlign.center,
-                              textDirection: f.isBn || f.lang == 'en'
-                                  ? null
-                                  : TextDirection.ltr,
-                              style: AppText.caption.copyWith(
-                                color: AppColors.muted,
+                            if (!f.isBn && f.lang != 'ar') ...[
+                              const SizedBox(height: Gap.xs),
+                              Text(
+                                d.tr,
+                                textAlign: TextAlign.center,
+                                textDirection: TextDirection.ltr,
+                                style: AppText.caption.copyWith(
+                                  color: AppColors.gold,
+                                  fontStyle: FontStyle.italic,
+                                ),
                               ),
-                            ),
+                            ],
+                            if (meaning.isNotEmpty) ...[
+                              const SizedBox(height: Gap.xs),
+                              Text(
+                                meaning,
+                                textAlign: TextAlign.center,
+                                textDirection: f.isBn || f.lang == 'en'
+                                    ? null
+                                    : TextDirection.ltr,
+                                style: AppText.caption.copyWith(
+                                  color: AppColors.muted,
+                                ),
+                              ),
+                            ],
                           ],
-                        ],
+                        ),
                       ),
                     ),
-                  ),
-                  // Listen: the recitation from Hisn al-Muslim.
-                  Positioned(
-                    top: 0,
-                    right: 0,
-                    child: IconButton(
-                      tooltip: t.dhikrListen,
-                      onPressed: _play,
-                      icon: Icon(
-                        _playing
-                            ? Icons.stop_circle_outlined
-                            : Icons.play_circle_outline_rounded,
-                        color: AppColors.gold,
-                        size: 30,
+                    // Listen: the recitation from Hisn al-Muslim.
+                    Positioned(
+                      top: 0,
+                      right: 0,
+                      child: IconButton(
+                        tooltip: t.dhikrListen,
+                        onPressed: _play,
+                        icon: Icon(
+                          _playing
+                              ? Icons.stop_circle_outlined
+                              : Icons.play_circle_outline_rounded,
+                          color: AppColors.gold,
+                          size: 30,
+                        ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          // ---- the counter: a tap anywhere here counts one
-          Expanded(
-            // Raw pointer downs: every touch counts at once, however fast
-            // (a tap recognizer can drop quick taps in a row).
-            child: Listener(
-              behavior: HitTestBehavior.opaque,
-              onPointerDown: (_) => _tap(),
-              // Full width: a tap beside the ring counts too.
-              child: SizedBox(
-                width: double.infinity,
-                child: LayoutBuilder(
-                  builder: (context, c) {
-                    final size = [
-                      c.maxWidth * 0.68,
-                      c.maxHeight - 76,
-                      280.0,
-                    ].reduce(math.min).clamp(120.0, 280.0);
-                    return Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          label,
-                          style: AppText.label.copyWith(
-                            color: green ? AppColors.success : AppColors.ink,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        const SizedBox(height: Gap.s),
-                        DhikrRing(
-                          value: salah == null && !_finished
-                              ? 1
-                              : _count / d.perSalah,
-                          color: accent,
-                          size: size,
-                          stroke: 10,
-                          child: Container(
-                            width: size - 36,
-                            height: size - 36,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: accent.withValues(alpha: 0.08),
-                            ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                if (_finished)
-                                  Icon(
-                                    Icons.check_rounded,
-                                    color: accent,
-                                    size: size * 0.32,
-                                  )
-                                else
-                                  Text(
-                                    f.digits(_count),
-                                    style: AppText.headline.copyWith(
-                                      fontSize: size * 0.28,
-                                      height: 1.1,
-                                      color: AppColors.ink,
-                                      fontFeatures: const [
-                                        FontFeature.tabularFigures(),
-                                      ],
-                                    ),
-                                  ),
-                                if (!_finished && salah != null)
-                                  Text(
-                                    t.dhikrOfTarget(f.digits(d.perSalah)),
-                                    style: AppText.caption.copyWith(
-                                      color: AppColors.muted,
-                                    ),
-                                  ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: Gap.s),
-                        Text(
-                          t.dhikrTapToCount,
-                          style: AppText.micro.copyWith(color: AppColors.muted),
-                        ),
-                      ],
-                    );
-                  },
+                  ],
                 ),
               ),
             ),
-          ),
-          // ---- today's five salah
-          SafeArea(
-            top: false,
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(Gap.l, 0, Gap.l, Gap.m),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  AppCard(
-                    padding: const EdgeInsets.fromLTRB(
-                      Gap.s,
-                      Gap.m,
-                      Gap.s,
-                      Gap.m,
-                    ),
-                    child: Column(
-                      children: [
-                        Text(
-                          t.dhikrCheckSalah,
-                          style: AppText.micro.copyWith(color: AppColors.muted),
-                        ),
-                        const SizedBox(height: Gap.s),
-                        Row(
-                          children: [
-                            for (var i = 0; i < kPortions; i++)
-                              Expanded(
-                                child: _SalahMark(
-                                  label: salahName(i),
-                                  done: mask & (1 << i) != 0,
-                                  partial: false,
-                                  now: i == salah && !_finished,
-                                  color: AppColors.success,
-                                  onTap: () {
-                                    if (i == _salah) _reset();
-                                    notifier.toggle(d.id, i);
-                                  },
-                                ),
+            // ---- the counter: a tap anywhere here counts one
+            Expanded(
+              // Raw pointer events, so no tap is ever lost however fast (a
+              // tap recognizer can drop quick taps in a row). A touch counts
+              // when lifted without moving – a sideways swipe does not.
+              child: Listener(
+                behavior: HitTestBehavior.opaque,
+                onPointerDown: (e) => _touches[e.pointer] = e.position,
+                onPointerCancel: (e) => _touches.remove(e.pointer),
+                onPointerUp: (e) {
+                  final from = _touches.remove(e.pointer);
+                  if (from != null && (e.position - from).distance < 24) _tap();
+                },
+                // Full width: a tap beside the ring counts too.
+                child: SizedBox(
+                  width: double.infinity,
+                  child: LayoutBuilder(
+                    builder: (context, c) {
+                      final size = [
+                        c.maxWidth * 0.68,
+                        c.maxHeight - 76,
+                        280.0,
+                      ].reduce(math.min).clamp(120.0, 280.0);
+                      return Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            label,
+                            style: AppText.label.copyWith(
+                              color: green ? AppColors.success : AppColors.ink,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          const SizedBox(height: Gap.s),
+                          DhikrRing(
+                            value: salah == null && !_finished
+                                ? 1
+                                : _count / d.perSalah,
+                            color: accent,
+                            size: size,
+                            stroke: 10,
+                            child: Container(
+                              width: size - 36,
+                              height: size - 36,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: accent.withValues(alpha: 0.08),
                               ),
-                          ],
-                        ),
-                      ],
-                    ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  if (_finished)
+                                    Icon(
+                                      Icons.check_rounded,
+                                      color: accent,
+                                      size: size * 0.32,
+                                    )
+                                  else
+                                    Text(
+                                      f.digits(_count),
+                                      style: AppText.headline.copyWith(
+                                        fontSize: size * 0.28,
+                                        height: 1.1,
+                                        color: AppColors.ink,
+                                        fontFeatures: const [
+                                          FontFeature.tabularFigures(),
+                                        ],
+                                      ),
+                                    ),
+                                  if (!_finished && salah != null)
+                                    Text(
+                                      t.dhikrOfTarget(f.digits(d.perSalah)),
+                                      style: AppText.caption.copyWith(
+                                        color: AppColors.muted,
+                                      ),
+                                    ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: Gap.s),
+                          Text(
+                            t.dhikrTapToCount,
+                            style: AppText.micro.copyWith(
+                              color: AppColors.muted,
+                            ),
+                          ),
+                        ],
+                      );
+                    },
                   ),
-                ],
+                ),
               ),
             ),
-          ),
-        ],
+            // ---- today's five salah
+            SafeArea(
+              top: false,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(Gap.l, 0, Gap.l, Gap.m),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    AppCard(
+                      padding: const EdgeInsets.fromLTRB(
+                        Gap.s,
+                        Gap.m,
+                        Gap.s,
+                        Gap.m,
+                      ),
+                      child: Column(
+                        children: [
+                          Text(
+                            t.dhikrCheckSalah,
+                            style: AppText.micro.copyWith(
+                              color: AppColors.muted,
+                            ),
+                          ),
+                          const SizedBox(height: Gap.s),
+                          Row(
+                            children: [
+                              for (var i = 0; i < kPortions; i++)
+                                Expanded(
+                                  child: _SalahMark(
+                                    label: salahName(i),
+                                    done: mask & (1 << i) != 0,
+                                    partial: false,
+                                    now: i == salah && !_finished,
+                                    color: AppColors.success,
+                                    onTap: () {
+                                      if (i == _salah) _reset();
+                                      notifier.toggle(d.id, i);
+                                    },
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -990,30 +1051,21 @@ class _CounterHeader extends StatelessWidget {
   final Dhikr dhikr;
   final VoidCallback onInfo;
 
-  void _go(BuildContext context, Dhikr to) =>
-      Navigator.of(context).pushReplacement(
-        PageRouteBuilder(
-          transitionDuration: const Duration(milliseconds: 220),
-          pageBuilder: (_, _, _) => DhikrCounterScreen(dhikr: to),
-          transitionsBuilder: (_, a, _, child) =>
-              FadeTransition(opacity: a, child: child),
-        ),
-      );
-
   @override
   Widget build(BuildContext context) {
     final t = L10n.of(context);
     final f = Fmt.of(context);
     final i = kDhikrOrder.indexWhere((x) => x.id == dhikr.id);
-    final prev = i > 0 ? kDhikrOrder[i - 1] : null;
-    final next = i < kDhikrOrder.length - 1 ? kDhikrOrder[i + 1] : null;
+    final (prev, next) = dhikrNeighbours(dhikr);
     // Gold rings, so they read differently from Back (as on the Quran page).
     Widget arrow(IconData icon, Dhikr? to) {
       final c = to == null
           ? AppColors.onHeader.withValues(alpha: 0.25)
           : AppColors.goldLight;
       return InkResponse(
-        onTap: to == null ? null : () => _go(context, to),
+        onTap: to == null
+            ? null
+            : () => openDhikr(context, to, forward: to == next),
         radius: 22,
         child: Container(
           width: 30,

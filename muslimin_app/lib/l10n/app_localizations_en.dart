@@ -2646,4 +2646,7 @@ class L10nEn extends L10n {
   @override
   String get nearestOptionHint =>
       'Closest masjids to where you are, whatever the thana';
+
+  @override
+  String get seeAllDuas => 'See all duas';
 }

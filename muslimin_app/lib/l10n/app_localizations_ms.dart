@@ -2655,4 +2655,7 @@ class L10nMs extends L10n {
   @override
   String get nearestOptionHint =>
       'Masjid terdekat dari lokasi anda, apa jua kawasannya';
+
+  @override
+  String get seeAllDuas => 'Lihat semua doa';
 }

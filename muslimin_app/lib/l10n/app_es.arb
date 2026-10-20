@@ -778,5 +778,6 @@
   "partDua_evening": "Duas de la tarde",
   "partDua_night": "Duas de la noche",
   "nearestOption": "Más cercanas",
-  "nearestOptionHint": "Las mezquitas más cercanas a ti, sea cual sea el distrito"
+  "nearestOptionHint": "Las mezquitas más cercanas a ti, sea cual sea el distrito",
+  "seeAllDuas": "Ver todas las duas"
 }

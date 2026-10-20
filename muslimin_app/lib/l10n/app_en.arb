@@ -1382,5 +1382,6 @@
   "partDua_evening": "Evening duas",
   "partDua_night": "Night duas",
   "nearestOption": "Nearest",
-  "nearestOptionHint": "Closest masjids to where you are, whatever the thana"
+  "nearestOptionHint": "Closest masjids to where you are, whatever the thana",
+  "seeAllDuas": "See all duas"
 }

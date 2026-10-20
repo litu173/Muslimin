@@ -133,17 +133,36 @@ class _SurahScreenState extends ConsumerState<SurahScreen> {
     });
   }
 
-  /// Opens another surah in place of this one (arrows / surah picker).
+  /// Opens another surah in place of this one (arrows, a sideways swipe,
+  /// the surah picker), sliding in from the side it lies on.
   void _goTo(Surah s) {
     if (s.id == _s.id) return;
+    final forward = s.id > _s.id;
     Navigator.of(context).pushReplacement(
       PageRouteBuilder(
-        transitionDuration: const Duration(milliseconds: 220),
+        transitionDuration: const Duration(milliseconds: 260),
         pageBuilder: (_, _, _) => SurahScreen(surah: s),
-        transitionsBuilder: (_, a, _, child) =>
-            FadeTransition(opacity: a, child: child),
+        transitionsBuilder: (_, a, _, child) {
+          final c = CurvedAnimation(parent: a, curve: Curves.easeOutCubic);
+          return SlideTransition(
+            position: Tween(
+              begin: Offset(forward ? 0.25 : -0.25, 0),
+              end: Offset.zero,
+            ).animate(c),
+            child: FadeTransition(opacity: c, child: child),
+          );
+        },
       ),
     );
+  }
+
+  /// A sideways swipe: right-to-left for the next surah, left-to-right
+  /// for the previous one – the top arrows can be far for a thumb.
+  void _swipe(DragEndDetails e) {
+    final v = e.primaryVelocity ?? 0;
+    if (v.abs() < 300) return;
+    if (v < 0 && _s.id < 114) _goTo(kSurahs[_s.id]);
+    if (v > 0 && _s.id > 1) _goTo(kSurahs[_s.id - 2]);
   }
 
   Future<void> _pickReciter() async {
@@ -292,99 +311,104 @@ class _SurahScreenState extends ConsumerState<SurahScreen> {
               onGo: _goTo,
             ),
             Expanded(
-              child: FutureBuilder<List<Ayah>>(
-                future: _ayahs,
-                builder: (context, snap) {
-                  if (snap.hasError) {
-                    return EmptyState(
-                      message: t.somethingWrong,
-                      icon: Icons.wifi_off_rounded,
-                      action: AppButton(
-                        t.retry,
-                        dense: true,
-                        onPressed: _refresh,
-                      ),
-                    );
-                  }
-                  if (!snap.hasData) {
-                    return Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Loader(),
-                        Text(
-                          t.loadingSurah,
-                          style: AppText.caption.copyWith(
-                            color: AppColors.muted,
-                          ),
+              child: GestureDetector(
+                onHorizontalDragEnd: _swipe,
+                child: FutureBuilder<List<Ayah>>(
+                  future: _ayahs,
+                  builder: (context, snap) {
+                    if (snap.hasError) {
+                      return EmptyState(
+                        message: t.somethingWrong,
+                        icon: Icons.wifi_off_rounded,
+                        action: AppButton(
+                          t.retry,
+                          dense: true,
+                          onPressed: _refresh,
                         ),
-                      ],
-                    );
-                  }
-                  final ayahs = snap.data!;
-                  _jumpToStart();
-                  WidgetsBinding.instance.addPostFrameCallback(
-                    (_) => _markVisible(),
-                  );
-                  final extra = _hasBismillah ? 1 : 0;
-                  return NotificationListener<ScrollNotification>(
-                    onNotification: (n) {
-                      if (n is ScrollStartNotification &&
-                          n.dragDetails != null) {
-                        _userScrolledAt = DateTime.now();
-                      }
-                      if (n is ScrollEndNotification) _markVisible();
-                      return false;
-                    },
-                    child: ListenableBuilder(
-                      listenable: _player,
-                      builder: (context, _) => CustomScrollView(
-                        controller: _scroll,
-                        slivers: [
-                          PullToRefresh(onRefresh: _refresh),
-                          SliverPadding(
-                            padding: const EdgeInsets.fromLTRB(
-                              Gap.l,
-                              Gap.l,
-                              Gap.l,
-                              Gap.xxl,
-                            ),
-                            sliver: SuperSliverList.builder(
-                              listController: _list,
-                              itemCount: ayahs.length + extra + 1,
-                              itemBuilder: (context, i) {
-                                final Widget child;
-                                if (_hasBismillah && i == 0) {
-                                  child = const _Bismillah();
-                                } else if (i == ayahs.length + extra) {
-                                  child = _EndCard(
-                                    done: done,
-                                    onComplete: _complete,
-                                  );
-                                } else {
-                                  final a = ayahs[i - extra];
-                                  child = _AyahCard(
-                                    ayah: a,
-                                    words: _words,
-                                    number: f.digits(a.number),
-                                    reciting:
-                                        _player.started &&
-                                        _player.ayah == a.number,
-                                    playing: _player.playing,
-                                    onPlay: () => _player.playFrom(a.number),
-                                  );
-                                }
-                                return Padding(
-                                  padding: const EdgeInsets.only(bottom: Gap.m),
-                                  child: child,
-                                );
-                              },
+                      );
+                    }
+                    if (!snap.hasData) {
+                      return Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Loader(),
+                          Text(
+                            t.loadingSurah,
+                            style: AppText.caption.copyWith(
+                              color: AppColors.muted,
                             ),
                           ),
                         ],
+                      );
+                    }
+                    final ayahs = snap.data!;
+                    _jumpToStart();
+                    WidgetsBinding.instance.addPostFrameCallback(
+                      (_) => _markVisible(),
+                    );
+                    final extra = _hasBismillah ? 1 : 0;
+                    return NotificationListener<ScrollNotification>(
+                      onNotification: (n) {
+                        if (n is ScrollStartNotification &&
+                            n.dragDetails != null) {
+                          _userScrolledAt = DateTime.now();
+                        }
+                        if (n is ScrollEndNotification) _markVisible();
+                        return false;
+                      },
+                      child: ListenableBuilder(
+                        listenable: _player,
+                        builder: (context, _) => CustomScrollView(
+                          controller: _scroll,
+                          slivers: [
+                            PullToRefresh(onRefresh: _refresh),
+                            SliverPadding(
+                              padding: const EdgeInsets.fromLTRB(
+                                Gap.l,
+                                Gap.l,
+                                Gap.l,
+                                Gap.xxl,
+                              ),
+                              sliver: SuperSliverList.builder(
+                                listController: _list,
+                                itemCount: ayahs.length + extra + 1,
+                                itemBuilder: (context, i) {
+                                  final Widget child;
+                                  if (_hasBismillah && i == 0) {
+                                    child = const _Bismillah();
+                                  } else if (i == ayahs.length + extra) {
+                                    child = _EndCard(
+                                      done: done,
+                                      onComplete: _complete,
+                                    );
+                                  } else {
+                                    final a = ayahs[i - extra];
+                                    child = _AyahCard(
+                                      ayah: a,
+                                      words: _words,
+                                      number: f.digits(a.number),
+                                      reciting:
+                                          _player.started &&
+                                          _player.ayah == a.number,
+                                      playing: _player.playing,
+                                      onPlay: () => _player.playFrom(a.number),
+                                    );
+                                  }
+                                  return Padding(
+                                    padding: const EdgeInsets.only(
+                                      bottom: Gap.m,
+                                    ),
+                                    child: child,
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  );
-                },
+                    );
+                  },
+                ),
               ),
             ),
             _PlayerBar(player: _player, surah: _s, onReciter: _pickReciter),

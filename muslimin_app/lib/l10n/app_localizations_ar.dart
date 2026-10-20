@@ -2612,4 +2612,7 @@ class L10nAr extends L10n {
 
   @override
   String get nearestOptionHint => 'أقرب المساجد إلى مكانك، أيًّا كان الحي';
+
+  @override
+  String get seeAllDuas => 'عرض كل الأدعية';
 }

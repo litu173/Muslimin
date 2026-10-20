@@ -778,5 +778,6 @@
   "partDua_evening": "शाम की दुआएँ",
   "partDua_night": "रात की दुआएँ",
   "nearestOption": "सबसे नज़दीक",
-  "nearestOptionHint": "आपकी जगह से सबसे नज़दीकी मस्जिदें, थाना कोई भी हो"
+  "nearestOptionHint": "आपकी जगह से सबसे नज़दीकी मस्जिदें, थाना कोई भी हो",
+  "seeAllDuas": "सारी दुआएँ देखें"
 }
