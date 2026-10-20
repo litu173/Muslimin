@@ -2476,7 +2476,7 @@ class L10nUr extends L10n {
 
   @override
   String get dhikrIntro =>
-      'نبی ﷺ ہر روز ان کلمات سے اللہ کو یاد کرتے تھے۔ ہر ہدف کو پانچ حصوں میں بانٹیں اور ہر نماز کے بعد ایک حصہ پڑھیں — عشاء تک پورے دن کی سنت مکمل ہو جائے گی۔';
+      'نبی ﷺ ہر نماز کے بعد اور دن بھر اللہ کو یاد کرتے تھے۔ کوئی ذکر کھولیں اور گننے کے لیے ٹیپ کریں — ہر مکمل دور اپنی نماز کے لیے نشان زد ہو جائے گا، اور عشاء تک دن کی سنت مکمل ہو جائے گی۔';
 
   @override
   String dhikrPerDay(String n) {
@@ -2537,7 +2537,7 @@ class L10nUr extends L10n {
 
   @override
   String dhikrCredit(String n) {
-    return '$n حصوں سے پورا دن · صحیح بخاری اور صحیح مسلم سے';
+    return '$n حصوں سے پورا دن · ہر ذکر کے ساتھ حدیث کا حوالہ ہے';
   }
 
   @override
@@ -2586,4 +2586,39 @@ class L10nUr extends L10n {
 
   @override
   String get ach_dhikr_10k_desc => 'کل 10,000 بار ذکر کریں';
+
+  @override
+  String get dhikrAfterSalahTitle => 'ہر نماز کے بعد';
+
+  @override
+  String get dhikrAfterSalahSub =>
+      'ہر فرض نماز کے بعد پڑھے جانے والے اذکار — ہر نماز الگ سے نشان زد کریں';
+
+  @override
+  String get dhikrDailyTitle => 'روزانہ اہداف';
+
+  @override
+  String get dhikrDailySub => 'دن کی تعداد، پانچوں نمازوں میں برابر تقسیم';
+
+  @override
+  String get dhikrTapToCount => 'گننے کے لیے کہیں بھی ٹیپ کریں';
+
+  @override
+  String dhikrRoundDone(String salah) {
+    return '$salah کے بعد مکمل';
+  }
+
+  @override
+  String get dhikrAllSalahDone => 'آج پانچوں نمازوں کے بعد مکمل';
+
+  @override
+  String get dhikrCheckSalah => 'نشان زد کرنے کے لیے نماز پر ٹیپ کریں';
+
+  @override
+  String get dhikrReset => 'گنتی دوبارہ شروع کریں';
+
+  @override
+  String dhikrOfTarget(String n) {
+    return '$n میں سے';
+  }
 }

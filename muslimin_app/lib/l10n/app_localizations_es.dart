@@ -2487,7 +2487,7 @@ class L10nEs extends L10n {
 
   @override
   String get dhikrIntro =>
-      'El Profeta ﷺ recordaba a Allah cada día con estas palabras. Divide cada meta en cinco partes y di una parte después de cada salah: al llegar el Isha, la sunnah de todo el día está cumplida.';
+      'El Profeta ﷺ recordaba a Allah después de cada salah y a lo largo del día. Abre un dhikr y toca para contar: cada ronda terminada se marca para su salah, y al llegar el Isha la sunnah del día está cumplida.';
 
   @override
   String dhikrPerDay(String n) {
@@ -2549,7 +2549,7 @@ class L10nEs extends L10n {
 
   @override
   String dhikrCredit(String n) {
-    return '$n partes forman un día completo · de Sahih al-Bujari y Sahih Muslim';
+    return '$n partes forman un día completo · cada dhikr muestra su fuente de hadiz';
   }
 
   @override
@@ -2602,4 +2602,40 @@ class L10nEs extends L10n {
 
   @override
   String get ach_dhikr_10k_desc => 'Di 10.000 dhikr en total';
+
+  @override
+  String get dhikrAfterSalahTitle => 'Después de cada salah';
+
+  @override
+  String get dhikrAfterSalahSub =>
+      'Se dice tras cada salah obligatoria: marca cada salah por separado';
+
+  @override
+  String get dhikrDailyTitle => 'Metas diarias';
+
+  @override
+  String get dhikrDailySub =>
+      'La cuenta del día, repartida por igual entre las cinco salah';
+
+  @override
+  String get dhikrTapToCount => 'Toca en cualquier lugar para contar';
+
+  @override
+  String dhikrRoundDone(String salah) {
+    return 'Hecho después de $salah';
+  }
+
+  @override
+  String get dhikrAllSalahDone => 'Hecho tras las cinco salah de hoy';
+
+  @override
+  String get dhikrCheckSalah => 'Toca una salah para marcarla';
+
+  @override
+  String get dhikrReset => 'Reiniciar cuenta';
+
+  @override
+  String dhikrOfTarget(String n) {
+    return 'de $n';
+  }
 }

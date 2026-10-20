@@ -147,6 +147,17 @@ class DhikrNotifier extends Notifier<DhikrProgress> {
     _set(day, today);
   }
 
+  /// Sets the portion after the [salah]-th salah (the counter does this
+  /// when a round is finished).
+  void setPortion(String id, int salah, bool done) {
+    final day = dhikrDay(DateTime.now());
+    final today = _today(day);
+    final m = today[id] ?? 0;
+    final next = done ? m | (1 << salah) : m & ~(1 << salah);
+    if (next == m) return;
+    _set(day, today..[id] = next);
+  }
+
   /// All five portions of one dhikr at once (said in one sitting) – or
   /// none, to undo.
   void setAll(String id, bool done) {

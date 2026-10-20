@@ -2452,7 +2452,7 @@ class L10nBn extends L10n {
 
   @override
   String get dhikrIntro =>
-      'রাসূলুল্লাহ ﷺ প্রতিদিন এই বাক্যগুলো দিয়ে আল্লাহকে স্মরণ করতেন। প্রতিটি লক্ষ্যকে পাঁচ ভাগে ভাগ করে প্রতি সালাতের পর এক ভাগ পড়ুন — ইশার মধ্যেই সারাদিনের সুন্নাহ পূর্ণ হবে।';
+      'রাসূলুল্লাহ ﷺ প্রত্যেক সালাতের পর এবং সারাদিন আল্লাহকে স্মরণ করতেন। একটি জিকির খুলে চাপ দিয়ে গুনুন — প্রতিটি পূর্ণ রাউন্ড সেই সালাতের জন্য সম্পন্ন হবে, আর ইশার মধ্যেই দিনের সুন্নাহ পূর্ণ হবে।';
 
   @override
   String dhikrPerDay(String n) {
@@ -2513,7 +2513,7 @@ class L10nBn extends L10n {
 
   @override
   String dhikrCredit(String n) {
-    return '$nটি ভাগে পূর্ণ দিন · সহীহ বুখারী ও সহীহ মুসলিম থেকে';
+    return '$nটি ভাগে পূর্ণ দিন · প্রতিটি জিকিরে হাদিসের সূত্র দেওয়া আছে';
   }
 
   @override
@@ -2563,4 +2563,39 @@ class L10nBn extends L10n {
 
   @override
   String get ach_dhikr_10k_desc => 'মোট ১০,০০০ বার জিকির করুন';
+
+  @override
+  String get dhikrAfterSalahTitle => 'প্রত্যেক সালাতের পর';
+
+  @override
+  String get dhikrAfterSalahSub =>
+      'প্রতিটি ফরজ সালাতের পর পড়ার জিকির — প্রতিটি সালাত আলাদাভাবে সম্পন্ন করুন';
+
+  @override
+  String get dhikrDailyTitle => 'দৈনিক লক্ষ্য';
+
+  @override
+  String get dhikrDailySub => 'দিনের সংখ্যা, পাঁচ ওয়াক্ত সালাতে সমান ভাগে';
+
+  @override
+  String get dhikrTapToCount => 'গুনতে স্ক্রিনের যেকোনো জায়গায় চাপ দিন';
+
+  @override
+  String dhikrRoundDone(String salah) {
+    return '$salah-এর পর সম্পন্ন';
+  }
+
+  @override
+  String get dhikrAllSalahDone => 'আজ পাঁচ ওয়াক্তের পরই সম্পন্ন';
+
+  @override
+  String get dhikrCheckSalah => 'সম্পন্ন করতে সালাতে চাপ দিন';
+
+  @override
+  String get dhikrReset => 'গণনা আবার শুরু';
+
+  @override
+  String dhikrOfTarget(String n) {
+    return '$n-এর মধ্যে';
+  }
 }

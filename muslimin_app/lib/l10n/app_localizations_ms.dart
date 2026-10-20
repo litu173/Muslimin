@@ -2481,7 +2481,7 @@ class L10nMs extends L10n {
 
   @override
   String get dhikrIntro =>
-      'Nabi ﷺ mengingati Allah setiap hari dengan kalimah-kalimah ini. Bahagikan setiap sasaran kepada lima bahagian dan sebut satu bahagian selepas setiap solat — menjelang Isyak, sunnah sehari penuh pun selesai.';
+      'Nabi ﷺ mengingati Allah selepas setiap solat dan sepanjang hari. Buka satu zikir dan ketik untuk mengira — setiap pusingan yang selesai ditandakan untuk solatnya, dan menjelang Isyak sunnah hari itu pun selesai.';
 
   @override
   String dhikrPerDay(String n) {
@@ -2542,7 +2542,7 @@ class L10nMs extends L10n {
 
   @override
   String dhikrCredit(String n) {
-    return '$n bahagian untuk sehari penuh · daripada Sahih al-Bukhari dan Sahih Muslim';
+    return '$n bahagian untuk sehari penuh · setiap zikir disertakan sumber hadisnya';
   }
 
   @override
@@ -2594,4 +2594,40 @@ class L10nMs extends L10n {
 
   @override
   String get ach_dhikr_10k_desc => 'Sebut sejumlah 10,000 zikir';
+
+  @override
+  String get dhikrAfterSalahTitle => 'Selepas setiap solat';
+
+  @override
+  String get dhikrAfterSalahSub =>
+      'Disebut selepas setiap solat fardu — tandakan setiap solat secara berasingan';
+
+  @override
+  String get dhikrDailyTitle => 'Sasaran harian';
+
+  @override
+  String get dhikrDailySub =>
+      'Jumlah sehari, dibahagi sama rata kepada lima solat';
+
+  @override
+  String get dhikrTapToCount => 'Ketik di mana-mana untuk mengira';
+
+  @override
+  String dhikrRoundDone(String salah) {
+    return 'Selesai selepas $salah';
+  }
+
+  @override
+  String get dhikrAllSalahDone => 'Selesai selepas kelima-lima solat hari ini';
+
+  @override
+  String get dhikrCheckSalah => 'Ketik solat untuk menandakannya';
+
+  @override
+  String get dhikrReset => 'Set semula kiraan';
+
+  @override
+  String dhikrOfTarget(String n) {
+    return 'daripada $n';
+  }
 }

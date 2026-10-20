@@ -2476,7 +2476,7 @@ class L10nId extends L10n {
 
   @override
   String get dhikrIntro =>
-      'Nabi ﷺ mengingat Allah setiap hari dengan kalimat-kalimat ini. Bagi setiap target menjadi lima bagian dan ucapkan satu bagian setelah tiap salat — saat Isya, sunnah sehari penuh pun tuntas.';
+      'Nabi ﷺ mengingat Allah setelah setiap salat dan sepanjang hari. Buka sebuah zikir dan ketuk untuk menghitung — setiap putaran yang selesai dicentang untuk salatnya, dan saat Isya sunnah hari itu pun tuntas.';
 
   @override
   String dhikrPerDay(String n) {
@@ -2537,7 +2537,7 @@ class L10nId extends L10n {
 
   @override
   String dhikrCredit(String n) {
-    return '$n bagian untuk sehari penuh · dari Sahih al-Bukhari dan Sahih Muslim';
+    return '$n bagian untuk sehari penuh · setiap zikir disertai sumber haditsnya';
   }
 
   @override
@@ -2589,4 +2589,39 @@ class L10nId extends L10n {
 
   @override
   String get ach_dhikr_10k_desc => 'Ucapkan total 10.000 zikir';
+
+  @override
+  String get dhikrAfterSalahTitle => 'Setelah setiap salat';
+
+  @override
+  String get dhikrAfterSalahSub =>
+      'Diucapkan setelah tiap salat fardu — centang tiap salat sendiri-sendiri';
+
+  @override
+  String get dhikrDailyTitle => 'Target harian';
+
+  @override
+  String get dhikrDailySub => 'Jumlah sehari, dibagi rata ke lima salat';
+
+  @override
+  String get dhikrTapToCount => 'Ketuk di mana saja untuk menghitung';
+
+  @override
+  String dhikrRoundDone(String salah) {
+    return 'Selesai setelah $salah';
+  }
+
+  @override
+  String get dhikrAllSalahDone => 'Selesai setelah kelima salat hari ini';
+
+  @override
+  String get dhikrCheckSalah => 'Ketuk salat untuk mencentangnya';
+
+  @override
+  String get dhikrReset => 'Ulangi hitungan';
+
+  @override
+  String dhikrOfTarget(String n) {
+    return 'dari $n';
+  }
 }

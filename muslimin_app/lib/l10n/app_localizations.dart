@@ -4494,7 +4494,7 @@ abstract class L10n {
   /// No description provided for @dhikrIntro.
   ///
   /// In en, this message translates to:
-  /// **'The Prophet ﷺ remembered Allah every day with these words. Split each target into five parts and say one part after each salah — by Isha, the whole day\'s sunnah is done.'**
+  /// **'The Prophet ﷺ remembered Allah after every salah and throughout the day. Open a dhikr and tap to count — each finished round is checked off for its salah, and by Isha the day\'s sunnah is done.'**
   String get dhikrIntro;
 
   /// No description provided for @dhikrPerDay.
@@ -4590,7 +4590,7 @@ abstract class L10n {
   /// No description provided for @dhikrCredit.
   ///
   /// In en, this message translates to:
-  /// **'{n} parts make a full day · from Sahih al-Bukhari and Sahih Muslim'**
+  /// **'{n} parts make a full day · each dhikr shows its hadith source'**
   String dhikrCredit(String n);
 
   /// No description provided for @dhikrOneDone.
@@ -4676,6 +4676,66 @@ abstract class L10n {
   /// In en, this message translates to:
   /// **'Say 10,000 dhikr in total'**
   String get ach_dhikr_10k_desc;
+
+  /// No description provided for @dhikrAfterSalahTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'After every salah'**
+  String get dhikrAfterSalahTitle;
+
+  /// No description provided for @dhikrAfterSalahSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Said after each fard salah — check each salah off on its own'**
+  String get dhikrAfterSalahSub;
+
+  /// No description provided for @dhikrDailyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily targets'**
+  String get dhikrDailyTitle;
+
+  /// No description provided for @dhikrDailySub.
+  ///
+  /// In en, this message translates to:
+  /// **'A day\'s count, split evenly over the five salah'**
+  String get dhikrDailySub;
+
+  /// No description provided for @dhikrTapToCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap anywhere to count'**
+  String get dhikrTapToCount;
+
+  /// No description provided for @dhikrRoundDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Done after {salah}'**
+  String dhikrRoundDone(String salah);
+
+  /// No description provided for @dhikrAllSalahDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Done after all five salah today'**
+  String get dhikrAllSalahDone;
+
+  /// No description provided for @dhikrCheckSalah.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap a salah to check it off'**
+  String get dhikrCheckSalah;
+
+  /// No description provided for @dhikrReset.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset count'**
+  String get dhikrReset;
+
+  /// No description provided for @dhikrOfTarget.
+  ///
+  /// In en, this message translates to:
+  /// **'of {n}'**
+  String dhikrOfTarget(String n);
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {

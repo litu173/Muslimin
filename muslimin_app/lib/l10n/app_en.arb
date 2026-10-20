@@ -1258,7 +1258,7 @@
   "timeTo": "To",
   "dhikrTitle": "Daily Dhikr",
   "dhikrSub": "Sunnah targets · a part after each salah",
-  "dhikrIntro": "The Prophet ﷺ remembered Allah every day with these words. Split each target into five parts and say one part after each salah — by Isha, the whole day's sunnah is done.",
+  "dhikrIntro": "The Prophet ﷺ remembered Allah after every salah and throughout the day. Open a dhikr and tap to count — each finished round is checked off for its salah, and by Isha the day's sunnah is done.",
   "dhikrPerDay": "{n} a day",
   "@dhikrPerDay": {
     "placeholders": {
@@ -1315,7 +1315,7 @@
   },
   "dhikrVirtue": "Virtue",
   "dhikrTapSalah": "Tap a salah to mark all of its dhikr done",
-  "dhikrCredit": "{n} parts make a full day · from Sahih al-Bukhari and Sahih Muslim",
+  "dhikrCredit": "{n} parts make a full day · each dhikr shows its hadith source",
   "@dhikrCredit": {
     "placeholders": {
       "n": {
@@ -1350,5 +1350,29 @@
   "ach_dhikr_streak30": "Month of Remembrance",
   "ach_dhikr_streak30_desc": "Complete the daily dhikr 30 days in a row",
   "ach_dhikr_10k": "Ten Thousand",
-  "ach_dhikr_10k_desc": "Say 10,000 dhikr in total"
+  "ach_dhikr_10k_desc": "Say 10,000 dhikr in total",
+  "dhikrAfterSalahTitle": "After every salah",
+  "dhikrAfterSalahSub": "Said after each fard salah — check each salah off on its own",
+  "dhikrDailyTitle": "Daily targets",
+  "dhikrDailySub": "A day's count, split evenly over the five salah",
+  "dhikrTapToCount": "Tap anywhere to count",
+  "dhikrRoundDone": "Done after {salah}",
+  "@dhikrRoundDone": {
+    "placeholders": {
+      "salah": {
+        "type": "String"
+      }
+    }
+  },
+  "dhikrAllSalahDone": "Done after all five salah today",
+  "dhikrCheckSalah": "Tap a salah to check it off",
+  "dhikrReset": "Reset count",
+  "dhikrOfTarget": "of {n}",
+  "@dhikrOfTarget": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  }
 }

@@ -10,6 +10,13 @@ void main() {
     }
   });
 
+  test('dhikr ids are unique; after-salah adhkar come first', () {
+    expect(kDhikrs.map((d) => d.id).toSet().length, kDhikrs.length);
+    final firstDaily = kDhikrs.indexWhere((d) => !d.afterSalah);
+    expect(kDhikrs.skip(firstDaily).every((d) => !d.afterSalah), isTrue);
+    expect(kDhikrs.where((d) => d.afterSalah).length, 11);
+  });
+
   test('the dhikr day turns over at 3 AM', () {
     expect(dhikrDay(DateTime(2026, 10, 20, 2, 30)), '2026-10-19');
     expect(dhikrDay(DateTime(2026, 10, 20, 3, 0)), '2026-10-20');

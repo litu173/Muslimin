@@ -2444,7 +2444,7 @@ class L10nAr extends L10n {
 
   @override
   String get dhikrIntro =>
-      'كان النبي ﷺ يذكر الله كل يوم بهذه الكلمات. قسّم كل عدد إلى خمسة أجزاء وقل جزءًا بعد كل صلاة، فتكتمل سنة اليوم كله عند العشاء.';
+      'كان النبي ﷺ يذكر الله بعد كل صلاة وطوال اليوم. افتح ذكرًا واضغط للعدّ — كل جولة مكتملة تُحتسب لصلاتها، وعند العشاء تكتمل سنة اليوم.';
 
   @override
   String dhikrPerDay(String n) {
@@ -2504,7 +2504,7 @@ class L10nAr extends L10n {
 
   @override
   String dhikrCredit(String n) {
-    return '$n جزءًا ليوم كامل · من صحيح البخاري وصحيح مسلم';
+    return '$n جزءًا ليوم كامل · لكل ذكر مصدره من الحديث';
   }
 
   @override
@@ -2553,4 +2553,39 @@ class L10nAr extends L10n {
 
   @override
   String get ach_dhikr_10k_desc => 'اذكر الله 10,000 مرة إجمالًا';
+
+  @override
+  String get dhikrAfterSalahTitle => 'بعد كل صلاة';
+
+  @override
+  String get dhikrAfterSalahSub =>
+      'تُقال بعد كل صلاة مفروضة — حدّد كل صلاة على حدة';
+
+  @override
+  String get dhikrDailyTitle => 'أعداد يومية';
+
+  @override
+  String get dhikrDailySub => 'عدد اليوم مقسّم بالتساوي على الصلوات الخمس';
+
+  @override
+  String get dhikrTapToCount => 'اضغط في أي مكان للعدّ';
+
+  @override
+  String dhikrRoundDone(String salah) {
+    return 'اكتمل بعد $salah';
+  }
+
+  @override
+  String get dhikrAllSalahDone => 'اكتمل بعد الصلوات الخمس اليوم';
+
+  @override
+  String get dhikrCheckSalah => 'اضغط على صلاة لتحديدها';
+
+  @override
+  String get dhikrReset => 'إعادة العدّ';
+
+  @override
+  String dhikrOfTarget(String n) {
+    return 'من $n';
+  }
 }

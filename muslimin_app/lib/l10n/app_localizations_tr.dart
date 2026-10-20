@@ -2470,7 +2470,7 @@ class L10nTr extends L10n {
 
   @override
   String get dhikrIntro =>
-      'Peygamber ﷺ her gün Allah\'ı bu sözlerle anardı. Her hedefi beş parçaya bölün ve her namazdan sonra bir parçasını söyleyin — yatsıya kadar günün tüm sünneti tamamlanır.';
+      'Peygamber ﷺ her namazdan sonra ve gün boyu Allah\'ı anardı. Bir zikri açın ve saymak için dokunun — biten her tur kendi namazı için işaretlenir, yatsıya kadar günün sünneti tamamlanır.';
 
   @override
   String dhikrPerDay(String n) {
@@ -2531,7 +2531,7 @@ class L10nTr extends L10n {
 
   @override
   String dhikrCredit(String n) {
-    return 'Tam bir gün $n parça · Sahih-i Buhari ve Sahih-i Müslim\'den';
+    return 'Tam bir gün $n parça · her zikrin hadis kaynağı yanında';
   }
 
   @override
@@ -2582,4 +2582,39 @@ class L10nTr extends L10n {
 
   @override
   String get ach_dhikr_10k_desc => 'Toplam 10.000 zikir söyleyin';
+
+  @override
+  String get dhikrAfterSalahTitle => 'Her namazdan sonra';
+
+  @override
+  String get dhikrAfterSalahSub =>
+      'Her farz namazdan sonra söylenir — her namazı ayrı ayrı işaretleyin';
+
+  @override
+  String get dhikrDailyTitle => 'Günlük hedefler';
+
+  @override
+  String get dhikrDailySub => 'Günlük sayı, beş vakte eşit bölünmüş';
+
+  @override
+  String get dhikrTapToCount => 'Saymak için herhangi bir yere dokunun';
+
+  @override
+  String dhikrRoundDone(String salah) {
+    return '$salah sonrası tamam';
+  }
+
+  @override
+  String get dhikrAllSalahDone => 'Bugün beş vaktin ardından tamam';
+
+  @override
+  String get dhikrCheckSalah => 'İşaretlemek için bir namaza dokunun';
+
+  @override
+  String get dhikrReset => 'Sayacı sıfırla';
+
+  @override
+  String dhikrOfTarget(String n) {
+    return '$n içinden';
+  }
 }

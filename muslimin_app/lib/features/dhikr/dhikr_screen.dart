@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/nav.dart';
@@ -31,9 +32,10 @@ int? salahNow(WaqtStatus? w) {
 
 String dhikrName(Fmt f, Dhikr d) => f.isBn ? d.nameBn : d.nameEn;
 
-String _plan(L10n t, Fmt f, Dhikr d) =>
-    '${t.dhikrPerDay(f.digits(d.perDay))} · '
-    '${t.dhikrPerSalah(f.digits(d.perSalah))}';
+String _plan(L10n t, Fmt f, Dhikr d) => d.afterSalah
+    ? t.dhikrPerSalah(f.digits(d.perSalah))
+    : '${t.dhikrPerDay(f.digits(d.perDay))} · '
+          '${t.dhikrPerSalah(f.digits(d.perSalah))}';
 
 /// Home: "Daily Dhikr" with today's card. "View All" opens the list.
 class DhikrSection extends StatelessWidget {
@@ -306,12 +308,14 @@ class DhikrRing extends StatelessWidget {
     required this.color,
     required this.child,
     this.size = 48,
+    this.stroke = 4,
   });
 
   final double value;
   final Color color;
   final Widget child;
   final double size;
+  final double stroke;
 
   @override
   Widget build(BuildContext context) => TweenAnimationBuilder<double>(
@@ -319,7 +323,7 @@ class DhikrRing extends StatelessWidget {
     duration: const Duration(milliseconds: 500),
     curve: Curves.easeOutCubic,
     builder: (_, v, child) => CustomPaint(
-      painter: _RingPainter(v, color, color.withValues(alpha: 0.14)),
+      painter: _RingPainter(v, color, color.withValues(alpha: 0.14), stroke),
       child: SizedBox.square(
         dimension: size,
         child: Center(child: child),
@@ -330,18 +334,19 @@ class DhikrRing extends StatelessWidget {
 }
 
 class _RingPainter extends CustomPainter {
-  _RingPainter(this.value, this.color, this.track);
+  _RingPainter(this.value, this.color, this.track, this.stroke);
 
   final double value;
   final Color color;
   final Color track;
+  final double stroke;
 
   @override
   void paint(Canvas canvas, Size s) {
-    final rect = (Offset.zero & s).deflate(3);
+    final rect = (Offset.zero & s).deflate(stroke / 2 + 1);
     final p = Paint()
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 4
+      ..strokeWidth = stroke
       ..strokeCap = StrokeCap.round;
     canvas.drawArc(rect, 0, 2 * math.pi, false, p..color = track);
     if (value > 0) {
@@ -386,7 +391,8 @@ class _PortionDots extends StatelessWidget {
 }
 
 // ------------------------------------------------------------------- list
-/// Every daily dhikr, each with its target and today's portions.
+/// Every dhikr in two groups – after every salah, and the daily targets –
+/// each with today's five salah marks.
 class DhikrScreen extends ConsumerWidget {
   const DhikrScreen({super.key});
 
@@ -396,6 +402,26 @@ class DhikrScreen extends ConsumerWidget {
     final f = Fmt.of(context);
     final p = ref.watch(dhikrProgressProvider);
     final notifier = ref.read(dhikrProgressProvider.notifier);
+
+    List<Widget> group(String title, String sub, bool afterSalah) => [
+      Padding(
+        padding: const EdgeInsets.fromLTRB(4, Gap.xl, 4, Gap.m),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(title, style: AppText.subtitle),
+            const SizedBox(height: 2),
+            Text(sub, style: AppText.caption.copyWith(color: AppColors.muted)),
+          ],
+        ),
+      ),
+      for (final d in kDhikrs)
+        if (d.afterSalah == afterSalah) ...[
+          _DhikrTile(dhikr: d, mask: p.maskToday(d.id)),
+          const SizedBox(height: Gap.m),
+        ],
+    ];
+
     return Scaffold(
       body: Column(
         children: [
@@ -419,11 +445,8 @@ class DhikrScreen extends ConsumerWidget {
                     style: AppText.micro.copyWith(color: AppColors.muted),
                   ),
                 ),
-                const SizedBox(height: Gap.l),
-                for (final d in kDhikrs) ...[
-                  _DhikrTile(dhikr: d, mask: p.maskToday(d.id)),
-                  const SizedBox(height: Gap.m),
-                ],
+                ...group(t.dhikrAfterSalahTitle, t.dhikrAfterSalahSub, true),
+                ...group(t.dhikrDailyTitle, t.dhikrDailySub, false),
                 const SizedBox(height: Gap.s),
                 Text(
                   t.dhikrCredit(f.digits(DhikrProgress.portionsPerDay)),
@@ -452,7 +475,7 @@ class _DhikrTile extends StatelessWidget {
     final done = mask == kAllPortions;
     final color = done ? AppColors.success : AppColors.gold;
     return AppCard(
-      onTap: () => push(context, DhikrDetailScreen(dhikr: dhikr)),
+      onTap: () => push(context, DhikrCounterScreen(dhikr: dhikr)),
       padding: const EdgeInsets.fromLTRB(Gap.l, Gap.m, Gap.m, Gap.m),
       child: Row(
         children: [
@@ -463,11 +486,17 @@ class _DhikrTile extends StatelessWidget {
               shape: BoxShape.circle,
               color: color.withValues(alpha: 0.12),
             ),
-            child: Icon(
-              done ? Icons.check_rounded : Icons.spa_outlined,
-              color: color,
-              size: 22,
-            ),
+            child: done
+                ? Icon(Icons.check_rounded, color: color, size: 22)
+                : Center(
+                    child: Text(
+                      f.digits(dhikr.perSalah),
+                      style: AppText.label.copyWith(
+                        color: color,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
           ),
           const SizedBox(width: Gap.m),
           Expanded(
@@ -491,32 +520,187 @@ class _DhikrTile extends StatelessWidget {
   }
 }
 
-// ----------------------------------------------------------------- detail
-/// One dhikr: its words and virtue, and today's plan – the day's target
-/// split evenly over the five salah, each part marked done on its own or
-/// all at once.
-class DhikrDetailScreen extends ConsumerWidget {
-  const DhikrDetailScreen({super.key, required this.dhikr});
+// ---------------------------------------------------------------- counter
+/// One dhikr as a tasbih counter: the words on top, a big ring with the
+/// count in the middle – a tap anywhere around it counts one – and the five
+/// salah below. A finished round checks off its salah; each salah can also
+/// be checked by hand. Daily targets can be marked done all at once;
+/// after-salah adhkar cannot (they belong after each salah).
+class DhikrCounterScreen extends ConsumerStatefulWidget {
+  const DhikrCounterScreen({super.key, required this.dhikr});
 
   final Dhikr dhikr;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<DhikrCounterScreen> createState() => _DhikrCounterState();
+}
+
+class _DhikrCounterState extends ConsumerState<DhikrCounterScreen> {
+  int _count = 0;
+
+  /// The salah this round counts for (fixed once counting starts).
+  int? _salah;
+
+  /// The round has just been finished: the ring shows a tick until the
+  /// next tap starts a new round.
+  bool _finished = false;
+
+  Dhikr get _d => widget.dhikr;
+
+  int get _mask => ref.read(dhikrProgressProvider).maskToday(widget.dhikr.id);
+
+  /// The salah due now if it is still open, else the latest earlier open
+  /// one, else a later one. Null when all five are done.
+  int? _open(int mask) {
+    final now = salahNow(ref.read(waqtProvider)) ?? 0;
+    final order = [
+      for (var i = now; i >= 0; i--) i,
+      for (var i = now + 1; i < kPortions; i++) i,
+    ];
+    for (final i in order) {
+      if (mask & (1 << i) == 0) return i;
+    }
+    return null;
+  }
+
+  void _tap() {
+    // Only once the page is fully open and on top: the touch that opened
+    // it, or one on a sheet above it, never counts.
+    final route = ModalRoute.of(context);
+    if (route != null &&
+        (!route.isCurrent || !(route.animation?.isCompleted ?? true))) {
+      return;
+    }
+    setState(() {
+      if (_finished) {
+        _finished = false;
+        _count = 0;
+        _salah = null;
+      }
+      if (_count == 0) _salah = _open(_mask);
+      _count++;
+      final s = _salah;
+      if (s != null && _count >= _d.perSalah) {
+        _finished = true;
+        ref.read(dhikrProgressProvider.notifier).setPortion(_d.id, s, true);
+      }
+    });
+    _finished ? HapticFeedback.heavyImpact() : HapticFeedback.selectionClick();
+  }
+
+  void _reset() => setState(() {
+    _count = 0;
+    _salah = null;
+    _finished = false;
+  });
+
+  void _virtue() {
     final t = L10n.of(context);
     final f = Fmt.of(context);
-    final d = dhikr;
+    showModalBottomSheet<void>(
+      context: context,
+      useSafeArea: true,
+      isScrollControlled: true,
+      constraints: const BoxConstraints(maxWidth: double.infinity),
+      builder: (ctx) => Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+          color: AppColors.card,
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(Radii.sheet),
+          ),
+        ),
+        padding: EdgeInsets.fromLTRB(
+          Gap.xl,
+          Gap.m,
+          Gap.xl,
+          Gap.xxl + MediaQuery.paddingOf(ctx).bottom,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Center(
+              child: Container(
+                width: 40,
+                height: 4,
+                margin: const EdgeInsets.only(bottom: Gap.l),
+                decoration: BoxDecoration(
+                  color: AppColors.muted.withValues(alpha: 0.35),
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+            ),
+            Row(
+              children: [
+                Icon(
+                  Icons.auto_awesome_rounded,
+                  size: 18,
+                  color: AppColors.gold,
+                ),
+                const SizedBox(width: 6),
+                Text(
+                  t.dhikrVirtue,
+                  style: AppText.label.copyWith(color: AppColors.gold),
+                ),
+              ],
+            ),
+            const SizedBox(height: Gap.s),
+            Text(
+              f.isBn ? _d.virtueBn : _d.virtueEn,
+              textDirection: f.isBn || f.lang == 'en'
+                  ? null
+                  : TextDirection.ltr,
+              style: AppText.body.copyWith(height: 1.5),
+            ),
+            const SizedBox(height: Gap.m),
+            Row(
+              children: [
+                Icon(
+                  Icons.menu_book_outlined,
+                  size: 14,
+                  color: AppColors.muted,
+                ),
+                const SizedBox(width: 4),
+                Expanded(
+                  child: Text(
+                    f.isBn ? _d.refBn : _d.refEn,
+                    style: AppText.micro.copyWith(color: AppColors.muted),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final t = L10n.of(context);
+    final f = Fmt.of(context);
+    final d = _d;
     final mask = ref.watch(
       dhikrProgressProvider.select((p) => p.maskToday(d.id)),
     );
+    ref.watch(waqtProvider);
     final notifier = ref.read(dhikrProgressProvider.notifier);
-    final now = salahNow(ref.watch(waqtProvider));
-    final all = mask == kAllPortions;
-    final parts = DhikrProgress.bits(mask);
+    // Before counting starts, the round goes to the open salah due now.
+    final salah = _count == 0 && !_finished ? _open(mask) : _salah;
+    final allDone = mask == kAllPortions;
+    final green = _finished || (allDone && salah == null);
+    final accent = green ? AppColors.success : AppColors.gold;
+    String salahName(int i) => f.prayer(PrayerX.daily[i]);
     // Bangla and English are written for the app; other languages show
     // English (Arabic: the dhikr itself only), like the duas.
     final meaning = f.isBn ? d.bn : (f.lang == 'ar' ? '' : d.en);
-    final virtue = f.isBn ? d.virtueBn : d.virtueEn;
-    final split = f.isBn ? d.splitBn : d.splitEn;
+
+    final label = _finished
+        ? t.dhikrRoundDone(salahName(_salah!))
+        : salah != null
+        ? t.dhikrAfterSalah(salahName(salah))
+        : t.dhikrAllSalahDone;
 
     return Scaffold(
       body: Column(
@@ -525,33 +709,55 @@ class DhikrDetailScreen extends ConsumerWidget {
             title: dhikrName(f, d),
             subtitle: _plan(t, f, d),
             back: true,
-          ),
-          Expanded(
-            child: RefreshList(
-              onRefresh: () =>
-                  Future<void>.delayed(const Duration(milliseconds: 500)),
-              padding: const EdgeInsets.fromLTRB(Gap.l, Gap.l, Gap.l, Gap.xxl),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                // ---- the words
-                AppCard(
+                IconButton(
+                  tooltip: t.dhikrReset,
+                  onPressed: _count == 0 ? null : _reset,
+                  icon: const Icon(Icons.restart_alt_rounded),
+                  color: AppColors.onHeader,
+                  disabledColor: AppColors.onHeader.withValues(alpha: 0.35),
+                ),
+                IconButton(
+                  tooltip: t.dhikrVirtue,
+                  onPressed: _virtue,
+                  icon: const Icon(Icons.info_outline_rounded),
+                  color: AppColors.onHeader,
+                ),
+              ],
+            ),
+          ),
+          // ---- the words (long ones scroll)
+          Padding(
+            padding: const EdgeInsets.fromLTRB(Gap.l, Gap.l, Gap.l, 0),
+            child: AppCard(
+              padding: EdgeInsets.zero,
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxHeight: MediaQuery.sizeOf(context).height * 0.26,
+                ),
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.all(Gap.l),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Text(
                         d.ar,
-                        textAlign: TextAlign.right,
+                        textAlign: TextAlign.center,
                         textDirection: TextDirection.rtl,
                         style: TextStyle(
                           fontFamily: AppText.arabic,
-                          fontSize: 24,
-                          height: 2,
+                          fontSize: d.ar.length > 60 ? 22 : 30,
+                          height: 1.9,
                           color: AppColors.ink,
                         ),
                       ),
                       if (!f.isBn && f.lang != 'ar') ...[
-                        const SizedBox(height: Gap.s),
+                        const SizedBox(height: Gap.xs),
                         Text(
                           d.tr,
+                          textAlign: TextAlign.center,
                           textDirection: TextDirection.ltr,
                           style: AppText.caption.copyWith(
                             color: AppColors.gold,
@@ -560,261 +766,175 @@ class DhikrDetailScreen extends ConsumerWidget {
                         ),
                       ],
                       if (meaning.isNotEmpty) ...[
-                        const SizedBox(height: Gap.s),
+                        const SizedBox(height: Gap.xs),
                         Text(
                           meaning,
+                          textAlign: TextAlign.center,
                           textDirection: f.isBn || f.lang == 'en'
                               ? null
                               : TextDirection.ltr,
-                          style: AppText.body.copyWith(height: 1.5),
-                        ),
-                      ],
-                    ],
-                  ),
-                ),
-                const SizedBox(height: Gap.m),
-                // ---- why
-                AppCard(
-                  color: Color.alphaBlend(
-                    AppColors.gold.withValues(alpha: 0.10),
-                    AppColors.card,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.auto_awesome_rounded,
-                            size: 18,
-                            color: AppColors.gold,
-                          ),
-                          const SizedBox(width: 6),
-                          Text(
-                            t.dhikrVirtue,
-                            style: AppText.label.copyWith(
-                              color: AppColors.gold,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: Gap.s),
-                      Text(
-                        virtue,
-                        textDirection: f.isBn || f.lang == 'en'
-                            ? null
-                            : TextDirection.ltr,
-                        style: AppText.body.copyWith(height: 1.5),
-                      ),
-                      const SizedBox(height: Gap.s),
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.menu_book_outlined,
-                            size: 14,
+                          style: AppText.caption.copyWith(
                             color: AppColors.muted,
                           ),
-                          const SizedBox(width: 4),
-                          Expanded(
-                            child: Text(
-                              f.isBn ? d.refBn : d.refEn,
-                              style: AppText.micro.copyWith(
-                                color: AppColors.muted,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-
-                // ---- today's plan
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(4, Gap.xl, 4, Gap.s),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Text(t.dhikrPlan, style: AppText.subtitle),
-                      ),
-                      Text(
-                        t.dhikrPartsDone(f.digits(parts), f.digits(kPortions)),
-                        style: AppText.caption.copyWith(
-                          color: all ? AppColors.success : AppColors.muted,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(4, 0, 4, Gap.m),
-                  child: Text(
-                    t.dhikrPlanBody(f.digits(d.perDay), f.digits(d.perSalah)),
-                    style: AppText.caption.copyWith(color: AppColors.muted),
-                  ),
-                ),
-                AppCard(
-                  padding: const EdgeInsets.symmetric(vertical: Gap.xs),
-                  child: Column(
-                    children: [
-                      for (var i = 0; i < kPortions; i++) ...[
-                        if (i > 0)
-                          Divider(
-                            height: 1,
-                            indent: Gap.l,
-                            endIndent: Gap.l,
-                            color: AppColors.divider,
-                          ),
-                        _PortionRow(
-                          salah: f.prayer(PrayerX.daily[i]),
-                          count: f.digits(d.perSalah),
-                          split: split,
-                          done: mask & (1 << i) != 0,
-                          now: i == now,
-                          onTap: () => notifier.toggle(d.id, i),
                         ),
                       ],
                     ],
                   ),
                 ),
-                const SizedBox(height: Gap.l),
-                if (all)
-                  Container(
-                    padding: const EdgeInsets.all(Gap.m),
-                    margin: const EdgeInsets.only(bottom: Gap.m),
-                    decoration: BoxDecoration(
-                      color: AppColors.success.withValues(alpha: 0.12),
-                      borderRadius: BorderRadius.circular(Radii.card),
-                    ),
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.check_circle_rounded,
-                          color: AppColors.success,
-                        ),
-                        const SizedBox(width: Gap.s),
-                        Expanded(
-                          child: Text(
-                            t.dhikrOneDone(f.digits(d.perDay)),
-                            style: AppText.label.copyWith(
-                              color: AppColors.success,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                AppButton(
-                  all ? t.dhikrClearToday : t.dhikrMarkAll,
-                  icon: all ? Icons.undo_rounded : Icons.done_all_rounded,
-                  style: all ? AppButtonStyle.outlined : AppButtonStyle.filled,
-                  expand: true,
-                  onPressed: () => notifier.setAll(d.id, !all),
-                ),
-                const SizedBox(height: Gap.s),
-                Text(
-                  t.dhikrMarkAllHint,
-                  textAlign: TextAlign.center,
-                  style: AppText.micro.copyWith(color: AppColors.muted),
-                ),
-              ],
+              ),
             ),
           ),
-        ],
-      ),
-    );
-  }
-}
-
-/// "After Fajr · 20×" with a check to mark the part done.
-class _PortionRow extends StatelessWidget {
-  const _PortionRow({
-    required this.salah,
-    required this.count,
-    required this.split,
-    required this.done,
-    required this.now,
-    required this.onTap,
-  });
-
-  final String salah;
-  final String count;
-  final String? split;
-  final bool done;
-  final bool now;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final t = L10n.of(context);
-    return InkWell(
-      onTap: onTap,
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(Gap.l, Gap.m, Gap.m, Gap.m),
-        child: Row(
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Flexible(
-                        child: Text(
-                          t.dhikrAfterSalah(salah),
-                          style: AppText.label,
+          // ---- the counter: a tap anywhere here counts one
+          Expanded(
+            // Raw pointer downs: every touch counts at once, however fast
+            // (a tap recognizer can drop quick taps in a row).
+            child: Listener(
+              behavior: HitTestBehavior.opaque,
+              onPointerDown: (_) => _tap(),
+              // Full width: a tap beside the ring counts too.
+              child: SizedBox(
+                width: double.infinity,
+                child: LayoutBuilder(
+                  builder: (context, c) {
+                    final size = [
+                      c.maxWidth * 0.68,
+                      c.maxHeight - 76,
+                      280.0,
+                    ].reduce(math.min).clamp(120.0, 280.0);
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          label,
+                          style: AppText.label.copyWith(
+                            color: green ? AppColors.success : AppColors.ink,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
-                      ),
-                      if (now) ...[
-                        const SizedBox(width: Gap.s),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 1,
-                          ),
-                          decoration: BoxDecoration(
-                            color: AppColors.goldLight,
-                            borderRadius: BorderRadius.circular(Radii.pill),
-                          ),
-                          child: Text(
-                            t.nowLabel,
-                            style: AppText.micro.copyWith(
-                              color: AppColors.inkDeep,
-                              fontWeight: FontWeight.w700,
+                        const SizedBox(height: Gap.s),
+                        DhikrRing(
+                          value: salah == null && !_finished
+                              ? 1
+                              : _count / d.perSalah,
+                          color: accent,
+                          size: size,
+                          stroke: 10,
+                          child: Container(
+                            width: size - 36,
+                            height: size - 36,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: accent.withValues(alpha: 0.08),
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                if (_finished)
+                                  Icon(
+                                    Icons.check_rounded,
+                                    color: accent,
+                                    size: size * 0.32,
+                                  )
+                                else
+                                  Text(
+                                    f.digits(_count),
+                                    style: AppText.headline.copyWith(
+                                      fontSize: size * 0.28,
+                                      height: 1.1,
+                                      color: AppColors.ink,
+                                      fontFeatures: const [
+                                        FontFeature.tabularFigures(),
+                                      ],
+                                    ),
+                                  ),
+                                if (!_finished && salah != null)
+                                  Text(
+                                    t.dhikrOfTarget(f.digits(d.perSalah)),
+                                    style: AppText.caption.copyWith(
+                                      color: AppColors.muted,
+                                    ),
+                                  ),
+                              ],
                             ),
                           ),
                         ),
+                        const SizedBox(height: Gap.s),
+                        Text(
+                          t.dhikrTapToCount,
+                          style: AppText.micro.copyWith(color: AppColors.muted),
+                        ),
                       ],
-                    ],
+                    );
+                  },
+                ),
+              ),
+            ),
+          ),
+          // ---- today's five salah
+          SafeArea(
+            top: false,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(Gap.l, 0, Gap.l, Gap.m),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  AppCard(
+                    padding: const EdgeInsets.fromLTRB(
+                      Gap.s,
+                      Gap.m,
+                      Gap.s,
+                      Gap.m,
+                    ),
+                    child: Column(
+                      children: [
+                        Text(
+                          t.dhikrCheckSalah,
+                          style: AppText.micro.copyWith(color: AppColors.muted),
+                        ),
+                        const SizedBox(height: Gap.s),
+                        Row(
+                          children: [
+                            for (var i = 0; i < kPortions; i++)
+                              Expanded(
+                                child: _SalahMark(
+                                  label: salahName(i),
+                                  done: mask & (1 << i) != 0,
+                                  partial: false,
+                                  now: i == salah && !_finished,
+                                  color: AppColors.success,
+                                  onTap: () {
+                                    if (i == _salah) _reset();
+                                    notifier.toggle(d.id, i);
+                                  },
+                                ),
+                              ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                  Text(
-                    split == null
-                        ? t.repeatTimes(count)
-                        : '${t.repeatTimes(count)} · $split',
-                    style: AppText.caption.copyWith(color: AppColors.muted),
-                  ),
+                  if (!d.afterSalah) ...[
+                    const SizedBox(height: Gap.m),
+                    AppButton(
+                      allDone ? t.dhikrClearToday : t.dhikrMarkAll,
+                      icon: allDone
+                          ? Icons.undo_rounded
+                          : Icons.done_all_rounded,
+                      style: allDone
+                          ? AppButtonStyle.outlined
+                          : AppButtonStyle.filled,
+                      expand: true,
+                      onPressed: () {
+                        _reset();
+                        notifier.setAll(d.id, !allDone);
+                      },
+                    ),
+                  ],
                 ],
               ),
             ),
-            AnimatedContainer(
-              duration: const Duration(milliseconds: 250),
-              width: 30,
-              height: 30,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: done ? AppColors.success : Colors.transparent,
-                border: Border.all(
-                  color: done ? AppColors.success : AppColors.divider,
-                  width: 2,
-                ),
-              ),
-              child: done
-                  ? Icon(Icons.check_rounded, size: 18, color: AppColors.onGold)
-                  : null,
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
