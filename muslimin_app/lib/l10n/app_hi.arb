@@ -770,5 +770,6 @@
   "dhikrAllSalahDone": "आज पाँचों नमाज़ों के बाद पूरा",
   "dhikrCheckSalah": "चिह्नित करने के लिए नमाज़ पर टैप करें",
   "dhikrReset": "गिनती फिर से शुरू करें",
-  "dhikrOfTarget": "{n} में से"
+  "dhikrOfTarget": "{n} में से",
+  "dhikrListen": "सुनें"
 }

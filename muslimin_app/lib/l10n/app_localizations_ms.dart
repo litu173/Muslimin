@@ -2630,4 +2630,7 @@ class L10nMs extends L10n {
   String dhikrOfTarget(String n) {
     return 'daripada $n';
   }
+
+  @override
+  String get dhikrListen => 'Dengar';
 }

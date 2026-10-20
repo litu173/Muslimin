@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:just_audio/just_audio.dart';
 
 import '../../core/nav.dart';
 import '../../core/theme/app_colors.dart';
@@ -391,8 +392,9 @@ class _PortionDots extends StatelessWidget {
 }
 
 // ------------------------------------------------------------------- list
-/// Every dhikr in two groups – after every salah, and the daily targets –
-/// each with today's five salah marks.
+/// Every dhikr in two groups – the daily targets, then after every salah –
+/// each with today's five salah marks. The card on top only shows the
+/// day's status; salah are checked off inside each dhikr.
 class DhikrScreen extends ConsumerWidget {
   const DhikrScreen({super.key});
 
@@ -401,7 +403,6 @@ class DhikrScreen extends ConsumerWidget {
     final t = L10n.of(context);
     final f = Fmt.of(context);
     final p = ref.watch(dhikrProgressProvider);
-    final notifier = ref.read(dhikrProgressProvider.notifier);
 
     List<Widget> group(String title, String sub, bool afterSalah) => [
       Padding(
@@ -437,16 +438,10 @@ class DhikrScreen extends ConsumerWidget {
                   style: AppText.body.copyWith(color: AppColors.muted),
                 ),
                 const SizedBox(height: Gap.l),
-                DhikrTodayCard(onSalah: notifier.setSalah),
-                Padding(
-                  padding: const EdgeInsets.only(top: Gap.s, left: 4),
-                  child: Text(
-                    t.dhikrTapSalah,
-                    style: AppText.micro.copyWith(color: AppColors.muted),
-                  ),
-                ),
-                ...group(t.dhikrAfterSalahTitle, t.dhikrAfterSalahSub, true),
+                // Status only: each salah is checked off in its dhikr.
+                const DhikrTodayCard(),
                 ...group(t.dhikrDailyTitle, t.dhikrDailySub, false),
+                ...group(t.dhikrAfterSalahTitle, t.dhikrAfterSalahSub, true),
                 const SizedBox(height: Gap.s),
                 Text(
                   t.dhikrCredit(f.digits(DhikrProgress.portionsPerDay)),
@@ -546,6 +541,38 @@ class _DhikrCounterState extends ConsumerState<DhikrCounterScreen> {
   bool _finished = false;
 
   Dhikr get _d => widget.dhikr;
+
+  /// Hisn al-Muslim's recitation, made on first play.
+  AudioPlayer? _player;
+  bool _playing = false;
+
+  Future<void> _play() async {
+    final player = _player ??= AudioPlayer()
+      ..playerStateStream.listen((s) {
+        if (s.processingState == ProcessingState.completed && mounted) {
+          setState(() => _playing = false);
+        }
+      });
+    if (_playing) {
+      setState(() => _playing = false);
+      await player.stop();
+      return;
+    }
+    setState(() => _playing = true);
+    try {
+      await player.setUrl(_d.audio);
+      await player.seek(Duration.zero);
+      await player.play();
+    } catch (_) {
+      if (mounted) setState(() => _playing = false);
+    }
+  }
+
+  @override
+  void dispose() {
+    _player?.dispose();
+    super.dispose();
+  }
 
   int get _mask => ref.read(dhikrProgressProvider).maskToday(widget.dhikr.id);
 
@@ -733,54 +760,74 @@ class _DhikrCounterState extends ConsumerState<DhikrCounterScreen> {
             padding: const EdgeInsets.fromLTRB(Gap.l, Gap.l, Gap.l, 0),
             child: AppCard(
               padding: EdgeInsets.zero,
-              child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  maxHeight: MediaQuery.sizeOf(context).height * 0.26,
-                ),
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.all(Gap.l),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Text(
-                        d.ar,
-                        textAlign: TextAlign.center,
-                        textDirection: TextDirection.rtl,
-                        style: TextStyle(
-                          fontFamily: AppText.arabic,
-                          fontSize: d.ar.length > 60 ? 22 : 30,
-                          height: 1.9,
-                          color: AppColors.ink,
-                        ),
+              child: Stack(
+                children: [
+                  ConstrainedBox(
+                    constraints: BoxConstraints(
+                      maxHeight: MediaQuery.sizeOf(context).height * 0.26,
+                    ),
+                    child: SingleChildScrollView(
+                      padding: const EdgeInsets.fromLTRB(44, Gap.l, 44, Gap.l),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Text(
+                            d.ar,
+                            textAlign: TextAlign.center,
+                            textDirection: TextDirection.rtl,
+                            style: TextStyle(
+                              fontFamily: AppText.arabic,
+                              fontSize: d.ar.length > 60 ? 22 : 30,
+                              height: 1.9,
+                              color: AppColors.ink,
+                            ),
+                          ),
+                          if (!f.isBn && f.lang != 'ar') ...[
+                            const SizedBox(height: Gap.xs),
+                            Text(
+                              d.tr,
+                              textAlign: TextAlign.center,
+                              textDirection: TextDirection.ltr,
+                              style: AppText.caption.copyWith(
+                                color: AppColors.gold,
+                                fontStyle: FontStyle.italic,
+                              ),
+                            ),
+                          ],
+                          if (meaning.isNotEmpty) ...[
+                            const SizedBox(height: Gap.xs),
+                            Text(
+                              meaning,
+                              textAlign: TextAlign.center,
+                              textDirection: f.isBn || f.lang == 'en'
+                                  ? null
+                                  : TextDirection.ltr,
+                              style: AppText.caption.copyWith(
+                                color: AppColors.muted,
+                              ),
+                            ),
+                          ],
+                        ],
                       ),
-                      if (!f.isBn && f.lang != 'ar') ...[
-                        const SizedBox(height: Gap.xs),
-                        Text(
-                          d.tr,
-                          textAlign: TextAlign.center,
-                          textDirection: TextDirection.ltr,
-                          style: AppText.caption.copyWith(
-                            color: AppColors.gold,
-                            fontStyle: FontStyle.italic,
-                          ),
-                        ),
-                      ],
-                      if (meaning.isNotEmpty) ...[
-                        const SizedBox(height: Gap.xs),
-                        Text(
-                          meaning,
-                          textAlign: TextAlign.center,
-                          textDirection: f.isBn || f.lang == 'en'
-                              ? null
-                              : TextDirection.ltr,
-                          style: AppText.caption.copyWith(
-                            color: AppColors.muted,
-                          ),
-                        ),
-                      ],
-                    ],
+                    ),
                   ),
-                ),
+                  // Listen: the recitation from Hisn al-Muslim.
+                  Positioned(
+                    top: 0,
+                    right: 0,
+                    child: IconButton(
+                      tooltip: t.dhikrListen,
+                      onPressed: _play,
+                      icon: Icon(
+                        _playing
+                            ? Icons.stop_circle_outlined
+                            : Icons.play_circle_outline_rounded,
+                        color: AppColors.gold,
+                        size: 30,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),

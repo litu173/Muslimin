@@ -4736,6 +4736,12 @@ abstract class L10n {
   /// In en, this message translates to:
   /// **'of {n}'**
   String dhikrOfTarget(String n);
+
+  /// No description provided for @dhikrListen.
+  ///
+  /// In en, this message translates to:
+  /// **'Listen'**
+  String get dhikrListen;
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {

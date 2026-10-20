@@ -770,5 +770,6 @@
   "dhikrAllSalahDone": "Bugün beş vaktin ardından tamam",
   "dhikrCheckSalah": "İşaretlemek için bir namaza dokunun",
   "dhikrReset": "Sayacı sıfırla",
-  "dhikrOfTarget": "{n} içinden"
+  "dhikrOfTarget": "{n} içinden",
+  "dhikrListen": "Dinle"
 }

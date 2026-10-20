@@ -770,5 +770,6 @@
   "dhikrAllSalahDone": "اكتمل بعد الصلوات الخمس اليوم",
   "dhikrCheckSalah": "اضغط على صلاة لتحديدها",
   "dhikrReset": "إعادة العدّ",
-  "dhikrOfTarget": "من {n}"
+  "dhikrOfTarget": "من {n}",
+  "dhikrListen": "استمع"
 }

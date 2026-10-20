@@ -2638,4 +2638,7 @@ class L10nEs extends L10n {
   String dhikrOfTarget(String n) {
     return 'de $n';
   }
+
+  @override
+  String get dhikrListen => 'Escuchar';
 }

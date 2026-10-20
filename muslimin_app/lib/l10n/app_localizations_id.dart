@@ -2624,4 +2624,7 @@ class L10nId extends L10n {
   String dhikrOfTarget(String n) {
     return 'dari $n';
   }
+
+  @override
+  String get dhikrListen => 'Dengarkan';
 }

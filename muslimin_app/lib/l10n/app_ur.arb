@@ -770,5 +770,6 @@
   "dhikrAllSalahDone": "آج پانچوں نمازوں کے بعد مکمل",
   "dhikrCheckSalah": "نشان زد کرنے کے لیے نماز پر ٹیپ کریں",
   "dhikrReset": "گنتی دوبارہ شروع کریں",
-  "dhikrOfTarget": "{n} میں سے"
+  "dhikrOfTarget": "{n} میں سے",
+  "dhikrListen": "سنیں"
 }

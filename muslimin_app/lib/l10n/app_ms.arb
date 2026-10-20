@@ -770,5 +770,6 @@
   "dhikrAllSalahDone": "Selesai selepas kelima-lima solat hari ini",
   "dhikrCheckSalah": "Ketik solat untuk menandakannya",
   "dhikrReset": "Set semula kiraan",
-  "dhikrOfTarget": "daripada {n}"
+  "dhikrOfTarget": "daripada {n}",
+  "dhikrListen": "Dengar"
 }

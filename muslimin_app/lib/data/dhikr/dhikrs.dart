@@ -22,6 +22,7 @@ class Dhikr {
     required this.refEn,
     required this.refBn,
     required this.perSalah,
+    required this.hisn,
     this.afterSalah = false,
   });
 
@@ -48,6 +49,12 @@ class Dhikr {
   /// checked off on its own, never all at once.
   final bool afterSalah;
 
+  /// Its number in Hisn al-Muslim, whose site has the recitation.
+  final int hisn;
+
+  /// Recitation from hisnmuslim.com (the same as the Dua tab).
+  String get audio => 'https://www.hisnmuslim.com/audio/ar/$hisn.mp3';
+
   /// Times a day.
   int get perDay => perSalah * kPortions;
 }
@@ -70,6 +77,7 @@ const kDhikrs = <Dhikr>[
     refEn: "Sahih Muslim 591",
     refBn: "সহীহ মুসলিম ৫৯১",
     perSalah: 3,
+    hisn: 66,
   ),
   Dhikr(
     id: "salah_antas_salam",
@@ -85,6 +93,7 @@ const kDhikrs = <Dhikr>[
     refEn: "Sahih Muslim 591, 592",
     refBn: "সহীহ মুসলিম ৫৯১, ৫৯২",
     perSalah: 1,
+    hisn: 66,
   ),
   Dhikr(
     id: "salah_la_mania",
@@ -100,6 +109,7 @@ const kDhikrs = <Dhikr>[
     refEn: "Sahih al-Bukhari 844 · Sahih Muslim 593",
     refBn: "সহীহ বুখারী ৮৪৪ · সহীহ মুসলিম ৫৯৩",
     perSalah: 1,
+    hisn: 67,
   ),
   Dhikr(
     id: "salah_la_hawla",
@@ -115,6 +125,7 @@ const kDhikrs = <Dhikr>[
     refEn: "Sahih Muslim 594",
     refBn: "সহীহ মুসলিম ৫৯৪",
     perSalah: 1,
+    hisn: 68,
   ),
   Dhikr(
     id: "salah_subhanallah",
@@ -130,6 +141,7 @@ const kDhikrs = <Dhikr>[
     refEn: "Sahih Muslim 597",
     refBn: "সহীহ মুসলিম ৫৯৭",
     perSalah: 33,
+    hisn: 69,
   ),
   Dhikr(
     id: "salah_alhamdulillah",
@@ -145,6 +157,7 @@ const kDhikrs = <Dhikr>[
     refEn: "Sahih Muslim 597",
     refBn: "সহীহ মুসলিম ৫৯৭",
     perSalah: 33,
+    hisn: 69,
   ),
   Dhikr(
     id: "salah_allahu_akbar",
@@ -160,6 +173,7 @@ const kDhikrs = <Dhikr>[
     refEn: "Sahih Muslim 597",
     refBn: "সহীহ মুসলিম ৫৯৭",
     perSalah: 33,
+    hisn: 69,
   ),
   Dhikr(
     id: "salah_tahlil",
@@ -175,6 +189,7 @@ const kDhikrs = <Dhikr>[
     refEn: "Sahih Muslim 597",
     refBn: "সহীহ মুসলিম ৫৯৭",
     perSalah: 1,
+    hisn: 69,
   ),
   Dhikr(
     id: "salah_quls",
@@ -190,6 +205,7 @@ const kDhikrs = <Dhikr>[
     refEn: "Abu Dawud 1523 · at-Tirmidhi 2903 · an-Nasaʾi 1336",
     refBn: "আবু দাউদ ১৫২৩ · তিরমিযী ২৯০৩ · নাসাঈ ১৩৩৬",
     perSalah: 1,
+    hisn: 70,
   ),
   Dhikr(
     id: "salah_ayatul_kursi",
@@ -206,6 +222,7 @@ const kDhikrs = <Dhikr>[
     refBn:
         "নাসাঈ, আস-সুনানুল কুবরা ৯৯২৮ · আলবানী সহীহ বলেছেন (সহীহুল জামি‘ ৬৪৬৪)",
     perSalah: 1,
+    hisn: 71,
   ),
   Dhikr(
     id: "salah_ainni",
@@ -221,6 +238,7 @@ const kDhikrs = <Dhikr>[
     refEn: "Abu Dawud 1522 · an-Nasaʾi 1303",
     refBn: "আবু দাউদ ১৫২২ · নাসাঈ ১৩০৩",
     perSalah: 1,
+    hisn: 59,
   ),
   Dhikr(
     id: 'subhanallah_bihamdihi',
@@ -239,6 +257,7 @@ const kDhikrs = <Dhikr>[
     refEn: 'Sahih al-Bukhari 6405 · Sahih Muslim 2691',
     refBn: 'সহীহ বুখারী ৬৪০৫ · সহীহ মুসলিম ২৬৯১',
     perSalah: 20,
+    hisn: 91,
   ),
   Dhikr(
     id: 'tahlil',
@@ -269,6 +288,7 @@ const kDhikrs = <Dhikr>[
     refEn: 'Sahih al-Bukhari 3293 · Sahih Muslim 2691',
     refBn: 'সহীহ বুখারী ৩২৯৩ · সহীহ মুসলিম ২৬৯১',
     perSalah: 20,
+    hisn: 93,
   ),
   Dhikr(
     id: 'istighfar',
@@ -287,6 +307,7 @@ const kDhikrs = <Dhikr>[
     refEn: 'Sahih Muslim 2702 · Sahih al-Bukhari 6307',
     refBn: 'সহীহ মুসলিম ২৭০২ · সহীহ বুখারী ৬৩০৭',
     perSalah: 20,
+    hisn: 96,
   ),
   Dhikr(
     id: 'subhanallah',
@@ -307,5 +328,6 @@ const kDhikrs = <Dhikr>[
     refEn: 'Sahih Muslim 2698',
     refBn: 'সহীহ মুসলিম ২৬৯৮',
     perSalah: 20,
+    hisn: 258,
   ),
 ];

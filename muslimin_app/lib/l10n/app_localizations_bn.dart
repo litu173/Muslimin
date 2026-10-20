@@ -2598,4 +2598,7 @@ class L10nBn extends L10n {
   String dhikrOfTarget(String n) {
     return '$n-এর মধ্যে';
   }
+
+  @override
+  String get dhikrListen => 'শুনুন';
 }

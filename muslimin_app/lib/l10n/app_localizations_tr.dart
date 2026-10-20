@@ -2617,4 +2617,7 @@ class L10nTr extends L10n {
   String dhikrOfTarget(String n) {
     return '$n içinden';
   }
+
+  @override
+  String get dhikrListen => 'Dinle';
 }

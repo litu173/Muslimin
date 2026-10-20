@@ -770,5 +770,6 @@
   "dhikrAllSalahDone": "আজ পাঁচ ওয়াক্তের পরই সম্পন্ন",
   "dhikrCheckSalah": "সম্পন্ন করতে সালাতে চাপ দিন",
   "dhikrReset": "গণনা আবার শুরু",
-  "dhikrOfTarget": "{n}-এর মধ্যে"
+  "dhikrOfTarget": "{n}-এর মধ্যে",
+  "dhikrListen": "শুনুন"
 }

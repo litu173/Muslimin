@@ -770,5 +770,6 @@
   "dhikrAllSalahDone": "Selesai setelah kelima salat hari ini",
   "dhikrCheckSalah": "Ketuk salat untuk mencentangnya",
   "dhikrReset": "Ulangi hitungan",
-  "dhikrOfTarget": "dari {n}"
+  "dhikrOfTarget": "dari {n}",
+  "dhikrListen": "Dengarkan"
 }

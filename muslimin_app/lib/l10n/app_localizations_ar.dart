@@ -2588,4 +2588,7 @@ class L10nAr extends L10n {
   String dhikrOfTarget(String n) {
     return 'من $n';
   }
+
+  @override
+  String get dhikrListen => 'استمع';
 }

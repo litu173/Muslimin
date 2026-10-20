@@ -2618,4 +2618,7 @@ class L10nHi extends L10n {
   String dhikrOfTarget(String n) {
     return '$n में से';
   }
+
+  @override
+  String get dhikrListen => 'सुनें';
 }

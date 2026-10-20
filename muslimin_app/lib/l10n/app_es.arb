@@ -770,5 +770,6 @@
   "dhikrAllSalahDone": "Hecho tras las cinco salah de hoy",
   "dhikrCheckSalah": "Toca una salah para marcarla",
   "dhikrReset": "Reiniciar cuenta",
-  "dhikrOfTarget": "de {n}"
+  "dhikrOfTarget": "de {n}",
+  "dhikrListen": "Escuchar"
 }
