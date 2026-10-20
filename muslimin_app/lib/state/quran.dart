@@ -266,7 +266,9 @@ final quranProgressProvider =
 /// Daily reading goal (verses) behind the Home energy card.
 const kDailyGoal = 10;
 
-class Achievement {
+/// A badge earned from [P] – Quran reading ([QuranProgress]) or daily
+/// dhikr (DhikrProgress).
+class Achievement<P> {
   const Achievement(this.id, this.icon, this.target, this.progress);
 
   final String id;
@@ -274,13 +276,13 @@ class Achievement {
   /// Material icon code point name, resolved by the UI.
   final String icon;
   final int target;
-  final int Function(QuranProgress p) progress;
+  final int Function(P p) progress;
 }
 
 int _done(QuranProgress p, Iterable<int> ids) =>
     ids.where(p.completed.contains).length;
 
-final kAchievements = <Achievement>[
+final kAchievements = <Achievement<QuranProgress>>[
   Achievement('bismillah', 'auto_stories', 1, (p) => p.versesRead),
   Achievement('fatiha', 'menu_book', 1, (p) => _done(p, [1])),
   Achievement('quls', 'shield', 3, (p) => _done(p, [112, 113, 114])),

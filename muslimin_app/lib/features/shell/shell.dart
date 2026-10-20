@@ -5,6 +5,7 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text.dart';
 import '../../l10n/app_localizations.dart';
 import '../../state/channel.dart';
+import '../../state/dhikr.dart';
 import '../../state/quran.dart';
 import '../achievements/achievements.dart';
 import '../dua/dua_screen.dart';
@@ -40,12 +41,15 @@ class _ShellState extends ConsumerState<Shell> {
       if (prev != next) setState(() => _visits[next]++);
     });
     // Celebrate each achievement the moment it is earned.
-    ref.listen(quranProgressProvider.select((p) => p.achievedAt), (prev, next) {
+    void celebrate(Map<String, String>? prev, Map<String, String> next) {
       if (prev == null) return;
       for (final id in next.keys.where((k) => !prev.containsKey(k))) {
         showAchievementToast(context, id);
       }
-    });
+    }
+
+    ref.listen(quranProgressProvider.select((p) => p.achievedAt), celebrate);
+    ref.listen(dhikrProgressProvider.select((p) => p.achievedAt), celebrate);
     return Scaffold(
       body: IndexedStack(
         index: _tab,

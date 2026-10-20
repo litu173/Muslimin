@@ -2463,4 +2463,126 @@ class L10nEn extends L10n {
 
   @override
   String get timeTo => 'To';
+
+  @override
+  String get dhikrTitle => 'Daily Dhikr';
+
+  @override
+  String get dhikrSub => 'Sunnah targets · a part after each salah';
+
+  @override
+  String get dhikrIntro =>
+      'The Prophet ﷺ remembered Allah every day with these words. Split each target into five parts and say one part after each salah — by Isha, the whole day\'s sunnah is done.';
+
+  @override
+  String dhikrPerDay(String n) {
+    return '$n a day';
+  }
+
+  @override
+  String dhikrPerSalah(String n) {
+    return '$n after each salah';
+  }
+
+  @override
+  String get dhikrPlan => 'Today\'s plan';
+
+  @override
+  String dhikrPlanBody(String total, String part) {
+    return '$total a day, split evenly: say it $part times after each of the five salah. Tap a salah when you\'ve done its part.';
+  }
+
+  @override
+  String get dhikrMarkAll => 'Mark all done';
+
+  @override
+  String get dhikrMarkAllHint =>
+      'Said it all in one sitting? Mark the whole day at once.';
+
+  @override
+  String get dhikrClearToday => 'Clear today';
+
+  @override
+  String get dhikrNotStarted => 'Not started today';
+
+  @override
+  String get dhikrNotStartedHint => 'Say a small part after your next salah';
+
+  @override
+  String dhikrPartsDone(String done, String total) {
+    return '$done of $total parts done';
+  }
+
+  @override
+  String get dhikrDoneToday => 'Done for today — MashaAllah!';
+
+  @override
+  String get dhikrDoneTodaySub => 'Every sunnah dhikr is complete';
+
+  @override
+  String dhikrCountToday(String n) {
+    return '$n dhikr said today';
+  }
+
+  @override
+  String get dhikrVirtue => 'Virtue';
+
+  @override
+  String get dhikrTapSalah => 'Tap a salah to mark all of its dhikr done';
+
+  @override
+  String dhikrCredit(String n) {
+    return '$n parts make a full day · from Sahih al-Bukhari and Sahih Muslim';
+  }
+
+  @override
+  String dhikrOneDone(String n) {
+    return 'All $n done today — MashaAllah!';
+  }
+
+  @override
+  String dhikrAfterSalah(String salah) {
+    return 'After $salah';
+  }
+
+  @override
+  String get ach_dhikr_first => 'First Dhikr';
+
+  @override
+  String get ach_dhikr_first_desc =>
+      'Complete your first part of the daily dhikr';
+
+  @override
+  String get ach_dhikr_salah => 'After the Salah';
+
+  @override
+  String get ach_dhikr_salah_desc =>
+      'Complete every dhikr\'s part after one salah';
+
+  @override
+  String get ach_dhikr_day => 'A Day of Dhikr';
+
+  @override
+  String get ach_dhikr_day_desc =>
+      'Complete all the daily sunnah dhikr in one day';
+
+  @override
+  String get ach_dhikr_streak7 => 'Week of Remembrance';
+
+  @override
+  String get ach_dhikr_streak7_desc =>
+      'Complete the daily dhikr 7 days in a row';
+
+  @override
+  String get ach_dhikr_streak30 => 'Month of Remembrance';
+
+  @override
+  String get ach_dhikr_streak30_desc =>
+      'Complete the daily dhikr 30 days in a row';
+
+  @override
+  String get ach_dhikr_10k => 'Ten Thousand';
+
+  @override
+  String get ach_dhikr_10k_desc => 'Say 10,000 dhikr in total';
 }

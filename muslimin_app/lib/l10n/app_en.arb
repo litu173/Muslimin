@@ -1255,5 +1255,100 @@
   "channelMembers": "Channel members",
   "markAllRead": "Mark all read",
   "timeFrom": "From",
-  "timeTo": "To"
+  "timeTo": "To",
+  "dhikrTitle": "Daily Dhikr",
+  "dhikrSub": "Sunnah targets · a part after each salah",
+  "dhikrIntro": "The Prophet ﷺ remembered Allah every day with these words. Split each target into five parts and say one part after each salah — by Isha, the whole day's sunnah is done.",
+  "dhikrPerDay": "{n} a day",
+  "@dhikrPerDay": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "dhikrPerSalah": "{n} after each salah",
+  "@dhikrPerSalah": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "dhikrPlan": "Today's plan",
+  "dhikrPlanBody": "{total} a day, split evenly: say it {part} times after each of the five salah. Tap a salah when you've done its part.",
+  "@dhikrPlanBody": {
+    "placeholders": {
+      "total": {
+        "type": "String"
+      },
+      "part": {
+        "type": "String"
+      }
+    }
+  },
+  "dhikrMarkAll": "Mark all done",
+  "dhikrMarkAllHint": "Said it all in one sitting? Mark the whole day at once.",
+  "dhikrClearToday": "Clear today",
+  "dhikrNotStarted": "Not started today",
+  "dhikrNotStartedHint": "Say a small part after your next salah",
+  "dhikrPartsDone": "{done} of {total} parts done",
+  "@dhikrPartsDone": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "dhikrDoneToday": "Done for today — MashaAllah!",
+  "dhikrDoneTodaySub": "Every sunnah dhikr is complete",
+  "dhikrCountToday": "{n} dhikr said today",
+  "@dhikrCountToday": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "dhikrVirtue": "Virtue",
+  "dhikrTapSalah": "Tap a salah to mark all of its dhikr done",
+  "dhikrCredit": "{n} parts make a full day · from Sahih al-Bukhari and Sahih Muslim",
+  "@dhikrCredit": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "dhikrOneDone": "All {n} done today — MashaAllah!",
+  "@dhikrOneDone": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "dhikrAfterSalah": "After {salah}",
+  "@dhikrAfterSalah": {
+    "placeholders": {
+      "salah": {
+        "type": "String"
+      }
+    }
+  },
+  "ach_dhikr_first": "First Dhikr",
+  "ach_dhikr_first_desc": "Complete your first part of the daily dhikr",
+  "ach_dhikr_salah": "After the Salah",
+  "ach_dhikr_salah_desc": "Complete every dhikr's part after one salah",
+  "ach_dhikr_day": "A Day of Dhikr",
+  "ach_dhikr_day_desc": "Complete all the daily sunnah dhikr in one day",
+  "ach_dhikr_streak7": "Week of Remembrance",
+  "ach_dhikr_streak7_desc": "Complete the daily dhikr 7 days in a row",
+  "ach_dhikr_streak30": "Month of Remembrance",
+  "ach_dhikr_streak30_desc": "Complete the daily dhikr 30 days in a row",
+  "ach_dhikr_10k": "Ten Thousand",
+  "ach_dhikr_10k_desc": "Say 10,000 dhikr in total"
 }

@@ -84,6 +84,16 @@ class Prefs {
   set quranProgress(Map<String, dynamic> v) =>
       _p.setString('quranProgress', jsonEncode(v));
 
+  /// Daily sunnah dhikr: which of the five after-salah portions were done
+  /// each day, and dhikr achievements – stored on the phone.
+  Map<String, dynamic> get dhikrProgress {
+    final raw = _p.getString('dhikrProgress');
+    return raw == null ? {} : jsonDecode(raw) as Map<String, dynamic>;
+  }
+
+  set dhikrProgress(Map<String, dynamic> v) =>
+      _p.setString('dhikrProgress', jsonEncode(v));
+
   /// Cached last location so the home screen renders instantly.
   ({double lat, double lng, String label})? get lastLocation {
     final raw = _p.getString('lastLocation');

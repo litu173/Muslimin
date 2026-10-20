@@ -2443,4 +2443,124 @@ class L10nBn extends L10n {
 
   @override
   String get timeTo => 'শেষ';
+
+  @override
+  String get dhikrTitle => 'দৈনিক জিকির';
+
+  @override
+  String get dhikrSub => 'সুন্নাহ লক্ষ্য · প্রতি সালাতের পর একটু করে';
+
+  @override
+  String get dhikrIntro =>
+      'রাসূলুল্লাহ ﷺ প্রতিদিন এই বাক্যগুলো দিয়ে আল্লাহকে স্মরণ করতেন। প্রতিটি লক্ষ্যকে পাঁচ ভাগে ভাগ করে প্রতি সালাতের পর এক ভাগ পড়ুন — ইশার মধ্যেই সারাদিনের সুন্নাহ পূর্ণ হবে।';
+
+  @override
+  String dhikrPerDay(String n) {
+    return 'দিনে $n বার';
+  }
+
+  @override
+  String dhikrPerSalah(String n) {
+    return 'প্রতি সালাতের পর $n বার';
+  }
+
+  @override
+  String get dhikrPlan => 'আজকের পরিকল্পনা';
+
+  @override
+  String dhikrPlanBody(String total, String part) {
+    return 'দিনে $total বার, সমান ভাগে: পাঁচ ওয়াক্ত সালাতের প্রতিটির পর $part বার পড়ুন। কোনো ওয়াক্তের ভাগ শেষ হলে সেটিতে চাপ দিন।';
+  }
+
+  @override
+  String get dhikrMarkAll => 'সব সম্পন্ন চিহ্নিত করুন';
+
+  @override
+  String get dhikrMarkAllHint =>
+      'একবারে সব পড়ে ফেলেছেন? পুরো দিন একসাথে চিহ্নিত করুন।';
+
+  @override
+  String get dhikrClearToday => 'আজকেরটা মুছুন';
+
+  @override
+  String get dhikrNotStarted => 'আজ এখনো শুরু হয়নি';
+
+  @override
+  String get dhikrNotStartedHint => 'পরের সালাতের পর একটু পড়ে নিন';
+
+  @override
+  String dhikrPartsDone(String done, String total) {
+    return '$totalটির মধ্যে $doneটি ভাগ সম্পন্ন';
+  }
+
+  @override
+  String get dhikrDoneToday => 'আজকের জিকির সম্পন্ন — মাশাআল্লাহ!';
+
+  @override
+  String get dhikrDoneTodaySub => 'সব সুন্নাহ জিকির পূর্ণ হয়েছে';
+
+  @override
+  String dhikrCountToday(String n) {
+    return 'আজ $n বার জিকির';
+  }
+
+  @override
+  String get dhikrVirtue => 'ফজিলত';
+
+  @override
+  String get dhikrTapSalah =>
+      'কোনো ওয়াক্তে চাপ দিলে সেই সালাতের সব জিকির সম্পন্ন হবে';
+
+  @override
+  String dhikrCredit(String n) {
+    return '$nটি ভাগে পূর্ণ দিন · সহীহ বুখারী ও সহীহ মুসলিম থেকে';
+  }
+
+  @override
+  String dhikrOneDone(String n) {
+    return 'আজ $n বার সম্পন্ন — মাশাআল্লাহ!';
+  }
+
+  @override
+  String dhikrAfterSalah(String salah) {
+    return '$salah-এর পর';
+  }
+
+  @override
+  String get ach_dhikr_first => 'প্রথম জিকির';
+
+  @override
+  String get ach_dhikr_first_desc => 'দৈনিক জিকিরের প্রথম ভাগ সম্পন্ন করুন';
+
+  @override
+  String get ach_dhikr_salah => 'সালাতের পর';
+
+  @override
+  String get ach_dhikr_salah_desc =>
+      'এক সালাতের পর সব জিকিরের ভাগ সম্পন্ন করুন';
+
+  @override
+  String get ach_dhikr_day => 'জিকিরের একটি দিন';
+
+  @override
+  String get ach_dhikr_day_desc =>
+      'এক দিনে সব দৈনিক সুন্নাহ জিকির সম্পন্ন করুন';
+
+  @override
+  String get ach_dhikr_streak7 => 'স্মরণের সপ্তাহ';
+
+  @override
+  String get ach_dhikr_streak7_desc => 'টানা ৭ দিন দৈনিক জিকির সম্পন্ন করুন';
+
+  @override
+  String get ach_dhikr_streak30 => 'স্মরণের মাস';
+
+  @override
+  String get ach_dhikr_streak30_desc => 'টানা ৩০ দিন দৈনিক জিকির সম্পন্ন করুন';
+
+  @override
+  String get ach_dhikr_10k => 'দশ হাজার';
+
+  @override
+  String get ach_dhikr_10k_desc => 'মোট ১০,০০০ বার জিকির করুন';
 }

@@ -4478,6 +4478,204 @@ abstract class L10n {
   /// In en, this message translates to:
   /// **'To'**
   String get timeTo;
+
+  /// No description provided for @dhikrTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily Dhikr'**
+  String get dhikrTitle;
+
+  /// No description provided for @dhikrSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Sunnah targets · a part after each salah'**
+  String get dhikrSub;
+
+  /// No description provided for @dhikrIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'The Prophet ﷺ remembered Allah every day with these words. Split each target into five parts and say one part after each salah — by Isha, the whole day\'s sunnah is done.'**
+  String get dhikrIntro;
+
+  /// No description provided for @dhikrPerDay.
+  ///
+  /// In en, this message translates to:
+  /// **'{n} a day'**
+  String dhikrPerDay(String n);
+
+  /// No description provided for @dhikrPerSalah.
+  ///
+  /// In en, this message translates to:
+  /// **'{n} after each salah'**
+  String dhikrPerSalah(String n);
+
+  /// No description provided for @dhikrPlan.
+  ///
+  /// In en, this message translates to:
+  /// **'Today\'s plan'**
+  String get dhikrPlan;
+
+  /// No description provided for @dhikrPlanBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{total} a day, split evenly: say it {part} times after each of the five salah. Tap a salah when you\'ve done its part.'**
+  String dhikrPlanBody(String total, String part);
+
+  /// No description provided for @dhikrMarkAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark all done'**
+  String get dhikrMarkAll;
+
+  /// No description provided for @dhikrMarkAllHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Said it all in one sitting? Mark the whole day at once.'**
+  String get dhikrMarkAllHint;
+
+  /// No description provided for @dhikrClearToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear today'**
+  String get dhikrClearToday;
+
+  /// No description provided for @dhikrNotStarted.
+  ///
+  /// In en, this message translates to:
+  /// **'Not started today'**
+  String get dhikrNotStarted;
+
+  /// No description provided for @dhikrNotStartedHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Say a small part after your next salah'**
+  String get dhikrNotStartedHint;
+
+  /// No description provided for @dhikrPartsDone.
+  ///
+  /// In en, this message translates to:
+  /// **'{done} of {total} parts done'**
+  String dhikrPartsDone(String done, String total);
+
+  /// No description provided for @dhikrDoneToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Done for today — MashaAllah!'**
+  String get dhikrDoneToday;
+
+  /// No description provided for @dhikrDoneTodaySub.
+  ///
+  /// In en, this message translates to:
+  /// **'Every sunnah dhikr is complete'**
+  String get dhikrDoneTodaySub;
+
+  /// No description provided for @dhikrCountToday.
+  ///
+  /// In en, this message translates to:
+  /// **'{n} dhikr said today'**
+  String dhikrCountToday(String n);
+
+  /// No description provided for @dhikrVirtue.
+  ///
+  /// In en, this message translates to:
+  /// **'Virtue'**
+  String get dhikrVirtue;
+
+  /// No description provided for @dhikrTapSalah.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap a salah to mark all of its dhikr done'**
+  String get dhikrTapSalah;
+
+  /// No description provided for @dhikrCredit.
+  ///
+  /// In en, this message translates to:
+  /// **'{n} parts make a full day · from Sahih al-Bukhari and Sahih Muslim'**
+  String dhikrCredit(String n);
+
+  /// No description provided for @dhikrOneDone.
+  ///
+  /// In en, this message translates to:
+  /// **'All {n} done today — MashaAllah!'**
+  String dhikrOneDone(String n);
+
+  /// No description provided for @dhikrAfterSalah.
+  ///
+  /// In en, this message translates to:
+  /// **'After {salah}'**
+  String dhikrAfterSalah(String salah);
+
+  /// No description provided for @ach_dhikr_first.
+  ///
+  /// In en, this message translates to:
+  /// **'First Dhikr'**
+  String get ach_dhikr_first;
+
+  /// No description provided for @ach_dhikr_first_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete your first part of the daily dhikr'**
+  String get ach_dhikr_first_desc;
+
+  /// No description provided for @ach_dhikr_salah.
+  ///
+  /// In en, this message translates to:
+  /// **'After the Salah'**
+  String get ach_dhikr_salah;
+
+  /// No description provided for @ach_dhikr_salah_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete every dhikr\'s part after one salah'**
+  String get ach_dhikr_salah_desc;
+
+  /// No description provided for @ach_dhikr_day.
+  ///
+  /// In en, this message translates to:
+  /// **'A Day of Dhikr'**
+  String get ach_dhikr_day;
+
+  /// No description provided for @ach_dhikr_day_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete all the daily sunnah dhikr in one day'**
+  String get ach_dhikr_day_desc;
+
+  /// No description provided for @ach_dhikr_streak7.
+  ///
+  /// In en, this message translates to:
+  /// **'Week of Remembrance'**
+  String get ach_dhikr_streak7;
+
+  /// No description provided for @ach_dhikr_streak7_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete the daily dhikr 7 days in a row'**
+  String get ach_dhikr_streak7_desc;
+
+  /// No description provided for @ach_dhikr_streak30.
+  ///
+  /// In en, this message translates to:
+  /// **'Month of Remembrance'**
+  String get ach_dhikr_streak30;
+
+  /// No description provided for @ach_dhikr_streak30_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete the daily dhikr 30 days in a row'**
+  String get ach_dhikr_streak30_desc;
+
+  /// No description provided for @ach_dhikr_10k.
+  ///
+  /// In en, this message translates to:
+  /// **'Ten Thousand'**
+  String get ach_dhikr_10k;
+
+  /// No description provided for @ach_dhikr_10k_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Say 10,000 dhikr in total'**
+  String get ach_dhikr_10k_desc;
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {

@@ -16,6 +16,7 @@ import '../../core/widgets/refresh.dart';
 import '../../core/widgets/surfaces.dart';
 import '../../l10n/app_localizations.dart';
 import '../../state/providers.dart';
+import '../dhikr/dhikr_screen.dart';
 import '../prayers/all_prayers_screen.dart';
 import '../registration/registration_flow.dart';
 import 'location_bar.dart';
@@ -185,8 +186,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
             const SliverToBoxAdapter(child: SizedBox(height: Gap.l)),
             SliverToBoxAdapter(child: _in(9, const NowDuaSection())),
 
+            // ---- daily sunnah dhikr, a part after each salah
+            SliverToBoxAdapter(child: _in(10, const DhikrSection())),
+
             const SliverToBoxAdapter(child: SizedBox(height: Gap.xl)),
-            SliverToBoxAdapter(child: _in(10, const VerseCarousel())),
+            SliverToBoxAdapter(child: _in(11, const VerseCarousel())),
 
             const SliverToBoxAdapter(child: SizedBox(height: Gap.xxl)),
           ],

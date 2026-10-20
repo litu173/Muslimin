@@ -2467,4 +2467,126 @@ class L10nId extends L10n {
 
   @override
   String get timeTo => 'Sampai';
+
+  @override
+  String get dhikrTitle => 'Zikir Harian';
+
+  @override
+  String get dhikrSub => 'Target sunnah · sebagian setelah tiap salat';
+
+  @override
+  String get dhikrIntro =>
+      'Nabi ﷺ mengingat Allah setiap hari dengan kalimat-kalimat ini. Bagi setiap target menjadi lima bagian dan ucapkan satu bagian setelah tiap salat — saat Isya, sunnah sehari penuh pun tuntas.';
+
+  @override
+  String dhikrPerDay(String n) {
+    return '$n sehari';
+  }
+
+  @override
+  String dhikrPerSalah(String n) {
+    return '$n setelah tiap salat';
+  }
+
+  @override
+  String get dhikrPlan => 'Rencana hari ini';
+
+  @override
+  String dhikrPlanBody(String total, String part) {
+    return '$total sehari, dibagi rata: ucapkan $part kali setelah tiap salat lima waktu. Ketuk salat setelah bagiannya selesai.';
+  }
+
+  @override
+  String get dhikrMarkAll => 'Tandai semua selesai';
+
+  @override
+  String get dhikrMarkAllHint =>
+      'Sudah mengucapkan semuanya sekaligus? Tandai sehari penuh sekaligus.';
+
+  @override
+  String get dhikrClearToday => 'Hapus hari ini';
+
+  @override
+  String get dhikrNotStarted => 'Belum dimulai hari ini';
+
+  @override
+  String get dhikrNotStartedHint => 'Ucapkan sedikit setelah salat berikutnya';
+
+  @override
+  String dhikrPartsDone(String done, String total) {
+    return '$done dari $total bagian selesai';
+  }
+
+  @override
+  String get dhikrDoneToday => 'Tuntas hari ini — MasyaAllah!';
+
+  @override
+  String get dhikrDoneTodaySub => 'Semua zikir sunnah sudah selesai';
+
+  @override
+  String dhikrCountToday(String n) {
+    return '$n zikir hari ini';
+  }
+
+  @override
+  String get dhikrVirtue => 'Keutamaan';
+
+  @override
+  String get dhikrTapSalah =>
+      'Ketuk salat untuk menandai semua zikirnya selesai';
+
+  @override
+  String dhikrCredit(String n) {
+    return '$n bagian untuk sehari penuh · dari Sahih al-Bukhari dan Sahih Muslim';
+  }
+
+  @override
+  String dhikrOneDone(String n) {
+    return '$n kali tuntas hari ini — MasyaAllah!';
+  }
+
+  @override
+  String dhikrAfterSalah(String salah) {
+    return 'Setelah $salah';
+  }
+
+  @override
+  String get ach_dhikr_first => 'Zikir Pertama';
+
+  @override
+  String get ach_dhikr_first_desc => 'Selesaikan bagian pertama zikir harian';
+
+  @override
+  String get ach_dhikr_salah => 'Setelah Salat';
+
+  @override
+  String get ach_dhikr_salah_desc =>
+      'Selesaikan bagian semua zikir setelah satu salat';
+
+  @override
+  String get ach_dhikr_day => 'Sehari Berzikir';
+
+  @override
+  String get ach_dhikr_day_desc =>
+      'Selesaikan semua zikir sunnah harian dalam satu hari';
+
+  @override
+  String get ach_dhikr_streak7 => 'Sepekan Berzikir';
+
+  @override
+  String get ach_dhikr_streak7_desc =>
+      'Selesaikan zikir harian 7 hari berturut-turut';
+
+  @override
+  String get ach_dhikr_streak30 => 'Sebulan Berzikir';
+
+  @override
+  String get ach_dhikr_streak30_desc =>
+      'Selesaikan zikir harian 30 hari berturut-turut';
+
+  @override
+  String get ach_dhikr_10k => 'Sepuluh Ribu';
+
+  @override
+  String get ach_dhikr_10k_desc => 'Ucapkan total 10.000 zikir';
 }

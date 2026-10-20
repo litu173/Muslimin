@@ -2472,4 +2472,126 @@ class L10nMs extends L10n {
 
   @override
   String get timeTo => 'Hingga';
+
+  @override
+  String get dhikrTitle => 'Zikir Harian';
+
+  @override
+  String get dhikrSub => 'Sasaran sunnah · sebahagian selepas setiap solat';
+
+  @override
+  String get dhikrIntro =>
+      'Nabi ﷺ mengingati Allah setiap hari dengan kalimah-kalimah ini. Bahagikan setiap sasaran kepada lima bahagian dan sebut satu bahagian selepas setiap solat — menjelang Isyak, sunnah sehari penuh pun selesai.';
+
+  @override
+  String dhikrPerDay(String n) {
+    return '$n sehari';
+  }
+
+  @override
+  String dhikrPerSalah(String n) {
+    return '$n selepas setiap solat';
+  }
+
+  @override
+  String get dhikrPlan => 'Rancangan hari ini';
+
+  @override
+  String dhikrPlanBody(String total, String part) {
+    return '$total sehari, dibahagi sama rata: sebut $part kali selepas setiap solat lima waktu. Ketik solat apabila bahagiannya selesai.';
+  }
+
+  @override
+  String get dhikrMarkAll => 'Tandakan semua selesai';
+
+  @override
+  String get dhikrMarkAllHint =>
+      'Sudah sebut semuanya sekali duduk? Tandakan sehari penuh sekali gus.';
+
+  @override
+  String get dhikrClearToday => 'Kosongkan hari ini';
+
+  @override
+  String get dhikrNotStarted => 'Belum dimulakan hari ini';
+
+  @override
+  String get dhikrNotStartedHint => 'Sebut sedikit selepas solat seterusnya';
+
+  @override
+  String dhikrPartsDone(String done, String total) {
+    return '$done daripada $total bahagian selesai';
+  }
+
+  @override
+  String get dhikrDoneToday => 'Selesai hari ini — MasyaAllah!';
+
+  @override
+  String get dhikrDoneTodaySub => 'Semua zikir sunnah telah lengkap';
+
+  @override
+  String dhikrCountToday(String n) {
+    return '$n zikir hari ini';
+  }
+
+  @override
+  String get dhikrVirtue => 'Kelebihan';
+
+  @override
+  String get dhikrTapSalah =>
+      'Ketik solat untuk menandakan semua zikirnya selesai';
+
+  @override
+  String dhikrCredit(String n) {
+    return '$n bahagian untuk sehari penuh · daripada Sahih al-Bukhari dan Sahih Muslim';
+  }
+
+  @override
+  String dhikrOneDone(String n) {
+    return '$n kali selesai hari ini — MasyaAllah!';
+  }
+
+  @override
+  String dhikrAfterSalah(String salah) {
+    return 'Selepas $salah';
+  }
+
+  @override
+  String get ach_dhikr_first => 'Zikir Pertama';
+
+  @override
+  String get ach_dhikr_first_desc => 'Selesaikan bahagian pertama zikir harian';
+
+  @override
+  String get ach_dhikr_salah => 'Selepas Solat';
+
+  @override
+  String get ach_dhikr_salah_desc =>
+      'Selesaikan bahagian semua zikir selepas satu solat';
+
+  @override
+  String get ach_dhikr_day => 'Sehari Berzikir';
+
+  @override
+  String get ach_dhikr_day_desc =>
+      'Selesaikan semua zikir sunnah harian dalam sehari';
+
+  @override
+  String get ach_dhikr_streak7 => 'Seminggu Berzikir';
+
+  @override
+  String get ach_dhikr_streak7_desc =>
+      'Selesaikan zikir harian 7 hari berturut-turut';
+
+  @override
+  String get ach_dhikr_streak30 => 'Sebulan Berzikir';
+
+  @override
+  String get ach_dhikr_streak30_desc =>
+      'Selesaikan zikir harian 30 hari berturut-turut';
+
+  @override
+  String get ach_dhikr_10k => 'Sepuluh Ribu';
+
+  @override
+  String get ach_dhikr_10k_desc => 'Sebut sejumlah 10,000 zikir';
 }

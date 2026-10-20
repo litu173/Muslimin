@@ -12,6 +12,7 @@ import '../../core/utils/format.dart';
 import '../../core/widgets/refresh.dart';
 import '../../core/widgets/surfaces.dart';
 import '../../l10n/app_localizations.dart';
+import '../../state/dhikr.dart';
 import '../../state/quran.dart';
 import '../read/read_widgets.dart';
 
@@ -32,7 +33,59 @@ const _icons = <String, IconData>{
   'star': Icons.star_rounded,
   'route': Icons.route_rounded,
   'workspace_premium': Icons.workspace_premium_rounded,
+  'spa': Icons.spa_rounded,
+  'self_improvement': Icons.self_improvement_rounded,
+  'verified': Icons.verified_rounded,
+  'local_florist': Icons.local_florist_rounded,
+  'diamond': Icons.diamond_rounded,
+  'all_inclusive': Icons.all_inclusive_rounded,
 };
+
+/// One badge as the pages show it – a Quran or a dhikr achievement.
+class BadgeInfo {
+  const BadgeInfo(this.id, this.icon, this.target, this.done, this.earnedAt);
+
+  final String id;
+  final String icon;
+  final int target;
+
+  /// Progress so far, up to [target].
+  final int done;
+
+  /// ISO date, or null while still locked.
+  final String? earnedAt;
+
+  bool get earned => earnedAt != null;
+  double get value => done / target;
+}
+
+/// Every badge: Quran reading first, then daily dhikr.
+final badgesProvider = Provider<List<BadgeInfo>>((ref) {
+  final q = ref.watch(quranProgressProvider);
+  final d = ref.watch(dhikrProgressProvider);
+  return [
+    for (final a in kAchievements)
+      BadgeInfo(
+        a.id,
+        a.icon,
+        a.target,
+        a.progress(q).clamp(0, a.target),
+        q.achievedAt[a.id],
+      ),
+    for (final a in kDhikrAchievements)
+      BadgeInfo(
+        a.id,
+        a.icon,
+        a.target,
+        a.progress(d).clamp(0, a.target),
+        d.achievedAt[a.id],
+      ),
+  ];
+});
+
+String _iconOf(String id) =>
+    kAchievements.where((a) => a.id == id).firstOrNull?.icon ??
+    kDhikrAchievements.firstWhere((a) => a.id == id).icon;
 
 String achievementName(L10n t, String id) => switch (id) {
   'bismillah' => t.ach_bismillah,
@@ -50,6 +103,12 @@ String achievementName(L10n t, String id) => switch (id) {
   'quiz100' => t.ach_quiz100,
   'juzamma' => t.ach_juzamma,
   'phases10' => t.ach_phases10,
+  'dhikr_first' => t.ach_dhikr_first,
+  'dhikr_salah' => t.ach_dhikr_salah,
+  'dhikr_day' => t.ach_dhikr_day,
+  'dhikr_streak7' => t.ach_dhikr_streak7,
+  'dhikr_streak30' => t.ach_dhikr_streak30,
+  'dhikr_10k' => t.ach_dhikr_10k,
   _ => t.ach_khatm,
 };
 
@@ -69,20 +128,25 @@ String achievementDesc(L10n t, String id) => switch (id) {
   'quiz100' => t.ach_quiz100_desc,
   'juzamma' => t.ach_juzamma_desc,
   'phases10' => t.ach_phases10_desc,
+  'dhikr_first' => t.ach_dhikr_first_desc,
+  'dhikr_salah' => t.ach_dhikr_salah_desc,
+  'dhikr_day' => t.ach_dhikr_day_desc,
+  'dhikr_streak7' => t.ach_dhikr_streak7_desc,
+  'dhikr_streak30' => t.ach_dhikr_streak30_desc,
+  'dhikr_10k' => t.ach_dhikr_10k_desc,
   _ => t.ach_khatm_desc,
 };
 
 /// Shown when an achievement is earned.
 void showAchievementToast(BuildContext context, String id) {
   final t = L10n.of(context);
-  final a = kAchievements.firstWhere((x) => x.id == id);
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       backgroundColor: AppColors.header,
       duration: const Duration(seconds: 4),
       content: Row(
         children: [
-          AchievementMedal(achievement: a, earned: true, value: 1, size: 40),
+          AchievementMedal(icon: _iconOf(id), earned: true, value: 1, size: 40),
           const SizedBox(width: Gap.m),
           Expanded(
             child: Text(
@@ -101,13 +165,14 @@ void showAchievementToast(BuildContext context, String id) {
 class AchievementMedal extends StatelessWidget {
   const AchievementMedal({
     super.key,
-    required this.achievement,
+    required this.icon,
     required this.earned,
     required this.value,
     this.size = 64,
   });
 
-  final Achievement achievement;
+  /// Icon name from the achievement lists.
+  final String icon;
   final bool earned;
 
   /// Progress 0…1.
@@ -158,7 +223,7 @@ class AchievementMedal extends StatelessWidget {
                 : null,
           ),
           child: Icon(
-            _icons[achievement.icon] ?? Icons.star_rounded,
+            _icons[icon] ?? Icons.star_rounded,
             size: size * (earned ? 0.42 : 0.34),
             color: earned ? Colors.white : AppColors.muted,
           ),
@@ -198,16 +263,11 @@ class _RingPainter extends CustomPainter {
 }
 
 /// Earned achievements first (newest first), then the closest to earning.
-List<Achievement> _ordered(QuranProgress p) {
-  final earned =
-      kAchievements.where((a) => p.achievedAt.containsKey(a.id)).toList()
-        ..sort((a, b) => p.achievedAt[b.id]!.compareTo(p.achievedAt[a.id]!));
-  final rest =
-      kAchievements.where((a) => !p.achievedAt.containsKey(a.id)).toList()
-        ..sort(
-          (a, b) =>
-              (b.progress(p) / b.target).compareTo(a.progress(p) / a.target),
-        );
+List<BadgeInfo> _ordered(List<BadgeInfo> all) {
+  final earned = all.where((b) => b.earned).toList()
+    ..sort((a, b) => b.earnedAt!.compareTo(a.earnedAt!));
+  final rest = all.where((b) => !b.earned).toList()
+    ..sort((a, b) => b.value.compareTo(a.value));
   return [...earned, ...rest];
 }
 
@@ -219,9 +279,9 @@ class AchievementsCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final t = L10n.of(context);
     final f = Fmt.of(context);
-    final p = ref.watch(quranProgressProvider);
-    final list = _ordered(p).take(5).toList();
-    final count = p.achievedAt.length;
+    final all = ref.watch(badgesProvider);
+    final list = _ordered(all).take(5).toList();
+    final count = all.where((b) => b.earned).length;
     return AppCard(
       onTap: () => push(context, const AchievementsScreen()),
       child: Column(
@@ -233,10 +293,7 @@ class AchievementsCard extends ConsumerWidget {
               const SizedBox(width: Gap.s),
               Expanded(child: Text(t.achievements, style: AppText.subtitle)),
               Text(
-                t.achievementsCount(
-                  f.digits(count),
-                  f.digits(kAchievements.length),
-                ),
+                t.achievementsCount(f.digits(count), f.digits(all.length)),
                 style: AppText.caption.copyWith(color: AppColors.muted),
               ),
               Icon(Icons.chevron_right_rounded, color: AppColors.muted),
@@ -246,7 +303,7 @@ class AchievementsCard extends ConsumerWidget {
           ClipRRect(
             borderRadius: BorderRadius.circular(4),
             child: LinearProgressIndicator(
-              value: count / kAchievements.length,
+              value: count / all.length,
               minHeight: 6,
               color: AppColors.gold,
               backgroundColor: AppColors.gold.withValues(alpha: 0.12),
@@ -261,9 +318,9 @@ class AchievementsCard extends ConsumerWidget {
                 Column(
                   children: [
                     AchievementMedal(
-                      achievement: a,
-                      earned: p.achievedAt.containsKey(a.id),
-                      value: a.progress(p) / a.target,
+                      icon: a.icon,
+                      earned: a.earned,
+                      value: a.value,
                       size: 52,
                     ),
                     const SizedBox(height: 6),
@@ -290,11 +347,11 @@ class AchievementsCard extends ConsumerWidget {
 class AchievementsScreen extends ConsumerWidget {
   const AchievementsScreen({super.key});
 
-  void _details(BuildContext context, Achievement a, QuranProgress p) {
+  void _details(BuildContext context, BadgeInfo a) {
     final t = L10n.of(context);
     final f = Fmt.of(context);
-    final earnedAt = p.achievedAt[a.id];
-    final done = a.progress(p).clamp(0, a.target);
+    final earnedAt = a.earnedAt;
+    final done = a.done;
     // Full-width sheet from the bottom edge (no side gaps, any screen).
     showModalBottomSheet<void>(
       context: context,
@@ -332,7 +389,7 @@ class AchievementsScreen extends ConsumerWidget {
               curve: Curves.elasticOut,
               builder: (_, v, child) => Transform.scale(scale: v, child: child),
               child: AchievementMedal(
-                achievement: a,
+                icon: a.icon,
                 earned: earnedAt != null,
                 value: done / a.target,
                 size: 110,
@@ -365,8 +422,8 @@ class AchievementsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final t = L10n.of(context);
     final f = Fmt.of(context);
-    final p = ref.watch(quranProgressProvider);
-    final list = _ordered(p);
+    final all = ref.watch(badgesProvider);
+    final list = _ordered(all);
     return Scaffold(
       appBar: PatternAppBar(title: Text(t.achievements)),
       body: RefreshList(
@@ -376,8 +433,8 @@ class AchievementsScreen extends ConsumerWidget {
         children: [
           Text(
             t.achievementsCount(
-              f.digits(p.achievedAt.length),
-              f.digits(kAchievements.length),
+              f.digits(all.where((b) => b.earned).length),
+              f.digits(all.length),
             ),
             style: AppText.label,
           ),
@@ -396,16 +453,16 @@ class AchievementsScreen extends ConsumerWidget {
                   borderRadius: BorderRadius.circular(Radii.card),
                   child: InkWell(
                     borderRadius: BorderRadius.circular(Radii.card),
-                    onTap: () => _details(context, a, p),
+                    onTap: () => _details(context, a),
                     child: Padding(
                       padding: const EdgeInsets.all(Gap.s),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           AchievementMedal(
-                            achievement: a,
-                            earned: p.achievedAt.containsKey(a.id),
-                            value: a.progress(p) / a.target,
+                            icon: a.icon,
+                            earned: a.earned,
+                            value: a.value,
                           ),
                           const SizedBox(height: Gap.s),
                           Text(
@@ -419,11 +476,11 @@ class AchievementsScreen extends ConsumerWidget {
                           ),
                           const SizedBox(height: 2),
                           Text(
-                            p.achievedAt.containsKey(a.id)
-                                ? f.date(DateTime.parse(p.achievedAt[a.id]!))
-                                : '${f.digits(a.progress(p).clamp(0, a.target))}/${f.digits(a.target)}',
+                            a.earned
+                                ? f.date(DateTime.parse(a.earnedAt!))
+                                : '${f.digits(a.done)}/${f.digits(a.target)}',
                             style: AppText.micro.copyWith(
-                              color: p.achievedAt.containsKey(a.id)
+                              color: a.earned
                                   ? AppColors.gold
                                   : AppColors.muted,
                             ),

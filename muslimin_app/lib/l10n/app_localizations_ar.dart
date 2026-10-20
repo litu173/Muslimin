@@ -2435,4 +2435,122 @@ class L10nAr extends L10n {
 
   @override
   String get timeTo => 'إلى';
+
+  @override
+  String get dhikrTitle => 'الأذكار اليومية';
+
+  @override
+  String get dhikrSub => 'أعداد من السنة · جزء بعد كل صلاة';
+
+  @override
+  String get dhikrIntro =>
+      'كان النبي ﷺ يذكر الله كل يوم بهذه الكلمات. قسّم كل عدد إلى خمسة أجزاء وقل جزءًا بعد كل صلاة، فتكتمل سنة اليوم كله عند العشاء.';
+
+  @override
+  String dhikrPerDay(String n) {
+    return '$n في اليوم';
+  }
+
+  @override
+  String dhikrPerSalah(String n) {
+    return '$n بعد كل صلاة';
+  }
+
+  @override
+  String get dhikrPlan => 'خطة اليوم';
+
+  @override
+  String dhikrPlanBody(String total, String part) {
+    return '$total في اليوم مقسّمة بالتساوي: قلها $part مرة بعد كل صلاة من الصلوات الخمس. اضغط على الصلاة عند إتمام جزئها.';
+  }
+
+  @override
+  String get dhikrMarkAll => 'تحديد الكل كمكتمل';
+
+  @override
+  String get dhikrMarkAllHint =>
+      'قلتها كلها في جلسة واحدة؟ حدّد اليوم كله دفعة واحدة.';
+
+  @override
+  String get dhikrClearToday => 'مسح اليوم';
+
+  @override
+  String get dhikrNotStarted => 'لم تبدأ اليوم بعد';
+
+  @override
+  String get dhikrNotStartedHint => 'قل جزءًا صغيرًا بعد صلاتك القادمة';
+
+  @override
+  String dhikrPartsDone(String done, String total) {
+    return '$done من $total أجزاء مكتملة';
+  }
+
+  @override
+  String get dhikrDoneToday => 'اكتمل ذكر اليوم — ما شاء الله!';
+
+  @override
+  String get dhikrDoneTodaySub => 'اكتملت أذكار السنة كلها';
+
+  @override
+  String dhikrCountToday(String n) {
+    return '$n ذكرًا اليوم';
+  }
+
+  @override
+  String get dhikrVirtue => 'الفضل';
+
+  @override
+  String get dhikrTapSalah => 'اضغط على صلاة لتحديد كل أذكارها كمكتملة';
+
+  @override
+  String dhikrCredit(String n) {
+    return '$n جزءًا ليوم كامل · من صحيح البخاري وصحيح مسلم';
+  }
+
+  @override
+  String dhikrOneDone(String n) {
+    return 'اكتملت $n اليوم — ما شاء الله!';
+  }
+
+  @override
+  String dhikrAfterSalah(String salah) {
+    return 'بعد $salah';
+  }
+
+  @override
+  String get ach_dhikr_first => 'أول ذكر';
+
+  @override
+  String get ach_dhikr_first_desc => 'أتمّ أول جزء من الأذكار اليومية';
+
+  @override
+  String get ach_dhikr_salah => 'بعد الصلاة';
+
+  @override
+  String get ach_dhikr_salah_desc => 'أتمّ جزء كل الأذكار بعد صلاة واحدة';
+
+  @override
+  String get ach_dhikr_day => 'يوم من الذكر';
+
+  @override
+  String get ach_dhikr_day_desc => 'أتمّ كل أذكار السنة اليومية في يوم واحد';
+
+  @override
+  String get ach_dhikr_streak7 => 'أسبوع الذكر';
+
+  @override
+  String get ach_dhikr_streak7_desc => 'أتمّ الأذكار اليومية 7 أيام متتالية';
+
+  @override
+  String get ach_dhikr_streak30 => 'شهر الذكر';
+
+  @override
+  String get ach_dhikr_streak30_desc =>
+      'أتمّ الأذكار اليومية 30 يومًا متتاليًا';
+
+  @override
+  String get ach_dhikr_10k => 'عشرة آلاف';
+
+  @override
+  String get ach_dhikr_10k_desc => 'اذكر الله 10,000 مرة إجمالًا';
 }

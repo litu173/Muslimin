@@ -2467,4 +2467,123 @@ class L10nUr extends L10n {
 
   @override
   String get timeTo => 'تک';
+
+  @override
+  String get dhikrTitle => 'روزانہ ذکر';
+
+  @override
+  String get dhikrSub => 'سنت کے اہداف · ہر نماز کے بعد تھوڑا سا';
+
+  @override
+  String get dhikrIntro =>
+      'نبی ﷺ ہر روز ان کلمات سے اللہ کو یاد کرتے تھے۔ ہر ہدف کو پانچ حصوں میں بانٹیں اور ہر نماز کے بعد ایک حصہ پڑھیں — عشاء تک پورے دن کی سنت مکمل ہو جائے گی۔';
+
+  @override
+  String dhikrPerDay(String n) {
+    return 'روزانہ $n بار';
+  }
+
+  @override
+  String dhikrPerSalah(String n) {
+    return 'ہر نماز کے بعد $n بار';
+  }
+
+  @override
+  String get dhikrPlan => 'آج کا منصوبہ';
+
+  @override
+  String dhikrPlanBody(String total, String part) {
+    return 'روزانہ $total بار، برابر حصوں میں: پانچوں نمازوں میں سے ہر ایک کے بعد $part بار پڑھیں۔ کسی نماز کا حصہ مکمل ہو تو اس پر ٹیپ کریں۔';
+  }
+
+  @override
+  String get dhikrMarkAll => 'سب مکمل نشان زد کریں';
+
+  @override
+  String get dhikrMarkAllHint =>
+      'ایک ہی نشست میں سب پڑھ لیا؟ پورا دن ایک ساتھ نشان زد کریں۔';
+
+  @override
+  String get dhikrClearToday => 'آج کا صاف کریں';
+
+  @override
+  String get dhikrNotStarted => 'آج ابھی شروع نہیں ہوا';
+
+  @override
+  String get dhikrNotStartedHint => 'اگلی نماز کے بعد تھوڑا سا پڑھ لیں';
+
+  @override
+  String dhikrPartsDone(String done, String total) {
+    return '$total میں سے $done حصے مکمل';
+  }
+
+  @override
+  String get dhikrDoneToday => 'آج کا ذکر مکمل — ماشاءاللہ!';
+
+  @override
+  String get dhikrDoneTodaySub => 'تمام سنت اذکار مکمل ہو گئے';
+
+  @override
+  String dhikrCountToday(String n) {
+    return 'آج $n بار ذکر';
+  }
+
+  @override
+  String get dhikrVirtue => 'فضیلت';
+
+  @override
+  String get dhikrTapSalah =>
+      'کسی نماز پر ٹیپ کریں تاکہ اس کے تمام اذکار مکمل ہوں';
+
+  @override
+  String dhikrCredit(String n) {
+    return '$n حصوں سے پورا دن · صحیح بخاری اور صحیح مسلم سے';
+  }
+
+  @override
+  String dhikrOneDone(String n) {
+    return 'آج $n بار مکمل — ماشاءاللہ!';
+  }
+
+  @override
+  String dhikrAfterSalah(String salah) {
+    return '$salah کے بعد';
+  }
+
+  @override
+  String get ach_dhikr_first => 'پہلا ذکر';
+
+  @override
+  String get ach_dhikr_first_desc => 'روزانہ ذکر کا پہلا حصہ مکمل کریں';
+
+  @override
+  String get ach_dhikr_salah => 'نماز کے بعد';
+
+  @override
+  String get ach_dhikr_salah_desc =>
+      'ایک نماز کے بعد تمام اذکار کا حصہ مکمل کریں';
+
+  @override
+  String get ach_dhikr_day => 'ذکر کا ایک دن';
+
+  @override
+  String get ach_dhikr_day_desc => 'ایک دن میں تمام روزانہ سنت اذکار مکمل کریں';
+
+  @override
+  String get ach_dhikr_streak7 => 'ذکر کا ہفتہ';
+
+  @override
+  String get ach_dhikr_streak7_desc => 'لگاتار 7 دن روزانہ ذکر مکمل کریں';
+
+  @override
+  String get ach_dhikr_streak30 => 'ذکر کا مہینہ';
+
+  @override
+  String get ach_dhikr_streak30_desc => 'لگاتار 30 دن روزانہ ذکر مکمل کریں';
+
+  @override
+  String get ach_dhikr_10k => 'دس ہزار';
+
+  @override
+  String get ach_dhikr_10k_desc => 'کل 10,000 بار ذکر کریں';
 }

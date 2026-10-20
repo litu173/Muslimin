@@ -2462,4 +2462,125 @@ class L10nHi extends L10n {
 
   @override
   String get timeTo => 'तक';
+
+  @override
+  String get dhikrTitle => 'रोज़ाना ज़िक्र';
+
+  @override
+  String get dhikrSub => 'सुन्नत लक्ष्य · हर नमाज़ के बाद थोड़ा';
+
+  @override
+  String get dhikrIntro =>
+      'नबी ﷺ हर दिन इन शब्दों से अल्लाह को याद करते थे। हर लक्ष्य को पाँच हिस्सों में बाँटें और हर नमाज़ के बाद एक हिस्सा पढ़ें — ईशा तक पूरे दिन की सुन्नत पूरी हो जाएगी।';
+
+  @override
+  String dhikrPerDay(String n) {
+    return 'दिन में $n बार';
+  }
+
+  @override
+  String dhikrPerSalah(String n) {
+    return 'हर नमाज़ के बाद $n बार';
+  }
+
+  @override
+  String get dhikrPlan => 'आज की योजना';
+
+  @override
+  String dhikrPlanBody(String total, String part) {
+    return 'दिन में $total बार, बराबर हिस्सों में: पाँचों नमाज़ों में से हर एक के बाद $part बार पढ़ें। किसी नमाज़ का हिस्सा पूरा होने पर उस पर टैप करें।';
+  }
+
+  @override
+  String get dhikrMarkAll => 'सब पूरा चिह्नित करें';
+
+  @override
+  String get dhikrMarkAllHint =>
+      'एक ही बैठक में सब पढ़ लिया? पूरा दिन एक साथ चिह्नित करें।';
+
+  @override
+  String get dhikrClearToday => 'आज का साफ़ करें';
+
+  @override
+  String get dhikrNotStarted => 'आज अभी शुरू नहीं हुआ';
+
+  @override
+  String get dhikrNotStartedHint => 'अगली नमाज़ के बाद थोड़ा पढ़ लें';
+
+  @override
+  String dhikrPartsDone(String done, String total) {
+    return '$total में से $done हिस्से पूरे';
+  }
+
+  @override
+  String get dhikrDoneToday => 'आज का ज़िक्र पूरा — माशाअल्लाह!';
+
+  @override
+  String get dhikrDoneTodaySub => 'सभी सुन्नत ज़िक्र पूरे हो गए';
+
+  @override
+  String dhikrCountToday(String n) {
+    return 'आज $n बार ज़िक्र';
+  }
+
+  @override
+  String get dhikrVirtue => 'फ़ज़ीलत';
+
+  @override
+  String get dhikrTapSalah =>
+      'किसी नमाज़ पर टैप करें ताकि उसके सारे ज़िक्र पूरे हों';
+
+  @override
+  String dhikrCredit(String n) {
+    return '$n हिस्सों से पूरा दिन · सहीह बुख़ारी और सहीह मुस्लिम से';
+  }
+
+  @override
+  String dhikrOneDone(String n) {
+    return 'आज $n बार पूरा — माशाअल्लाह!';
+  }
+
+  @override
+  String dhikrAfterSalah(String salah) {
+    return '$salah के बाद';
+  }
+
+  @override
+  String get ach_dhikr_first => 'पहला ज़िक्र';
+
+  @override
+  String get ach_dhikr_first_desc => 'रोज़ाना ज़िक्र का पहला हिस्सा पूरा करें';
+
+  @override
+  String get ach_dhikr_salah => 'नमाज़ के बाद';
+
+  @override
+  String get ach_dhikr_salah_desc =>
+      'एक नमाज़ के बाद सभी ज़िक्र का हिस्सा पूरा करें';
+
+  @override
+  String get ach_dhikr_day => 'ज़िक्र का एक दिन';
+
+  @override
+  String get ach_dhikr_day_desc =>
+      'एक दिन में सभी रोज़ाना सुन्नत ज़िक्र पूरे करें';
+
+  @override
+  String get ach_dhikr_streak7 => 'ज़िक्र का हफ़्ता';
+
+  @override
+  String get ach_dhikr_streak7_desc => 'लगातार 7 दिन रोज़ाना ज़िक्र पूरा करें';
+
+  @override
+  String get ach_dhikr_streak30 => 'ज़िक्र का महीना';
+
+  @override
+  String get ach_dhikr_streak30_desc =>
+      'लगातार 30 दिन रोज़ाना ज़िक्र पूरा करें';
+
+  @override
+  String get ach_dhikr_10k => 'दस हज़ार';
+
+  @override
+  String get ach_dhikr_10k_desc => 'कुल 10,000 बार ज़िक्र करें';
 }
