@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../app.dart'
+    show openNotificationPayload, pendingNotificationPayload, shellReady;
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text.dart';
 import '../../l10n/app_localizations.dart';
@@ -24,6 +26,18 @@ class Shell extends ConsumerStatefulWidget {
 }
 
 class _ShellState extends ConsumerState<Shell> {
+  @override
+  void initState() {
+    super.initState();
+    // Opened by tapping a notification: show its page now the tabs are up.
+    shellReady = true;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final p = pendingNotificationPayload;
+      pendingNotificationPayload = null;
+      openNotificationPayload(p);
+    });
+  }
+
   int get _tab => ref.watch(shellTabProvider);
   void _go(int i) => ref.read(shellTabProvider.notifier).go(i);
 

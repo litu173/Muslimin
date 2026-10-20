@@ -10,6 +10,7 @@ import 'core/theme/app_colors.dart';
 import 'core/theme/app_theme.dart';
 import 'core/widgets/refresh.dart';
 import 'features/masjid/masjid_screen.dart';
+import 'features/more/about_screen.dart';
 import 'features/splash/splash_screen.dart';
 import 'l10n/app_localizations.dart';
 import 'services/notification_service.dart';
@@ -86,12 +87,27 @@ class _MusliminAppState extends ConsumerState<MusliminApp> {
   }
 }
 
-/// Notification payloads look like `masjid:<id>`.
+/// A tap that arrived before the app's tabs were showing (the app was
+/// opened by the notification): handled by the Shell once it is up, so
+/// the splash screen's hand-over doesn't replace the opened page.
+String? pendingNotificationPayload;
+bool shellReady = false;
+
+/// Notification payloads: `masjid:<id>`, or `about` (an app update –
+/// About the App, where the latest APK is downloaded).
 void openNotificationPayload(String? payload) {
-  if (payload == null || !payload.startsWith('masjid:')) return;
-  navigatorKey.currentState?.push(
-    MaterialPageRoute(
-      builder: (_) => MasjidScreen(masjidId: payload.substring(7)),
-    ),
-  );
+  if (payload == null) return;
+  if (!shellReady) {
+    pendingNotificationPayload = payload;
+    return;
+  }
+  final Widget page;
+  if (payload == 'about') {
+    page = const AboutScreen();
+  } else if (payload.startsWith('masjid:')) {
+    page = MasjidScreen(masjidId: payload.substring(7));
+  } else {
+    return;
+  }
+  navigatorKey.currentState?.push(MaterialPageRoute(builder: (_) => page));
 }

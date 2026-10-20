@@ -1,0 +1,40 @@
+# Sends one notification to every app user (app-update news). Run by hand:
+# Actions → "Broadcast to all users" → Run workflow. Leave "send" off for a
+# dry run that only counts the phones. Tapping the notification opens About
+# the App (latest APK download). Needs the FIREBASE_SERVICE_ACCOUNT secret.
+name: Broadcast to all users
+on:
+  workflow_dispatch:
+    inputs:
+      title:
+        description: Notification title
+        required: true
+      body:
+        description: Notification text
+        required: true
+      send:
+        description: Really send (off = dry run, count only)
+        type: boolean
+        default: false
+jobs:
+  broadcast:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    if: ${{ github.repository == 'litu173/Muslimin' }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: firebase/tools
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: firebase/tools/package-lock.json
+      - run: npm ci --omit=dev
+        working-directory: firebase/tools
+      - run: node broadcast.mjs ${{ inputs.send && '--send' || '' }}
+        working-directory: firebase/tools
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          TITLE: ${{ inputs.title }}
+          BODY: ${{ inputs.body }}

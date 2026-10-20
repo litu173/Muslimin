@@ -6,6 +6,8 @@ import 'notification_service.dart';
 
 /// Firebase Cloud Messaging: notices from followed masjids arrive via the
 /// topic `masjid_<id>` (sent by the Cloud Function in /firebase/functions).
+/// App-update news (firebase/tools/broadcast.mjs) carries `type: update`
+/// and opens About the App.
 class PushService {
   PushService(this._backend);
 
@@ -45,8 +47,11 @@ class PushService {
     fm.onTokenRefresh.listen(_backend.saveFcmToken);
   }
 
-  String? _payload(Map<String, dynamic> data) =>
-      data['masjidId'] == null ? null : 'masjid:${data['masjidId']}';
+  String? _payload(Map<String, dynamic> data) => data['type'] == 'update'
+      ? 'about'
+      : data['masjidId'] == null
+      ? null
+      : 'masjid:${data['masjidId']}';
 
   Future<void> registerToken() async {
     if (!_enabled) return;
