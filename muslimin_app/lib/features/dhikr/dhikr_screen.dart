@@ -542,7 +542,8 @@ class _DhikrCounterState extends ConsumerState<DhikrCounterScreen> {
 
   Dhikr get _d => widget.dhikr;
 
-  /// Hisn al-Muslim's recitation, made on first play.
+  /// This dhikr's recitation (a clip bundled with the app), made on first
+  /// play.
   AudioPlayer? _player;
   bool _playing = false;
 
@@ -560,7 +561,7 @@ class _DhikrCounterState extends ConsumerState<DhikrCounterScreen> {
     }
     setState(() => _playing = true);
     try {
-      await player.setUrl(_d.audio);
+      await player.setAsset(_d.audio);
       await player.seek(Duration.zero);
       await player.play();
     } catch (_) {

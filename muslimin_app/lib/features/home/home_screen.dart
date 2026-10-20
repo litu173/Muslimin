@@ -104,16 +104,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
               ),
             ),
             SliverToBoxAdapter(child: _in(1, const PrayerHeader())),
-            // Daily Quran reading: the lantern fills as you read.
-            SliverToBoxAdapter(
-              child: _in(
-                2,
-                const Padding(
-                  padding: EdgeInsets.fromLTRB(Gap.l, Gap.xl, Gap.l, 0),
-                  child: QuranEnergyCard(),
-                ),
-              ),
-            ),
 
             // ---- authority banner
             if (showBanner)
@@ -182,12 +172,22 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                     ],
             ),
 
-            // ---- duas for this part of the day
-            const SliverToBoxAdapter(child: SizedBox(height: Gap.l)),
-            SliverToBoxAdapter(child: _in(9, const NowDuaSection())),
+            // ---- daily Quran reading: the lantern fills as you read
+            SliverToBoxAdapter(
+              child: _in(
+                9,
+                const Padding(
+                  padding: EdgeInsets.fromLTRB(Gap.l, Gap.xl, Gap.l, 0),
+                  child: QuranEnergyCard(),
+                ),
+              ),
+            ),
 
             // ---- daily sunnah dhikr, a part after each salah
-            SliverToBoxAdapter(child: _in(10, const DhikrSection())),
+            SliverToBoxAdapter(child: _in(9, const DhikrSection())),
+
+            // ---- duas for this part of the day
+            SliverToBoxAdapter(child: _in(10, const NowDuaSection())),
 
             const SliverToBoxAdapter(child: SizedBox(height: Gap.xl)),
             SliverToBoxAdapter(child: _in(11, const VerseCarousel())),

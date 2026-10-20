@@ -23,6 +23,7 @@ class Dhikr {
     required this.refBn,
     required this.perSalah,
     required this.hisn,
+    required this.clip,
     this.afterSalah = false,
   });
 
@@ -49,11 +50,14 @@ class Dhikr {
   /// checked off on its own, never all at once.
   final bool afterSalah;
 
-  /// Its number in Hisn al-Muslim, whose site has the recitation.
+  /// Its number in Hisn al-Muslim, whose recitation the audio comes from.
   final int hisn;
 
-  /// Recitation from hisnmuslim.com (the same as the Dua tab).
-  String get audio => 'https://www.hisnmuslim.com/audio/ar/$hisn.mp3';
+  /// Just this dhikr's words, cut from Hisn al-Muslim's recitation
+  /// (hisnmuslim.com) by tool/build_dhikr_audio.py – no narration.
+  final String clip;
+
+  String get audio => 'assets/dhikr/$clip.m4a';
 
   /// Times a day.
   int get perDay => perSalah * kPortions;
@@ -78,6 +82,7 @@ const kDhikrs = <Dhikr>[
     refBn: "সহীহ মুসলিম ৫৯১",
     perSalah: 3,
     hisn: 66,
+    clip: 'salah_istighfar',
   ),
   Dhikr(
     id: "salah_antas_salam",
@@ -94,6 +99,7 @@ const kDhikrs = <Dhikr>[
     refBn: "সহীহ মুসলিম ৫৯১, ৫৯২",
     perSalah: 1,
     hisn: 66,
+    clip: 'salah_antas_salam',
   ),
   Dhikr(
     id: "salah_la_mania",
@@ -110,6 +116,7 @@ const kDhikrs = <Dhikr>[
     refBn: "সহীহ বুখারী ৮৪৪ · সহীহ মুসলিম ৫৯৩",
     perSalah: 1,
     hisn: 67,
+    clip: 'salah_la_mania',
   ),
   Dhikr(
     id: "salah_la_hawla",
@@ -126,6 +133,7 @@ const kDhikrs = <Dhikr>[
     refBn: "সহীহ মুসলিম ৫৯৪",
     perSalah: 1,
     hisn: 68,
+    clip: 'salah_la_hawla',
   ),
   Dhikr(
     id: "salah_subhanallah",
@@ -142,6 +150,7 @@ const kDhikrs = <Dhikr>[
     refBn: "সহীহ মুসলিম ৫৯৭",
     perSalah: 33,
     hisn: 69,
+    clip: 'salah_subhanallah',
   ),
   Dhikr(
     id: "salah_alhamdulillah",
@@ -158,6 +167,7 @@ const kDhikrs = <Dhikr>[
     refBn: "সহীহ মুসলিম ৫৯৭",
     perSalah: 33,
     hisn: 69,
+    clip: 'salah_alhamdulillah',
   ),
   Dhikr(
     id: "salah_allahu_akbar",
@@ -174,6 +184,7 @@ const kDhikrs = <Dhikr>[
     refBn: "সহীহ মুসলিম ৫৯৭",
     perSalah: 33,
     hisn: 69,
+    clip: 'salah_allahu_akbar',
   ),
   Dhikr(
     id: "salah_tahlil",
@@ -190,32 +201,34 @@ const kDhikrs = <Dhikr>[
     refBn: "সহীহ মুসলিম ৫৯৭",
     perSalah: 1,
     hisn: 69,
+    clip: 'salah_tahlil',
   ),
   Dhikr(
     id: "salah_quls",
     afterSalah: true,
-    ar: " قُلْ هُوَ ٱللَّهُ أَحَدٌ ۝ ٱللَّهُ ٱلصَّمَدُ ۝ لَمْ يَلِدْ وَلَمْ يُولَدْ ۝ وَلَمْ يَكُن لَّهُۥ كُفُوًا أَحَدٌۢ\n قُلْ أَعُوذُ بِرَبِّ ٱلْفَلَقِ ۝ مِن شَرِّ مَا خَلَقَ ۝ وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ ۝ وَمِن شَرِّ ٱلنَّفَّـٰثَـٰتِ فِى ٱلْعُقَدِ ۝ وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ\n قُلْ أَعُوذُ بِرَبِّ ٱلنَّاسِ ۝ مَلِكِ ٱلنَّاسِ ۝ إِلَـٰهِ ٱلنَّاسِ ۝ مِن شَرِّ ٱلْوَسْوَاسِ ٱلْخَنَّاسِ ۝ ٱلَّذِى يُوَسْوِسُ فِى صُدُورِ ٱلنَّاسِ ۝ مِنَ ٱلْجِنَّةِ وَٱلنَّاسِ",
-    tr: "Qul huwallahu ahad… (Al-Ikhlas) · Qul aʿudhu bi rabbil-falaq… (Al-Falaq) · Qul aʿudhu bi rabbin-nas… (An-Nas)",
+    ar: "بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ\nقُلْ هُوَ ٱللَّهُ أَحَدٌ ۝ ٱللَّهُ ٱلصَّمَدُ ۝ لَمْ يَلِدْ وَلَمْ يُولَدْ ۝ وَلَمْ يَكُن لَّهُۥ كُفُوًا أَحَدٌۢ\nبِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ\nقُلْ أَعُوذُ بِرَبِّ ٱلْفَلَقِ ۝ مِن شَرِّ مَا خَلَقَ ۝ وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ ۝ وَمِن شَرِّ ٱلنَّفَّـٰثَـٰتِ فِى ٱلْعُقَدِ ۝ وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ\nبِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ\nقُلْ أَعُوذُ بِرَبِّ ٱلنَّاسِ ۝ مَلِكِ ٱلنَّاسِ ۝ إِلَـٰهِ ٱلنَّاسِ ۝ مِن شَرِّ ٱلْوَسْوَاسِ ٱلْخَنَّاسِ ۝ ٱلَّذِى يُوَسْوِسُ فِى صُدُورِ ٱلنَّاسِ ۝ مِنَ ٱلْجِنَّةِ وَٱلنَّاسِ",
+    tr: "Bismillahir-rahmanir-rahim. Qul huwallahu ahad… (Al-Ikhlas) · Bismillahir-rahmanir-rahim. Qul aʿudhu bi rabbil-falaq… (Al-Falaq) · Bismillahir-rahmanir-rahim. Qul aʿudhu bi rabbin-nas… (An-Nas)",
     nameEn: "Al-Ikhlas, Al-Falaq, An-Nas",
     nameBn: "সূরা ইখলাস, ফালাক ও নাস",
-    en: "Say: He is Allah, the One. Allah, the Eternal Refuge. He neither begets nor is born, and none is comparable to Him. — Say: I seek refuge in the Lord of daybreak, from the evil of what He created, from the evil of darkness when it settles, from the evil of those who blow on knots, and from the evil of an envier when he envies. — Say: I seek refuge in the Lord of mankind, the King of mankind, the God of mankind, from the evil of the retreating whisperer, who whispers in the hearts of mankind, from among the jinn and mankind.",
-    bn: "বলুন, তিনি আল্লাহ, এক। আল্লাহ অমুখাপেক্ষী। তিনি কাউকে জন্ম দেননি, তাঁকেও জন্ম দেওয়া হয়নি, আর তাঁর সমতুল্য কেউ নেই। — বলুন, আমি আশ্রয় চাই ভোরের রবের কাছে, তিনি যা সৃষ্টি করেছেন তার অনিষ্ট থেকে, অন্ধকার রাতের অনিষ্ট থেকে যখন তা ছেয়ে যায়, গিরায় ফুঁক দেওয়া নারীদের অনিষ্ট থেকে, আর হিংসুকের অনিষ্ট থেকে যখন সে হিংসা করে। — বলুন, আমি আশ্রয় চাই মানুষের রবের কাছে, মানুষের অধিপতির কাছে, মানুষের ইলাহের কাছে, আত্মগোপনকারী কুমন্ত্রণাদাতার অনিষ্ট থেকে, যে মানুষের অন্তরে কুমন্ত্রণা দেয়, জিন ও মানুষের মধ্য থেকে।",
+    en: "In the name of Allah, the Most Gracious, the Most Merciful. Say: He is Allah, the One. Allah, the Eternal Refuge. He neither begets nor is born, and none is comparable to Him. — In the name of Allah, the Most Gracious, the Most Merciful. Say: I seek refuge in the Lord of daybreak, from the evil of what He created, from the evil of darkness when it settles, from the evil of those who blow on knots, and from the evil of an envier when he envies. — In the name of Allah, the Most Gracious, the Most Merciful. Say: I seek refuge in the Lord of mankind, the King of mankind, the God of mankind, from the evil of the retreating whisperer, who whispers in the hearts of mankind, from among the jinn and mankind.",
+    bn: "পরম করুণাময় অসীম দয়ালু আল্লাহর নামে। বলুন, তিনি আল্লাহ, এক। আল্লাহ অমুখাপেক্ষী। তিনি কাউকে জন্ম দেননি, তাঁকেও জন্ম দেওয়া হয়নি, আর তাঁর সমতুল্য কেউ নেই। — পরম করুণাময় অসীম দয়ালু আল্লাহর নামে। বলুন, আমি আশ্রয় চাই ভোরের রবের কাছে, তিনি যা সৃষ্টি করেছেন তার অনিষ্ট থেকে, অন্ধকার রাতের অনিষ্ট থেকে যখন তা ছেয়ে যায়, গিরায় ফুঁক দেওয়া নারীদের অনিষ্ট থেকে, আর হিংসুকের অনিষ্ট থেকে যখন সে হিংসা করে। — পরম করুণাময় অসীম দয়ালু আল্লাহর নামে। বলুন, আমি আশ্রয় চাই মানুষের রবের কাছে, মানুষের অধিপতির কাছে, মানুষের ইলাহের কাছে, আত্মগোপনকারী কুমন্ত্রণাদাতার অনিষ্ট থেকে, যে মানুষের অন্তরে কুমন্ত্রণা দেয়, জিন ও মানুষের মধ্য থেকে।",
     virtueEn: "ʿUqbah ibn ʿAmir said: The Messenger of Allah ﷺ commanded me to recite the Muʿawwidhat after every salah.",
     virtueBn: "উকবা ইবনু আমির রা. বলেন: রাসূলুল্লাহ ﷺ আমাকে প্রত্যেক সালাতের পর মু‘আওয়িযাত (সূরা ইখলাস, ফালাক ও নাস) পড়তে আদেশ করেছেন।",
     refEn: "Abu Dawud 1523 · at-Tirmidhi 2903 · an-Nasaʾi 1336",
     refBn: "আবু দাউদ ১৫২৩ · তিরমিযী ২৯০৩ · নাসাঈ ১৩৩৬",
     perSalah: 1,
     hisn: 70,
+    clip: 'salah_quls',
   ),
   Dhikr(
     id: "salah_ayatul_kursi",
     afterSalah: true,
-    ar: "ٱللَّهُ لَآ إِلَـٰهَ إِلَّا هُوَ ٱلْحَىُّ ٱلْقَيُّومُ ۚ لَا تَأْخُذُهُۥ سِنَةٌ وَلَا نَوْمٌ ۚ لَّهُۥ مَا فِى ٱلسَّمَـٰوَٰتِ وَمَا فِى ٱلْأَرْضِ ۗ مَن ذَا ٱلَّذِى يَشْفَعُ عِندَهُۥٓ إِلَّا بِإِذْنِهِۦ ۚ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ ۖ وَلَا يُحِيطُونَ بِشَىْءٍ مِّنْ عِلْمِهِۦٓ إِلَّا بِمَا شَآءَ ۚ وَسِعَ كُرْسِيُّهُ ٱلسَّمَـٰوَٰتِ وَٱلْأَرْضَ ۖ وَلَا يَـُٔودُهُۥ حِفْظُهُمَا ۚ وَهُوَ ٱلْعَلِىُّ ٱلْعَظِيمُ",
-    tr: "Allahu la ilaha illa huwal-hayyul-qayyum, la taʾkhudhuhu sinatun wa la nawm, lahu ma fis-samawati wa ma fil-ard, man dhal-ladhi yashfaʿu ʿindahu illa bi-idhnih, yaʿlamu ma bayna aydihim wa ma khalfahum, wa la yuhituna bi-shayʾin min ʿilmihi illa bima shaʾ, wasiʿa kursiyyuhus-samawati wal-ard, wa la yaʾuduhu hifzuhuma, wa huwal-ʿaliyyul-ʿazim",
+    ar: "بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ\nٱللَّهُ لَآ إِلَـٰهَ إِلَّا هُوَ ٱلْحَىُّ ٱلْقَيُّومُ ۚ لَا تَأْخُذُهُۥ سِنَةٌ وَلَا نَوْمٌ ۚ لَّهُۥ مَا فِى ٱلسَّمَـٰوَٰتِ وَمَا فِى ٱلْأَرْضِ ۗ مَن ذَا ٱلَّذِى يَشْفَعُ عِندَهُۥٓ إِلَّا بِإِذْنِهِۦ ۚ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ ۖ وَلَا يُحِيطُونَ بِشَىْءٍ مِّنْ عِلْمِهِۦٓ إِلَّا بِمَا شَآءَ ۚ وَسِعَ كُرْسِيُّهُ ٱلسَّمَـٰوَٰتِ وَٱلْأَرْضَ ۖ وَلَا يَـُٔودُهُۥ حِفْظُهُمَا ۚ وَهُوَ ٱلْعَلِىُّ ٱلْعَظِيمُ",
+    tr: "Bismillahir-rahmanir-rahim. Allahu la ilaha illa huwal-hayyul-qayyum, la taʾkhudhuhu sinatun wa la nawm, lahu ma fis-samawati wa ma fil-ard, man dhal-ladhi yashfaʿu ʿindahu illa bi-idhnih, yaʿlamu ma bayna aydihim wa ma khalfahum, wa la yuhituna bi-shayʾin min ʿilmihi illa bima shaʾ, wasiʿa kursiyyuhus-samawati wal-ard, wa la yaʾuduhu hifzuhuma, wa huwal-ʿaliyyul-ʿazim",
     nameEn: "Ayat al-Kursi",
     nameBn: "আয়াতুল কুরসি",
-    en: "Allah – none has the right to be worshipped but Him, the Ever-Living, the Sustainer of all. Neither drowsiness nor sleep overtakes Him. His is whatever is in the heavens and the earth. Who can intercede with Him except by His leave? He knows what is before them and what is behind them, and they grasp nothing of His knowledge except what He wills. His Kursi extends over the heavens and the earth, and guarding them does not tire Him. He is the Most High, the Most Great.",
-    bn: "আল্লাহ, তিনি ছাড়া কোনো সত্য ইলাহ নেই, তিনি চিরঞ্জীব, সব কিছুর ধারক। তন্দ্রা ও নিদ্রা তাঁকে স্পর্শ করে না। আসমান ও জমিনে যা কিছু আছে সব তাঁরই। কে আছে যে তাঁর অনুমতি ছাড়া তাঁর কাছে সুপারিশ করবে? তাদের সামনে ও পেছনে যা আছে তিনি জানেন, আর তিনি যা চান তা ছাড়া তাঁর জ্ঞানের কিছুই তারা আয়ত্ত করতে পারে না। তাঁর কুরসি আসমান ও জমিন পরিব্যাপ্ত, আর এ দুটির রক্ষণাবেক্ষণ তাঁকে ক্লান্ত করে না। তিনি সর্বোচ্চ, মহান।",
+    en: "In the name of Allah, the Most Gracious, the Most Merciful. Allah – none has the right to be worshipped but Him, the Ever-Living, the Sustainer of all. Neither drowsiness nor sleep overtakes Him. His is whatever is in the heavens and the earth. Who can intercede with Him except by His leave? He knows what is before them and what is behind them, and they grasp nothing of His knowledge except what He wills. His Kursi extends over the heavens and the earth, and guarding them does not tire Him. He is the Most High, the Most Great.",
+    bn: "পরম করুণাময় অসীম দয়ালু আল্লাহর নামে। আল্লাহ, তিনি ছাড়া কোনো সত্য ইলাহ নেই, তিনি চিরঞ্জীব, সব কিছুর ধারক। তন্দ্রা ও নিদ্রা তাঁকে স্পর্শ করে না। আসমান ও জমিনে যা কিছু আছে সব তাঁরই। কে আছে যে তাঁর অনুমতি ছাড়া তাঁর কাছে সুপারিশ করবে? তাদের সামনে ও পেছনে যা আছে তিনি জানেন, আর তিনি যা চান তা ছাড়া তাঁর জ্ঞানের কিছুই তারা আয়ত্ত করতে পারে না। তাঁর কুরসি আসমান ও জমিন পরিব্যাপ্ত, আর এ দুটির রক্ষণাবেক্ষণ তাঁকে ক্লান্ত করে না। তিনি সর্বোচ্চ, মহান।",
     virtueEn: "Whoever recites Ayat al-Kursi after every obligatory salah, nothing keeps him from entering Paradise except death.",
     virtueBn: "যে ব্যক্তি প্রত্যেক ফরজ সালাতের পর আয়াতুল কুরসি পড়বে, মৃত্যু ছাড়া তার জান্নাতে প্রবেশের পথে আর কোনো বাধা থাকবে না।",
     refEn: "an-Nasaʾi, as-Sunan al-Kubra 9928 · graded sahih by al-Albani (Sahih al-Jamiʿ 6464)",
@@ -223,6 +236,7 @@ const kDhikrs = <Dhikr>[
         "নাসাঈ, আস-সুনানুল কুবরা ৯৯২৮ · আলবানী সহীহ বলেছেন (সহীহুল জামি‘ ৬৪৬৪)",
     perSalah: 1,
     hisn: 71,
+    clip: 'salah_ayatul_kursi',
   ),
   Dhikr(
     id: "salah_ainni",
@@ -239,6 +253,7 @@ const kDhikrs = <Dhikr>[
     refBn: "আবু দাউদ ১৫২২ · নাসাঈ ১৩০৩",
     perSalah: 1,
     hisn: 59,
+    clip: 'salah_ainni',
   ),
   Dhikr(
     id: 'subhanallah_bihamdihi',
@@ -258,6 +273,7 @@ const kDhikrs = <Dhikr>[
     refBn: 'সহীহ বুখারী ৬৪০৫ · সহীহ মুসলিম ২৬৯১',
     perSalah: 20,
     hisn: 91,
+    clip: 'subhanallahi_wa_bihamdihi',
   ),
   Dhikr(
     id: 'tahlil',
@@ -289,6 +305,7 @@ const kDhikrs = <Dhikr>[
     refBn: 'সহীহ বুখারী ৩২৯৩ · সহীহ মুসলিম ২৬৯১',
     perSalah: 20,
     hisn: 93,
+    clip: 'tahlil_100',
   ),
   Dhikr(
     id: 'istighfar',
@@ -308,6 +325,7 @@ const kDhikrs = <Dhikr>[
     refBn: 'সহীহ মুসলিম ২৭০২ · সহীহ বুখারী ৬৩০৭',
     perSalah: 20,
     hisn: 96,
+    clip: 'istighfar_100',
   ),
   Dhikr(
     id: 'subhanallah',
@@ -329,5 +347,6 @@ const kDhikrs = <Dhikr>[
     refBn: 'সহীহ মুসলিম ২৬৯৮',
     perSalah: 20,
     hisn: 258,
+    clip: 'salah_subhanallah',
   ),
 ];
