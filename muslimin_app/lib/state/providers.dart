@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../core/languages.dart';
 import '../core/utils/geo.dart';
 import '../data/backend/backend.dart';
 import '../data/models/app_user.dart';
@@ -65,14 +64,10 @@ class SettingsNotifier extends Notifier<AppSettings> {
   @override
   AppSettings build() {
     final p = ref.watch(prefsProvider);
-    final device =
-        WidgetsBinding.instance.platformDispatcher.locale.languageCode;
     return AppSettings(
-      // First run: the phone's language if the app has it, else English.
-      locale: Locale(
-        p.localeCode ??
-            (kAppLanguages.any((l) => l.code == device) ? device : 'en'),
-      ),
+      // Bangla until the user picks another language; the colour theme
+      // follows the phone (light / dark) until changed in Settings.
+      locale: Locale(p.localeCode ?? 'bn'),
       madhab: p.madhab,
       calcMethod: p.calcMethod,
       hijriOffset: p.hijriOffset,
