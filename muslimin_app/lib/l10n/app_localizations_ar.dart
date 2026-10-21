@@ -2621,4 +2621,23 @@ class L10nAr extends L10n {
 
   @override
   String get updateBadge => 'تحديث';
+
+  @override
+  String get updateOnPlay => 'التحديث من Google Play';
+
+  @override
+  String get helpContact => 'المساعدة والتواصل';
+
+  @override
+  String get helpContactBody =>
+      'تواجه مشكلة، أو وجدت وقت جماعة خاطئًا، أو لديك اقتراح؟ راسلنا – نقرأ كل رسالة.';
+
+  @override
+  String get sendEmail => 'إرسال بريد';
+
+  @override
+  String get copyEmail => 'نسخ البريد';
+
+  @override
+  String get emailCopied => 'تم نسخ البريد';
 }

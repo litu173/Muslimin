@@ -781,5 +781,11 @@
   "nearestOptionHint": "Bulunduğunuz yere en yakın camiler, hangi ilçede olursa olsun",
   "seeAllDuas": "Tüm duaları gör",
   "appUpdate": "Uygulama güncellemesi",
-  "updateBadge": "Güncelle"
+  "updateBadge": "Güncelle",
+  "updateOnPlay": "Google Play'de güncelle",
+  "helpContact": "Yardım ve İletişim",
+  "helpContactBody": "Bir sorun mu var, yanlış cemaat saati mi buldunuz ya da öneriniz mi var? Bize e-posta gönderin – her mesajı okuyoruz.",
+  "sendEmail": "E-posta gönder",
+  "copyEmail": "E-postayı kopyala",
+  "emailCopied": "E-posta kopyalandı"
 }

@@ -2655,4 +2655,23 @@ class L10nUr extends L10n {
 
   @override
   String get updateBadge => 'اپ ڈیٹ';
+
+  @override
+  String get updateOnPlay => 'Google Play پر اپ ڈیٹ کریں';
+
+  @override
+  String get helpContact => 'مدد اور رابطہ';
+
+  @override
+  String get helpContactBody =>
+      'کوئی مسئلہ ہے، جماعت کا وقت غلط ملا، یا کوئی تجویز ہے؟ ہمیں ای میل کریں – ہم ہر پیغام پڑھتے ہیں۔';
+
+  @override
+  String get sendEmail => 'ای میل بھیجیں';
+
+  @override
+  String get copyEmail => 'ای میل کاپی کریں';
+
+  @override
+  String get emailCopied => 'ای میل کاپی ہو گئی';
 }

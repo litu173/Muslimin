@@ -2632,4 +2632,23 @@ class L10nBn extends L10n {
 
   @override
   String get updateBadge => 'আপডেট';
+
+  @override
+  String get updateOnPlay => 'Google Play-তে আপডেট করুন';
+
+  @override
+  String get helpContact => 'সাহায্য ও যোগাযোগ';
+
+  @override
+  String get helpContactBody =>
+      'কোনো সমস্যা হচ্ছে, জামাতের সময় ভুল পেয়েছেন, বা কোনো পরামর্শ আছে? আমাদের ইমেইল করুন – আমরা প্রতিটি বার্তা পড়ি।';
+
+  @override
+  String get sendEmail => 'ইমেইল পাঠান';
+
+  @override
+  String get copyEmail => 'ইমেইল কপি করুন';
+
+  @override
+  String get emailCopied => 'ইমেইল কপি হয়েছে';
 }

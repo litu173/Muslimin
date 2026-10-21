@@ -2651,4 +2651,23 @@ class L10nTr extends L10n {
 
   @override
   String get updateBadge => 'Güncelle';
+
+  @override
+  String get updateOnPlay => 'Google Play\'de güncelle';
+
+  @override
+  String get helpContact => 'Yardım ve İletişim';
+
+  @override
+  String get helpContactBody =>
+      'Bir sorun mu var, yanlış cemaat saati mi buldunuz ya da öneriniz mi var? Bize e-posta gönderin – her mesajı okuyoruz.';
+
+  @override
+  String get sendEmail => 'E-posta gönder';
+
+  @override
+  String get copyEmail => 'E-postayı kopyala';
+
+  @override
+  String get emailCopied => 'E-posta kopyalandı';
 }

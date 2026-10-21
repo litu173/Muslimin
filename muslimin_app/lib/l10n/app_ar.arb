@@ -781,5 +781,11 @@
   "nearestOptionHint": "أقرب المساجد إلى مكانك، أيًّا كان الحي",
   "seeAllDuas": "عرض كل الأدعية",
   "appUpdate": "تحديث التطبيق",
-  "updateBadge": "تحديث"
+  "updateBadge": "تحديث",
+  "updateOnPlay": "التحديث من Google Play",
+  "helpContact": "المساعدة والتواصل",
+  "helpContactBody": "تواجه مشكلة، أو وجدت وقت جماعة خاطئًا، أو لديك اقتراح؟ راسلنا – نقرأ كل رسالة.",
+  "sendEmail": "إرسال بريد",
+  "copyEmail": "نسخ البريد",
+  "emailCopied": "تم نسخ البريد"
 }

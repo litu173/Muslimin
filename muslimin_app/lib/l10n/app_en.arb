@@ -1385,5 +1385,11 @@
   "nearestOptionHint": "Closest masjids to where you are, whatever the thana",
   "seeAllDuas": "See all duas",
   "appUpdate": "App update",
-  "updateBadge": "Update"
+  "updateBadge": "Update",
+  "updateOnPlay": "Update on Google Play",
+  "helpContact": "Help & Contact",
+  "helpContactBody": "Facing a problem, found a wrong jamat time, or have a suggestion? Email us – we read every message.",
+  "sendEmail": "Send email",
+  "copyEmail": "Copy email",
+  "emailCopied": "Email copied"
 }

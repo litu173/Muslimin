@@ -2658,4 +2658,23 @@ class L10nId extends L10n {
 
   @override
   String get updateBadge => 'Perbarui';
+
+  @override
+  String get updateOnPlay => 'Perbarui di Google Play';
+
+  @override
+  String get helpContact => 'Bantuan & Kontak';
+
+  @override
+  String get helpContactBody =>
+      'Ada masalah, waktu jamaah salah, atau punya saran? Kirim email kepada kami – kami membaca setiap pesan.';
+
+  @override
+  String get sendEmail => 'Kirim email';
+
+  @override
+  String get copyEmail => 'Salin email';
+
+  @override
+  String get emailCopied => 'Email disalin';
 }

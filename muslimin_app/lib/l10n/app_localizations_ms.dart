@@ -2664,4 +2664,23 @@ class L10nMs extends L10n {
 
   @override
   String get updateBadge => 'Kemas kini';
+
+  @override
+  String get updateOnPlay => 'Kemas kini di Google Play';
+
+  @override
+  String get helpContact => 'Bantuan & Hubungi';
+
+  @override
+  String get helpContactBody =>
+      'Ada masalah, waktu jemaah salah, atau ada cadangan? E-mel kami – kami membaca setiap mesej.';
+
+  @override
+  String get sendEmail => 'Hantar e-mel';
+
+  @override
+  String get copyEmail => 'Salin e-mel';
+
+  @override
+  String get emailCopied => 'E-mel disalin';
 }

@@ -2672,4 +2672,23 @@ class L10nEs extends L10n {
 
   @override
   String get updateBadge => 'Actualizar';
+
+  @override
+  String get updateOnPlay => 'Actualizar en Google Play';
+
+  @override
+  String get helpContact => 'Ayuda y contacto';
+
+  @override
+  String get helpContactBody =>
+      '¿Tienes un problema, encontraste una hora de jamat incorrecta o tienes una sugerencia? Escríbenos: leemos cada mensaje.';
+
+  @override
+  String get sendEmail => 'Enviar correo';
+
+  @override
+  String get copyEmail => 'Copiar correo';
+
+  @override
+  String get emailCopied => 'Correo copiado';
 }

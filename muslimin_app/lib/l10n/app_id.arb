@@ -781,5 +781,11 @@
   "nearestOptionHint": "Masjid terdekat dari lokasi Anda, apa pun wilayahnya",
   "seeAllDuas": "Lihat semua doa",
   "appUpdate": "Pembaruan aplikasi",
-  "updateBadge": "Perbarui"
+  "updateBadge": "Perbarui",
+  "updateOnPlay": "Perbarui di Google Play",
+  "helpContact": "Bantuan & Kontak",
+  "helpContactBody": "Ada masalah, waktu jamaah salah, atau punya saran? Kirim email kepada kami – kami membaca setiap pesan.",
+  "sendEmail": "Kirim email",
+  "copyEmail": "Salin email",
+  "emailCopied": "Email disalin"
 }

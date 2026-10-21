@@ -781,5 +781,11 @@
   "nearestOptionHint": "آپ کی جگہ سے سب سے قریب مساجد، تھانہ کوئی بھی ہو",
   "seeAllDuas": "تمام دعائیں دیکھیں",
   "appUpdate": "ایپ اپ ڈیٹ",
-  "updateBadge": "اپ ڈیٹ"
+  "updateBadge": "اپ ڈیٹ",
+  "updateOnPlay": "Google Play پر اپ ڈیٹ کریں",
+  "helpContact": "مدد اور رابطہ",
+  "helpContactBody": "کوئی مسئلہ ہے، جماعت کا وقت غلط ملا، یا کوئی تجویز ہے؟ ہمیں ای میل کریں – ہم ہر پیغام پڑھتے ہیں۔",
+  "sendEmail": "ای میل بھیجیں",
+  "copyEmail": "ای میل کاپی کریں",
+  "emailCopied": "ای میل کاپی ہو گئی"
 }

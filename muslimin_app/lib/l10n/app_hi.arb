@@ -781,5 +781,11 @@
   "nearestOptionHint": "आपकी जगह से सबसे नज़दीकी मस्जिदें, थाना कोई भी हो",
   "seeAllDuas": "सारी दुआएँ देखें",
   "appUpdate": "ऐप अपडेट",
-  "updateBadge": "अपडेट"
+  "updateBadge": "अपडेट",
+  "updateOnPlay": "Google Play पर अपडेट करें",
+  "helpContact": "मदद और संपर्क",
+  "helpContactBody": "कोई समस्या है, जमात का समय गलत मिला, या कोई सुझाव है? हमें ईमेल करें – हम हर संदेश पढ़ते हैं।",
+  "sendEmail": "ईमेल भेजें",
+  "copyEmail": "ईमेल कॉपी करें",
+  "emailCopied": "ईमेल कॉपी हो गया"
 }

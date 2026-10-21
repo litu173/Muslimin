@@ -781,5 +781,11 @@
   "nearestOptionHint": "Las mezquitas más cercanas a ti, sea cual sea el distrito",
   "seeAllDuas": "Ver todas las duas",
   "appUpdate": "Actualización de la app",
-  "updateBadge": "Actualizar"
+  "updateBadge": "Actualizar",
+  "updateOnPlay": "Actualizar en Google Play",
+  "helpContact": "Ayuda y contacto",
+  "helpContactBody": "¿Tienes un problema, encontraste una hora de jamat incorrecta o tienes una sugerencia? Escríbenos: leemos cada mensaje.",
+  "sendEmail": "Enviar correo",
+  "copyEmail": "Copiar correo",
+  "emailCopied": "Correo copiado"
 }

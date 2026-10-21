@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter/services.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
+import '../../core/config.dart';
 import '../../core/nav.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
@@ -119,6 +122,12 @@ class _MoreScreenState extends ConsumerState<MoreScreen> {
                               ? t.updateBadge
                               : null,
                           onTap: () => push(context, const AboutScreen()),
+                        ),
+                        const Divider(),
+                        _MenuRow(
+                          icon: Icons.support_agent_rounded,
+                          label: t.helpContact,
+                          onTap: () => _showHelp(context),
                         ),
                         if (user?.isSuperAdmin ?? false) ...[
                           const Divider(),
@@ -303,4 +312,103 @@ class _AccountCard extends ConsumerWidget {
       ),
     );
   }
+}
+
+/// Help & Contact: the support email, to write to or copy.
+void _showHelp(BuildContext context) {
+  final t = L10n.of(context);
+  showModalBottomSheet<void>(
+    context: context,
+    useSafeArea: true,
+    constraints: const BoxConstraints(maxWidth: double.infinity),
+    builder: (ctx) => Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: AppColors.card,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(Radii.sheet)),
+      ),
+      padding: EdgeInsets.fromLTRB(
+        Gap.xl,
+        Gap.m,
+        Gap.xl,
+        Gap.xl + MediaQuery.paddingOf(ctx).bottom,
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Center(
+            child: Container(
+              width: 40,
+              height: 4,
+              margin: const EdgeInsets.only(bottom: Gap.l),
+              decoration: BoxDecoration(
+                color: AppColors.muted.withValues(alpha: 0.35),
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+          ),
+          Row(
+            children: [
+              Icon(Icons.support_agent_rounded, color: AppColors.gold),
+              const SizedBox(width: Gap.s),
+              Text(t.helpContact, style: AppText.subtitle),
+            ],
+          ),
+          const SizedBox(height: Gap.s),
+          Text(t.helpContactBody, style: AppText.body),
+          const SizedBox(height: Gap.l),
+          Container(
+            padding: const EdgeInsets.symmetric(
+              horizontal: Gap.l,
+              vertical: Gap.m,
+            ),
+            decoration: BoxDecoration(
+              color: AppColors.pill,
+              borderRadius: BorderRadius.circular(Radii.button),
+            ),
+            child: Row(
+              children: [
+                Icon(Icons.mail_outline_rounded, color: AppColors.gold),
+                const SizedBox(width: Gap.s),
+                Expanded(
+                  child: SelectableText(kSupportEmail, style: AppText.label),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: Gap.l),
+          AppButton(
+            t.sendEmail,
+            icon: Icons.send_rounded,
+            expand: true,
+            onPressed: () async {
+              final ok = await launchUrl(
+                Uri(
+                  scheme: 'mailto',
+                  path: kSupportEmail,
+                  query: 'subject=${Uri.encodeComponent('$kAppName – help')}',
+                ),
+              );
+              if (!ok && ctx.mounted) _copy(ctx, t);
+            },
+          ),
+          const SizedBox(height: Gap.s),
+          AppButton(
+            t.copyEmail,
+            icon: Icons.copy_rounded,
+            style: AppButtonStyle.outlined,
+            expand: true,
+            onPressed: () => _copy(ctx, t),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+void _copy(BuildContext context, L10n t) {
+  Clipboard.setData(const ClipboardData(text: kSupportEmail));
+  ScaffoldMessenger.of(context)
+      .showSnackBar(SnackBar(content: Text(t.emailCopied)));
 }

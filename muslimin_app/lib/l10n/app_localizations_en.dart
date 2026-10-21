@@ -2655,4 +2655,23 @@ class L10nEn extends L10n {
 
   @override
   String get updateBadge => 'Update';
+
+  @override
+  String get updateOnPlay => 'Update on Google Play';
+
+  @override
+  String get helpContact => 'Help & Contact';
+
+  @override
+  String get helpContactBody =>
+      'Facing a problem, found a wrong jamat time, or have a suggestion? Email us – we read every message.';
+
+  @override
+  String get sendEmail => 'Send email';
+
+  @override
+  String get copyEmail => 'Copy email';
+
+  @override
+  String get emailCopied => 'Email copied';
 }

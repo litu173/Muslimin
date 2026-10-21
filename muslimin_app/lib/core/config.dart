@@ -12,6 +12,18 @@ const kRequirePhoneOtp = !kBeta;
 
 const kAppName = kBeta ? 'Muslimin Beta' : 'Muslimin';
 
+/// Where users write for help (More → Help & Contact, store listing,
+/// privacy policy).
+const kSupportEmail = 'muslimin.admin@gmail.com';
+
+/// The Google Play build (`--dart-define=PLAY=true`). Play doesn't allow an
+/// app to update itself from elsewhere, so updates open the Play listing
+/// instead of downloading the APK from GitHub.
+const kPlayStore = bool.fromEnvironment('PLAY');
+
+const kPlayStoreUrl =
+    'https://play.google.com/store/apps/details?id=com.muslimin.muslimin';
+
 /// Everyone signs in (email or Google) after onboarding. Set to false to show
 /// a "Continue as guest" option on the Welcome screen instead.
 const kRequireAccount = true;

@@ -2652,4 +2652,23 @@ class L10nHi extends L10n {
 
   @override
   String get updateBadge => 'अपडेट';
+
+  @override
+  String get updateOnPlay => 'Google Play पर अपडेट करें';
+
+  @override
+  String get helpContact => 'मदद और संपर्क';
+
+  @override
+  String get helpContactBody =>
+      'कोई समस्या है, जमात का समय गलत मिला, या कोई सुझाव है? हमें ईमेल करें – हम हर संदेश पढ़ते हैं।';
+
+  @override
+  String get sendEmail => 'ईमेल भेजें';
+
+  @override
+  String get copyEmail => 'ईमेल कॉपी करें';
+
+  @override
+  String get emailCopied => 'ईमेल कॉपी हो गया';
 }

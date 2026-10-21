@@ -236,7 +236,17 @@ class _VersionCardState extends State<_VersionCard> {
                   ],
                 ),
                 const SizedBox(height: Gap.m),
-                if (_android) ...[
+                if (_android && kPlayStore)
+                  AppButton(
+                    t.updateOnPlay,
+                    icon: Icons.shop_rounded,
+                    style: newer
+                        ? AppButtonStyle.filled
+                        : AppButtonStyle.outlined,
+                    expand: true,
+                    onPressed: () => _open(kPlayStoreUrl),
+                  )
+                else if (_android) ...[
                   AppButton(
                     '${t.downloadLatestApk} (${latest.tag})',
                     icon: Icons.download_rounded,

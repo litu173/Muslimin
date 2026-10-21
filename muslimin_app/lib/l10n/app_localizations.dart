@@ -4802,6 +4802,42 @@ abstract class L10n {
   /// In en, this message translates to:
   /// **'Update'**
   String get updateBadge;
+
+  /// No description provided for @updateOnPlay.
+  ///
+  /// In en, this message translates to:
+  /// **'Update on Google Play'**
+  String get updateOnPlay;
+
+  /// No description provided for @helpContact.
+  ///
+  /// In en, this message translates to:
+  /// **'Help & Contact'**
+  String get helpContact;
+
+  /// No description provided for @helpContactBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Facing a problem, found a wrong jamat time, or have a suggestion? Email us – we read every message.'**
+  String get helpContactBody;
+
+  /// No description provided for @sendEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Send email'**
+  String get sendEmail;
+
+  /// No description provided for @copyEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy email'**
+  String get copyEmail;
+
+  /// No description provided for @emailCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Email copied'**
+  String get emailCopied;
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {
