@@ -2706,4 +2706,24 @@ class L10nUr extends L10n {
 
   @override
   String get updateNow => 'ابھی اپ ڈیٹ کریں';
+
+  @override
+  String get inboxMessage => 'آپ کے لیے پیغام';
+
+  @override
+  String get appNews => 'خبریں';
+
+  @override
+  String get openNotice => 'نوٹس کھولیں';
+
+  @override
+  String get openMasjid => 'مسجد کھولیں';
+
+  @override
+  String get openAbout => 'ایپ کے بارے میں کھولیں';
+
+  @override
+  String masjidNumber(String n) {
+    return 'مسجد نمبر $n';
+  }
 }

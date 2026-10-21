@@ -17,7 +17,9 @@ import '../../core/widgets/islamic_pattern.dart';
 import '../../core/widgets/refresh.dart';
 import '../../core/widgets/surfaces.dart';
 import '../../data/models/masjid.dart';
+import '../../data/models/app_config.dart' show Feature;
 import '../../l10n/app_localizations.dart';
+import '../../state/update.dart' show featureProvider;
 import '../../services/location_service.dart';
 import '../../state/channel.dart';
 import '../../state/follows.dart';
@@ -77,13 +79,24 @@ class MasjidScreen extends ConsumerStatefulWidget {
 
 class _MasjidScreenState extends ConsumerState<MasjidScreen>
     with SingleTickerProviderStateMixin {
-  late final _tabs = TabController(length: 4, vsync: this)..addListener(_onTab);
+  /// The tabs the admin left on (App settings → Features), read when the
+  /// page opens.
+  late final List<String> _tabIds = [
+    'home',
+    if (ref.read(featureProvider(Feature.masjidNotice))) 'notice',
+    if (ref.read(featureProvider(Feature.masjidChannel))) 'channel',
+    if (ref.read(featureProvider(Feature.masjidAbout))) 'about',
+  ];
+  late final _tabs = TabController(length: _tabIds.length, vsync: this)
+    ..addListener(_onTab);
   final _scroll = ScrollController();
 
   /// The channel is a chat: give it the whole screen by scrolling the
   /// masjid info away.
   void _onTab() {
-    if (_tabs.index == 2 && !_tabs.indexIsChanging && _scroll.hasClients) {
+    if (_tabIds[_tabs.index] == 'channel' &&
+        !_tabs.indexIsChanging &&
+        _scroll.hasClients) {
       _scroll.animateTo(
         _scroll.position.maxScrollExtent,
         duration: const Duration(milliseconds: 300),
@@ -116,7 +129,7 @@ class _MasjidScreenState extends ConsumerState<MasjidScreen>
       );
     }
     final isOwner = user != null && user.uid == masjid.ownerUid;
-    final canEdit = isOwner || (user?.isSuperAdmin ?? false);
+    final canEdit = isOwner || (user?.isAdmin ?? false);
     // Owner, admin or a volunteer editor living nearby.
     final canEditTimes = ref.watch(canEditTimesProvider(masjid));
 
@@ -143,7 +156,15 @@ class _MasjidScreenState extends ConsumerState<MasjidScreen>
                 children: [
                   SizedBox(
                     height: 44,
-                    child: _TabBarDelegate(_tabs, t).build(context, 0, false),
+                    child: _TabBarDelegate(_tabs, t, [
+                      for (final id in _tabIds)
+                        switch (id) {
+                          'notice' => t.tabNotice,
+                          'channel' => t.tabChannel,
+                          'about' => t.tabAbout,
+                          _ => t.tabHome,
+                        },
+                    ]).build(context, 0, false),
                   ),
                   if (isOwner && masjid.status != MasjidStatus.approved)
                     _StatusBanner(masjid: masjid),
@@ -151,28 +172,43 @@ class _MasjidScreenState extends ConsumerState<MasjidScreen>
                     child: TabBarView(
                       controller: _tabs,
                       children: [
-                        MasjidHomeTab(
-                          masjid: masjid,
-                          canEdit: canEditTimes,
-                          canVolunteer:
-                              user != null &&
-                              !canEditTimes &&
-                              masjid.status == MasjidStatus.approved,
-                          canReport: user != null && !isOwner,
-                          onOpenChannel: () => _tabs.animateTo(2),
-                        ),
-                        MasjidNoticeTab(
-                          masjid: masjid,
-                          canEdit:
-                              canEdit && masjid.status == MasjidStatus.approved,
-                        ),
-                        // Live is hidden for now (live_tab.dart is kept).
-                        MasjidChannelTab(masjid: masjid),
-                        MasjidAboutTab(
-                          masjid: masjid,
-                          canEdit: canEditTimes,
-                          canManage: canEdit,
-                        ),
+                        for (final id in _tabIds)
+                          switch (id) {
+                            'notice' => MasjidNoticeTab(
+                              masjid: masjid,
+                              canEdit:
+                                  canEdit &&
+                                  masjid.status == MasjidStatus.approved,
+                            ),
+                            // Live is hidden for now (live_tab.dart is kept).
+                            'channel' => MasjidChannelTab(masjid: masjid),
+                            'about' => MasjidAboutTab(
+                              masjid: masjid,
+                              canEdit: canEditTimes,
+                              canManage: canEdit,
+                            ),
+                            _ => MasjidHomeTab(
+                              masjid: masjid,
+                              canEdit: canEditTimes,
+                              canVolunteer:
+                                  user != null &&
+                                  !canEditTimes &&
+                                  masjid.status == MasjidStatus.approved &&
+                                  ref.watch(
+                                    featureProvider(Feature.volunteering),
+                                  ),
+                              canReport:
+                                  user != null &&
+                                  !isOwner &&
+                                  ref.watch(
+                                    featureProvider(Feature.reportProblem),
+                                  ),
+                              onOpenChannel: () {
+                                final i = _tabIds.indexOf('channel');
+                                if (i >= 0) _tabs.animateTo(i);
+                              },
+                            ),
+                          },
                       ],
                     ),
                   ),
@@ -200,7 +236,11 @@ class _MoreMenu extends ConsumerWidget {
     final user = ref.watch(authProvider).value;
     final editor = ref.watch(isEditorProvider(masjid.id)).value ?? false;
     final channelAdmin =
-        ref.watch(channelRoleProvider(masjid))?.canManage ?? false;
+        (ref.watch(channelRoleProvider(masjid))?.canManage ?? false) &&
+        ref.watch(featureProvider(Feature.channelMembers)) &&
+        ref.watch(featureProvider(Feature.masjidChannel));
+    final dirOn = ref.watch(featureProvider(Feature.directions));
+    final reportOn = ref.watch(featureProvider(Feature.reportProblem));
     return PopupMenuButton<String>(
       icon: Icon(Icons.more_vert_rounded, color: AppColors.onHeader),
       color: AppColors.card,
@@ -226,12 +266,12 @@ class _MoreMenu extends ConsumerWidget {
       },
       itemBuilder: (_) => [
         PopupMenuItem(value: 'share', child: Text(t.share)),
-        PopupMenuItem(value: 'dir', child: Text(t.directions)),
+        if (dirOn) PopupMenuItem(value: 'dir', child: Text(t.directions)),
         if (channelAdmin)
           PopupMenuItem(value: 'members', child: Text(t.channelMembers)),
         if (member != null)
           PopupMenuItem(value: 'leave', child: Text(t.leaveChannel)),
-        if (user != null && user.uid != masjid.ownerUid)
+        if (user != null && user.uid != masjid.ownerUid && reportOn)
           PopupMenuItem(value: 'report', child: Text(t.reportProblem)),
         if (editor)
           PopupMenuItem(value: 'stopEditing', child: Text(t.stopEditing)),
@@ -271,6 +311,14 @@ class _Info extends ConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  if (masjid.number != null)
+                    Text(
+                      t.masjidNumber(f.digits(masjid.number!)),
+                      style: AppText.caption.copyWith(
+                        color: AppColors.goldLight,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
                   Text(
                     masjid.fullAddress,
                     style: AppText.body.copyWith(color: AppColors.onHeader),
@@ -327,11 +375,13 @@ class _Info extends ConsumerWidget {
                 ],
               ),
             ),
-            IconButton(
-              tooltip: t.directions,
-              onPressed: () => push(context, DirectionsScreen(masjid: masjid)),
-              icon: Icon(Icons.explore_outlined, color: AppColors.onHeader),
-            ),
+            if (ref.watch(featureProvider(Feature.directions)))
+              IconButton(
+                tooltip: t.directions,
+                onPressed: () =>
+                    push(context, DirectionsScreen(masjid: masjid)),
+                icon: Icon(Icons.explore_outlined, color: AppColors.onHeader),
+              ),
           ],
         ),
       ),
@@ -340,10 +390,11 @@ class _Info extends ConsumerWidget {
 }
 
 class _TabBarDelegate extends SliverPersistentHeaderDelegate {
-  _TabBarDelegate(this.controller, this.t);
+  _TabBarDelegate(this.controller, this.t, this.labels);
 
   final TabController controller;
   final L10n t;
+  final List<String> labels;
 
   @override
   double get minExtent => 44;
@@ -374,12 +425,7 @@ class _TabBarDelegate extends SliverPersistentHeaderDelegate {
         borderRadius: BorderRadius.vertical(top: Radius.circular(3)),
         insets: EdgeInsets.symmetric(horizontal: 8),
       ),
-      tabs: [
-        Tab(text: t.tabHome),
-        Tab(text: t.tabNotice),
-        Tab(text: t.tabChannel),
-        Tab(text: t.tabAbout),
-      ],
+      tabs: [for (final l in labels) Tab(text: l)],
     ),
   );
 

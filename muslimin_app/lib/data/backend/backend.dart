@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import '../models/inbox_message.dart';
 import '../models/app_config.dart';
 import '../models/announcement.dart';
 import '../models/app_user.dart';
@@ -185,6 +186,12 @@ abstract class Backend {
 
   /// Switches set in the admin website (minimum version, Home banner).
   Stream<AppConfig> appConfig();
+
+  /// Bangla names of places, English -> Bangla (config/places).
+  Future<Map<String, String>> placeNamesBn();
+
+  /// Messages the admin sent to the signed-in user, newest first.
+  Stream<List<InboxMessage>> myInbox({int limit = 30});
   Future<void> postNotice(Notice notice);
   Future<void> deleteNotice(String id);
 

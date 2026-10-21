@@ -11,6 +11,7 @@ import 'core/theme/app_theme.dart';
 import 'core/widgets/refresh.dart';
 import 'features/masjid/masjid_screen.dart';
 import 'features/more/about_screen.dart';
+import 'features/notifications/notifications_screen.dart';
 import 'features/splash/splash_screen.dart';
 import 'l10n/app_localizations.dart';
 import 'services/notification_service.dart';
@@ -93,8 +94,9 @@ class _MusliminAppState extends ConsumerState<MusliminApp> {
 String? pendingNotificationPayload;
 bool shellReady = false;
 
-/// Notification payloads: `masjid:<id>`, or `about` (an app update –
-/// About the App, where the latest APK is downloaded).
+/// Notification payloads: `masjid:<id>`, `about` (an app update – About the
+/// App, where the latest version is downloaded) or `inbox` (news and
+/// personal messages – the Notifications page).
 void openNotificationPayload(String? payload) {
   if (payload == null) return;
   if (!shellReady) {
@@ -104,6 +106,8 @@ void openNotificationPayload(String? payload) {
   final Widget page;
   if (payload == 'about') {
     page = const AboutScreen();
+  } else if (payload == 'inbox') {
+    page = const NotificationsScreen();
   } else if (payload.startsWith('masjid:')) {
     page = MasjidScreen(masjidId: payload.substring(7));
   } else {

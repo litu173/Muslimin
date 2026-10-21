@@ -11,6 +11,10 @@
   <link href="https://fonts.googleapis.com/css2?family=Grenze+Gotisch:wght@800&family=Anek+Bangla:wght@400;500;600&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <link rel="stylesheet" href="css/admin.css" />
+  <script>
+    // Light by default; "system" follows the computer (App settings → theme menu).
+    try { var t = localStorage.getItem('muslimin-admin-theme') || 'light'; if (t !== 'system') document.documentElement.dataset.theme = t; } catch (e) { document.documentElement.dataset.theme = 'light'; }
+  </script>
 </head>
 <body>
   <div id="root"><div class="boot"><div class="spinner"></div></div></div>

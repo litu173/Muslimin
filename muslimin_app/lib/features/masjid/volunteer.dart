@@ -73,7 +73,9 @@ class _VolunteerSheetState extends ConsumerState<_VolunteerSheet> {
       }
       final m = widget.masjid;
       final d = distanceMeters(here.lat, here.lng, m.lat, m.lng);
-      if (d > kEditorRadiusM) {
+      // Volunteers (a role the admin gives) may help any masjid.
+      final trusted = ref.read(authProvider).value?.isTrustedVolunteer ?? false;
+      if (d > kEditorRadiusM && !trusted) {
         setState(() => _problem = t.volunteerTooFar(meters(f, d), km));
         return;
       }

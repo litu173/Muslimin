@@ -796,5 +796,11 @@
   "accountDisabled": "Bu hesap Muslimin ekibi tarafından devre dışı bırakıldı. muslimin.admin@gmail.com ile iletişime geçin.",
   "updateRequiredTitle": "Güncelleme gerekli",
   "updateRequiredBody": "Muslimin'in bu sürümü çok eski. Uygulamayı kullanmaya devam etmek için güncelleyin.",
-  "updateNow": "Şimdi güncelle"
+  "updateNow": "Şimdi güncelle",
+  "inboxMessage": "Size mesaj",
+  "appNews": "Haberler",
+  "openNotice": "Duyuruyu aç",
+  "openMasjid": "Camiyi aç",
+  "openAbout": "Uygulama Hakkında'yı aç",
+  "masjidNumber": "Cami No. {n}"
 }

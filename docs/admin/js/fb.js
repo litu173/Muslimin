@@ -1,16 +1,16 @@
 // Firebase for the admin website. `?emu` connects to the local emulators
 // (firebase emulators:start) so everything can be tried without touching
 // the live database.
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js';
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js';
 import {
   getAuth, connectAuthEmulator, onAuthStateChanged, signInWithEmailAndPassword,
   GoogleAuthProvider, signInWithPopup, signOut, sendPasswordResetEmail,
-} from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js';
+} from 'https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js';
 import {
   getFirestore, connectFirestoreEmulator, addDoc, collection, serverTimestamp,
-} from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js';
+} from 'https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js';
 
-export * from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js';
+export * from 'https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js';
 
 export const emu = new URLSearchParams(location.search).has('emu');
 
@@ -23,6 +23,7 @@ const app = initializeApp(emu
     authDomain: 'muslimin-app-bd.firebaseapp.com',
   });
 
+export { app };
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 if (emu) {
@@ -36,7 +37,9 @@ export {
 export const signInWithGoogle = () => signInWithPopup(auth, new GoogleAuthProvider());
 
 /** The signed-in admin, set by app.js once the role is checked. */
-export const me = { uid: '', name: '', email: '' };
+export const me = { uid: '', name: '', email: '', role: '' };
+/** Super admins also change roles, app settings and accounts. */
+export const isSuper = () => me.role === 'superAdmin';
 
 /** Records an admin action (Activity log). Never blocks the action. */
 export async function logAction(action, target, details = {}) {

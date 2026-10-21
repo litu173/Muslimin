@@ -4,8 +4,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../app.dart'
     show openNotificationPayload, pendingNotificationPayload, shellReady;
 import '../../core/theme/app_colors.dart';
+import '../../core/widgets/refresh.dart' show RefreshAyah;
+import '../../data/models/app_config.dart' show Feature;
 import '../../core/theme/app_text.dart';
 import '../../l10n/app_localizations.dart';
+import '../../services/places.dart';
 import '../../state/channel.dart';
 import '../../state/dhikr.dart';
 import '../../state/update.dart';
@@ -68,9 +71,20 @@ class _ShellState extends ConsumerState<Shell> {
     ref.listen(dhikrProgressProvider.select((p) => p.achievedAt), celebrate);
     // The admin requires a newer version: nothing else until it's updated.
     if (ref.watch(updateRequiredProvider)) return const UpdateRequiredScreen();
+    // Tabs the admin switched off are hidden (App settings → Features).
+    final quranOn = ref.watch(featureProvider(Feature.tabQuran));
+    final duaOn = ref.watch(featureProvider(Feature.tabDua));
+    final noticeOn = ref.watch(featureProvider(Feature.tabNotice));
+    RefreshAyah.enabled = ref.watch(featureProvider(Feature.refreshAyah));
+    Places.bn = ref.watch(placeNamesProvider).value ?? const {};
+    Places.bangla = Localizations.localeOf(context).languageCode == 'bn';
+    final hidden = {if (!quranOn) 1, if (!duaOn) 2, if (!noticeOn) 3};
+    if (hidden.contains(_tab)) {
+      WidgetsBinding.instance.addPostFrameCallback((_) => _go(0));
+    }
     return Scaffold(
       body: IndexedStack(
-        index: _tab,
+        index: hidden.contains(_tab) ? 0 : _tab,
         children: [
           // Hidden tabs stay alive but their animations and timers pause,
           // so only the visible tab uses the CPU / GPU.
@@ -112,30 +126,33 @@ class _ShellState extends ConsumerState<Shell> {
                   selected: _tab == 0,
                   onTap: () => _go(0),
                 ),
-                _NavItem(
-                  icon: _tab == 1
-                      ? Icons.menu_book_rounded
-                      : Icons.menu_book_outlined,
-                  label: t.tabQuran,
-                  selected: _tab == 1,
-                  onTap: () => _go(1),
-                ),
-                _NavItem(
-                  icon: _tab == 2
-                      ? Icons.volunteer_activism_rounded
-                      : Icons.volunteer_activism_outlined,
-                  label: t.tabDua,
-                  selected: _tab == 2,
-                  onTap: () => _go(2),
-                ),
-                _NavItem(
-                  icon: _tab == 3
-                      ? Icons.campaign_rounded
-                      : Icons.campaign_outlined,
-                  label: t.tabNotices,
-                  selected: _tab == 3,
-                  onTap: () => _go(3),
-                ),
+                if (quranOn)
+                  _NavItem(
+                    icon: _tab == 1
+                        ? Icons.menu_book_rounded
+                        : Icons.menu_book_outlined,
+                    label: t.tabQuran,
+                    selected: _tab == 1,
+                    onTap: () => _go(1),
+                  ),
+                if (duaOn)
+                  _NavItem(
+                    icon: _tab == 2
+                        ? Icons.volunteer_activism_rounded
+                        : Icons.volunteer_activism_outlined,
+                    label: t.tabDua,
+                    selected: _tab == 2,
+                    onTap: () => _go(2),
+                  ),
+                if (noticeOn)
+                  _NavItem(
+                    icon: _tab == 3
+                        ? Icons.campaign_rounded
+                        : Icons.campaign_outlined,
+                    label: t.tabNotices,
+                    selected: _tab == 3,
+                    onTap: () => _go(3),
+                  ),
                 _NavItem(
                   icon: Icons.menu_rounded,
                   label: t.more,

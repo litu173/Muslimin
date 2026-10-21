@@ -2706,4 +2706,24 @@ class L10nEn extends L10n {
 
   @override
   String get updateNow => 'Update now';
+
+  @override
+  String get inboxMessage => 'Message for you';
+
+  @override
+  String get appNews => 'News';
+
+  @override
+  String get openNotice => 'Open notice';
+
+  @override
+  String get openMasjid => 'Open masjid';
+
+  @override
+  String get openAbout => 'Open About the App';
+
+  @override
+  String masjidNumber(String n) {
+    return 'Masjid No. $n';
+  }
 }

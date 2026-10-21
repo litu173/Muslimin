@@ -66,7 +66,7 @@ class _AboutScreenState extends State<AboutScreen> {
                     ),
                     const SizedBox(height: Gap.s),
                     const Wordmark(size: 40),
-                    if (kBeta) ...[
+                    if (kShowBeta) ...[
                       const SizedBox(height: 6),
                       const BetaBadge(),
                     ],
@@ -196,7 +196,7 @@ class _VersionCardState extends State<_VersionCard> {
                   if (info != null)
                     Text(
                       f.digits('${info.version} (${info.buildNumber})') +
-                          (kBeta ? ' · Beta' : ''),
+                          (kShowBeta ? ' · Beta' : ''),
                       style: AppText.label,
                     ),
                 ],

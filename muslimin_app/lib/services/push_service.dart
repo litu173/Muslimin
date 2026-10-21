@@ -47,11 +47,14 @@ class PushService {
     fm.onTokenRefresh.listen(_backend.saveFcmToken);
   }
 
-  String? _payload(Map<String, dynamic> data) => data['type'] == 'update'
-      ? 'about'
-      : data['masjidId'] == null
-      ? null
-      : 'masjid:${data['masjidId']}';
+  /// Where a tapped notification leads: an app update to About the App,
+  /// news and personal messages to the Notifications page, a masjid's
+  /// notice or channel message to that masjid.
+  String? _payload(Map<String, dynamic> data) => switch (data['type']) {
+    'update' => 'about',
+    'inbox' || 'news' => 'inbox',
+    _ => data['masjidId'] == null ? null : 'masjid:${data['masjidId']}',
+  };
 
   Future<void> registerToken() async {
     if (!_enabled) return;

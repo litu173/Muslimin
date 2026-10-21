@@ -10,6 +10,7 @@ import {
   fmtDate, toast, clear, empty, link, confirmDialog, table, num,
 } from '../ui.js';
 import { pageHead } from '../app.js';
+import { suggestBangla } from '../ai.js';
 import {
   bdThanas, masjidOf, loggedUpdate, locationChange, setStatus, PRAYERS, STAFF, DAYS,
   COUNTRIES, countryName, REASONS, queueJob,
@@ -45,7 +46,7 @@ export async function render(el, id) {
   }
 
   el.append(pageHead(m.name || '(no name)',
-    h('span', statusBadge(m.status), ' ', m.nameBn || '', m.address ? ` · ${m.address}` : ''),
+    h('span', statusBadge(m.status), ' ', m.number ? h('span.num-tag', `Masjid No. ${m.number} · `) : '', m.nameBn || '', m.address ? ` · ${m.address}` : ''),
     h('button.btn', { onclick: () => history.back() }, icon('back', 18), 'Back'),
     ...statusActions));
   if (m.status === 'rejected' || m.status === 'suspended') {
@@ -74,7 +75,17 @@ function infoCard(m, reload) {
   const address = input({ value: m.address || '' });
   const live = input({ value: m.liveUrl || '', placeholder: 'https://youtube.com/…' });
   return card('Information',
-    field('Name (English)', name), field('Name (Bangla)', nameBn), field('Address', address),
+    field('Name (English)', name),
+    h('div.row', { style: { alignItems: 'flex-end', flexWrap: 'nowrap' } },
+      h('div', { style: { flex: 1 } }, field('Name (Bangla)', nameBn)),
+      h('button.btn', { style: { marginBottom: '12px' }, title: 'Suggest the Bangla name with Gemini – check it before saving', onclick: (e) => act(e.currentTarget, async () => {
+        const got = await suggestBangla([name.value.trim()], 'masjid');
+        const v = got[name.value.trim()];
+        if (!v) throw new Error('No suggestion – type it yourself.');
+        nameBn.value = v;
+        toast('Suggested – check it, then Save.');
+      }) }, '✨ Suggest')),
+    field('Address', address),
     field('Live stream link', live, 'Shown on the masjid page when set.'),
     h('div.row.end', h('button.btn.btn-primary', { onclick: (e) => act(e.currentTarget, async () => {
       if (name.value.trim().length < 3) throw new Error('Name is too short.');

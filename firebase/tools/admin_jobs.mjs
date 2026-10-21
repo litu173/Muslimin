@@ -1,10 +1,13 @@
 // Runs the work the admin website (docs/admin) queues in `adminJobs` that
 // needs the Firebase Admin SDK – the free plan has no Cloud Functions:
 //   * push         – a notification to everyone, a masjid's followers, a
-//                    channel's members or one user (and, for everyone,
-//                    saved in `announcements` for the Notifications page)
+//                    channel's members, one user or a list of users; saved
+//                    for the app's Notifications page (`announcements` for
+//                    everyone, users/{uid}/inbox for people)
 //   * disableUser / enableUser – stop / allow signing in
 //   * deleteUser   – delete the sign-in account and the profile
+//   * numberMasjids – give every approved masjid without one a number, in
+//                    the order they were added (counters/masjid)
 // Each job is marked done or failed with a result the website shows.
 //
 // Run by .github/workflows/admin-jobs.yml (the website starts it right
@@ -103,19 +106,42 @@ async function push(p) {
       });
       return `sent to topic ${topic}`;
     }
-    case 'user': {
-      if (!t.id) throw new Error('user id missing');
-      return toTokens(await allTokens([t.id]), {
-        notification: { title, body }, data: { type: 'news' }, android,
+    case 'user':
+    case 'users': {
+      const uids = [...new Set(t.type === 'user' ? [t.id] : t.ids || [])].filter(Boolean).slice(0, 2000);
+      if (!uids.length) throw new Error('no users');
+      // Kept in each person's inbox, so it is on their Notifications page.
+      const link = p.link && p.link.type ? { type: `${p.link.type}`, id: `${p.link.id || ''}` } : null;
+      for (let i = 0; i < uids.length; i += 400) {
+        const b = db.batch();
+        for (const uid of uids.slice(i, i + 400)) {
+          b.set(db.collection(`users/${uid}/inbox`).doc(), { title, body, link, createdAt: Timestamp.now() });
+        }
+        await b.commit();
+      }
+      const sent = await toTokens(await allTokens(uids), {
+        notification: { title, body }, data: { type: 'inbox' }, android,
       });
+      return `${uids.length} inbox${uids.length > 1 ? 'es' : ''}; ${sent}`;
     }
     default:
       throw new Error(`unknown target ${t.type}`);
   }
 }
 
+const roles = new Map();
+async function roleOf(uid) {
+  if (!roles.has(uid)) roles.set(uid, (await db.doc(`users/${uid}`).get()).get('role') || 'user');
+  return roles.get(uid);
+}
+
 async function run(job) {
   const p = job.payload || {};
+  // Accounts are disabled or deleted only on a super admin's order.
+  if (['disableUser', 'enableUser', 'deleteUser', 'numberMasjids'].includes(job.type)
+      && await roleOf(job.createdBy) !== 'superAdmin') {
+    throw new Error('only a super admin can do this');
+  }
   switch (job.type) {
     case 'push':
       return push(p);
@@ -134,6 +160,23 @@ async function run(job) {
       }
       await db.doc(`users/${p.uid}`).delete();
       return 'account and profile deleted';
+    }
+    case 'numberMasjids': {
+      // One read per masjid and one write per new number – run it once.
+      const snap = await db.collection('masjids').where('status', '==', 'approved')
+        .select('createdAt', 'number').get();
+      const all = snap.docs.map((d) => ({ ref: d.ref, id: d.id, at: d.get('createdAt')?.toMillis?.() ?? 0, n: d.get('number') }));
+      const max = all.reduce((a, m) => (typeof m.n === 'number' && m.n > a ? m.n : a), 0);
+      const counter = db.doc('counters/masjid');
+      let next = Math.max((await counter.get()).get('next') || 1, max + 1);
+      const todo = all.filter((m) => typeof m.n !== 'number').sort((a, b) => a.at - b.at || a.id.localeCompare(b.id));
+      for (let i = 0; i < todo.length; i += 400) {
+        const b = db.batch();
+        for (const m of todo.slice(i, i + 400)) b.update(m.ref, { number: next++ });
+        await b.commit();
+      }
+      await counter.set({ next }, { merge: true });
+      return `numbered ${todo.length} masjids; next number ${next}`;
     }
     default:
       throw new Error(`unknown job ${job.type}`);

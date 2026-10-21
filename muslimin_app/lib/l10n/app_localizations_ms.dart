@@ -2715,4 +2715,24 @@ class L10nMs extends L10n {
 
   @override
   String get updateNow => 'Kemas kini sekarang';
+
+  @override
+  String get inboxMessage => 'Mesej untuk anda';
+
+  @override
+  String get appNews => 'Berita';
+
+  @override
+  String get openNotice => 'Buka notis';
+
+  @override
+  String get openMasjid => 'Buka masjid';
+
+  @override
+  String get openAbout => 'Buka Tentang Aplikasi';
+
+  @override
+  String masjidNumber(String n) {
+    return 'Masjid No. $n';
+  }
 }

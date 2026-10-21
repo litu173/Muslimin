@@ -796,5 +796,11 @@
   "accountDisabled": "مسلمین ٹیم نے یہ اکاؤنٹ بند کر دیا ہے۔ muslimin.admin@gmail.com پر رابطہ کریں۔",
   "updateRequiredTitle": "اپ ڈیٹ ضروری ہے",
   "updateRequiredBody": "مسلمین کا یہ ورژن بہت پرانا ہے۔ ایپ استعمال جاری رکھنے کے لیے اپ ڈیٹ کریں۔",
-  "updateNow": "ابھی اپ ڈیٹ کریں"
+  "updateNow": "ابھی اپ ڈیٹ کریں",
+  "inboxMessage": "آپ کے لیے پیغام",
+  "appNews": "خبریں",
+  "openNotice": "نوٹس کھولیں",
+  "openMasjid": "مسجد کھولیں",
+  "openAbout": "ایپ کے بارے میں کھولیں",
+  "masjidNumber": "مسجد نمبر {n}"
 }

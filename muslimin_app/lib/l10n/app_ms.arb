@@ -796,5 +796,11 @@
   "accountDisabled": "Akaun ini telah dinyahaktifkan oleh pasukan Muslimin. Hubungi muslimin.admin@gmail.com.",
   "updateRequiredTitle": "Kemas kini diperlukan",
   "updateRequiredBody": "Versi Muslimin ini terlalu lama. Kemas kini untuk terus menggunakan aplikasi.",
-  "updateNow": "Kemas kini sekarang"
+  "updateNow": "Kemas kini sekarang",
+  "inboxMessage": "Mesej untuk anda",
+  "appNews": "Berita",
+  "openNotice": "Buka notis",
+  "openMasjid": "Buka masjid",
+  "openAbout": "Buka Tentang Aplikasi",
+  "masjidNumber": "Masjid No. {n}"
 }

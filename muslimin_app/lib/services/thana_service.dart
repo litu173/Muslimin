@@ -4,6 +4,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:geocoding/geocoding.dart';
 
+import 'places.dart';
+
 /// A thana / upazila and its district – the same names the masjid profiles
 /// use (`district`, `thana`).
 @immutable
@@ -13,7 +15,7 @@ class Thana {
   final String district;
   final String name;
 
-  String get label => '$name, $district';
+  String get label => '${Places.of(name)}, ${Places.of(district)}';
 
   @override
   bool operator ==(Object other) =>
@@ -127,9 +129,9 @@ class Area {
   bool get inBangladesh => country == 'BD';
 
   String get label => [
-    thana,
-    district,
-    if (!inBangladesh) countryName.isNotEmpty ? countryName : country,
+    Places.of(thana),
+    Places.of(district),
+    if (!inBangladesh) Places.of(countryName.isNotEmpty ? countryName : country),
   ].where((s) => s.trim().isNotEmpty).join(', ');
 }
 

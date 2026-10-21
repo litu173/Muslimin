@@ -2701,4 +2701,24 @@ class L10nTr extends L10n {
 
   @override
   String get updateNow => 'Şimdi güncelle';
+
+  @override
+  String get inboxMessage => 'Size mesaj';
+
+  @override
+  String get appNews => 'Haberler';
+
+  @override
+  String get openNotice => 'Duyuruyu aç';
+
+  @override
+  String get openMasjid => 'Camiyi aç';
+
+  @override
+  String get openAbout => 'Uygulama Hakkında\'yı aç';
+
+  @override
+  String masjidNumber(String n) {
+    return 'Cami No. $n';
+  }
 }

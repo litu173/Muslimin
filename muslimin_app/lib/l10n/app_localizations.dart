@@ -4892,6 +4892,42 @@ abstract class L10n {
   /// In en, this message translates to:
   /// **'Update now'**
   String get updateNow;
+
+  /// No description provided for @inboxMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Message for you'**
+  String get inboxMessage;
+
+  /// No description provided for @appNews.
+  ///
+  /// In en, this message translates to:
+  /// **'News'**
+  String get appNews;
+
+  /// No description provided for @openNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'Open notice'**
+  String get openNotice;
+
+  /// No description provided for @openMasjid.
+  ///
+  /// In en, this message translates to:
+  /// **'Open masjid'**
+  String get openMasjid;
+
+  /// No description provided for @openAbout.
+  ///
+  /// In en, this message translates to:
+  /// **'Open About the App'**
+  String get openAbout;
+
+  /// No description provided for @masjidNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Masjid No. {n}'**
+  String masjidNumber(String n);
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {

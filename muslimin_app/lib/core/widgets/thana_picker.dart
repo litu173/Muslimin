@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../l10n/app_localizations.dart';
+import '../../services/places.dart';
 import '../../services/thana_service.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_text.dart';
@@ -126,7 +127,9 @@ class _ThanaSheetState extends State<_ThanaSheet> {
               .where(
                 (a) =>
                     a.name.toLowerCase().contains(q) ||
-                    a.district.toLowerCase().contains(q),
+                    a.district.toLowerCase().contains(q) ||
+                    Places.of(a.name).contains(q) ||
+                    Places.of(a.district).contains(q),
               )
               .toList();
     final selected = widget.current ?? widget.mine;
@@ -187,7 +190,10 @@ class _ThanaSheetState extends State<_ThanaSheet> {
                       Icons.my_location_rounded,
                       color: AppColors.gold,
                     ),
-                    title: Text(widget.mine!.name, style: AppText.label),
+                    title: Text(
+                      Places.of(widget.mine!.name),
+                      style: AppText.label,
+                    ),
                     subtitle: Text(
                       t.myThana,
                       style: AppText.micro.copyWith(color: AppColors.muted),
@@ -200,9 +206,9 @@ class _ThanaSheetState extends State<_ThanaSheet> {
                 for (final a in list)
                   ListTile(
                     dense: true,
-                    title: Text(a.name, style: AppText.body),
+                    title: Text(Places.of(a.name), style: AppText.body),
                     subtitle: Text(
-                      a.district,
+                      Places.of(a.district),
                       style: AppText.micro.copyWith(color: AppColors.muted),
                     ),
                     trailing: a == selected

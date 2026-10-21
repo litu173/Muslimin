@@ -12,6 +12,8 @@ import '../../core/widgets/surfaces.dart';
 import '../../core/widgets/thana_picker.dart';
 import '../../data/models/masjid.dart';
 import '../../l10n/app_localizations.dart';
+import '../../data/models/app_config.dart' show Feature;
+import '../../state/update.dart' show featureProvider;
 import '../../state/providers.dart';
 import '../masjid/suggest_masjid.dart';
 import 'masjid_card.dart';
@@ -127,8 +129,13 @@ class _MasjidListScreenState extends ConsumerState<MasjidListScreen> {
                     await refreshAll(ref);
                   },
                   padding: const EdgeInsets.fromLTRB(Gap.l, 0, Gap.l, Gap.xxl),
-                  // The last item asks for masjids that are missing.
-                  itemCount: list.length + 1,
+                  // The last item asks for masjids that are missing (unless
+                  // the admin switched suggesting off).
+                  itemCount:
+                      list.length +
+                      (ref.watch(featureProvider(Feature.suggestMasjid))
+                          ? 1
+                          : 0),
                   separatorBuilder: (_, _) => const SizedBox(height: 10),
                   itemBuilder: (_, i) => i < list.length
                       ? MasjidCard(masjid: list[i], index: i)

@@ -40,7 +40,9 @@ for (const [i, n] of names.entries()) {
   const uid = `u${i + 1}`;
   await auth.createUser({ uid, email: `${n.split(' ')[0].toLowerCase()}@test.local`, password: 'test1234', displayName: n }).catch(() => {});
   await db.doc(`users/${uid}`).set({
-    name: n, email: `${n.split(' ')[0].toLowerCase()}@test.local`, phone: '', role: 'user', createdAt: ago(i * 2),
+    name: n, email: `${n.split(' ')[0].toLowerCase()}@test.local`, phone: '',
+    role: i === 13 ? 'admin' : i === 12 ? 'editor' : i === 11 ? 'volunteer' : 'user', createdAt: ago(i * 2),
+    ...(i < 10 ? { lastSeenAt: ago(i * 6), appVersion: '1.20.0', platform: i % 2 ? 'android' : 'iOS' } : {}),
     follows: i % 3 ? { m1: {}, m2: {} } : {}, fcmTokens: i % 2 ? [`token-${uid}`] : [], ...(i === 5 ? { editBlocked: true } : {}),
   });
 }

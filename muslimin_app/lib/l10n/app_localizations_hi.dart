@@ -2702,4 +2702,24 @@ class L10nHi extends L10n {
 
   @override
   String get updateNow => 'अभी अपडेट करें';
+
+  @override
+  String get inboxMessage => 'आपके लिए संदेश';
+
+  @override
+  String get appNews => 'समाचार';
+
+  @override
+  String get openNotice => 'नोटिस खोलें';
+
+  @override
+  String get openMasjid => 'मस्जिद खोलें';
+
+  @override
+  String get openAbout => 'ऐप के बारे में खोलें';
+
+  @override
+  String masjidNumber(String n) {
+    return 'मस्जिद नं. $n';
+  }
 }

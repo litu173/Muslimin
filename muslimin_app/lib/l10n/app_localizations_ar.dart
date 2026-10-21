@@ -2671,4 +2671,24 @@ class L10nAr extends L10n {
 
   @override
   String get updateNow => 'حدّث الآن';
+
+  @override
+  String get inboxMessage => 'رسالة لك';
+
+  @override
+  String get appNews => 'أخبار';
+
+  @override
+  String get openNotice => 'فتح الإعلان';
+
+  @override
+  String get openMasjid => 'فتح المسجد';
+
+  @override
+  String get openAbout => 'فتح حول التطبيق';
+
+  @override
+  String masjidNumber(String n) {
+    return 'مسجد رقم $n';
+  }
 }

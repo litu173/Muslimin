@@ -1,19 +1,60 @@
-// App settings: switches the app reads at start (config/app), the GitHub
-// token for instant jobs (kept only in this browser) and the admin team.
+// App settings: switches the app reads at start (config/app) – versions,
+// banner, which features are on – masjid numbers, the GitHub token for
+// instant jobs (kept only in this browser) and the admin team.
 import {
-  db, doc, getDoc, setDoc, collection, query, where, getDocs, serverTimestamp, logAction,
+  db, isSuper, doc, getDoc, setDoc, collection, query, where, getDocs, serverTimestamp, logAction,
 } from '../fb.js';
-import { h, card, input, field, act, link, badge, toast, empty } from '../ui.js';
+import { h, card, input, field, act, link, badge, toast, empty, confirmDialog } from '../ui.js';
 import { pageHead } from '../app.js';
-import { ghToken, startJobs } from '../data.js';
+import { ghToken, startJobs, queueJob, roleName, ROLE_KIND } from '../data.js';
+
+// Same keys as the app's Feature class (lib/data/models/app_config.dart).
+const FEATURES = [
+  ['Bottom tabs', [
+    ['tabQuran', 'Quran tab'], ['tabDua', 'Dua tab'], ['tabNotice', 'Notice tab'],
+  ]],
+  ['Home', [
+    ['homeDailyQuran', 'Daily Quran card'], ['homeDailyDhikr', 'Daily dhikr card'], ['homeDua', 'Daily dua card'],
+    ['homeVerses', 'Verses section'], ['homeRegisterBanner', '“Register your masjid” banner'],
+    ['refreshAyah', 'Ayah while pulling to refresh'],
+  ]],
+  ['Masjid page', [
+    ['masjidNotice', 'Notice tab'], ['masjidChannel', 'Channel tab'], ['masjidAbout', 'About tab'],
+    ['channelMembers', 'Channel members list'], ['directions', 'Directions'], ['reportProblem', 'Report a problem'],
+    ['volunteering', 'Volunteering (update times)'], ['timeBoardScan', 'Scan the time board'],
+  ]],
+  ['More & masjids', [
+    ['achievements', 'Achievements'], ['masjidRegistration', 'Masjid registration'], ['suggestMasjid', 'Suggest a missing masjid'],
+  ]],
+];
 
 export async function render(el) {
-  el.append(pageHead('App settings', 'Switches every phone reads when the app starts'));
+  el.append(pageHead('App settings', isSuper() ? 'Switches every phone reads when the app starts' : 'Your GitHub token – the app switches are for super admins'));
   const ref = doc(db, 'config', 'app');
   const c = (await getDoc(ref)).data() || {};
 
   const grid = h('div.grid.g2');
   el.append(grid);
+  if (!isSuper()) {
+    grid.append(tokenCard());
+    return;
+  }
+
+  // ---- features
+  const feats = c.features || {};
+  const boxes = {};
+  grid.before(card('Features in the app',
+    h('p.muted.small', 'Switch a part of the app off for everyone. Phones pick it up the next time the app opens. Everything is on unless switched off.'),
+    h('div.feat', FEATURES.map(([group, items]) => [h('h4', group), items.map(([k, label]) => {
+      boxes[k] = h('input', { type: 'checkbox', checked: feats[k] !== false });
+      return h('label.switch', boxes[k], label);
+    })])),
+    h('div.row.end', { style: { marginTop: '14px' } }, h('button.btn.btn-primary', { onclick: (e) => act(e.currentTarget, async () => {
+      const features = Object.fromEntries(Object.entries(boxes).map(([k, b]) => [k, b.checked]));
+      const off = Object.keys(features).filter((k) => !features[k]);
+      await setDoc(ref, { features, updatedAt: serverTimestamp() }, { merge: true });
+      await logAction('config.features', 'config/app', { off });
+    }, 'Saved – phones update when the app opens.') }, 'Save features'))));
 
   // ---- versions
   const minV = input({ value: c.minVersion || '', placeholder: 'e.g. 1.18.5' });
@@ -41,9 +82,29 @@ export async function render(el) {
       await logAction('config.banner', 'config/app', { on: on.checked });
     }, 'Saved.') }, 'Save'))));
 
-  // ---- GitHub token
+  // ---- masjid numbers
+  const counter = (await getDoc(doc(db, 'counters', 'masjid'))).data();
+  grid.append(card('Masjid numbers',
+    h('p.small', 'Every approved masjid gets a number (Masjid No. 1, 2, 3…) shown in the app and here. New approvals get the next number automatically once numbering has started.'),
+    counter ? h('div.msg', `Numbering is on – the next masjid gets No. ${counter.next}.`) : h('div.msg.warn', 'Not started yet.'),
+    h('div.row.end', h('button.btn.btn-primary', { onclick: (e) => act(e.currentTarget, async () => {
+      if (!await confirmDialog('Number the masjids?', 'Approved masjids without a number get one, oldest first. It reads every approved masjid once (about one read per masjid) – run it once, then new ones are numbered on approval.', { ok: 'Start' })) return;
+      const { started } = await queueJob('numberMasjids', {});
+      toast(started ? 'Numbering – it takes a minute or two.' : 'Queued – runs with the next job.');
+    }) }, counter ? 'Number any missed masjids' : 'Start numbering'))));
+
+  grid.append(tokenCard());
+
+  // ---- admin team
+  const admins = await getDocs(query(collection(db, 'users'), where('role', 'in', ['superAdmin', 'admin', 'editor'])));
+  grid.append(card('Admin team', admins.empty ? empty('None.') : h('div.list', admins.docs.map((d) => h('div.list-item', h('span.dot'),
+    h('div.grow', link(`/user/${d.id}`, d.data().name || d.data().email), h('div.muted.small', d.data().email)), badge(roleName(d.data().role).toLowerCase(), ROLE_KIND[d.data().role])))),
+  h('p.muted.small', { style: { marginTop: '10px' } }, 'To change someone’s role, open their profile under Users → Role. Users → filter by role lists volunteers too.')));
+}
+
+function tokenCard() {
   const tok = input({ type: 'password', value: ghToken.get(), placeholder: 'github_pat_…' });
-  grid.append(card('Send instantly (GitHub token)',
+  return card('Send instantly (GitHub token)',
     h('p.small', 'On the free Firebase plan, notifications and account actions are run by a GitHub job. With a token saved here, this website starts that job immediately; without one, it runs on its schedule (every 15 min, sometimes later).'),
     h('ol.small', h('li', 'GitHub → Settings → Developer settings → Fine-grained tokens → Generate new token.'),
       h('li', 'Repository access: only litu173/Muslimin. Permissions: Actions → Read and write.'),
@@ -54,11 +115,5 @@ export async function render(el) {
       h('button.btn.btn-primary', { onclick: (e) => act(e.currentTarget, async () => {
         ghToken.set(tok.value.trim());
         toast((await startJobs()) ? 'Token works – job started.' : 'Saved, but GitHub refused it – check the permissions.', 'ok');
-      }) }, 'Save & test'))));
-
-  // ---- admin team
-  const admins = await getDocs(query(collection(db, 'users'), where('role', '==', 'superAdmin')));
-  grid.append(card('Super admins', admins.empty ? empty('None.') : h('div.list', admins.docs.map((d) => h('div.list-item', h('span.dot'),
-    h('div.grow', link(`/user/${d.id}`, d.data().name || d.data().email), h('div.muted.small', d.data().email)), badge('super admin', 'gold')))),
-  h('p.muted.small', { style: { marginTop: '10px' } }, 'To add an admin, open their profile under Users and choose “Make super admin”.')));
+      }) }, 'Save & test')));
 }

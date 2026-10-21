@@ -9,7 +9,7 @@ import {
   fmtDate, toast, clear, tabs, spinner, link, empty,
 } from '../ui.js';
 import { pageHead, refreshCounts } from '../app.js';
-import { masjidOf, setStatus, REASONS, bdThanas, COUNTRIES, geoData } from '../data.js';
+import { masjidOf, setStatus, REASONS, bdThanas, COUNTRIES, geoData, giveNumber } from '../data.js';
 import { miniMap, placeOf } from './map.js';
 
 export async function render(el, tab = 'pending') {
@@ -121,6 +121,7 @@ async function approveSuggestion(s, done) {
     });
     b.update(doc(db, 'suggestions', s.id), { status: 'approved', masjidId: ref.id });
     await b.commit();
+    await giveNumber(ref.id);
     await logAction('suggestion.approve', `masjids/${ref.id}`, { name: name.value.trim() });
   }, 'Added – the finder can now set its times.');
   done();

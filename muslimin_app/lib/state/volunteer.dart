@@ -13,12 +13,15 @@ final isEditorProvider = StreamProvider.family<bool, String>((ref, masjidId) {
   return ref.watch(backendProvider).isMasjidEditor(masjidId);
 }, retry: _noRetry);
 
-/// Who may change [masjid]'s jamat times, maktab and staff: its owner, the
-/// super admin, and its volunteer editors.
+/// Who may change [masjid]'s jamat times, maktab and staff: its owner,
+/// admins and editors (roles), and its volunteer editors.
 final canEditTimesProvider = Provider.family<bool, Masjid>((ref, masjid) {
   final user = ref.watch(authProvider).value;
   if (user == null) return false;
-  if (user.uid == masjid.ownerUid || user.isSuperAdmin) return true;
+  if (user.uid == masjid.ownerUid || user.isAdmin) return true;
+  if (user.isGlobalEditor && masjid.status == MasjidStatus.approved) {
+    return true;
+  }
   return masjid.status == MasjidStatus.approved &&
       (ref.watch(isEditorProvider(masjid.id)).value ?? false);
 });

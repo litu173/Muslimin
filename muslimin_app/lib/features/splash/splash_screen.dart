@@ -133,7 +133,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                                     fontSize: 19,
                                   ),
                                 ),
-                                if (kBeta) ...[
+                                if (kShowBeta) ...[
                                   const SizedBox(height: 14),
                                   const BetaBadge(),
                                 ],

@@ -30,6 +30,7 @@ function compose() {
     ['channel', "One masjid's channel members"],
     ['user', 'One person (by email)'],
   ], 'all');
+  form.hint = h('div.muted.small', { style: { marginBottom: '12px' } }, 'To message several people (e.g. inactive users), pick them under Users.');
   form.kind = select([['news', 'News / announcement'], ['update', 'App update (opens About the App)']], 'news');
   form.save = h('input', { type: 'checkbox', checked: true });
   form.title = input({ placeholder: 'e.g. মুসলিমিন আপডেট এসেছে 🎉', maxLength: 120 });
@@ -96,7 +97,7 @@ function compose() {
 
   sync();
   return card('Write',
-    field('Send to', form.to), allBox, masjidBox, userBox,
+    field('Send to', form.to), form.hint, allBox, masjidBox, userBox,
     field('Title', form.title), field('Message', form.body, 'Up to 500 characters. Bangla works.'),
     ghToken.get() ? null : h('div.msg.warn', 'No GitHub token saved – messages wait for the next scheduled run (up to ~15 min, sometimes later). Add one in App settings to send instantly.'),
     h('div.row.end', send));
@@ -112,9 +113,9 @@ function preview() {
   draw();
   return card('Preview',
     h('div.preview-phone', h('div.small', { style: { opacity: 0.6, marginBottom: '8px' } }, 'Notification on a phone'),
-      h('div.pn', h('img', { src: '../assets/icon-192.png', alt: '' }), h('div', h('div.small', { style: { opacity: 0.7 } }, 'Muslimin Beta · now'), t, b))),
+      h('div.pn', h('img', { src: '../assets/icon-192.png', alt: '' }), h('div', h('div.small', { style: { opacity: 0.7 } }, 'Muslimin · now'), t, b))),
     h('p.muted.small', { style: { marginTop: '12px' } },
-      'Tapping it opens the app – an "App update" opens About the App; a masjid message opens that masjid. Messages to everyone are also listed on the app\'s Notifications page when the switch is on.'));
+      'Tapping it opens the app – an "App update" opens About the App; a masjid message opens that masjid; a message to a person opens their Notifications page, where it stays. Messages to everyone are also listed there when the switch is on.'));
 }
 
 async function history(box) {
@@ -133,8 +134,12 @@ async function history(box) {
     !jobs || jobs.empty ? empty('Nothing sent from here yet.') : table([
       { label: 'What', cell: (d) => (d.data().type === 'push'
         ? h('div.t-name', h('b', d.data().payload?.title || ''), h('span', d.data().payload?.body || ''))
-        : h('b', { disableUser: 'Disable sign-in', enableUser: 'Enable sign-in', deleteUser: 'Delete account' }[d.data().type] || d.data().type, ` – ${d.data().payload?.email || ''}`)) },
-      { label: 'To', cell: (d) => (d.data().type === 'push' ? badge(d.data().payload?.target?.type || 'all', 'mute') : '') },
+        : h('b', { disableUser: 'Disable sign-in', enableUser: 'Enable sign-in', deleteUser: 'Delete account', numberMasjids: 'Number the masjids' }[d.data().type] || d.data().type, d.data().payload?.email ? ` – ${d.data().payload.email}` : '')) },
+      { label: 'To', cell: (d) => {
+        const t = d.data().payload?.target;
+        if (d.data().type !== 'push') return '';
+        return badge(t?.type === 'users' ? `${t.ids?.length || 0} people` : t?.type || 'all', 'mute');
+      } },
       { label: 'Status', cell: (d) => h('div', statusBadge(d.data().status), d.data().result ? h('div.muted.small', d.data().result) : null) },
       { label: 'When', class: 'nowrap', cell: (d) => ago(d.data().createdAt) },
     ], jobs.docs)),

@@ -51,6 +51,9 @@ class RefreshAyah {
   static Future<List<RefreshAyah>>? _all;
   static List<RefreshAyah>? loaded;
 
+  /// Off when the admin switched the refresh ayah off (set by the Shell).
+  static bool enabled = true;
+
   static Future<List<RefreshAyah>> load() => _all ??= () async {
     final raw = await rootBundle.loadString('assets/quran/refresh_ayat.json');
     return loaded = [
@@ -95,9 +98,10 @@ class _PullToRefreshState extends State<PullToRefresh> {
     RefreshAyah.load();
   }
 
+  // The ayah stays a few seconds so it can be read (not when it's off).
   Future<void> _refresh() => Future.wait([
     widget.onRefresh(),
-    Future<void>.delayed(PullToRefresh.hold),
+    if (RefreshAyah.enabled) Future<void>.delayed(PullToRefresh.hold),
   ]);
 
   @override
@@ -126,7 +130,9 @@ class _PullToRefreshState extends State<PullToRefresh> {
         RefreshIndicatorMode.armed || RefreshIndicatorMode.refresh => 1.0,
         RefreshIndicatorMode.done => (pulled / extent).clamp(0.0, 1.0),
       };
-      final ayah = ayat != null && _index != null ? ayat[_index!] : null;
+      final ayah = RefreshAyah.enabled && ayat != null && _index != null
+          ? ayat[_index!]
+          : null;
       // OverflowBox: the gap starts at 0 px tall; the card and spinner keep
       // their size and are uncovered from the bottom as the gap opens.
       // ClipRect: only the open gap shows it – it slides out from under

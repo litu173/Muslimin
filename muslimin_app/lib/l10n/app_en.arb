@@ -1407,5 +1407,18 @@
         "type": "String"
       }
     }
+  },
+  "inboxMessage": "Message for you",
+  "appNews": "News",
+  "openNotice": "Open notice",
+  "openMasjid": "Open masjid",
+  "openAbout": "Open About the App",
+  "masjidNumber": "Masjid No. {n}",
+  "@masjidNumber": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
   }
 }

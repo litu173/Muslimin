@@ -8,18 +8,28 @@ rules_version = '2';
 //   * Account + verified phone  : create a masjid profile -> always starts as `pending`.
 //   * Masjid owner              : edit their own masjid's times/staff/live link and post notices,
 //                                 but can never change `status`, `ownerUid` or verification data.
-//   * Super admin               : users/{uid}.role == 'superAdmin' (set manually in the console),
-//                                 approves / rejects / suspends masjids.
+//   * Admin / super admin       : users/{uid}.role 'admin' / 'superAdmin' – approve, reject,
+//                                 suspend masjids; see role() below for every role.
 service cloud.firestore {
   match /databases/{database}/documents {
 
     function signedIn() { return request.auth != null; }
     function userDoc() { return get(/databases/$(database)/documents/users/$(request.auth.uid)); }
-    function isSuperAdmin() {
+    // Roles (users/{uid}.role, set by the super admin in the admin website):
+    //   superAdmin – everything, incl. roles and app settings
+    //   admin      – moderation: masjids, review, users, notifications
+    //   editor     – edits times / maktab / staff / location of any masjid
+    //   volunteer  – may volunteer for any masjid (no 2 km check)
+    //   user       – everyone else
+    function role() {
       return signedIn()
-        && exists(/databases/$(database)/documents/users/$(request.auth.uid))
-        && userDoc().data.role == 'superAdmin';
+          && exists(/databases/$(database)/documents/users/$(request.auth.uid))
+        ? userDoc().data.get('role', 'user') : '';
     }
+    function isSuperAdmin() { return role() == 'superAdmin'; }
+    function isAdmin() { return role() in ['admin', 'superAdmin']; }
+    function isGlobalEditor() { return role() in ['editor', 'admin', 'superAdmin']; }
+    function isTrustedVolunteer() { return role() == 'volunteer'; }
     function isOwner(masjid) { return signedIn() && masjid.ownerUid == request.auth.uid; }
     function unchanged(keys) { return !request.resource.data.diff(resource.data).affectedKeys().hasAny(keys); }
 
@@ -29,28 +39,36 @@ service cloud.firestore {
       function validProfile() {
         return request.resource.data.keys().hasOnly(
                  ['name', 'email', 'phone', 'role', 'createdAt', 'follows', 'fcmTokens',
-                  'editBlocked', 'disabled'])
+                  'editBlocked', 'disabled', 'lastSeenAt', 'appVersion', 'platform'])
           && (!('name' in request.resource.data) || request.resource.data.name is string
               && request.resource.data.name.size() <= 80);
       }
 
-      allow read: if isSelf() || isSuperAdmin();
+      allow read: if isSelf() || isAdmin();
       // Users can create their own profile but never promote themselves.
       allow create: if isSelf() && request.resource.data.role == 'user' && validProfile();
       // `editBlocked` (no volunteering) and `disabled` are set by the admin only.
       allow update: if (isSelf() && unchanged(['role', 'createdAt', 'editBlocked', 'disabled'])
           && validProfile())
-        || isSuperAdmin();
+        || isSuperAdmin()
+        || (isAdmin() && unchanged(['role'])
+          && !(resource.data.get('role', 'user') in ['admin', 'superAdmin']));
       allow delete: if isSelf() || isSuperAdmin();
+
+      // Messages the admin sent to this user (Notifications page).
+      match /inbox/{messageId} {
+        allow read, delete: if isSelf() || isAdmin();
+        allow create: if isAdmin();
+      }
     }
 
     match /masjids/{masjidId} {
       allow read: if resource.data.status == 'approved'
         || isOwner(resource.data)
-        || isSuperAdmin();
+        || isAdmin();
 
       // The admin adds masjids users found missing (suggestions below).
-      allow create: if isSuperAdmin()
+      allow create: if isAdmin()
         && request.resource.data.ownerUid == request.auth.uid
         && request.resource.data.geo.geopoint is latlng;
 
@@ -89,7 +107,16 @@ service cloud.firestore {
           && (unchanged(['geo', 'locationAccuracyM'])
             || (request.resource.data.locationAccuracyM <= 50
               && request.resource.data.geo.geopoint is latlng)))
-        || isSuperAdmin()
+        || isAdmin()
+        // Editors (role): times, maktab, staff and location of any
+        // approved masjid, signed with their uid.
+        || (isGlobalEditor()
+          && resource.data.status == 'approved'
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(
+               ['jamat', 'jamatUpdatedAt', 'hasJamat', 'maktab', 'staff',
+                'geo', 'locationSource', 'locationAccuracyM', 'district', 'thana', 'country',
+                'updatedBy', 'updatedByName', 'updatedAt'])
+          && request.resource.data.updatedBy == request.auth.uid)
         // Volunteer editors (people near the masjid): jamat times, maktab
         // and staff only, signed with their uid.
         || (isEditor()
@@ -107,7 +134,7 @@ service cloud.firestore {
               && math.abs(request.resource.data.geo.geopoint.longitude()
                    - resource.data.geo.geopoint.longitude()) < 0.02)));
 
-      allow delete: if isSuperAdmin();
+      allow delete: if isAdmin();
 
       // A masjid outside Bangladesh (no `country` = Bangladesh).
       function abroad() {
@@ -128,9 +155,9 @@ service cloud.firestore {
       // fix; the rules check the stated position is near the masjid.
       match /editors/{uid} {
         allow read: if signedIn() && (request.auth.uid == uid
-          || masjidDoc().ownerUid == request.auth.uid || isSuperAdmin());
+          || masjidDoc().ownerUid == request.auth.uid || isAdmin());
         // The admin makes whoever suggested a masjid its first editor.
-        allow create: if isSuperAdmin();
+        allow create: if isAdmin();
         allow create: if signedIn() && request.auth.uid == uid
           && masjidDoc().status == 'approved'
           && !editBlocked()
@@ -140,23 +167,25 @@ service cloud.firestore {
           && request.resource.data.masjidId == masjidId
           && request.resource.data.lat is number
           && request.resource.data.lng is number
-          && math.abs(request.resource.data.lat - masjidDoc().geo.geopoint.latitude()) < 0.025
-          && math.abs(request.resource.data.lng - masjidDoc().geo.geopoint.longitude()) < 0.025;
+          // Volunteers (role) may help any masjid; others must be nearby.
+          && (isTrustedVolunteer()
+            || (math.abs(request.resource.data.lat - masjidDoc().geo.geopoint.latitude()) < 0.025
+              && math.abs(request.resource.data.lng - masjidDoc().geo.geopoint.longitude()) < 0.025));
         allow delete: if signedIn() && (request.auth.uid == uid
-          || masjidDoc().ownerUid == request.auth.uid || isSuperAdmin());
+          || masjidDoc().ownerUid == request.auth.uid || isAdmin());
       }
 
       // ---- Edit history: who changed times / staff / maktab, before and
       // after. Written with the change; read by the owner and the admin.
       match /edits/{editId} {
-        allow read: if signedIn() && (masjidDoc().ownerUid == request.auth.uid || isSuperAdmin());
+        allow read: if signedIn() && (masjidDoc().ownerUid == request.auth.uid || isAdmin());
         allow create: if signedIn()
           && request.resource.data.uid == request.auth.uid
           && request.resource.data.masjidId == masjidId
           && request.resource.data.field in ['jamat', 'staff', 'maktab', 'location']
-          && (masjidDoc().ownerUid == request.auth.uid || isEditor() || isSuperAdmin());
+          && (masjidDoc().ownerUid == request.auth.uid || isEditor() || isGlobalEditor());
         // Removed only with the masjid itself.
-        allow delete: if isSuperAdmin();
+        allow delete: if isAdmin();
       }
 
       // ---- Channel: the masjid's Imam / Khatib / committee message the
@@ -169,7 +198,7 @@ service cloud.firestore {
       }
       function isChannelAdmin() {
         return signedIn() && (masjidDoc().ownerUid == request.auth.uid
-          || channelRole() == 'admin' || isSuperAdmin());
+          || channelRole() == 'admin' || isAdmin());
       }
       function canPost() { return isChannelAdmin() || channelRole() == 'editor'; }
 
@@ -218,19 +247,19 @@ service cloud.firestore {
 
     // Admin report: every edit and every editor, across masjids.
     match /{path=**}/edits/{editId} {
-      allow read: if isSuperAdmin();
+      allow read: if isAdmin();
     }
     // Admin website: channel messages across all masjids (moderation).
     match /{path=**}/messages/{messageId} {
-      allow read: if isSuperAdmin();
+      allow read: if isAdmin();
     }
     match /{path=**}/editors/{uid} {
-      allow read: if isSuperAdmin() || (signedIn() && resource.data.uid == request.auth.uid);
+      allow read: if isAdmin() || (signedIn() && resource.data.uid == request.auth.uid);
     }
 
     // Masjids missing from the app, pinned by users; the admin adds them.
     match /suggestions/{id} {
-      allow read: if isSuperAdmin() || (signedIn() && resource.data.uid == request.auth.uid);
+      allow read: if isAdmin() || (signedIn() && resource.data.uid == request.auth.uid);
       allow create: if signedIn()
         && request.resource.data.keys().hasOnly(
              ['name', 'nameBn', 'lat', 'lng', 'district', 'thana', 'country', 'uid',
@@ -242,7 +271,7 @@ service cloud.firestore {
         && request.resource.data.name.size() <= 80
         && request.resource.data.lat is number
         && request.resource.data.lng is number;
-      allow update, delete: if isSuperAdmin();
+      allow update, delete: if isAdmin();
     }
 
     // Problems reported by users ("wrong jamat time"…): one per user and
@@ -261,40 +290,47 @@ service cloud.firestore {
           && request.resource.data.note is string
           && request.resource.data.note.size() <= 500;
       }
-      allow read: if isSuperAdmin() || (signedIn() && resource.data.uid == request.auth.uid);
+      allow read: if isAdmin() || (signedIn() && resource.data.uid == request.auth.uid);
       allow create: if validReport();
       // Reporting again replaces your own report (and reopens it).
-      allow update: if validReport() || isSuperAdmin();
-      allow delete: if isSuperAdmin();
+      allow update: if validReport() || isAdmin();
+      allow delete: if isAdmin();
     }
 
     // "My channels": a user can list their own memberships across masjids.
     match /{path=**}/members/{uid} {
-      allow read: if (signedIn() && resource.data.uid == request.auth.uid) || isSuperAdmin();
+      allow read: if (signedIn() && resource.data.uid == request.auth.uid) || isAdmin();
     }
 
     // App news for everyone (update announcements) – written by the admin
     // (website) and the admin tools (firebase/tools/broadcast.mjs).
     match /announcements/{id} {
       allow read: if true;
-      allow write: if isSuperAdmin();
+      allow write: if isAdmin();
     }
 
     // ---- Admin website (docs/admin) --------------------------------------
     // App-wide switches: minimum version, maintenance banner. Everyone reads.
     match /config/{id} {
       allow read: if true;
-      allow write: if isSuperAdmin();
+      // App switches: super admins. Place names (config/places): any admin.
+      allow write: if isSuperAdmin() || (id == 'places' && isAdmin());
     }
     // Work that needs the Admin SDK (push, disable / delete accounts): the
     // admin queues it, the GitHub job (firebase/tools/admin_jobs.mjs) runs it
     // and records the result.
     match /adminJobs/{id} {
-      allow read, create: if isSuperAdmin();
+      allow read, create: if isAdmin();
+    }
+    // Masjid numbers: counters/masjid.next is the next number to give
+    // (when an admin approves a masjid).
+    match /counters/{id} {
+      allow read: if true;
+      allow write: if isAdmin();
     }
     // Who did what in the admin website. Never edited or deleted.
     match /adminLog/{id} {
-      allow read, create: if isSuperAdmin();
+      allow read, create: if isAdmin();
     }
 
     match /notices/{noticeId} {
@@ -308,7 +344,7 @@ service cloud.firestore {
         && request.resource.data.title.size() > 0;
       allow update, delete: if (signedIn()
           && masjid(resource.data.masjidId).ownerUid == request.auth.uid)
-        || isSuperAdmin();
+        || isAdmin();
     }
   }
 }

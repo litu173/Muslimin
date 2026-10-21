@@ -38,6 +38,7 @@ h1, h2, h3 { margin: 0; font-weight: 600; }
   background-image: radial-gradient(120% 60% at 0% 0%, rgba(255,201,64,.12), transparent 60%);
 }
 .brand { display: flex; align-items: center; gap: 10px; padding: 4px 10px 18px; }
+.brand img { height: 34px; width: auto; display: block; }
 .brand b { font-family: "Grenze Gotisch", serif; font-weight: 800; font-size: 30px; color: var(--gold-2); letter-spacing: .5px; }
 .brand small { display: block; font-size: 11px; opacity: .7; letter-spacing: 2px; text-transform: uppercase; }
 .nav { display: flex; flex-direction: column; gap: 2px; flex: 1; overflow-y: auto; }
@@ -53,6 +54,16 @@ h1, h2, h3 { margin: 0; font-weight: 600; }
 .me .av { width: 34px; height: 34px; border-radius: 50%; background: var(--gold-2); color: #1a1407; display: grid; place-items: center; font-weight: 700; }
 .me div { flex: 1; min-width: 0; }
 .me div span { display: block; opacity: .65; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.theme { display: flex; gap: 2px; margin: 8px 10px 4px; background: rgba(255,255,255,.07); border-radius: 10px; padding: 3px; }
+.theme button { flex: 1; background: none; border: 0; color: rgba(243,238,213,.75); font: 500 12px Poppins, sans-serif; padding: 5px 0; border-radius: 8px; cursor: pointer; }
+.theme button.on { background: rgba(255,201,64,.18); color: var(--gold-2); }
+.chk { width: 17px; height: 17px; accent-color: var(--gold); cursor: pointer; vertical-align: middle; }
+.bulkbar { position: sticky; bottom: 12px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; background: var(--head); color: var(--on-head); padding: 10px 14px; border-radius: 14px; box-shadow: 0 8px 24px rgba(0,0,0,.25); margin-top: 12px; }
+.bulkbar .grow { flex: 1; }
+.feat { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 8px 18px; }
+.feat h4 { grid-column: 1 / -1; margin: 10px 0 0; font-size: 12.5px; color: var(--muted); text-transform: uppercase; letter-spacing: .6px; }
+.num-tag { display: inline-block; font-weight: 700; color: var(--gold); font-variant-numeric: tabular-nums; }
+pre.csv { background: var(--chip); padding: 10px 12px; border-radius: 10px; font-size: 12.5px; overflow-x: auto; margin: 6px 0 12px; }
 .me button { background: none; border: 0; color: inherit; cursor: pointer; opacity: .75; }
 .main { min-width: 0; padding: 26px 30px 60px; }
 .top { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; flex-wrap: wrap; }
@@ -197,8 +208,8 @@ textarea.inp { min-height: 90px; resize: vertical; }
 /* ---- sign in */
 .login { min-height: 100vh; display: grid; place-items: center; padding: 20px; background: var(--head); background-image: radial-gradient(90% 60% at 50% 0%, rgba(255,201,64,.16), transparent 60%); }
 .login-card { background: var(--card); border-radius: 22px; padding: 30px 28px; width: min(400px, 100%); box-shadow: 0 30px 80px rgba(0,0,0,.4); }
-.login-card .brand b { color: var(--gold); }
-.login-card .brand { justify-content: center; padding-bottom: 6px; }
+.login-card .brand { justify-content: center; flex-direction: column; gap: 6px; background: var(--head); margin: -30px -28px 18px; padding: 26px 20px 18px; border-radius: 22px 22px 0 0; color: var(--on-head); text-align: center; }
+.login-card .brand img { height: 44px; }
 .login-card p { text-align: center; color: var(--muted); margin: 0 0 20px; }
 .login-card .btn { width: 100%; justify-content: center; padding: 11px; }
 .or { text-align: center; color: var(--muted); font-size: 13px; margin: 14px 0; }

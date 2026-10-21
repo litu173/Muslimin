@@ -1,10 +1,11 @@
-// Admin website: sign-in gate (super admins only), sidebar and router.
+// Admin website: sign-in gate (admins and super admins), sidebar and router.
 import {
-  auth, db, emu, me, onAuthStateChanged, signInWithEmailAndPassword, signInWithGoogle,
+  auth, db, emu, me, isSuper, onAuthStateChanged, signInWithEmailAndPassword, signInWithGoogle,
   signOut, sendPasswordResetEmail, doc, getDoc, collection, query, where,
   getCountFromServer,
 } from './fb.js';
 import { h, icon, clear, toast, friendlyError, input, spinner } from './ui.js';
+import { loadPlaces } from './data.js';
 
 const root = document.getElementById('root');
 
@@ -45,8 +46,8 @@ function loginScreen(message) {
     try { await signInWithEmailAndPassword(auth, email.value.trim(), pass.value); } catch (x) { show(x); }
   };
   clear(root).append(h('div.login', h('form.login-card', { onsubmit: submit },
-    h('div.brand', h('div', h('b', 'Muslimin'), h('small', 'Admin'))),
-    h('p', 'Super admins only'),
+    h('div.brand', h('img', { src: '../assets/logo.svg', alt: 'Muslimin' }), h('small', 'Admin panel')),
+    h('p', 'For Muslimin admins'),
     err,
     h('div.field', email), h('div.field', pass),
     h('button.btn.btn-primary', { type: 'submit' }, 'Sign in'),
@@ -78,8 +79,9 @@ function shell() {
   content = h('main.main');
   const initials = (me.name || me.email || '?').trim().slice(0, 1).toUpperCase();
   sideEl = h('aside.side',
-    h('div.brand', h('div', h('b', 'Muslimin'), h('small', 'Admin panel'))),
+    h('div.brand', h('div', h('img', { src: '../assets/logo.svg', alt: 'Muslimin' }), h('small', isSuper() ? 'Super admin' : 'Admin panel'))),
     navEl,
+    themePicker(),
     h('div.me', h('div.av', initials), h('div', h('b', me.name || 'Admin'), h('span', me.email)),
       h('button', { title: 'Sign out', onclick: () => signOut(auth) }, icon('logout'))));
   clear(root).append(
@@ -90,6 +92,21 @@ function shell() {
   });
   renderNav();
   refreshCounts();
+}
+
+// Light / dark / follow the computer – remembered in this browser.
+const THEME_KEY = 'muslimin-admin-theme';
+function themePicker() {
+  const box = h('div.theme');
+  const cur = () => { try { return localStorage.getItem(THEME_KEY) || 'light'; } catch { return 'light'; } };
+  const draw = () => clear(box).append([['light', 'Light'], ['dark', 'Dark'], ['system', 'System']].map(([v, label]) =>
+    h(`button${cur() === v ? '.on' : ''}`, { type: 'button', onclick: () => {
+      try { localStorage.setItem(THEME_KEY, v); } catch { /* private mode */ }
+      if (v === 'system') delete document.documentElement.dataset.theme; else document.documentElement.dataset.theme = v;
+      draw();
+    } }, label)));
+  draw();
+  return box;
 }
 
 function renderNav() {
@@ -153,12 +170,14 @@ onAuthStateChanged(auth, async (u) => {
   clear(root).append(h('div.boot', h('div.spinner')));
   try {
     const p = await getDoc(doc(db, 'users', u.uid));
-    if (p.data()?.role !== 'superAdmin') {
+    const role = p.data()?.role;
+    if (!['admin', 'superAdmin'].includes(role)) {
       await signOut(auth);
-      loginScreen(`${u.email} is not a super admin.`);
+      loginScreen(`${u.email} is not an admin.`);
       return;
     }
-    Object.assign(me, { uid: u.uid, email: u.email || '', name: p.data()?.name || u.displayName || '' });
+    Object.assign(me, { uid: u.uid, email: u.email || '', name: p.data()?.name || u.displayName || '', role });
+    await loadPlaces();
     shell();
     if (!location.hash) location.hash = '#/dashboard';
     route();

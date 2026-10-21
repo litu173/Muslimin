@@ -15,6 +15,7 @@ import '../../core/widgets/surfaces.dart';
 import '../../data/models/masjid.dart';
 import '../../l10n/app_localizations.dart';
 import '../../state/update.dart';
+import '../../data/models/app_config.dart' show Feature;
 import '../../state/providers.dart';
 import '../achievements/achievements.dart';
 import '../admin/admin_panel_screen.dart';
@@ -49,6 +50,7 @@ class _MoreScreenState extends ConsumerState<MoreScreen> {
     // Signed-out users already see the "For masjid authorities" card.
     final showBanner =
         user != null &&
+        ref.watch(featureProvider(Feature.masjidRegistration)) &&
         mine.isEmpty &&
         !_bannerClosed &&
         !ref.read(prefsProvider).authorityBannerHidden;
@@ -73,8 +75,10 @@ class _MoreScreenState extends ConsumerState<MoreScreen> {
                 children: [
                   _AccountCard(),
                   const SizedBox(height: Gap.l),
-                  const AchievementsCard(),
-                  const SizedBox(height: Gap.l),
+                  if (ref.watch(featureProvider(Feature.achievements))) ...[
+                    const AchievementsCard(),
+                    const SizedBox(height: Gap.l),
+                  ],
                   if (showBanner) ...[
                     AuthorityBanner(
                       showDontShow: true,
@@ -129,7 +133,7 @@ class _MoreScreenState extends ConsumerState<MoreScreen> {
                           label: t.helpContact,
                           onTap: () => _showHelp(context),
                         ),
-                        if (user?.isSuperAdmin ?? false) ...[
+                        if (user?.isAdmin ?? false) ...[
                           const Divider(),
                           _MenuRow(
                             icon: Icons.verified_user_outlined,

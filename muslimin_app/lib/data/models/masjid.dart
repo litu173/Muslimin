@@ -1,3 +1,4 @@
+import '../../services/places.dart';
 import 'hm.dart';
 import 'prayer.dart';
 
@@ -78,6 +79,7 @@ class Masjid {
     this.rejectionReason,
     this.updatedByName = '',
     this.imported = false,
+    this.number,
   });
 
   final String id;
@@ -125,11 +127,18 @@ class Masjid {
   /// Added from OpenStreetMap by the admin, not registered by the masjid.
   final bool imported;
 
+  /// Masjid number (1, 2, 3 …), given when it is approved; null until then.
+  final int? number;
+
   String displayName(bool bangla) =>
       bangla && nameBn.trim().isNotEmpty ? nameBn : name;
 
-  String get fullAddress =>
-      [address, thana, district].where((s) => s.trim().isNotEmpty).join(', ');
+  /// Address, thana and district (place names in Bangla when the app is).
+  String get fullAddress => [
+    address,
+    Places.of(thana),
+    Places.of(district),
+  ].where((s) => s.trim().isNotEmpty).join(', ');
 
   /// Next jamat from [now] (today, or tomorrow's Fajr). Friday uses Jum'ah instead of Duhr.
   /// Jamat of the current waqt [prayer] (as in the Home header), even if it
@@ -215,6 +224,7 @@ class Masjid {
     rejectionReason: rejectionReason ?? this.rejectionReason,
     updatedByName: updatedByName,
     imported: imported,
+    number: number,
   );
 
   static Map<Prayer, HM> jamatFromMap(Map<String, dynamic>? m) => {
@@ -277,6 +287,7 @@ class Masjid {
     rejectionReason: m['rejectionReason'] as String?,
     updatedByName: (m['updatedByName'] ?? '') as String,
     imported: m['source'] == 'osm',
+    number: (m['number'] as num?)?.toInt(),
   );
 
   /// Fields common to every backend (geo & timestamps are added by the backend).

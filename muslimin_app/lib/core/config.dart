@@ -10,7 +10,10 @@ const kBeta = true;
 
 const kRequirePhoneOtp = !kBeta;
 
-const kAppName = kBeta ? 'Muslimin Beta' : 'Muslimin';
+const kAppName = 'Muslimin';
+
+/// The "Beta" badge: on the test builds from GitHub, not on Google Play.
+const kShowBeta = kBeta && !kPlayStore;
 
 /// Where users write for help (More → Help & Contact, store listing,
 /// privacy policy).

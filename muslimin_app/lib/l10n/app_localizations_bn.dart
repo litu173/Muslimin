@@ -2682,4 +2682,24 @@ class L10nBn extends L10n {
 
   @override
   String get updateNow => 'এখনই আপডেট করুন';
+
+  @override
+  String get inboxMessage => 'আপনার জন্য বার্তা';
+
+  @override
+  String get appNews => 'খবর';
+
+  @override
+  String get openNotice => 'নোটিশ দেখুন';
+
+  @override
+  String get openMasjid => 'মসজিদ দেখুন';
+
+  @override
+  String get openAbout => 'অ্যাপ সম্পর্কে দেখুন';
+
+  @override
+  String masjidNumber(String n) {
+    return 'মসজিদ নং $n';
+  }
 }

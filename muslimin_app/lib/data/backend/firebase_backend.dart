@@ -4,12 +4,14 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:geoflutterfire_plus/geoflutterfire_plus.dart';
 
 import '../../core/utils/geo.dart';
 import '../../firebase_options.dart';
+import '../models/inbox_message.dart';
 import '../models/app_config.dart';
 import '../models/announcement.dart';
 import '../models/app_user.dart';
@@ -66,10 +68,29 @@ class FirebaseBackend implements Backend {
         snap = await ref.get();
       }
       _current = _map(u, snap.data());
+      unawaited(_markSeen(ref, snap.data()));
     } catch (_) {
       _current = _map(u, null);
     }
     _users.add(_current);
+  }
+
+  /// Last time this person used the app (for the admin's "inactive users"),
+  /// with the app version and platform – written at most once a day.
+  Future<void> _markSeen(
+    DocumentReference<Map<String, dynamic>> ref,
+    Map<String, dynamic>? doc,
+  ) async {
+    try {
+      final last = _ts(doc?['lastSeenAt']);
+      if (last != null && DateTime.now().difference(last).inHours < 20) return;
+      final info = await PackageInfo.fromPlatform();
+      await ref.set({
+        'lastSeenAt': FieldValue.serverTimestamp(),
+        'appVersion': info.version,
+        'platform': defaultTargetPlatform.name,
+      }, SetOptions(merge: true));
+    } catch (_) {}
   }
 
   AppUser _map(User u, Map<String, dynamic>? doc) => AppUser(
@@ -80,7 +101,7 @@ class FirebaseBackend implements Backend {
         : (u.displayName ?? ''),
     phone: u.phoneNumber ?? '',
     emailVerified: u.emailVerified,
-    role: doc?['role'] == 'superAdmin' ? UserRole.superAdmin : UserRole.user,
+    role: UserRole.values.asNameMap()[doc?['role']] ?? UserRole.user,
     hasPassword: u.providerData.any((p) => p.providerId == 'password'),
   );
 
@@ -643,13 +664,37 @@ class FirebaseBackend implements Backend {
       .map((s) => s.docs.map(_masjid).toList());
 
   @override
-  Future<void> setStatus(String id, MasjidStatus status, {String? reason}) =>
-      _masjids.doc(id).update({
-        'status': status.name,
-        'rejectionReason': reason,
-        'reviewedBy': _auth.currentUser?.uid,
-        'reviewedAt': FieldValue.serverTimestamp(),
+  Future<void> setStatus(
+    String id,
+    MasjidStatus status, {
+    String? reason,
+  }) async {
+    await _masjids.doc(id).update({
+      'status': status.name,
+      'rejectionReason': reason,
+      'reviewedBy': _auth.currentUser?.uid,
+      'reviewedAt': FieldValue.serverTimestamp(),
+    });
+    if (status == MasjidStatus.approved) await _giveNumber(_masjids.doc(id));
+  }
+
+  /// The next masjid number (counters/masjid), once a masjid is approved.
+  /// Until the admin has numbered the existing masjids (admin website →
+  /// App settings) there is no counter, and the job numbers it later.
+  Future<void> _giveNumber(DocumentReference<Map<String, dynamic>> ref) async {
+    try {
+      await _db.runTransaction((tx) async {
+        final counter = _db.doc('counters/masjid');
+        final c = await tx.get(counter);
+        if (!c.exists) return;
+        final m = await tx.get(ref);
+        if (!m.exists || m.data()?['number'] != null) return;
+        final next = (c.data()?['next'] as num?)?.toInt() ?? 1;
+        tx.update(ref, {'number': next});
+        tx.update(counter, {'next': next + 1});
       });
+    } catch (_) {}
+  }
 
   // --------------------------------------------------------------- notices
   static Notice _notice(DocumentSnapshot<Map<String, dynamic>> d) {
@@ -664,12 +709,51 @@ class FirebaseBackend implements Backend {
   }
 
   @override
+  Stream<List<InboxMessage>> myInbox({int limit = 30}) {
+    final uid = _auth.currentUser?.uid;
+    if (uid == null) return Stream.value(const []);
+    return _userDoc(uid)
+        .collection('inbox')
+        .orderBy('createdAt', descending: true)
+        .limit(limit)
+        .snapshots()
+        .map(
+          (s) => [
+            for (final d in s.docs)
+              InboxMessage(
+                id: d.id,
+                title: d.data()['title'] as String? ?? '',
+                body: d.data()['body'] as String? ?? '',
+                createdAt: _tsNow(d.data()['createdAt']),
+                linkType: (d.data()['link'] as Map?)?['type'] as String? ?? '',
+                linkId: (d.data()['link'] as Map?)?['id'] as String? ?? '',
+              ),
+          ],
+        )
+        .handleError((_) {});
+  }
+
+  @override
   Stream<AppConfig> appConfig() => _db
       .doc('config/app')
       .snapshots()
       .map((d) => AppConfig.fromMap(d.data()))
       // Not readable yet (rules not deployed) or offline: no switches.
       .handleError((_) {});
+
+  @override
+  Future<Map<String, String>> placeNamesBn() async {
+    try {
+      final d = await _db.doc('config/places').get();
+      final m = (d.data()?['bn'] as Map?) ?? const {};
+      return {
+        for (final e in m.entries)
+          if (e.value is String) '${e.key}': e.value as String,
+      };
+    } catch (_) {
+      return const {};
+    }
+  }
 
   @override
   Stream<List<Announcement>> announcements({int limit = 10}) => _db
@@ -852,6 +936,7 @@ class FirebaseBackend implements Backend {
         'masjidId': ref.id,
       });
     await batch.commit();
+    await _giveNumber(ref);
   }
 
   @override

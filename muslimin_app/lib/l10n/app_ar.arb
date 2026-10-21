@@ -796,5 +796,11 @@
   "accountDisabled": "عطّل فريق مسلمين هذا الحساب. تواصل عبر muslimin.admin@gmail.com.",
   "updateRequiredTitle": "يلزم التحديث",
   "updateRequiredBody": "هذا الإصدار من مسلمين قديم جدًا. حدّث التطبيق لمتابعة استخدامه.",
-  "updateNow": "حدّث الآن"
+  "updateNow": "حدّث الآن",
+  "inboxMessage": "رسالة لك",
+  "appNews": "أخبار",
+  "openNotice": "فتح الإعلان",
+  "openMasjid": "فتح المسجد",
+  "openAbout": "فتح حول التطبيق",
+  "masjidNumber": "مسجد رقم {n}"
 }

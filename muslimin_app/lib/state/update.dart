@@ -3,6 +3,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 
 import '../data/models/announcement.dart';
 import '../data/models/app_config.dart';
+import '../data/models/inbox_message.dart';
 import '../services/update_service.dart';
 import 'providers.dart';
 
@@ -24,9 +25,26 @@ final newerReleaseProvider = FutureProvider<UpdateInfo?>((ref) async {
   }
 });
 
+/// Messages the admin sent to me (users/{uid}/inbox).
+final myInboxProvider = StreamProvider<List<InboxMessage>>((ref) {
+  ref.watch(authProvider.select((u) => u.value?.uid));
+  return ref.watch(backendProvider).myInbox();
+});
+
 /// Switches from the admin website (config/app).
+/// Bangla names of places (admin website → Locations), read once.
+final placeNamesProvider = FutureProvider<Map<String, String>>(
+  (ref) => ref.watch(backendProvider).placeNamesBn(),
+);
+
 final appConfigProvider = StreamProvider<AppConfig>(
   (ref) => ref.watch(backendProvider).appConfig(),
+);
+
+/// Whether a part of the app is on ([Feature] keys; on until the admin
+/// switches it off).
+final featureProvider = Provider.family<bool, String>(
+  (ref, key) => ref.watch(appConfigProvider).value?.on(key) ?? true,
 );
 
 /// The installed version ("1.18.5").

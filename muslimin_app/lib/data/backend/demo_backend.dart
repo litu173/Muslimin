@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'dart:math' as math;
 
 import '../../core/utils/geo.dart';
+import '../models/inbox_message.dart';
 import '../models/app_config.dart';
 import '../models/announcement.dart';
 import '../models/app_user.dart';
@@ -103,6 +104,7 @@ class DemoBackend implements Backend {
         id: id,
         name: names[i].$1,
         nameBn: names[i].$3,
+        number: i + 1,
         address: names[i].$2,
         district: 'Dhaka',
         thana: 'Ramna',
@@ -812,8 +814,31 @@ class DemoBackend implements Backend {
     _emit();
   }
 
+  /// One sample personal message, so the inbox shows how it looks.
+  @override
+  Stream<List<InboxMessage>> myInbox({int limit = 30}) => Stream.value([
+    InboxMessage(
+      id: 'demo-msg',
+      title: 'আপনার মসজিদের তথ্য',
+      body:
+          'আসসালামু আলাইকুম। বায়তুল আমান জামে মসজিদের জামাতের সময় হালনাগাদ '
+          'করার জন্য জাযাকাল্লাহু খাইরান। মাগরিবের সময়টি আরেকবার দেখে নেবেন – '
+          'কয়েকজন ব্যবহারকারী জানিয়েছেন সময়টি পাঁচ মিনিট আগে।',
+      createdAt: DateTime.now().subtract(const Duration(minutes: 30)),
+      linkType: 'masjid',
+      linkId: 'm1',
+    ),
+  ]);
+
   @override
   Stream<AppConfig> appConfig() => Stream.value(const AppConfig());
+
+  @override
+  Future<Map<String, String>> placeNamesBn() async => const {
+    'Dhaka': 'ঢাকা',
+    'Paltan': 'পল্টন',
+    'Ramna': 'রমনা',
+  };
 
   /// One sample update announcement, so the inbox shows how it looks.
   @override

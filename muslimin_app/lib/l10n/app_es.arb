@@ -796,5 +796,11 @@
   "accountDisabled": "El equipo de Muslimin ha desactivado esta cuenta. Escribe a muslimin.admin@gmail.com.",
   "updateRequiredTitle": "Actualización necesaria",
   "updateRequiredBody": "Esta versión de Muslimin es demasiado antigua. Actualiza para seguir usando la app.",
-  "updateNow": "Actualizar ahora"
+  "updateNow": "Actualizar ahora",
+  "inboxMessage": "Mensaje para ti",
+  "appNews": "Noticias",
+  "openNotice": "Abrir aviso",
+  "openMasjid": "Abrir mezquita",
+  "openAbout": "Abrir Acerca de la app",
+  "masjidNumber": "Mezquita n.º {n}"
 }

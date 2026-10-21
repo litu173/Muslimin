@@ -2708,4 +2708,24 @@ class L10nId extends L10n {
 
   @override
   String get updateNow => 'Perbarui sekarang';
+
+  @override
+  String get inboxMessage => 'Pesan untuk Anda';
+
+  @override
+  String get appNews => 'Berita';
+
+  @override
+  String get openNotice => 'Buka pengumuman';
+
+  @override
+  String get openMasjid => 'Buka masjid';
+
+  @override
+  String get openAbout => 'Buka Tentang Aplikasi';
+
+  @override
+  String masjidNumber(String n) {
+    return 'Masjid No. $n';
+  }
 }

@@ -3,21 +3,28 @@ import 'dart:io';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 
+import 'places.dart';
 import 'thana_service.dart';
 
 class UserLocation {
   const UserLocation({
     required this.lat,
     required this.lng,
-    required this.label,
+    required String label,
     this.accuracy = 0,
     this.fromMap = false,
     this.approximate = false,
-  });
+    // A named parameter can't be private, so no initializing formal.
+    // ignore: prefer_initializing_formals
+  }) : _label = label;
 
   final double lat;
   final double lng;
-  final String label;
+
+  /// "Kazi Office Lane, Ramna, Dhaka" – thana and district in Bangla when
+  /// the app is (admin website → Locations).
+  String get label => _label.split(', ').map(Places.of).join(', ');
+  final String _label;
   final double accuracy;
 
   /// Chosen on the map (no GPS accuracy) rather than measured on site.

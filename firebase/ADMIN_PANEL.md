@@ -1,8 +1,18 @@
 # Muslimin admin website
 
-**URL:** https://litu173.github.io/Muslimin/admin/ – super admins only
-(`users/{uid}.role == 'superAdmin'`). Everything it reads or writes is
-enforced by `firestore.rules`, so the page being public is safe.
+**URL:** https://litu173.github.io/Muslimin/admin/ – for admins and super
+admins (`users/{uid}.role`). Everything it reads or writes is enforced by
+`firestore.rules`, so the page being public is safe.
+
+## Roles
+
+| Role | What they can do |
+|---|---|
+| user | Uses the app; volunteers for masjids within 2 km |
+| volunteer | Trusted volunteer: becomes a volunteer editor of any masjid (no 2 km limit) |
+| editor | Updates jamat times, staff and maktab of every approved masjid |
+| admin | This panel: approves masjids, edits everything, place names, messages users. Cannot change roles or app settings, or disable / delete accounts |
+| superAdmin | Everything, including roles (Users → a person → Role), app settings and accounts |
 
 ## One-time setup
 
@@ -23,13 +33,26 @@ enforced by `firestore.rules`, so the page being public is safe.
 
 ## What it does
 
-Dashboard · Masjids (search, filters, map, add, full editor with history
-and undo) · Review (pending masjids, suggestions, problem reports) · Users
-(roles, block volunteering, disable sign-in, delete, direct notification) ·
-Locations (by country, district and thana coverage) · Activity (changes,
-notices, channel messages, volunteers) · Notifications (everyone, a masjid's
-followers, a channel, one user) · App settings (minimum app version, Home
-banner, admins) · Admin log.
+Dashboard · Masjids (search by name or number, filters, map, add, full
+editor with history and undo, CSV export, bulk jamat times from CSV, Bangla
+name suggestions) · Review (pending masjids, suggestions, problem reports) ·
+Users (roles, inactive users, pick people and message them, block
+volunteering, disable sign-in, delete) · Locations (coverage by country /
+district / thana, Bangla place names by hand or CSV, countries, rename a place
+on every masjid) · Activity · Notifications (everyone, a masjid's followers, a
+channel, one user) · App settings (features on/off, minimum app version, Home
+banner, masjid numbers, admin team) · Admin log. Light / dark / system theme
+at the bottom of the menu.
+
+**Bangla name suggestions** use Gemini through Firebase AI Logic: Firebase
+console → AI Logic → Get started → *Gemini Developer API* (free). Suggestions
+are always shown for review before saving.
+
+**Masjid numbers:** App settings → *Start numbering* once (numbers approved
+masjids oldest first); after that every approval gets the next number.
+
+**Inactive users** are found by `lastSeenAt`, which app 1.20+ records (at
+most once a day). People on older versions show under *No activity record yet*.
 
 ## Try it locally (no live data touched)
 

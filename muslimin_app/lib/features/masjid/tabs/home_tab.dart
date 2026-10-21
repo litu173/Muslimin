@@ -19,6 +19,8 @@ import '../../../state/providers.dart';
 import '../channel/channel_invite_card.dart';
 import '../../../services/time_board_reader.dart';
 import '../time_board_scan.dart';
+import '../../../data/models/app_config.dart' show Feature;
+import '../../../state/update.dart' show featureProvider;
 import '../volunteer.dart';
 import '../../../core/widgets/time_wheel.dart';
 
@@ -233,14 +235,10 @@ class _JamatCard extends ConsumerWidget {
           _CardHeader(
             icon: 'assets/images/kaaba.png',
             title: t.jamatTime,
+            // When, not who: the person who updated it isn't shown.
             subtitle: masjid.jamatUpdatedAt == null
                 ? null
-                : masjid.updatedByName.isEmpty
-                ? t.lastUpdated(f.relativeDays(masjid.jamatUpdatedAt!, now))
-                : t.lastUpdatedBy(
-                    f.relativeDays(masjid.jamatUpdatedAt!, now),
-                    masjid.updatedByName,
-                  ),
+                : t.lastUpdated(f.relativeDays(masjid.jamatUpdatedAt!, now)),
             // Everyone can set a reminder; owners, admins and editors
             // also get Edit.
             trailing: Row(
@@ -391,18 +389,25 @@ class _JamatEditorState extends ConsumerState<_JamatEditor> {
                 : t.lastUpdated(
                     f.relativeDays(widget.masjid.jamatUpdatedAt!, now),
                   ),
-            trailing: CircleIconButton(
-              icon: Icons.photo_camera_outlined,
-              active: true,
-              tooltip: t.scanBoard,
-              onTap: _scan,
-            ),
+            // Scanning the board can be switched off by the admin.
+            trailing: ref.watch(featureProvider(Feature.timeBoardScan))
+                ? CircleIconButton(
+                    icon: Icons.photo_camera_outlined,
+                    active: true,
+                    tooltip: t.scanBoard,
+                    onTap: _scan,
+                  )
+                : null,
           ),
           const SizedBox(height: Gap.m),
           // Two ways to update: scan the board, or tap each time below.
           AnimatedSwitcher(
             duration: const Duration(milliseconds: 300),
-            child: _fromPhoto.isEmpty
+            child:
+                _fromPhoto.isEmpty &&
+                    !ref.watch(featureProvider(Feature.timeBoardScan))
+                ? const SizedBox.shrink(key: ValueKey('none'))
+                : _fromPhoto.isEmpty
                 ? InkWell(
                     key: const ValueKey('hint'),
                     borderRadius: BorderRadius.circular(Radii.button),

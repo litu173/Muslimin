@@ -39,7 +39,7 @@ final _channelRole = Provider.family<ChannelRole?, (String, String)>((
   final (masjidId, ownerUid) = key;
   final user = ref.watch(authProvider).value;
   if (user == null) return null;
-  if (user.uid == ownerUid || user.isSuperAdmin) return ChannelRole.admin;
+  if (user.uid == ownerUid || user.isAdmin) return ChannelRole.admin;
   return ref.watch(channelMembershipProvider(masjidId)).value?.role;
 });
 
@@ -193,6 +193,9 @@ final unreadCountProvider = Provider<int>((ref) {
           .length +
       (ref.watch(announcementsProvider).value ?? const [])
           .where((a) => unread(a.id, a.createdAt))
+          .length +
+      (ref.watch(myInboxProvider).value ?? const [])
+          .where((m) => unread(m.id, m.createdAt))
           .length;
 });
 

@@ -16,6 +16,7 @@ import '../../core/widgets/refresh.dart';
 import '../../core/widgets/surfaces.dart';
 import '../../l10n/app_localizations.dart';
 import '../../state/providers.dart';
+import '../../data/models/app_config.dart' show Feature;
 import '../../state/update.dart';
 import '../dhikr/dhikr_screen.dart';
 import '../prayers/all_prayers_screen.dart';
@@ -83,7 +84,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
     final masjids = ref.watch(nearbyMasjidsProvider);
     // Only for users who have not registered a masjid yet.
     final mine = ref.watch(myMasjidsProvider);
+    bool on(String f) => ref.watch(featureProvider(f));
     final showBanner =
+        on(Feature.homeRegisterBanner) &&
+        on(Feature.masjidRegistration) &&
         !_bannerClosed &&
         !ref.read(prefsProvider).authorityBannerHidden &&
         mine.hasValue &&
@@ -189,24 +193,29 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
             ),
 
             // ---- daily Quran reading: the lantern fills as you read
-            SliverToBoxAdapter(
-              child: _in(
-                9,
-                const Padding(
-                  padding: EdgeInsets.fromLTRB(Gap.l, Gap.xl, Gap.l, 0),
-                  child: QuranEnergyCard(),
+            if (on(Feature.homeDailyQuran))
+              SliverToBoxAdapter(
+                child: _in(
+                  9,
+                  const Padding(
+                    padding: EdgeInsets.fromLTRB(Gap.l, Gap.xl, Gap.l, 0),
+                    child: QuranEnergyCard(),
+                  ),
                 ),
               ),
-            ),
 
             // ---- daily sunnah dhikr, a part after each salah
-            SliverToBoxAdapter(child: _in(9, const DhikrSection())),
+            if (on(Feature.homeDailyDhikr))
+              SliverToBoxAdapter(child: _in(9, const DhikrSection())),
 
             // ---- duas for this part of the day
-            SliverToBoxAdapter(child: _in(10, const NowDuaSection())),
+            if (on(Feature.homeDua) && on(Feature.tabDua))
+              SliverToBoxAdapter(child: _in(10, const NowDuaSection())),
 
-            const SliverToBoxAdapter(child: SizedBox(height: Gap.xl)),
-            SliverToBoxAdapter(child: _in(11, const VerseCarousel())),
+            if (on(Feature.homeVerses)) ...[
+              const SliverToBoxAdapter(child: SizedBox(height: Gap.xl)),
+              SliverToBoxAdapter(child: _in(11, const VerseCarousel())),
+            ],
 
             const SliverToBoxAdapter(child: SizedBox(height: Gap.xxl)),
           ],

@@ -69,7 +69,10 @@ class WelcomeScreen extends ConsumerWidget {
                   Image.asset('assets/images/onboard_mosque.png', height: 170),
                   const SizedBox(height: Gap.xl),
                   const Wordmark(size: 46),
-                  if (kBeta) ...[const SizedBox(height: 8), const BetaBadge()],
+                  if (kShowBeta) ...[
+                    const SizedBox(height: 8),
+                    const BetaBadge(),
+                  ],
                   const SizedBox(height: Gap.xl),
                   Text(
                     t.welcomeTitle,

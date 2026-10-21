@@ -796,5 +796,11 @@
   "accountDisabled": "মুসলিমিন টিম এই অ্যাকাউন্টটি বন্ধ করেছে। muslimin.admin@gmail.com-এ যোগাযোগ করুন।",
   "updateRequiredTitle": "আপডেট প্রয়োজন",
   "updateRequiredBody": "মুসলিমিনের এই ভার্সন অনেক পুরোনো। অ্যাপ ব্যবহার চালিয়ে যেতে আপডেট করুন।",
-  "updateNow": "এখনই আপডেট করুন"
+  "updateNow": "এখনই আপডেট করুন",
+  "inboxMessage": "আপনার জন্য বার্তা",
+  "appNews": "খবর",
+  "openNotice": "নোটিশ দেখুন",
+  "openMasjid": "মসজিদ দেখুন",
+  "openAbout": "অ্যাপ সম্পর্কে দেখুন",
+  "masjidNumber": "মসজিদ নং {n}"
 }

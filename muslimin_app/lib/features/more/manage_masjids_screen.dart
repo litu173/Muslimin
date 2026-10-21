@@ -15,6 +15,8 @@ import '../../core/widgets/thana_picker.dart';
 import '../../services/thana_service.dart';
 import '../../data/models/masjid.dart';
 import '../../l10n/app_localizations.dart';
+import '../../data/models/app_config.dart' show Feature;
+import '../../state/update.dart' show featureProvider;
 import '../../state/providers.dart';
 import '../masjid/masjid_screen.dart';
 import '../registration/registration_flow.dart';
@@ -49,7 +51,7 @@ class _ManageMasjidsScreenState extends ConsumerState<ManageMasjidsScreen> {
   Widget build(BuildContext context) {
     final t = L10n.of(context);
     final user = ref.watch(authProvider).value;
-    final admin = user?.isSuperAdmin ?? false;
+    final admin = user?.isAdmin ?? false;
     final mine = ref.watch(myThanaProvider).value;
     final thana = _thana ?? (admin ? mine : null) ?? allThanas;
     final all = thana == allThanas;
@@ -120,12 +122,17 @@ class _ManageMasjidsScreenState extends ConsumerState<ManageMasjidsScreen> {
         top: false,
         child: Padding(
           padding: const EdgeInsets.fromLTRB(Gap.l, Gap.s, Gap.l, Gap.l),
-          child: AppButton(
-            t.registerMasjid,
-            icon: Icons.add_rounded,
-            expand: true,
-            onPressed: () => startRegistration(context, ref),
-          ),
+          // Registration can be switched off by the admin (admins still can).
+          child:
+              ref.watch(featureProvider(Feature.masjidRegistration)) ||
+                  (ref.watch(authProvider).value?.isAdmin ?? false)
+              ? AppButton(
+                  t.registerMasjid,
+                  icon: Icons.add_rounded,
+                  expand: true,
+                  onPressed: () => startRegistration(context, ref),
+                )
+              : const SizedBox.shrink(),
         ),
       ),
     );

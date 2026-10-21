@@ -2722,4 +2722,24 @@ class L10nEs extends L10n {
 
   @override
   String get updateNow => 'Actualizar ahora';
+
+  @override
+  String get inboxMessage => 'Mensaje para ti';
+
+  @override
+  String get appNews => 'Noticias';
+
+  @override
+  String get openNotice => 'Abrir aviso';
+
+  @override
+  String get openMasjid => 'Abrir mezquita';
+
+  @override
+  String get openAbout => 'Abrir Acerca de la app';
+
+  @override
+  String masjidNumber(String n) {
+    return 'Mezquita n.º $n';
+  }
 }
