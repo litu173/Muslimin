@@ -114,9 +114,10 @@ export async function render(el, district, thana, country) {
       }, 0);
     } else {
       out.append(table([
-        { label: 'No.', class: 'r', cell: (m) => (m.number ? h('span.num-tag', m.number) : h('span.muted', '–')) },
+        { label: '#', class: 'r', cell: (m) => h('span.muted', rows.indexOf(m) + 1) },
         { label: 'Masjid', cell: (m) => h('div.t-name', h('b', m.name || '(no name)'), h('span', m.nameBn || m.address || '')) },
         { label: 'Area', cell: (m) => (m.country === 'BD' ? `${m.thana || '–'}, ${m.district || '–'}` : `${m.thana || m.district || '–'}, ${countryName(m.country)}`) },
+        { label: 'Masjid No.', class: 'r', cell: (m) => (m.number ? h('span.num-tag', m.number) : h('span.muted', '–')) },
         { label: 'Jamat', cell: (m) => (m.hasJamat ? badge('times set', 'ok') : badge('no times', 'mute')) },
         { label: 'Status', cell: (m) => statusBadge(m.status) },
         { label: 'Source', cell: (m) => badge({ osm: 'OpenStreetMap', user: 'Suggested', admin: 'Added by admin' }[m.source] || 'Registered', 'gold') },
