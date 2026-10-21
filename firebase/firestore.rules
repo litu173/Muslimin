@@ -29,7 +29,7 @@ service cloud.firestore {
       function validProfile() {
         return request.resource.data.keys().hasOnly(
                  ['name', 'email', 'phone', 'role', 'createdAt', 'follows', 'fcmTokens',
-                  'editBlocked'])
+                  'editBlocked', 'disabled'])
           && (!('name' in request.resource.data) || request.resource.data.name is string
               && request.resource.data.name.size() <= 80);
       }
@@ -37,8 +37,9 @@ service cloud.firestore {
       allow read: if isSelf() || isSuperAdmin();
       // Users can create their own profile but never promote themselves.
       allow create: if isSelf() && request.resource.data.role == 'user' && validProfile();
-      // `editBlocked` (no volunteering) is set by the admin only.
-      allow update: if (isSelf() && unchanged(['role', 'createdAt', 'editBlocked']) && validProfile())
+      // `editBlocked` (no volunteering) and `disabled` are set by the admin only.
+      allow update: if (isSelf() && unchanged(['role', 'createdAt', 'editBlocked', 'disabled'])
+          && validProfile())
         || isSuperAdmin();
       allow delete: if isSelf() || isSuperAdmin();
     }
@@ -144,6 +145,8 @@ service cloud.firestore {
           && request.resource.data.masjidId == masjidId
           && request.resource.data.field in ['jamat', 'staff', 'maktab', 'location']
           && (masjidDoc().ownerUid == request.auth.uid || isEditor() || isSuperAdmin());
+        // Removed only with the masjid itself.
+        allow delete: if isSuperAdmin();
       }
 
       // ---- Channel: the masjid's Imam / Khatib / committee message the
@@ -207,6 +210,10 @@ service cloud.firestore {
     match /{path=**}/edits/{editId} {
       allow read: if isSuperAdmin();
     }
+    // Admin website: channel messages across all masjids (moderation).
+    match /{path=**}/messages/{messageId} {
+      allow read: if isSuperAdmin();
+    }
     match /{path=**}/editors/{uid} {
       allow read: if isSuperAdmin() || (signedIn() && resource.data.uid == request.auth.uid);
     }
@@ -253,14 +260,31 @@ service cloud.firestore {
 
     // "My channels": a user can list their own memberships across masjids.
     match /{path=**}/members/{uid} {
-      allow read: if signedIn() && resource.data.uid == request.auth.uid;
+      allow read: if (signedIn() && resource.data.uid == request.auth.uid) || isSuperAdmin();
     }
 
-    // App news for everyone (update announcements) – written only by the
-    // admin tools (firebase/tools/broadcast.mjs).
+    // App news for everyone (update announcements) – written by the admin
+    // (website) and the admin tools (firebase/tools/broadcast.mjs).
     match /announcements/{id} {
       allow read: if true;
-      allow write: if false;
+      allow write: if isSuperAdmin();
+    }
+
+    // ---- Admin website (docs/admin) --------------------------------------
+    // App-wide switches: minimum version, maintenance banner. Everyone reads.
+    match /config/{id} {
+      allow read: if true;
+      allow write: if isSuperAdmin();
+    }
+    // Work that needs the Admin SDK (push, disable / delete accounts): the
+    // admin queues it, the GitHub job (firebase/tools/admin_jobs.mjs) runs it
+    // and records the result.
+    match /adminJobs/{id} {
+      allow read, create: if isSuperAdmin();
+    }
+    // Who did what in the admin website. Never edited or deleted.
+    match /adminLog/{id} {
+      allow read, create: if isSuperAdmin();
     }
 
     match /notices/{noticeId} {

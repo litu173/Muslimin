@@ -1,0 +1,38 @@
+# Runs what the admin website (docs/admin) queued in `adminJobs`: push
+# notifications, disabling / deleting accounts (firebase/tools/admin_jobs.mjs).
+# The website starts it right away through the GitHub API; the schedule picks
+# up anything left (GitHub may run it late). Needs FIREBASE_SERVICE_ACCOUNT.
+name: Admin jobs
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '*/15 * * * *'
+concurrency:
+  group: admin-jobs
+  cancel-in-progress: false
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    if: ${{ github.repository == 'litu173/Muslimin' }}
+    env:
+      HAS_KEY: ${{ secrets.FIREBASE_SERVICE_ACCOUNT != '' }}
+    steps:
+      - uses: actions/checkout@v4
+        if: env.HAS_KEY == 'true'
+        with:
+          sparse-checkout: firebase/tools
+      - uses: actions/setup-node@v4
+        if: env.HAS_KEY == 'true'
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: firebase/tools/package-lock.json
+      - run: npm ci --omit=dev
+        if: env.HAS_KEY == 'true'
+        working-directory: firebase/tools
+      - run: node admin_jobs.mjs
+        if: env.HAS_KEY == 'true'
+        working-directory: firebase/tools
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
