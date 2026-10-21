@@ -311,14 +311,6 @@ class _Info extends ConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  if (masjid.number != null)
-                    Text(
-                      t.masjidNumber(f.digits(masjid.number!)),
-                      style: AppText.caption.copyWith(
-                        color: AppColors.goldLight,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
                   Text(
                     masjid.fullAddress,
                     style: AppText.body.copyWith(color: AppColors.onHeader),

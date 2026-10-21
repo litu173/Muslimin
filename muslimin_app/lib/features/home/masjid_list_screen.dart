@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text.dart';
+import '../../core/utils/format.dart';
 import '../../core/widgets/buttons.dart';
 import '../../core/widgets/page_header.dart';
 import '../../core/widgets/refresh.dart';
@@ -64,7 +65,10 @@ class _MasjidListScreenState extends ConsumerState<MasjidListScreen> {
       body: Column(
         children: [
           PageHeader(
-            title: t.allMasjids,
+            // With how many masjids are listed, e.g. "All Masjids (24)".
+            title: masjids.value == null
+                ? t.allMasjids
+                : '${t.allMasjids} (${Fmt.of(context).digits(masjids.value!.length)})',
             subtitle: picked != null
                 ? '${picked.label} · ${t.nearestFirst}'
                 : loc == null

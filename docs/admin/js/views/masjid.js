@@ -46,7 +46,7 @@ export async function render(el, id) {
   }
 
   el.append(pageHead(m.name || '(no name)',
-    h('span', statusBadge(m.status), ' ', m.number ? h('span.num-tag', `Masjid No. ${m.number} · `) : '', m.nameBn || '', m.address ? ` · ${m.address}` : ''),
+    h('span', statusBadge(m.status), ' ', m.nameBn || '', m.address ? ` · ${m.address}` : ''),
     h('button.btn', { onclick: () => history.back() }, icon('back', 18), 'Back'),
     ...statusActions));
   if (m.status === 'rejected' || m.status === 'suspended') {

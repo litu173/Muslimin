@@ -1,7 +1,7 @@
 // Masjids: search, filter by status / place / times, list or map, add new.
 import {
   db, me, collection, query, where, orderBy, limit, startAfter, getDocs, getDoc, addDoc, doc,
-  writeBatch, serverTimestamp, logAction,
+  writeBatch, serverTimestamp, logAction, getCountFromServer,
 } from '../fb.js';
 import {
   h, icon, card, table, statusBadge, badge, input, select, field, dialog, act, go,
@@ -23,13 +23,20 @@ export async function render(el, district, thana, country) {
   if (district != null) Object.assign(state, { q: '', district: district || '', thana: thana || '', country: country || 'BD' });
   const thanas = await bdThanas();
   const districts = Object.keys(thanas).sort();
-  el.append(pageHead('Masjids', 'Every masjid in the app',
-    h('button.btn.btn-primary', { onclick: () => addMasjid(thanas) }, icon('plus', 18), 'Add masjid')));
+  const head = pageHead('Masjids', 'Every masjid in the app',
+    h('button.btn.btn-primary', { onclick: () => addMasjid(thanas) }, icon('plus', 18), 'Add masjid'));
+  el.append(head);
+  // Total beside the title, e.g. "Masjids 10,650".
+  const total = h('span.title-count');
+  head.querySelector('h1').append(' ', total);
+  getCountFromServer(collection(db, 'masjids')).then((c) => { total.textContent = num(c.data().count); }).catch(() => {});
+  let matching = null;
 
   const out = h('div');
   let cursor = null, rows = [];
+  let countLine = h('div'), countText = () => '';
 
-  const qIn = input({ placeholder: 'Search by name (English) or number…', value: state.q });
+  const qIn = input({ placeholder: 'Search by name (English)…', value: state.q });
   const stSel = select([['', 'All statuses'], ...STATUSES.map((s) => [s, s[0].toUpperCase() + s.slice(1)])], state.status);
   const coSel = select(COUNTRIES, state.country);
   const diSel = select([['', 'All districts'], ...districts.map((d) => [d, d])], state.district);
@@ -66,7 +73,7 @@ export async function render(el, district, thana, country) {
   el.append(card(null,
     h('div.filters', h('div.search', icon('search'), qIn), stSel, coSel, diSel, thSel, tiSel, viewSel),
     tools,
-    h('div.muted.small', 'Name search looks at the start of the English name, across all places; type a number to find Masjid No. N. Clear it to filter by place.'),
+    h('div.muted.small', 'Name search looks at the start of the English name, across all places. Clear it to filter by place.'),
     out));
 
   async function load(more = false) {
@@ -74,9 +81,7 @@ export async function render(el, district, thana, country) {
     const c = [];
     const base = collection(db, 'masjids');
     let q;
-    if (/^#?\d+$/.test(state.q)) {
-      c.push(where('number', '==', Number(state.q.replace('#', ''))));
-    } else if (state.q) {
+    if (state.q) {
       // Prefix search (index status + nameLower).
       if (state.status) c.push(where('status', '==', state.status));
       c.push(orderBy('nameLower'), where('nameLower', '>=', state.q), where('nameLower', '<=', `${state.q}`));
@@ -88,6 +93,11 @@ export async function render(el, district, thana, country) {
       if (state.times) c.push(where('hasJamat', '==', state.times === 'yes'));
     }
     if (more && cursor) c.push(startAfter(cursor));
+    if (!more) {
+      // How many match the filters (all pages), for the line above the list.
+      matching = null;
+      getCountFromServer(query(base, ...c)).then((n) => { matching = n.data().count; countLine.textContent = countText(); }).catch(() => {});
+    }
     q = query(base, ...c, limit(PAGE));
     await act(null, async () => {
       const snap = await getDocs(q);
@@ -99,7 +109,9 @@ export async function render(el, district, thana, country) {
 
   function draw(hasMore) {
     clear(out);
-    out.append(h('div.muted.small', { style: { margin: '6px 0 10px' } }, `${num(rows.length)} shown${hasMore ? ' – more below' : ''}`));
+    countText = () => `${num(rows.length)} shown${matching != null ? ` of ${num(matching)} matching` : ''}${hasMore ? ' – more below' : ''}`;
+    countLine = h('div.muted.small', { style: { margin: '6px 0 10px' } }, countText());
+    out.append(countLine);
     if (state.view === 'map') {
       const box = h('div.map.tall');
       out.append(box);
@@ -117,7 +129,6 @@ export async function render(el, district, thana, country) {
         { label: '#', class: 'r', cell: (m) => h('span.muted', rows.indexOf(m) + 1) },
         { label: 'Masjid', cell: (m) => h('div.t-name', h('b', m.name || '(no name)'), h('span', m.nameBn || m.address || '')) },
         { label: 'Area', cell: (m) => (m.country === 'BD' ? `${m.thana || '–'}, ${m.district || '–'}` : `${m.thana || m.district || '–'}, ${countryName(m.country)}`) },
-        { label: 'Masjid No.', class: 'r', cell: (m) => (m.number ? h('span.num-tag', m.number) : h('span.muted', '–')) },
         { label: 'Jamat', cell: (m) => (m.hasJamat ? badge('times set', 'ok') : badge('no times', 'mute')) },
         { label: 'Status', cell: (m) => statusBadge(m.status) },
         { label: 'Source', cell: (m) => badge({ osm: 'OpenStreetMap', user: 'Suggested', admin: 'Added by admin' }[m.source] || 'Registered', 'gold') },
@@ -196,8 +207,8 @@ const TIME_COLS = PRAYERS.map(([k]) => k);
 function exportCsv(rows) {
   if (!rows.length) { toast('Nothing shown to export.', 'bad'); return; }
   download(`muslimin-masjids-${new Date().toISOString().slice(0, 10)}.csv`, toCsv(
-    ['id', 'number', 'name', 'name_bn', 'country', 'district', 'thana', 'address', 'status', 'lat', 'lng', ...TIME_COLS],
-    rows.map((m) => [m.id, m.number ?? '', m.name, m.nameBn || '', m.country, m.district, m.thana, m.address || '', m.status,
+    ['id', 'name', 'name_bn', 'country', 'district', 'thana', 'address', 'status', 'lat', 'lng', ...TIME_COLS],
+    rows.map((m) => [m.id, m.name, m.nameBn || '', m.country, m.district, m.thana, m.address || '', m.status,
       m.lat ?? '', m.lng ?? '', ...TIME_COLS.map((k) => m.jamat?.[k] || '')])));
 }
 
@@ -215,8 +226,8 @@ function hhmm(v) {
 async function importTimes(done) {
   const text = await pickFile();
   if (!text) return;
-  const list = parseCsv(text).filter((r) => r.id || r.number);
-  if (!list.length) { toast('The file needs an id (or number) column and prayer columns.', 'bad'); return; }
+  const list = parseCsv(text).filter((r) => r.id);
+  if (!list.length) { toast('The file needs an id column and prayer columns.', 'bad'); return; }
   const bad = [];
   const plan = list.map((r, i) => {
     const jamat = {};
@@ -240,13 +251,8 @@ async function importTimes(done) {
   const missing = [];
   await act(null, async () => {
     for (const { r, jamat } of plan) {
-      let snap;
-      if (r.id) snap = await getDoc(doc(db, 'masjids', r.id));
-      else {
-        const s = await getDocs(query(collection(db, 'masjids'), where('number', '==', Number(r.number)), limit(1)));
-        snap = s.docs[0];
-      }
-      if (!snap?.exists()) { missing.push(r.id || `No. ${r.number}`); continue; }
+      const snap = await getDoc(doc(db, 'masjids', r.id));
+      if (!snap.exists()) { missing.push(r.id); continue; }
       const m = masjidOf(snap);
       const merged = { ...(m.jamat || {}), ...jamat };
       await loggedUpdate(m, 'jamat', m.jamat || {}, merged, {

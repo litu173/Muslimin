@@ -1,12 +1,12 @@
 // App settings: switches the app reads at start (config/app) – versions,
-// banner, which features are on – masjid numbers, the GitHub token for
+// banner, which features are on – the GitHub token for
 // instant jobs (kept only in this browser) and the admin team.
 import {
   db, isSuper, doc, getDoc, setDoc, collection, query, where, getDocs, serverTimestamp, logAction,
 } from '../fb.js';
-import { h, card, input, field, act, link, badge, toast, empty, confirmDialog } from '../ui.js';
+import { h, card, input, field, act, link, badge, toast, empty } from '../ui.js';
 import { pageHead } from '../app.js';
-import { ghToken, startJobs, queueJob, roleName, ROLE_KIND } from '../data.js';
+import { ghToken, startJobs, roleName, ROLE_KIND } from '../data.js';
 
 // Same keys as the app's Feature class (lib/data/models/app_config.dart).
 const FEATURES = [
@@ -81,17 +81,6 @@ export async function render(el) {
       await setDoc(ref, { maintenance: { on: on.checked, messageEn: en.value.trim(), messageBn: bn.value.trim() }, updatedAt: serverTimestamp() }, { merge: true });
       await logAction('config.banner', 'config/app', { on: on.checked });
     }, 'Saved.') }, 'Save'))));
-
-  // ---- masjid numbers
-  const counter = (await getDoc(doc(db, 'counters', 'masjid'))).data();
-  grid.append(card('Masjid numbers',
-    h('p.small', 'Every approved masjid gets a number (Masjid No. 1, 2, 3…) shown in the app and here. New approvals get the next number automatically once numbering has started.'),
-    counter ? h('div.msg', `Numbering is on – the next masjid gets No. ${counter.next}.`) : h('div.msg.warn', 'Not started yet.'),
-    h('div.row.end', h('button.btn.btn-primary', { onclick: (e) => act(e.currentTarget, async () => {
-      if (!await confirmDialog('Number the masjids?', 'Approved masjids without a number get one, oldest first. It reads every approved masjid once (about one read per masjid) – run it once, then new ones are numbered on approval.', { ok: 'Start' })) return;
-      const { started } = await queueJob('numberMasjids', {});
-      toast(started ? 'Numbering – it takes a minute or two.' : 'Queued – runs with the next job.');
-    }) }, counter ? 'Number any missed masjids' : 'Start numbering'))));
 
   grid.append(tokenCard());
 
