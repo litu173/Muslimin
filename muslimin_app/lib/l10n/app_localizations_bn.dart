@@ -2651,4 +2651,35 @@ class L10nBn extends L10n {
 
   @override
   String get emailCopied => 'ইমেইল কপি হয়েছে';
+
+  @override
+  String get cityRegion => 'শহর / অঞ্চল';
+
+  @override
+  String get areaName => 'এলাকা';
+
+  @override
+  String outsideBd(String country) {
+    return 'বাংলাদেশের বাইরে – $country';
+  }
+
+  @override
+  String get idOptional => 'আইডি বা পাসপোর্ট নম্বর (ঐচ্ছিক)';
+
+  @override
+  String get intlPhone => 'দেশের কোডসহ মোবাইল নম্বর, যেমন +44 7700 900123';
+
+  @override
+  String get accountDisabled =>
+      'মুসলিমিন টিম এই অ্যাকাউন্টটি বন্ধ করেছে। muslimin.admin@gmail.com-এ যোগাযোগ করুন।';
+
+  @override
+  String get updateRequiredTitle => 'আপডেট প্রয়োজন';
+
+  @override
+  String get updateRequiredBody =>
+      'মুসলিমিনের এই ভার্সন অনেক পুরোনো। অ্যাপ ব্যবহার চালিয়ে যেতে আপডেট করুন।';
+
+  @override
+  String get updateNow => 'এখনই আপডেট করুন';
 }

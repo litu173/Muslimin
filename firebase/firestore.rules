@@ -58,16 +58,20 @@ service cloud.firestore {
       allow create: if signedIn()
         && request.resource.data.ownerUid == request.auth.uid
         && request.resource.data.status == 'pending'
-        // Verified phone (SMS OTP) – or, during the public beta, a typed BD
-        // mobile number that the admin sees flagged as not verified.
+        // Verified phone (SMS OTP) – or, during the public beta, a typed
+        // mobile number that the admin sees flagged as not verified: a BD
+        // mobile in Bangladesh, any international number elsewhere.
         && ((request.resource.data.phoneVerified == true
               && request.resource.data.ownerPhone == request.auth.token.phone_number)
             || (request.resource.data.phoneVerified == false
-              && request.resource.data.ownerPhone.matches('^[+]8801[3-9][0-9]{8}$')))
+              && (request.resource.data.ownerPhone.matches('^[+]8801[3-9][0-9]{8}$')
+                || (abroad() && request.resource.data.ownerPhone.matches('^[+][1-9][0-9]{7,14}$')))))
         && request.resource.data.name is string
         && request.resource.data.name.size() >= 3
         && request.resource.data.name.size() <= 80
-        && request.resource.data.nid.matches('^[0-9]{10}$|^[0-9]{13}$|^[0-9]{17}$')
+        // The Bangladesh NID; elsewhere an optional ID of any kind.
+        && (request.resource.data.nid.matches('^[0-9]{10}$|^[0-9]{13}$|^[0-9]{17}$')
+          || (abroad() && request.resource.data.nid is string && request.resource.data.nid.size() <= 30))
         && request.resource.data.agreedToTerms == true
         // GPS fix within 50 m, or a pin placed on the map (stored as 0 m).
         && request.resource.data.locationAccuracyM <= 50
@@ -92,7 +96,7 @@ service cloud.firestore {
           && resource.data.status == 'approved'
           && request.resource.data.diff(resource.data).affectedKeys().hasOnly(
                ['jamat', 'jamatUpdatedAt', 'hasJamat', 'maktab', 'staff',
-                'geo', 'locationSource', 'locationAccuracyM', 'district', 'thana',
+                'geo', 'locationSource', 'locationAccuracyM', 'district', 'thana', 'country',
                 'updatedBy', 'updatedByName', 'updatedAt'])
           && request.resource.data.updatedBy == request.auth.uid
           // A wrong pin may be moved, but only nearby (~2 km).
@@ -104,6 +108,12 @@ service cloud.firestore {
                    - resource.data.geo.geopoint.longitude()) < 0.02)));
 
       allow delete: if isSuperAdmin();
+
+      // A masjid outside Bangladesh (no `country` = Bangladesh).
+      function abroad() {
+        return request.resource.data.get('country', 'BD') is string
+          && request.resource.data.get('country', 'BD') != 'BD';
+      }
 
       function isEditor() {
         return signedIn() && exists(/databases/$(database)/documents/masjids/$(masjidId)/editors/$(request.auth.uid));
@@ -223,8 +233,8 @@ service cloud.firestore {
       allow read: if isSuperAdmin() || (signedIn() && resource.data.uid == request.auth.uid);
       allow create: if signedIn()
         && request.resource.data.keys().hasOnly(
-             ['name', 'nameBn', 'lat', 'lng', 'district', 'thana', 'uid', 'userName',
-              'status', 'createdAt'])
+             ['name', 'nameBn', 'lat', 'lng', 'district', 'thana', 'country', 'uid',
+              'userName', 'status', 'createdAt'])
         && request.resource.data.uid == request.auth.uid
         && request.resource.data.status == 'open'
         && request.resource.data.name is string

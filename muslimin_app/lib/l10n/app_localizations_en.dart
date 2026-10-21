@@ -2674,4 +2674,36 @@ class L10nEn extends L10n {
 
   @override
   String get emailCopied => 'Email copied';
+
+  @override
+  String get cityRegion => 'City / region';
+
+  @override
+  String get areaName => 'Area';
+
+  @override
+  String outsideBd(String country) {
+    return 'Outside Bangladesh – $country';
+  }
+
+  @override
+  String get idOptional => 'ID or passport number (optional)';
+
+  @override
+  String get intlPhone =>
+      'Mobile number with country code, e.g. +44 7700 900123';
+
+  @override
+  String get accountDisabled =>
+      'This account has been disabled by the Muslimin team. Contact muslimin.admin@gmail.com.';
+
+  @override
+  String get updateRequiredTitle => 'Update needed';
+
+  @override
+  String get updateRequiredBody =>
+      'This version of Muslimin is too old. Please update to keep using the app.';
+
+  @override
+  String get updateNow => 'Update now';
 }

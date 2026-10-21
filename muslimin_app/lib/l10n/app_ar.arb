@@ -787,5 +787,14 @@
   "helpContactBody": "تواجه مشكلة، أو وجدت وقت جماعة خاطئًا، أو لديك اقتراح؟ راسلنا – نقرأ كل رسالة.",
   "sendEmail": "إرسال بريد",
   "copyEmail": "نسخ البريد",
-  "emailCopied": "تم نسخ البريد"
+  "emailCopied": "تم نسخ البريد",
+  "cityRegion": "المدينة / المنطقة",
+  "areaName": "الحي",
+  "outsideBd": "خارج بنغلاديش – {country}",
+  "idOptional": "رقم الهوية أو جواز السفر (اختياري)",
+  "intlPhone": "رقم الجوال مع رمز الدولة، مثل +44 7700 900123",
+  "accountDisabled": "عطّل فريق مسلمين هذا الحساب. تواصل عبر muslimin.admin@gmail.com.",
+  "updateRequiredTitle": "يلزم التحديث",
+  "updateRequiredBody": "هذا الإصدار من مسلمين قديم جدًا. حدّث التطبيق لمتابعة استخدامه.",
+  "updateNow": "حدّث الآن"
 }

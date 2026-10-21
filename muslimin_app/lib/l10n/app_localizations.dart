@@ -4838,6 +4838,60 @@ abstract class L10n {
   /// In en, this message translates to:
   /// **'Email copied'**
   String get emailCopied;
+
+  /// No description provided for @cityRegion.
+  ///
+  /// In en, this message translates to:
+  /// **'City / region'**
+  String get cityRegion;
+
+  /// No description provided for @areaName.
+  ///
+  /// In en, this message translates to:
+  /// **'Area'**
+  String get areaName;
+
+  /// No description provided for @outsideBd.
+  ///
+  /// In en, this message translates to:
+  /// **'Outside Bangladesh – {country}'**
+  String outsideBd(String country);
+
+  /// No description provided for @idOptional.
+  ///
+  /// In en, this message translates to:
+  /// **'ID or passport number (optional)'**
+  String get idOptional;
+
+  /// No description provided for @intlPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Mobile number with country code, e.g. +44 7700 900123'**
+  String get intlPhone;
+
+  /// No description provided for @accountDisabled.
+  ///
+  /// In en, this message translates to:
+  /// **'This account has been disabled by the Muslimin team. Contact muslimin.admin@gmail.com.'**
+  String get accountDisabled;
+
+  /// No description provided for @updateRequiredTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Update needed'**
+  String get updateRequiredTitle;
+
+  /// No description provided for @updateRequiredBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This version of Muslimin is too old. Please update to keep using the app.'**
+  String get updateRequiredBody;
+
+  /// No description provided for @updateNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Update now'**
+  String get updateNow;
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {

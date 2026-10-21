@@ -2674,4 +2674,36 @@ class L10nUr extends L10n {
 
   @override
   String get emailCopied => 'ای میل کاپی ہو گئی';
+
+  @override
+  String get cityRegion => 'شہر / علاقہ';
+
+  @override
+  String get areaName => 'محلہ';
+
+  @override
+  String outsideBd(String country) {
+    return 'بنگلہ دیش سے باہر – $country';
+  }
+
+  @override
+  String get idOptional => 'شناختی کارڈ یا پاسپورٹ نمبر (اختیاری)';
+
+  @override
+  String get intlPhone =>
+      'ملک کے کوڈ کے ساتھ موبائل نمبر، مثلاً +44 7700 900123';
+
+  @override
+  String get accountDisabled =>
+      'مسلمین ٹیم نے یہ اکاؤنٹ بند کر دیا ہے۔ muslimin.admin@gmail.com پر رابطہ کریں۔';
+
+  @override
+  String get updateRequiredTitle => 'اپ ڈیٹ ضروری ہے';
+
+  @override
+  String get updateRequiredBody =>
+      'مسلمین کا یہ ورژن بہت پرانا ہے۔ ایپ استعمال جاری رکھنے کے لیے اپ ڈیٹ کریں۔';
+
+  @override
+  String get updateNow => 'ابھی اپ ڈیٹ کریں';
 }

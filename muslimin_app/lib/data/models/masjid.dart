@@ -56,6 +56,7 @@ class Masjid {
     required this.address,
     required this.district,
     required this.thana,
+    this.country = 'BD',
     required this.lat,
     required this.lng,
     required this.status,
@@ -85,8 +86,15 @@ class Masjid {
   /// Optional Bangla name, shown when the UI is in Bangla.
   final String nameBn;
   final String address;
+
+  /// In Bangladesh: district and thana (upazila). Elsewhere: city / region
+  /// and area, as the place calls them.
   final String district;
   final String thana;
+
+  /// ISO country code; 'BD' for every masjid saved before it existed.
+  final String country;
+  bool get inBangladesh => country == 'BD';
   final double lat;
   final double lng;
   final MasjidStatus status;
@@ -164,6 +172,7 @@ class Masjid {
     String? address,
     String? district,
     String? thana,
+    String? country,
     MasjidStatus? status,
     Map<Prayer, HM>? jamat,
     DateTime? jamatUpdatedAt,
@@ -184,6 +193,7 @@ class Masjid {
     address: address ?? this.address,
     district: district ?? this.district,
     thana: thana ?? this.thana,
+    country: country ?? this.country,
     lat: location?.$1 ?? lat,
     lng: location?.$2 ?? lng,
     status: status ?? this.status,
@@ -242,6 +252,7 @@ class Masjid {
     address: (m['address'] ?? '') as String,
     district: (m['district'] ?? '') as String,
     thana: (m['thana'] ?? '') as String,
+    country: (m['country'] as String?) ?? 'BD',
     lat: lat,
     lng: lng,
     status:
@@ -276,6 +287,7 @@ class Masjid {
     'address': address,
     'district': district,
     'thana': thana,
+    'country': country,
     'status': status.name,
     'ownerUid': ownerUid,
     'ownerPhone': ownerPhone,

@@ -15,7 +15,7 @@ String authErrorText(L10n t, Object error) {
     'network-request-failed' || 'unavailable' => t.errNetwork,
     'credential-already-in-use' ||
     'account-exists-with-different-credential' => t.errPhoneInUse,
-    'user-disabled' => t.errUserDisabled,
+    'user-disabled' => t.accountDisabled,
     'invalid-otp' => t.invalidOtp,
     _ => error.message ?? t.somethingWrong,
   };

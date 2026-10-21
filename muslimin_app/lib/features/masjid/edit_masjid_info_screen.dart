@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/nav.dart';
+import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text.dart';
 import '../../core/utils/format.dart';
@@ -41,6 +42,14 @@ class _EditMasjidInfoScreenState extends ConsumerState<EditMasjidInfoScreen> {
       bdDistricts.any((d) => d.$1 == widget.masjid.district)
       ? widget.masjid.district
       : null;
+
+  /// Outside Bangladesh: city / region (and [_thana] holds the area).
+  late String _country = widget.masjid.country;
+  String _countryName = '';
+  late final _city = TextEditingController(
+    text: widget.masjid.inBangladesh ? '' : widget.masjid.district,
+  );
+  bool get _abroad => _country != 'BD';
   bool _saving = false;
 
   /// Current location; replaced by a fresh GPS fix after "Reload".
@@ -55,13 +64,21 @@ class _EditMasjidInfoScreenState extends ConsumerState<EditMasjidInfoScreen> {
   bool _locating = false;
   String? _locError;
 
-  /// District and thana from the masjid's position (still editable).
+  /// District and thana from the masjid's position (still editable) – or,
+  /// outside Bangladesh, its country, city and area.
   Future<void> _fillArea(double lat, double lng) async {
-    final area = (await ThanaService.load()).at(lat, lng);
+    final area = await areaAt(lat, lng);
     if (area == null || !mounted) return;
     setState(() {
-      _district = area.district;
-      _thana.text = area.name;
+      _country = area.country;
+      _countryName = area.countryName;
+      if (area.inBangladesh) {
+        _district = area.district;
+      } else {
+        _district = null;
+        _city.text = area.district;
+      }
+      _thana.text = area.thana;
     });
   }
 
@@ -98,7 +115,7 @@ class _EditMasjidInfoScreenState extends ConsumerState<EditMasjidInfoScreen> {
 
   @override
   void dispose() {
-    for (final c in [_name, _nameBn, _thana, _address]) {
+    for (final c in [_name, _nameBn, _thana, _address, _city]) {
       c.dispose();
     }
     super.dispose();
@@ -122,8 +139,9 @@ class _EditMasjidInfoScreenState extends ConsumerState<EditMasjidInfoScreen> {
             widget.masjid.id,
             name: _name.text.trim(),
             nameBn: _nameBn.text.trim(),
-            district: _district ?? '',
+            district: _abroad ? _city.text.trim() : _district ?? '',
             thana: _thana.text.trim(),
+            country: _country,
             address: _address.text.trim(),
             location: _moved
                 ? (_fix.lat, _fix.lng, _fix.fromMap ? 0 : _fix.accuracy)
@@ -173,28 +191,48 @@ class _EditMasjidInfoScreenState extends ConsumerState<EditMasjidInfoScreen> {
                             : null,
                       ),
                       AppTextField(label: t.masjidNameBn, controller: _nameBn),
-                      AppDropdown<String>(
-                        label: t.district,
-                        value: _district,
-                        hint: t.select,
-                        items: [for (final d in bdDistricts) d.$1],
-                        itemLabel: (en) => bn
-                            ? bdDistricts.firstWhere((d) => d.$1 == en).$2
-                            : en,
-                        validator: (v) => v == null ? t.required : null,
-                        onChanged: (v) => setState(() {
-                          _district = v;
-                          _thana.clear();
-                        }),
-                      ),
-                      ThanaDropdown(
-                        label: t.thana,
-                        district: _district,
-                        value: _thana.text,
-                        hint: t.select,
-                        validator: (v) => v == null ? t.required : null,
-                        onChanged: (v) => setState(() => _thana.text = v ?? ''),
-                      ),
+                      if (_abroad) ...[
+                        if (_countryName.isNotEmpty)
+                          Padding(
+                            padding: const EdgeInsets.only(top: Gap.l),
+                            child: Text(
+                              t.outsideBd(_countryName),
+                              style: AppText.label.copyWith(
+                                color: AppColors.gold,
+                              ),
+                            ),
+                          ),
+                        AppTextField(
+                          label: t.cityRegion,
+                          controller: _city,
+                          validator: req,
+                        ),
+                        AppTextField(label: t.areaName, controller: _thana),
+                      ] else ...[
+                        AppDropdown<String>(
+                          label: t.district,
+                          value: _district,
+                          hint: t.select,
+                          items: [for (final d in bdDistricts) d.$1],
+                          itemLabel: (en) => bn
+                              ? bdDistricts.firstWhere((d) => d.$1 == en).$2
+                              : en,
+                          validator: (v) => v == null ? t.required : null,
+                          onChanged: (v) => setState(() {
+                            _district = v;
+                            _thana.clear();
+                          }),
+                        ),
+                        ThanaDropdown(
+                          label: t.thana,
+                          district: _district,
+                          value: _thana.text,
+                          hint: t.select,
+                          validator: (v) => v == null ? t.required : null,
+                          onChanged: (v) =>
+                              setState(() => _thana.text = v ?? ''),
+                        ),
+                      ],
                       AppTextField(
                         label: t.address,
                         controller: _address,

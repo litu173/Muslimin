@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 import '../data/models/announcement.dart';
+import '../data/models/app_config.dart';
 import '../services/update_service.dart';
 import 'providers.dart';
 
@@ -21,6 +22,23 @@ final newerReleaseProvider = FutureProvider<UpdateInfo?>((ref) async {
   } catch (_) {
     return null;
   }
+});
+
+/// Switches from the admin website (config/app).
+final appConfigProvider = StreamProvider<AppConfig>(
+  (ref) => ref.watch(backendProvider).appConfig(),
+);
+
+/// The installed version ("1.18.5").
+final installedVersionProvider = FutureProvider<String>(
+  (ref) async => (await PackageInfo.fromPlatform()).version,
+);
+
+/// The admin set a minimum version and this install is older.
+final updateRequiredProvider = Provider<bool>((ref) {
+  final min = ref.watch(appConfigProvider).value?.minVersion ?? '';
+  final mine = ref.watch(installedVersionProvider).value;
+  return min.isNotEmpty && mine != null && compareVersions(mine, min) < 0;
 });
 
 /// A newer version is out: a dot on the More tab and on About the App.

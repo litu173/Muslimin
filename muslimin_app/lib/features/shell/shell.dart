@@ -17,6 +17,7 @@ import '../home/quran_energy_card.dart';
 import '../more/more_screen.dart';
 import '../notices/notices_screen.dart';
 import '../read/read_screen.dart';
+import 'update_required.dart';
 
 /// Bottom navigation: Home · Quran · Dua · Notice · More.
 class Shell extends ConsumerStatefulWidget {
@@ -65,6 +66,8 @@ class _ShellState extends ConsumerState<Shell> {
 
     ref.listen(quranProgressProvider.select((p) => p.achievedAt), celebrate);
     ref.listen(dhikrProgressProvider.select((p) => p.achievedAt), celebrate);
+    // The admin requires a newer version: nothing else until it's updated.
+    if (ref.watch(updateRequiredProvider)) return const UpdateRequiredScreen();
     return Scaffold(
       body: IndexedStack(
         index: _tab,

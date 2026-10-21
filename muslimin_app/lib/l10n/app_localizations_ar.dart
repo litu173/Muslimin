@@ -2640,4 +2640,35 @@ class L10nAr extends L10n {
 
   @override
   String get emailCopied => 'تم نسخ البريد';
+
+  @override
+  String get cityRegion => 'المدينة / المنطقة';
+
+  @override
+  String get areaName => 'الحي';
+
+  @override
+  String outsideBd(String country) {
+    return 'خارج بنغلاديش – $country';
+  }
+
+  @override
+  String get idOptional => 'رقم الهوية أو جواز السفر (اختياري)';
+
+  @override
+  String get intlPhone => 'رقم الجوال مع رمز الدولة، مثل +44 7700 900123';
+
+  @override
+  String get accountDisabled =>
+      'عطّل فريق مسلمين هذا الحساب. تواصل عبر muslimin.admin@gmail.com.';
+
+  @override
+  String get updateRequiredTitle => 'يلزم التحديث';
+
+  @override
+  String get updateRequiredBody =>
+      'هذا الإصدار من مسلمين قديم جدًا. حدّث التطبيق لمتابعة استخدامه.';
+
+  @override
+  String get updateNow => 'حدّث الآن';
 }

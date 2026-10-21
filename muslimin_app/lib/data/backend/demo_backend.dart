@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'dart:math' as math;
 
 import '../../core/utils/geo.dart';
+import '../models/app_config.dart';
 import '../models/announcement.dart';
 import '../models/app_user.dart';
 import '../models/channel.dart';
@@ -567,11 +568,13 @@ class DemoBackend implements Backend {
     required String address,
     (double, double, double)? location,
     String? locationSource,
+    String? country,
   }) async => _patch(
     id,
     (m) => m.copyWith(
       location: location,
       locationSource: locationSource,
+      country: country,
       name: name,
       nameBn: nameBn,
       district: district,
@@ -808,6 +811,9 @@ class DemoBackend implements Backend {
     _messages[masjidId]?.removeWhere((m) => m.id == id);
     _emit();
   }
+
+  @override
+  Stream<AppConfig> appConfig() => Stream.value(const AppConfig());
 
   /// One sample update announcement, so the inbox shows how it looks.
   @override

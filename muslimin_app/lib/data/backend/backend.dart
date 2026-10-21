@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import '../models/app_config.dart';
 import '../models/announcement.dart';
 import '../models/app_user.dart';
 import '../models/channel.dart';
@@ -111,6 +112,9 @@ abstract class Backend {
     /// New GPS fix (lat, lng, accuracy in m); null keeps the location.
     (double, double, double)? location,
     String? locationSource,
+
+    /// ISO code, when the masjid's country is known; null keeps it.
+    String? country,
   });
 
   /// Times, maktab and staff can also be changed by the masjid's volunteer
@@ -178,6 +182,9 @@ abstract class Backend {
 
   /// App news for everyone (update announcements), newest first.
   Stream<List<Announcement>> announcements({int limit = 10});
+
+  /// Switches set in the admin website (minimum version, Home banner).
+  Stream<AppConfig> appConfig();
   Future<void> postNotice(Notice notice);
   Future<void> deleteNotice(String id);
 

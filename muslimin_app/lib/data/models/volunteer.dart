@@ -166,6 +166,7 @@ class MasjidSuggestion {
     required this.lng,
     required this.district,
     required this.thana,
+    this.country = 'BD',
     required this.uid,
     required this.userName,
     this.createdAt,
@@ -178,6 +179,9 @@ class MasjidSuggestion {
   final double lng;
   final String district;
   final String thana;
+
+  /// ISO code of the country the pin is in.
+  final String country;
   final String uid;
   final String userName;
   final DateTime? createdAt;
@@ -189,6 +193,7 @@ class MasjidSuggestion {
     'lng': lng,
     'district': district,
     'thana': thana,
+    'country': country,
     'uid': uid,
     'userName': userName,
     'status': 'open',

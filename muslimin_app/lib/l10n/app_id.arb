@@ -787,5 +787,14 @@
   "helpContactBody": "Ada masalah, waktu jamaah salah, atau punya saran? Kirim email kepada kami – kami membaca setiap pesan.",
   "sendEmail": "Kirim email",
   "copyEmail": "Salin email",
-  "emailCopied": "Email disalin"
+  "emailCopied": "Email disalin",
+  "cityRegion": "Kota / wilayah",
+  "areaName": "Area",
+  "outsideBd": "Di luar Bangladesh – {country}",
+  "idOptional": "Nomor KTP atau paspor (opsional)",
+  "intlPhone": "Nomor HP dengan kode negara, mis. +44 7700 900123",
+  "accountDisabled": "Akun ini dinonaktifkan oleh tim Muslimin. Hubungi muslimin.admin@gmail.com.",
+  "updateRequiredTitle": "Perlu pembaruan",
+  "updateRequiredBody": "Versi Muslimin ini terlalu lama. Perbarui untuk terus memakai aplikasi.",
+  "updateNow": "Perbarui sekarang"
 }

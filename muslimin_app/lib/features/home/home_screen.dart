@@ -16,6 +16,7 @@ import '../../core/widgets/refresh.dart';
 import '../../core/widgets/surfaces.dart';
 import '../../l10n/app_localizations.dart';
 import '../../state/providers.dart';
+import '../../state/update.dart';
 import '../dhikr/dhikr_screen.dart';
 import '../prayers/all_prayers_screen.dart';
 import '../registration/registration_flow.dart';
@@ -104,6 +105,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                 ),
               ),
             ),
+            // ---- message from the Muslimin team (admin website)
+            const SliverToBoxAdapter(child: _TeamBanner()),
             SliverToBoxAdapter(child: _in(1, const PrayerHeader())),
 
             // ---- authority banner
@@ -252,6 +255,38 @@ class _MasjidPlaceholder extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+/// The banner the admin switched on (App settings): a short message from
+/// the Muslimin team, above the prayer header.
+class _TeamBanner extends ConsumerWidget {
+  const _TeamBanner();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final c = ref.watch(appConfigProvider).value;
+    final text = c == null || !c.bannerOn ? '' : c.banner(Fmt.of(context).isBn);
+    if (text.trim().isEmpty) return const SizedBox.shrink();
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(Gap.l, 0, Gap.l, Gap.s),
+      child: Container(
+        padding: const EdgeInsets.all(Gap.m),
+        decoration: BoxDecoration(
+          color: AppColors.gold.withValues(alpha: 0.14),
+          borderRadius: BorderRadius.circular(Radii.card),
+          border: Border.all(color: AppColors.gold.withValues(alpha: 0.4)),
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(Icons.campaign_rounded, color: AppColors.gold),
+            const SizedBox(width: Gap.s),
+            Expanded(child: Text(text, style: AppText.body)),
+          ],
+        ),
+      ),
     );
   }
 }

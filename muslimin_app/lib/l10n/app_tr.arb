@@ -787,5 +787,14 @@
   "helpContactBody": "Bir sorun mu var, yanlış cemaat saati mi buldunuz ya da öneriniz mi var? Bize e-posta gönderin – her mesajı okuyoruz.",
   "sendEmail": "E-posta gönder",
   "copyEmail": "E-postayı kopyala",
-  "emailCopied": "E-posta kopyalandı"
+  "emailCopied": "E-posta kopyalandı",
+  "cityRegion": "Şehir / bölge",
+  "areaName": "Semt",
+  "outsideBd": "Bangladeş dışında – {country}",
+  "idOptional": "Kimlik veya pasaport numarası (isteğe bağlı)",
+  "intlPhone": "Ülke koduyla cep numarası, ör. +44 7700 900123",
+  "accountDisabled": "Bu hesap Muslimin ekibi tarafından devre dışı bırakıldı. muslimin.admin@gmail.com ile iletişime geçin.",
+  "updateRequiredTitle": "Güncelleme gerekli",
+  "updateRequiredBody": "Muslimin'in bu sürümü çok eski. Uygulamayı kullanmaya devam etmek için güncelleyin.",
+  "updateNow": "Şimdi güncelle"
 }

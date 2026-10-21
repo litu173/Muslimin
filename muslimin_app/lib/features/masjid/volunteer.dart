@@ -453,7 +453,7 @@ Future<void> fixMasjidLocation(
     return;
   }
   try {
-    final area = (await ThanaService.load()).at(picked.lat, picked.lng);
+    final area = await areaAt(picked.lat, picked.lng);
     await ref
         .read(backendProvider)
         .updateLocation(
@@ -461,7 +461,7 @@ Future<void> fixMasjidLocation(
           picked.lat,
           picked.lng,
           district: area?.district ?? masjid.district,
-          thana: area?.name ?? masjid.thana,
+          thana: area?.thana ?? masjid.thana,
         );
     if (context.mounted) toast(context, t.updated);
   } catch (_) {

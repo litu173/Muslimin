@@ -69,6 +69,12 @@ class _RegistrationFlowState extends ConsumerState<RegistrationFlow> {
   final _thana = TextEditingController();
   final _address = TextEditingController();
   String? _district;
+
+  /// Outside Bangladesh: city / region (and [_thana] holds the area).
+  final _city = TextEditingController();
+  String _country = 'BD';
+  String _countryName = '';
+  bool get _abroad => _country != 'BD';
   UserLocation? _fix;
   bool _locating = false;
   String? _locError;
@@ -84,7 +90,7 @@ class _RegistrationFlowState extends ConsumerState<RegistrationFlow> {
   @override
   void dispose() {
     _resendTimer?.cancel();
-    for (final c in [_phone, _name, _nameBn, _thana, _address, _nid]) {
+    for (final c in [_phone, _name, _nameBn, _thana, _address, _nid, _city]) {
       c.dispose();
     }
     super.dispose();
@@ -125,6 +131,11 @@ class _RegistrationFlowState extends ConsumerState<RegistrationFlow> {
 
   // ------------------------------------------------------------- phone/otp
   String? get _e164 {
+    // Abroad: any international number, written with its country code.
+    if (_abroad) {
+      final intl = '+${_phone.text.replaceAll(RegExp(r'\D'), '')}';
+      return RegExp(r'^\+[1-9]\d{7,14}$').hasMatch(intl) ? intl : null;
+    }
     final digits = _phone.text.replaceAll(RegExp(r'\D'), '');
     final local = digits.startsWith('880') ? digits.substring(2) : digits;
     return RegExp(r'^01[3-9]\d{8}$').hasMatch(local) ? '+88$local' : null;
@@ -211,13 +222,22 @@ class _RegistrationFlowState extends ConsumerState<RegistrationFlow> {
 
   /// Location chosen on the map – a masjid tapped there also fills in the
   /// English or Bangla name if it is still empty.
-  /// District and thana from the masjid's position (still editable).
+  /// District and thana from the masjid's position (still editable) – or,
+  /// outside Bangladesh, its country, city and area.
   Future<void> _fillArea(double lat, double lng) async {
-    final area = (await ThanaService.load()).at(lat, lng);
+    final area = await areaAt(lat, lng);
     if (area == null || !mounted) return;
     setState(() {
-      _district = area.district;
-      _thana.text = area.name;
+      _country = area.country;
+      _countryName = area.countryName;
+      if (area.inBangladesh) {
+        _district = area.district;
+        _city.clear();
+      } else {
+        _district = null;
+        _city.text = area.district;
+      }
+      _thana.text = area.thana;
     });
   }
 
@@ -307,8 +327,9 @@ class _RegistrationFlowState extends ConsumerState<RegistrationFlow> {
               name: _name.text.trim(),
               nameBn: _nameBn.text.trim(),
               address: _address.text.trim(),
-              district: _district ?? '',
+              district: _abroad ? _city.text.trim() : _district ?? '',
               thana: _thana.text.trim(),
+              country: _country,
               lat: _fix!.lat,
               lng: _fix!.lng,
               status: MasjidStatus.pending,
@@ -590,27 +611,53 @@ class _RegistrationFlowState extends ConsumerState<RegistrationFlow> {
             controller: _nameBn,
             hint: 'যেমন: বায়তুল মোকাররম',
           ),
-          AppDropdown<String>(
-            label: t.district,
-            value: _district,
-            hint: t.select,
-            items: [for (final d in bdDistricts) d.$1],
-            itemLabel: (en) =>
-                bn ? bdDistricts.firstWhere((d) => d.$1 == en).$2 : en,
-            validator: (v) => v == null ? t.required : null,
-            onChanged: (v) => setState(() {
-              _district = v;
-              _thana.clear();
-            }),
-          ),
-          ThanaDropdown(
-            label: t.thana,
-            district: _district,
-            value: _thana.text,
-            hint: t.select,
-            validator: (v) => v == null ? t.required : null,
-            onChanged: (v) => setState(() => _thana.text = v ?? ''),
-          ),
+          if (_abroad) ...[
+            Padding(
+              padding: const EdgeInsets.only(top: Gap.l),
+              child: Row(
+                children: [
+                  Icon(Icons.public_rounded, size: 18, color: AppColors.gold),
+                  const SizedBox(width: 6),
+                  Expanded(
+                    child: Text(
+                      t.outsideBd(
+                        _countryName.isNotEmpty ? _countryName : _country,
+                      ),
+                      style: AppText.label.copyWith(color: AppColors.gold),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            AppTextField(
+              label: t.cityRegion,
+              controller: _city,
+              validator: req,
+            ),
+            AppTextField(label: t.areaName, controller: _thana),
+          ] else ...[
+            AppDropdown<String>(
+              label: t.district,
+              value: _district,
+              hint: t.select,
+              items: [for (final d in bdDistricts) d.$1],
+              itemLabel: (en) =>
+                  bn ? bdDistricts.firstWhere((d) => d.$1 == en).$2 : en,
+              validator: (v) => v == null ? t.required : null,
+              onChanged: (v) => setState(() {
+                _district = v;
+                _thana.clear();
+              }),
+            ),
+            ThanaDropdown(
+              label: t.thana,
+              district: _district,
+              value: _thana.text,
+              hint: t.select,
+              validator: (v) => v == null ? t.required : null,
+              onChanged: (v) => setState(() => _thana.text = v ?? ''),
+            ),
+          ],
           AppTextField(label: t.address, controller: _address, validator: req),
           LocationField(
             fix: _fix,
@@ -662,24 +709,29 @@ class _RegistrationFlowState extends ConsumerState<RegistrationFlow> {
               controller: _phone,
               keyboardType: TextInputType.phone,
               inputFormatters: [
-                FilteringTextInputFormatter.digitsOnly,
-                LengthLimitingTextInputFormatter(11),
+                FilteringTextInputFormatter.allow(RegExp(r'[0-9+ ]')),
+                LengthLimitingTextInputFormatter(_abroad ? 20 : 11),
               ],
               style: AppText.label,
-              decoration: const InputDecoration(hintText: '01XXXXXXXXX'),
+              decoration: InputDecoration(
+                hintText: _abroad ? '+44 7700 900123' : '01XXXXXXXXX',
+                helperText: _abroad ? t.intlPhone : null,
+              ),
               validator: (_) => _e164 == null ? t.invalidPhone : null,
             ),
           ],
+          // The Bangladesh NID; elsewhere any ID, and only if they wish.
           AppTextField(
-            label: t.nidNumber,
+            label: _abroad ? t.idOptional : t.nidNumber,
             controller: _nid,
-            keyboardType: TextInputType.number,
+            keyboardType: _abroad ? TextInputType.text : TextInputType.number,
             inputFormatters: [
-              FilteringTextInputFormatter.digitsOnly,
-              LengthLimitingTextInputFormatter(17),
+              if (!_abroad) FilteringTextInputFormatter.digitsOnly,
+              LengthLimitingTextInputFormatter(_abroad ? 30 : 17),
             ],
-            validator: (v) =>
-                RegExp(r'^(\d{10}|\d{13}|\d{17})$').hasMatch(v ?? '')
+            validator: (v) => _abroad
+                ? null
+                : RegExp(r'^(\d{10}|\d{13}|\d{17})$').hasMatch(v ?? '')
                 ? null
                 : t.invalidNid,
           ),

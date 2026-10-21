@@ -2671,4 +2671,35 @@ class L10nHi extends L10n {
 
   @override
   String get emailCopied => 'ईमेल कॉपी हो गया';
+
+  @override
+  String get cityRegion => 'शहर / क्षेत्र';
+
+  @override
+  String get areaName => 'इलाका';
+
+  @override
+  String outsideBd(String country) {
+    return 'बांग्लादेश के बाहर – $country';
+  }
+
+  @override
+  String get idOptional => 'आईडी या पासपोर्ट नंबर (वैकल्पिक)';
+
+  @override
+  String get intlPhone => 'देश कोड के साथ मोबाइल नंबर, जैसे +44 7700 900123';
+
+  @override
+  String get accountDisabled =>
+      'मुस्लिमीन टीम ने यह खाता बंद कर दिया है। muslimin.admin@gmail.com पर संपर्क करें।';
+
+  @override
+  String get updateRequiredTitle => 'अपडेट ज़रूरी है';
+
+  @override
+  String get updateRequiredBody =>
+      'मुस्लिमीन का यह संस्करण बहुत पुराना है। ऐप चलाते रहने के लिए अपडेट करें।';
+
+  @override
+  String get updateNow => 'अभी अपडेट करें';
 }

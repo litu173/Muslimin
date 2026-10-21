@@ -2670,4 +2670,35 @@ class L10nTr extends L10n {
 
   @override
   String get emailCopied => 'E-posta kopyalandı';
+
+  @override
+  String get cityRegion => 'Şehir / bölge';
+
+  @override
+  String get areaName => 'Semt';
+
+  @override
+  String outsideBd(String country) {
+    return 'Bangladeş dışında – $country';
+  }
+
+  @override
+  String get idOptional => 'Kimlik veya pasaport numarası (isteğe bağlı)';
+
+  @override
+  String get intlPhone => 'Ülke koduyla cep numarası, ör. +44 7700 900123';
+
+  @override
+  String get accountDisabled =>
+      'Bu hesap Muslimin ekibi tarafından devre dışı bırakıldı. muslimin.admin@gmail.com ile iletişime geçin.';
+
+  @override
+  String get updateRequiredTitle => 'Güncelleme gerekli';
+
+  @override
+  String get updateRequiredBody =>
+      'Muslimin\'in bu sürümü çok eski. Uygulamayı kullanmaya devam etmek için güncelleyin.';
+
+  @override
+  String get updateNow => 'Şimdi güncelle';
 }

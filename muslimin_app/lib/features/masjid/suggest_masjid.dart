@@ -74,7 +74,8 @@ Future<void> suggestMasjid(BuildContext context, WidgetRef ref) async {
     }
   }
 
-  final thana = (await ThanaService.load()).at(pin.lat, pin.lng);
+  // District / thana in Bangladesh; city / area anywhere else.
+  final thana = await areaAt(pin.lat, pin.lng);
   if (!context.mounted) return;
   if (thana == null) {
     toast(context, t.somethingWrong);
@@ -102,7 +103,8 @@ Future<void> suggestMasjid(BuildContext context, WidgetRef ref) async {
               lat: pin.lat,
               lng: pin.lng,
               district: thana.district,
-              thana: thana.name,
+              thana: thana.thana,
+              country: thana.country,
               uid: user.uid,
               userName: user.displayName,
             ),

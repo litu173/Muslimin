@@ -2677,4 +2677,35 @@ class L10nId extends L10n {
 
   @override
   String get emailCopied => 'Email disalin';
+
+  @override
+  String get cityRegion => 'Kota / wilayah';
+
+  @override
+  String get areaName => 'Area';
+
+  @override
+  String outsideBd(String country) {
+    return 'Di luar Bangladesh – $country';
+  }
+
+  @override
+  String get idOptional => 'Nomor KTP atau paspor (opsional)';
+
+  @override
+  String get intlPhone => 'Nomor HP dengan kode negara, mis. +44 7700 900123';
+
+  @override
+  String get accountDisabled =>
+      'Akun ini dinonaktifkan oleh tim Muslimin. Hubungi muslimin.admin@gmail.com.';
+
+  @override
+  String get updateRequiredTitle => 'Perlu pembaruan';
+
+  @override
+  String get updateRequiredBody =>
+      'Versi Muslimin ini terlalu lama. Perbarui untuk terus memakai aplikasi.';
+
+  @override
+  String get updateNow => 'Perbarui sekarang';
 }

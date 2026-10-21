@@ -1391,5 +1391,21 @@
   "helpContactBody": "Facing a problem, found a wrong jamat time, or have a suggestion? Email us – we read every message.",
   "sendEmail": "Send email",
   "copyEmail": "Copy email",
-  "emailCopied": "Email copied"
+  "emailCopied": "Email copied",
+  "cityRegion": "City / region",
+  "areaName": "Area",
+  "outsideBd": "Outside Bangladesh – {country}",
+  "idOptional": "ID or passport number (optional)",
+  "intlPhone": "Mobile number with country code, e.g. +44 7700 900123",
+  "accountDisabled": "This account has been disabled by the Muslimin team. Contact muslimin.admin@gmail.com.",
+  "updateRequiredTitle": "Update needed",
+  "updateRequiredBody": "This version of Muslimin is too old. Please update to keep using the app.",
+  "updateNow": "Update now",
+  "@outsideBd": {
+    "placeholders": {
+      "country": {
+        "type": "String"
+      }
+    }
+  }
 }

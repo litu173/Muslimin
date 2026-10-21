@@ -787,5 +787,14 @@
   "helpContactBody": "¿Tienes un problema, encontraste una hora de jamat incorrecta o tienes una sugerencia? Escríbenos: leemos cada mensaje.",
   "sendEmail": "Enviar correo",
   "copyEmail": "Copiar correo",
-  "emailCopied": "Correo copiado"
+  "emailCopied": "Correo copiado",
+  "cityRegion": "Ciudad / región",
+  "areaName": "Zona",
+  "outsideBd": "Fuera de Bangladés – {country}",
+  "idOptional": "Número de identidad o pasaporte (opcional)",
+  "intlPhone": "Móvil con prefijo del país, p. ej. +44 7700 900123",
+  "accountDisabled": "El equipo de Muslimin ha desactivado esta cuenta. Escribe a muslimin.admin@gmail.com.",
+  "updateRequiredTitle": "Actualización necesaria",
+  "updateRequiredBody": "Esta versión de Muslimin es demasiado antigua. Actualiza para seguir usando la app.",
+  "updateNow": "Actualizar ahora"
 }

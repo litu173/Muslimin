@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:geocoding/geocoding.dart';
 
 /// A thana / upazila and its district – the same names the masjid profiles
 /// use (`district`, `thana`).
@@ -104,4 +105,54 @@ class ThanaNames {
   /// The district's thanas, by name (empty for an unknown district).
   static Future<List<String>> of(String district) async =>
       (await load())[district] ?? const [];
+}
+
+/// Where a point is, for a masjid's address: in Bangladesh its district and
+/// thana (from the bundled boundaries); anywhere else the country, the
+/// city / region and the area from the phone's geocoder.
+@immutable
+class Area {
+  const Area(this.country, this.district, this.thana, {this.countryName = ''});
+
+  /// ISO code ('BD', 'GB', …).
+  final String country;
+
+  /// Bangladesh: district. Elsewhere: city / region.
+  final String district;
+
+  /// Bangladesh: thana. Elsewhere: area / neighbourhood.
+  final String thana;
+  final String countryName;
+
+  bool get inBangladesh => country == 'BD';
+
+  String get label => [
+    thana,
+    district,
+    if (!inBangladesh) countryName.isNotEmpty ? countryName : country,
+  ].where((s) => s.trim().isNotEmpty).join(', ');
+}
+
+/// The [Area] at a point, or null when it can't be told (abroad and offline,
+/// or right on Bangladesh's border outside every thana).
+Future<Area?> areaAt(double lat, double lng) async {
+  final t = (await ThanaService.load()).at(lat, lng);
+  if (t != null) return Area('BD', t.district, t.name);
+  try {
+    final marks = await Geocoding().placemarkFromCoordinates(lat, lng);
+    if (marks.isEmpty) return null;
+    final p = marks.first;
+    final cc = (p.isoCountryCode ?? '').toUpperCase();
+    if (cc.isEmpty || cc == 'BD') return null;
+    String pick(List<String?> xs) =>
+        (xs.firstWhere((x) => x != null && x.trim().isNotEmpty) ?? '').trim();
+    return Area(
+      cc,
+      pick([p.locality, p.subAdministrativeArea, p.administrativeArea, '']),
+      pick([p.subLocality, p.thoroughfare, p.locality, '']),
+      countryName: p.country ?? '',
+    );
+  } catch (_) {
+    return null;
+  }
 }

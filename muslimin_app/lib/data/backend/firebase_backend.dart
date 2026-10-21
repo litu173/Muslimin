@@ -10,6 +10,7 @@ import 'package:geoflutterfire_plus/geoflutterfire_plus.dart';
 
 import '../../core/utils/geo.dart';
 import '../../firebase_options.dart';
+import '../models/app_config.dart';
 import '../models/announcement.dart';
 import '../models/app_user.dart';
 import '../models/channel.dart';
@@ -522,7 +523,9 @@ class FirebaseBackend implements Backend {
     required String address,
     (double, double, double)? location,
     String? locationSource,
+    String? country,
   }) => _masjids.doc(id).update({
+    'country': ?country,
     if (location != null) ...{
       'geo': GeoFirePoint(GeoPoint(location.$1, location.$2)).data,
       'locationAccuracyM': location.$3,
@@ -659,6 +662,14 @@ class FirebaseBackend implements Backend {
       diedOn: _ts(m['diedOn']),
     );
   }
+
+  @override
+  Stream<AppConfig> appConfig() => _db
+      .doc('config/app')
+      .snapshots()
+      .map((d) => AppConfig.fromMap(d.data()))
+      // Not readable yet (rules not deployed) or offline: no switches.
+      .handleError((_) {});
 
   @override
   Stream<List<Announcement>> announcements({int limit = 10}) => _db

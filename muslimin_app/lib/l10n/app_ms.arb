@@ -787,5 +787,14 @@
   "helpContactBody": "Ada masalah, waktu jemaah salah, atau ada cadangan? E-mel kami – kami membaca setiap mesej.",
   "sendEmail": "Hantar e-mel",
   "copyEmail": "Salin e-mel",
-  "emailCopied": "E-mel disalin"
+  "emailCopied": "E-mel disalin",
+  "cityRegion": "Bandar / wilayah",
+  "areaName": "Kawasan",
+  "outsideBd": "Di luar Bangladesh – {country}",
+  "idOptional": "Nombor IC atau pasport (pilihan)",
+  "intlPhone": "Nombor telefon dengan kod negara, cth. +44 7700 900123",
+  "accountDisabled": "Akaun ini telah dinyahaktifkan oleh pasukan Muslimin. Hubungi muslimin.admin@gmail.com.",
+  "updateRequiredTitle": "Kemas kini diperlukan",
+  "updateRequiredBody": "Versi Muslimin ini terlalu lama. Kemas kini untuk terus menggunakan aplikasi.",
+  "updateNow": "Kemas kini sekarang"
 }
