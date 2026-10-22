@@ -1,3 +1,5 @@
+import '../../services/content_store.dart';
+
 /// The dhikr the Prophet ﷺ kept, in two groups:
 ///
 ///  * after every salah ([Dhikr.afterSalah]) – the adhkar said after each
@@ -59,6 +61,50 @@ class Dhikr {
 
   String get audio => 'assets/dhikr/$clip.m4a';
 
+  /// The text fields the admins can correct (admin website → Content).
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'ar': ar,
+    'tr': tr,
+    'nameEn': nameEn,
+    'nameBn': nameBn,
+    'en': en,
+    'bn': bn,
+    'virtueEn': virtueEn,
+    'virtueBn': virtueBn,
+    'refEn': refEn,
+    'refBn': refBn,
+    'perSalah': perSalah,
+  };
+
+  /// This dhikr with the admins' corrections ([toJson] keys); the id,
+  /// audio and grouping stay as built in.
+  Dhikr withChanges(Map<String, dynamic> j) {
+    String s(String k, String v) {
+      final x = j[k];
+      return x is String && x.trim().isNotEmpty ? x : v;
+    }
+
+    final n = (j['perSalah'] as num?)?.toInt();
+    return Dhikr(
+      id: id,
+      ar: s('ar', ar),
+      tr: s('tr', tr),
+      nameEn: s('nameEn', nameEn),
+      nameBn: s('nameBn', nameBn),
+      en: s('en', en),
+      bn: s('bn', bn),
+      virtueEn: s('virtueEn', virtueEn),
+      virtueBn: s('virtueBn', virtueBn),
+      refEn: s('refEn', refEn),
+      refBn: s('refBn', refBn),
+      perSalah: n != null && n > 0 ? n : perSalah,
+      hisn: hisn,
+      clip: clip,
+      afterSalah: afterSalah,
+    );
+  }
+
   /// Times a day.
   int get perDay => perSalah * kPortions;
 }
@@ -66,7 +112,12 @@ class Dhikr {
 /// One portion after each of the five daily salah.
 const kPortions = 5;
 
-const kDhikrs = <Dhikr>[
+/// Every dhikr, with any corrections the admins made (see
+/// services/content_store.dart).
+List<Dhikr> get kDhikrs => ContentStore.dhikrs(kDefaultDhikrs);
+
+/// As built into the app.
+const kDefaultDhikrs = <Dhikr>[
   Dhikr(
     id: "salah_istighfar",
     afterSalah: true,

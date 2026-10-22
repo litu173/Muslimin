@@ -834,6 +834,9 @@ class DemoBackend implements Backend {
   Stream<AppConfig> appConfig() => Stream.value(const AppConfig());
 
   @override
+  Future<Object?> content(String set) async => null;
+
+  @override
   Future<Map<String, String>> placeNamesBn() async => const {
     'Dhaka': 'ঢাকা',
     'Paltan': 'পল্টন',

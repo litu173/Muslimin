@@ -8,6 +8,7 @@ import '../../core/theme/app_text.dart';
 import '../../core/widgets/frosted_card.dart';
 import '../../core/widgets/surfaces.dart';
 import '../../l10n/app_localizations.dart';
+import '../../services/content_store.dart';
 
 /// Ayah slider on Home. Loops endlessly in both directions (auto-advances
 /// every 8 s, and swiping past the last ayah wraps to the first).
@@ -19,10 +20,9 @@ class VerseCarousel extends StatefulWidget {
 }
 
 class _VerseCarouselState extends State<VerseCarousel> {
-  static const _count = 3;
-
   /// Start far from page 0 so the user can swipe backwards forever too.
-  static const _startPage = _count * 1000;
+  // Divisible by 1…12, so any number of verses starts at the first.
+  static const _startPage = 27720;
 
   final _controller = PageController(initialPage: _startPage);
   int _page = _startPage;
@@ -81,11 +81,14 @@ class _VerseCarouselState extends State<VerseCarousel> {
   @override
   Widget build(BuildContext context) {
     final t = L10n.of(context);
-    final verses = [
-      (t.verse1Ar, t.verse1, t.verse1Ref),
-      (t.verse2Ar, t.verse2, t.verse2Ref),
-      (t.verse3Ar, t.verse3, t.verse3Ref),
-    ];
+    final verses =
+        _fromAdmins(Localizations.localeOf(context).languageCode) ??
+        [
+          (t.verse1Ar, t.verse1, t.verse1Ref),
+          (t.verse2Ar, t.verse2, t.verse2Ref),
+          (t.verse3Ar, t.verse3, t.verse3Ref),
+        ];
+    final count = verses.length;
     return Column(
       children: [
         SizedBox(
@@ -100,7 +103,7 @@ class _VerseCarouselState extends State<VerseCarousel> {
               controller: _controller,
               onPageChanged: (i) => setState(() => _page = i),
               itemBuilder: (_, i) {
-                final v = verses[i % _count];
+                final v = verses[i % count];
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: Gap.l),
                   child: _VerseCard(arabic: v.$1, text: v.$2, ref: v.$3),
@@ -110,10 +113,29 @@ class _VerseCarouselState extends State<VerseCarousel> {
           ),
         ),
         const SizedBox(height: Gap.m),
-        Dots(count: _count, index: _page % _count),
+        Dots(count: count, index: _page % count),
       ],
     );
   }
+}
+
+/// The verses as the admins set them (Content → Home verses): Arabic,
+/// meaning and reference per language, English when a language is missing
+/// (Arabic shows no meaning). Null when unset or unreadable.
+List<(String, String, String)>? _fromAdmins(String lang) {
+  final list = ContentStore.of(ContentStore.homeVerses);
+  if (list is! List) return null;
+  String pick(Object? m) {
+    if (m is! Map) return '';
+    return '${m[lang] ?? m['en'] ?? ''}';
+  }
+
+  final out = [
+    for (final v in list.whereType<Map>())
+      if ('${v['ar'] ?? ''}'.isNotEmpty)
+        ('${v['ar']}', lang == 'ar' ? '' : pick(v['tr']), pick(v['ref'])),
+  ];
+  return out.isEmpty ? null : out;
 }
 
 /// Ayah card: unlike the plain white cards, a warm gold-to-mint gradient with

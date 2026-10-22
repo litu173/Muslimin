@@ -314,7 +314,20 @@ service cloud.firestore {
     match /config/{id} {
       allow read: if true;
       // App switches: super admins. Place names (config/places): any admin.
+      // Admins saving content only move its version (contentVersion).
       allow write: if isSuperAdmin() || (id == 'places' && isAdmin());
+      allow update: if id == 'app' && isAdmin()
+        && request.resource.data.diff(resource.data).affectedKeys()
+             .hasOnly(['contentVersion', 'updatedAt']);
+      allow create: if id == 'app' && isAdmin()
+        && request.resource.data.keys().hasOnly(['contentVersion', 'updatedAt']);
+    }
+
+    // Content the admins correct (refresh ayat, Home verses, duas, dhikr);
+    // the app has the same built in and reads these only when changed.
+    match /content/{set} {
+      allow read: if true;
+      allow write: if isAdmin();
     }
     // Work that needs the Admin SDK (push, disable / delete accounts): the
     // admin queues it, the GitHub job (firebase/tools/admin_jobs.mjs) runs it

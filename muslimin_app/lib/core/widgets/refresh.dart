@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../data/quran/surahs.dart';
+import '../../services/content_store.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_spacing.dart';
 import '../theme/app_text.dart';
@@ -54,13 +55,29 @@ class RefreshAyah {
   /// Off when the admin switched the refresh ayah off (set by the Shell).
   static bool enabled = true;
 
-  static Future<List<RefreshAyah>> load() => _all ??= () async {
-    final raw = await rootBundle.loadString('assets/quran/refresh_ayat.json');
-    return loaded = [
-      for (final j in (jsonDecode(raw) as List).cast<Map<String, dynamic>>())
-        RefreshAyah.fromJson(j),
-    ];
-  }();
+  static int _revision = -1;
+
+  /// The admins' list (Content → Refresh ayat), else the built-in one.
+  static Future<List<RefreshAyah>> load() {
+    if (_revision != ContentStore.revision.value) {
+      _revision = ContentStore.revision.value;
+      _all = null;
+    }
+    return _all ??= () async {
+      List<RefreshAyah> parse(Object? j) => [
+        for (final m in (j as List).cast<Map>())
+          RefreshAyah.fromJson(m.cast<String, dynamic>()),
+      ];
+      const asset = 'assets/quran/refresh_ayat.json';
+      try {
+        final list = parse(
+          await ContentStore.json(ContentStore.refreshAyat, asset),
+        );
+        if (list.isNotEmpty) return loaded = list;
+      } catch (_) {}
+      return loaded = parse(jsonDecode(await rootBundle.loadString(asset)));
+    }();
+  }
 }
 
 /// Pull-to-refresh sliver: pulling down past the top drags the content down

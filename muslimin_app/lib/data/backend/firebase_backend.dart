@@ -742,6 +742,10 @@ class FirebaseBackend implements Backend {
       .handleError((_) {});
 
   @override
+  Future<Object?> content(String set) async =>
+      (await _db.doc('content/$set').get()).data()?['data'];
+
+  @override
   Future<Map<String, String>> placeNamesBn() async {
     try {
       final d = await _db.doc('config/places').get();

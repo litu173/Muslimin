@@ -9,20 +9,21 @@ import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text.dart';
 import '../../core/utils/format.dart';
 import '../../l10n/app_localizations.dart';
+import '../../services/content_store.dart';
 
 /// One dua from Hisn al-Muslim (see tool/build_duas.py).
 class Dua {
   Dua.fromJson(Map<String, dynamic> j)
-    : n = j['n'] as int,
+    : n = (j['n'] as num).toInt(),
       // The book wraps hadith wording in (( )) – drop the marks for display.
       ar = (j['ar'] as String).replaceAll('((', '').replaceAll('))', '').trim(),
-      tr = j['tr'] as String,
-      en = j['en'] as String,
-      bn = j['bn'] as String,
-      refBn = j['ref_bn'] as String,
-      refEn = j['ref_en'] as String,
+      tr = j['tr'] as String? ?? '',
+      en = j['en'] as String? ?? '',
+      bn = j['bn'] as String? ?? '',
+      refBn = j['ref_bn'] as String? ?? '',
+      refEn = j['ref_en'] as String? ?? '',
       repeat = (j['repeat'] as num?)?.toInt() ?? 1,
-      audio = (j['audio'] as String).replaceFirst('http://', 'https://');
+      audio = (j['audio'] as String? ?? '').replaceFirst('http://', 'https://');
 
   final int n;
   final String ar;
@@ -104,16 +105,21 @@ DayPart partNow() {
   return DayPart.night;
 }
 
+/// The duas as the admins set them (Content → Duas), else the built-in ones.
 Future<List<DuaScene>> loadDuaScenes() async {
-  final raw = await rootBundle.loadString('assets/duas/duas.json');
-  final j = jsonDecode(raw) as Map<String, dynamic>;
-  return [
-    for (final s in (j['scenes'] as List).cast<Map<String, dynamic>>())
+  const asset = 'assets/duas/duas.json';
+  List<DuaScene> parse(Object? raw) => [
+    for (final s in ((raw as Map)['scenes'] as List).cast<Map>())
       DuaScene(s['id'] as String, [
-        for (final d in (s['duas'] as List).cast<Map<String, dynamic>>())
-          Dua.fromJson(d),
+        for (final d in (s['duas'] as List).cast<Map>())
+          Dua.fromJson(d.cast<String, dynamic>()),
       ]),
   ];
+  try {
+    final scenes = parse(await ContentStore.json(ContentStore.duas, asset));
+    if (scenes.isNotEmpty) return scenes;
+  } catch (_) {}
+  return parse(jsonDecode(await rootBundle.loadString(asset)));
 }
 
 /// "A day with the remembrance of Allah": from waking up to sleeping, each

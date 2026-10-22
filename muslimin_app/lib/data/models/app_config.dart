@@ -37,7 +37,12 @@ class AppConfig {
     this.bannerEn = '',
     this.bannerBn = '',
     this.off = const {},
+    this.contentVersion = const {},
   });
+
+  /// When each content set was last changed by the admins (millis) – the
+  /// app downloads a set when this is newer than its copy.
+  final Map<String, int> contentVersion;
 
   /// Features switched off ([Feature] keys).
   final Set<String> off;
@@ -57,6 +62,10 @@ class AppConfig {
       bannerOn: (b?['on'] as bool?) ?? false,
       bannerEn: (b?['messageEn'] as String?) ?? '',
       bannerBn: (b?['messageBn'] as String?) ?? '',
+      contentVersion: {
+        for (final e in ((m?['contentVersion'] as Map?) ?? const {}).entries)
+          if (e.value is num) '${e.key}': (e.value as num).toInt(),
+      },
       off: {
         for (final e in ((m?['features'] as Map?) ?? const {}).entries)
           if (e.value == false) '${e.key}',

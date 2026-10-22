@@ -8,8 +8,10 @@ import '../../core/widgets/refresh.dart' show RefreshAyah;
 import '../../data/models/app_config.dart' show Feature;
 import '../../core/theme/app_text.dart';
 import '../../l10n/app_localizations.dart';
+import '../../services/content_store.dart';
 import '../../services/places.dart';
 import '../../state/channel.dart';
+import '../../state/providers.dart' show backendProvider;
 import '../../state/dhikr.dart';
 import '../../state/update.dart';
 import '../../state/quran.dart';
@@ -69,6 +71,15 @@ class _ShellState extends ConsumerState<Shell> {
 
     ref.listen(quranProgressProvider.select((p) => p.achievedAt), celebrate);
     ref.listen(dhikrProgressProvider.select((p) => p.achievedAt), celebrate);
+    // Content the admins corrected: download the changed sets.
+    ref.listen(appConfigProvider.select((c) => c.value?.contentVersion), (
+      _,
+      v,
+    ) {
+      if (v != null && v.isNotEmpty) {
+        ContentStore.sync(v, ref.read(backendProvider).content);
+      }
+    });
     // The admin requires a newer version: nothing else until it's updated.
     if (ref.watch(updateRequiredProvider)) return const UpdateRequiredScreen();
     // Tabs the admin switched off are hidden (App settings → Features).

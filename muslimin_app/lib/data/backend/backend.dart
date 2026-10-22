@@ -187,6 +187,10 @@ abstract class Backend {
   /// Switches set in the admin website (minimum version, Home banner).
   Stream<AppConfig> appConfig();
 
+  /// A content set the admins edited (`content/<set>.data`), or null when
+  /// they use the built-in one.
+  Future<Object?> content(String set);
+
   /// Bangla names of places, English -> Bangla (config/places).
   Future<Map<String, String>> placeNamesBn();
 

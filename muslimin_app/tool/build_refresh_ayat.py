@@ -48,6 +48,7 @@ def get(url):
 def clean(t):
     t = re.sub(r'<sup[^>]*>.*?</sup>', '', t)
     t = re.sub(r'<[^>]+>', '', t)
+    t = re.sub(r'\s*\[[0-9০-৯]+\]', '', t)  # footnote marks like [১]
     return re.sub(r'\s+', ' ', t).strip()
 
 

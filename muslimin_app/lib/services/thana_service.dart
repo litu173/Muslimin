@@ -131,7 +131,8 @@ class Area {
   String get label => [
     Places.of(thana),
     Places.of(district),
-    if (!inBangladesh) Places.of(countryName.isNotEmpty ? countryName : country),
+    if (!inBangladesh)
+      Places.of(countryName.isNotEmpty ? countryName : country),
   ].where((s) => s.trim().isNotEmpty).join(', ');
 }
 

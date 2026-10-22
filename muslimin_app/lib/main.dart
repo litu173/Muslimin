@@ -1,3 +1,5 @@
+import 'services/content_store.dart';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
@@ -55,7 +57,11 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   _registerFontLicenses();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  final results = await Future.wait([Prefs.load(), _initBackend()]);
+  final results = await Future.wait([
+    Prefs.load(),
+    _initBackend(),
+    ContentStore.init(),
+  ]);
   await NotificationService.instance.init();
 
   runApp(
