@@ -2721,4 +2721,41 @@ class L10nTr extends L10n {
   String masjidNumber(String n) {
     return 'Cami No. $n';
   }
+
+  @override
+  String get womenSpace => 'Kadınlar için namaz yeri';
+
+  @override
+  String get womenSpaceYes => 'Var';
+
+  @override
+  String get womenSpaceNo => 'Yok';
+
+  @override
+  String get womenSpaceUnset => 'Henüz belirtilmedi';
+
+  @override
+  String get womenSpaceAsk =>
+      'Burada kadınların namaz kılabileceği bir yer var mı?';
+
+  @override
+  String get yesLabel => 'Evet';
+
+  @override
+  String get noLabel => 'Hayır';
+
+  @override
+  String get womenFinderTitle => 'Kadınlar için namaz yerleri';
+
+  @override
+  String get womenFinderSub =>
+      'Yakınında kadınlar için namaz yeri olan camileri bul';
+
+  @override
+  String get womenFinderEmpty =>
+      'Burada henüz kadınlar için namaz yeri belirten cami yok.';
+
+  @override
+  String get womenFinderEmptyHint =>
+      'Cami yönetimi bunu cami sayfasından ekleyebilir.';
 }

@@ -22,6 +22,7 @@ import '../time_board_scan.dart';
 import '../../../data/models/app_config.dart' show Feature;
 import '../../../state/update.dart' show featureProvider;
 import '../volunteer.dart';
+import '../women_space.dart';
 import '../../../core/widgets/time_wheel.dart';
 
 /// Any time of day (hour, minute and AM/PM wheels).
@@ -36,6 +37,8 @@ class MasjidHomeTab extends ConsumerStatefulWidget {
     required this.onOpenChannel,
     this.canVolunteer = false,
     this.canReport = false,
+    this.showWomenSpace = true,
+    this.canManage = false,
   });
 
   final Masjid masjid;
@@ -48,6 +51,12 @@ class MasjidHomeTab extends ConsumerStatefulWidget {
 
   /// "Report a problem" (anyone but the owner).
   final bool canReport;
+
+  /// The women's prayer space card (unless the admin switched it off).
+  final bool showWomenSpace;
+
+  /// Owner or admin: answers whether there is a women's prayer space.
+  final bool canManage;
 
   /// Switches to the Channel tab.
   final VoidCallback onOpenChannel;
@@ -96,6 +105,11 @@ class _MasjidHomeTabState extends ConsumerState<MasjidHomeTab> {
           const SizedBox(height: 10),
         ] else
           const SizedBox(height: 10),
+        if (widget.showWomenSpace &&
+            (widget.canManage || widget.masjid.womenSpace != null)) ...[
+          WomenSpaceCard(masjid: widget.masjid, canManage: widget.canManage),
+          const SizedBox(height: 10),
+        ],
         if (_editMaktab)
           _MaktabEditor(
             masjid: widget.masjid,

@@ -24,6 +24,8 @@ import '../registration/registration_flow.dart';
 import 'location_bar.dart';
 import 'masjid_card.dart';
 import 'masjid_list_screen.dart';
+import 'women_space_screen.dart';
+import '../masjid/women_space.dart' show WomenSpaceIcon;
 import 'now_dua_card.dart';
 import 'quran_energy_card.dart';
 import 'verse_carousel.dart';
@@ -192,6 +194,18 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                     ],
             ),
 
+            // ---- women's prayer spaces: opens the finder
+            if (on(Feature.homeWomenSpace) && on(Feature.womenSpace))
+              SliverToBoxAdapter(
+                child: _in(
+                  8,
+                  const Padding(
+                    padding: EdgeInsets.fromLTRB(Gap.l, Gap.xl, Gap.l, 0),
+                    child: _WomenSpaceCard(),
+                  ),
+                ),
+              ),
+
             // ---- daily Quran reading: the lantern fills as you read
             if (on(Feature.homeDailyQuran))
               SliverToBoxAdapter(
@@ -227,6 +241,36 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
 
 /// A masjid card's outline while the nearest masjids load: same size, a
 /// faint badge and blank lines.
+/// "Women's prayer spaces": opens the finder of masjids that have one.
+class _WomenSpaceCard extends StatelessWidget {
+  const _WomenSpaceCard();
+
+  @override
+  Widget build(BuildContext context) {
+    final t = L10n.of(context);
+    return AppCard(
+      onTap: () => push(context, const WomenSpaceScreen()),
+      child: Row(
+        children: [
+          const WomenSpaceIcon(size: 48),
+          const SizedBox(width: Gap.m),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(t.womenFinderTitle, style: AppText.subtitle),
+                const SizedBox(height: 2),
+                Text(t.womenFinderSub, style: AppText.caption),
+              ],
+            ),
+          ),
+          Icon(Icons.chevron_right_rounded, color: AppColors.ink),
+        ],
+      ),
+    );
+  }
+}
+
 class _MasjidPlaceholder extends StatelessWidget {
   const _MasjidPlaceholder();
 

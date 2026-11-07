@@ -802,5 +802,16 @@
   "openNotice": "Duyuruyu aç",
   "openMasjid": "Camiyi aç",
   "openAbout": "Uygulama Hakkında'yı aç",
-  "masjidNumber": "Cami No. {n}"
+  "masjidNumber": "Cami No. {n}",
+  "womenSpace": "Kadınlar için namaz yeri",
+  "womenSpaceYes": "Var",
+  "womenSpaceNo": "Yok",
+  "womenSpaceUnset": "Henüz belirtilmedi",
+  "womenSpaceAsk": "Burada kadınların namaz kılabileceği bir yer var mı?",
+  "yesLabel": "Evet",
+  "noLabel": "Hayır",
+  "womenFinderTitle": "Kadınlar için namaz yerleri",
+  "womenFinderSub": "Yakınında kadınlar için namaz yeri olan camileri bul",
+  "womenFinderEmpty": "Burada henüz kadınlar için namaz yeri belirten cami yok.",
+  "womenFinderEmptyHint": "Cami yönetimi bunu cami sayfasından ekleyebilir."
 }

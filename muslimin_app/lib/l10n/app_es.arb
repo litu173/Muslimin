@@ -802,5 +802,16 @@
   "openNotice": "Abrir aviso",
   "openMasjid": "Abrir mezquita",
   "openAbout": "Abrir Acerca de la app",
-  "masjidNumber": "Mezquita n.º {n}"
+  "masjidNumber": "Mezquita n.º {n}",
+  "womenSpace": "Espacio de oración para mujeres",
+  "womenSpaceYes": "Disponible",
+  "womenSpaceNo": "No disponible",
+  "womenSpaceUnset": "Aún no indicado",
+  "womenSpaceAsk": "¿Hay un espacio para que las mujeres recen aquí?",
+  "yesLabel": "Sí",
+  "noLabel": "No",
+  "womenFinderTitle": "Espacios de oración para mujeres",
+  "womenFinderSub": "Encuentra mezquitas cercanas con espacio de oración para mujeres",
+  "womenFinderEmpty": "Aún ninguna mezquita de aquí ha indicado un espacio para mujeres.",
+  "womenFinderEmptyHint": "El comité de la mezquita puede añadirlo en su página."
 }

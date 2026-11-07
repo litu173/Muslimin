@@ -135,6 +135,13 @@ abstract class Backend {
   Future<void> updateStaff(Masjid masjid, Map<StaffRole, StaffMember> staff);
   Future<void> updateLive(String id, {String? url, required bool isLive});
 
+  /// Owner / admin: whether the masjid has a place for women to pray.
+  Future<void> updateWomenSpace(String id, bool available);
+
+  /// Approved masjids with a women's prayer space (all of them – the
+  /// finder sorts and filters on the phone).
+  Stream<List<Masjid>> womenSpaceMasjids();
+
   // ---- Volunteer editors ----
   /// Whether I am a volunteer editor of [masjidId].
   Stream<bool> isMasjidEditor(String masjidId);

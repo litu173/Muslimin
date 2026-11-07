@@ -150,6 +150,8 @@ class DemoBackend implements Backend {
           ),
         },
         isLive: i == 1,
+        // Some demo masjids have a women's prayer space.
+        womenSpace: i.isEven ? true : (i == 3 ? false : null),
         liveUrl: i == 1 ? 'https://www.youtube.com/' : null,
         createdAt: now.subtract(const Duration(days: 60)),
       );
@@ -672,6 +674,19 @@ class DemoBackend implements Backend {
     String? url,
     required bool isLive,
   }) async => _patch(id, (m) => m.copyWith(liveUrl: url, isLive: isLive));
+
+  @override
+  Future<void> updateWomenSpace(String id, bool available) async =>
+      _patch(id, (m) => m.copyWith(womenSpace: available));
+
+  @override
+  Stream<List<Masjid>> womenSpaceMasjids() => _watch(
+    () => _masjids.values
+        .where(
+          (m) => m.status == MasjidStatus.approved && m.womenSpace == true,
+        )
+        .toList(),
+  );
 
   // ----------------------------------------------------------------- admin
   @override

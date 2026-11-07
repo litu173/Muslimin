@@ -802,5 +802,16 @@
   "openNotice": "فتح الإعلان",
   "openMasjid": "فتح المسجد",
   "openAbout": "فتح حول التطبيق",
-  "masjidNumber": "مسجد رقم {n}"
+  "masjidNumber": "مسجد رقم {n}",
+  "womenSpace": "مصلى النساء",
+  "womenSpaceYes": "متوفر",
+  "womenSpaceNo": "غير متوفر",
+  "womenSpaceUnset": "لم يُحدَّد بعد",
+  "womenSpaceAsk": "هل يوجد مكان لصلاة النساء هنا؟",
+  "yesLabel": "نعم",
+  "noLabel": "لا",
+  "womenFinderTitle": "مصليات النساء",
+  "womenFinderSub": "ابحث عن مساجد قريبة فيها مصلى للنساء",
+  "womenFinderEmpty": "لم يحدد أي مسجد هنا مصلى للنساء بعد.",
+  "womenFinderEmptyHint": "يمكن للجنة المسجد إضافته من صفحة المسجد."
 }

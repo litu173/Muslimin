@@ -2726,4 +2726,40 @@ class L10nUr extends L10n {
   String masjidNumber(String n) {
     return 'مسجد نمبر $n';
   }
+
+  @override
+  String get womenSpace => 'خواتین کے لیے نماز کی جگہ';
+
+  @override
+  String get womenSpaceYes => 'موجود ہے';
+
+  @override
+  String get womenSpaceNo => 'موجود نہیں';
+
+  @override
+  String get womenSpaceUnset => 'ابھی بتایا نہیں گیا';
+
+  @override
+  String get womenSpaceAsk => 'کیا یہاں خواتین کے نماز پڑھنے کی جگہ ہے؟';
+
+  @override
+  String get yesLabel => 'ہاں';
+
+  @override
+  String get noLabel => 'نہیں';
+
+  @override
+  String get womenFinderTitle => 'خواتین کے لیے نماز کی جگہیں';
+
+  @override
+  String get womenFinderSub =>
+      'قریب کی وہ مساجد تلاش کریں جہاں خواتین کے لیے نماز کی جگہ ہے';
+
+  @override
+  String get womenFinderEmpty =>
+      'یہاں ابھی کسی مسجد نے خواتین کی نماز کی جگہ نہیں بتائی۔';
+
+  @override
+  String get womenFinderEmptyHint =>
+      'مسجد کمیٹی اسے مسجد کے صفحے سے شامل کر سکتی ہے۔';
 }

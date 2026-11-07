@@ -2691,4 +2691,37 @@ class L10nAr extends L10n {
   String masjidNumber(String n) {
     return 'مسجد رقم $n';
   }
+
+  @override
+  String get womenSpace => 'مصلى النساء';
+
+  @override
+  String get womenSpaceYes => 'متوفر';
+
+  @override
+  String get womenSpaceNo => 'غير متوفر';
+
+  @override
+  String get womenSpaceUnset => 'لم يُحدَّد بعد';
+
+  @override
+  String get womenSpaceAsk => 'هل يوجد مكان لصلاة النساء هنا؟';
+
+  @override
+  String get yesLabel => 'نعم';
+
+  @override
+  String get noLabel => 'لا';
+
+  @override
+  String get womenFinderTitle => 'مصليات النساء';
+
+  @override
+  String get womenFinderSub => 'ابحث عن مساجد قريبة فيها مصلى للنساء';
+
+  @override
+  String get womenFinderEmpty => 'لم يحدد أي مسجد هنا مصلى للنساء بعد.';
+
+  @override
+  String get womenFinderEmptyHint => 'يمكن للجنة المسجد إضافته من صفحة المسجد.';
 }

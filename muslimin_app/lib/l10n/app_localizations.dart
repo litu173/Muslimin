@@ -4928,6 +4928,72 @@ abstract class L10n {
   /// In en, this message translates to:
   /// **'Masjid No. {n}'**
   String masjidNumber(String n);
+
+  /// No description provided for @womenSpace.
+  ///
+  /// In en, this message translates to:
+  /// **'Women\'s prayer space'**
+  String get womenSpace;
+
+  /// No description provided for @womenSpaceYes.
+  ///
+  /// In en, this message translates to:
+  /// **'Available'**
+  String get womenSpaceYes;
+
+  /// No description provided for @womenSpaceNo.
+  ///
+  /// In en, this message translates to:
+  /// **'Not available'**
+  String get womenSpaceNo;
+
+  /// No description provided for @womenSpaceUnset.
+  ///
+  /// In en, this message translates to:
+  /// **'Not set yet'**
+  String get womenSpaceUnset;
+
+  /// No description provided for @womenSpaceAsk.
+  ///
+  /// In en, this message translates to:
+  /// **'Is there a place for women to pray here?'**
+  String get womenSpaceAsk;
+
+  /// No description provided for @yesLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes'**
+  String get yesLabel;
+
+  /// No description provided for @noLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'No'**
+  String get noLabel;
+
+  /// No description provided for @womenFinderTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Women\'s prayer spaces'**
+  String get womenFinderTitle;
+
+  /// No description provided for @womenFinderSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Find masjids near you with a place for women to pray'**
+  String get womenFinderSub;
+
+  /// No description provided for @womenFinderEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No masjid here has marked a women\'s prayer space yet.'**
+  String get womenFinderEmpty;
+
+  /// No description provided for @womenFinderEmptyHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Masjid committees can add it on their masjid page.'**
+  String get womenFinderEmptyHint;
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {

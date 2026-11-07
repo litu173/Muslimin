@@ -74,6 +74,7 @@ class Masjid {
     this.staff = const {},
     this.liveUrl,
     this.isLive = false,
+    this.womenSpace,
     this.createdAt,
     this.reviewedAt,
     this.rejectionReason,
@@ -117,6 +118,10 @@ class Masjid {
   final Map<StaffRole, StaffMember> staff;
   final String? liveUrl;
   final bool isLive;
+
+  /// A place for women to pray, as the owner / admin set it; null = not
+  /// set yet.
+  final bool? womenSpace;
   final DateTime? createdAt;
   final DateTime? reviewedAt;
   final String? rejectionReason;
@@ -189,6 +194,7 @@ class Masjid {
     Map<StaffRole, StaffMember>? staff,
     String? liveUrl,
     bool? isLive,
+    bool? womenSpace,
     String? rejectionReason,
     DateTime? reviewedAt,
 
@@ -219,6 +225,7 @@ class Masjid {
     staff: staff ?? this.staff,
     liveUrl: liveUrl ?? this.liveUrl,
     isLive: isLive ?? this.isLive,
+    womenSpace: womenSpace ?? this.womenSpace,
     createdAt: createdAt,
     reviewedAt: reviewedAt ?? this.reviewedAt,
     rejectionReason: rejectionReason ?? this.rejectionReason,
@@ -282,6 +289,7 @@ class Masjid {
     staff: staffFromMap((m['staff'] as Map?)?.cast<String, dynamic>()),
     liveUrl: m['liveUrl'] as String?,
     isLive: (m['isLive'] ?? false) as bool,
+    womenSpace: m['womenSpace'] as bool?,
     createdAt: createdAt,
     reviewedAt: reviewedAt,
     rejectionReason: m['rejectionReason'] as String?,

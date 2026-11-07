@@ -2728,4 +2728,40 @@ class L10nId extends L10n {
   String masjidNumber(String n) {
     return 'Masjid No. $n';
   }
+
+  @override
+  String get womenSpace => 'Tempat salat wanita';
+
+  @override
+  String get womenSpaceYes => 'Tersedia';
+
+  @override
+  String get womenSpaceNo => 'Tidak tersedia';
+
+  @override
+  String get womenSpaceUnset => 'Belum diatur';
+
+  @override
+  String get womenSpaceAsk => 'Apakah ada tempat salat untuk wanita di sini?';
+
+  @override
+  String get yesLabel => 'Ya';
+
+  @override
+  String get noLabel => 'Tidak';
+
+  @override
+  String get womenFinderTitle => 'Tempat salat wanita';
+
+  @override
+  String get womenFinderSub =>
+      'Temukan masjid terdekat yang punya tempat salat wanita';
+
+  @override
+  String get womenFinderEmpty =>
+      'Belum ada masjid di sini yang menandai tempat salat wanita.';
+
+  @override
+  String get womenFinderEmptyHint =>
+      'Pengurus masjid dapat menambahkannya di halaman masjid.';
 }

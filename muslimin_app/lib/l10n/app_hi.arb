@@ -802,5 +802,16 @@
   "openNotice": "नोटिस खोलें",
   "openMasjid": "मस्जिद खोलें",
   "openAbout": "ऐप के बारे में खोलें",
-  "masjidNumber": "मस्जिद नं. {n}"
+  "masjidNumber": "मस्जिद नं. {n}",
+  "womenSpace": "महिलाओं के लिए नमाज़ की जगह",
+  "womenSpaceYes": "उपलब्ध",
+  "womenSpaceNo": "उपलब्ध नहीं",
+  "womenSpaceUnset": "अभी बताया नहीं गया",
+  "womenSpaceAsk": "क्या यहाँ महिलाओं के नमाज़ पढ़ने की जगह है?",
+  "yesLabel": "हाँ",
+  "noLabel": "नहीं",
+  "womenFinderTitle": "महिलाओं के लिए नमाज़ की जगहें",
+  "womenFinderSub": "पास की वे मस्जिदें खोजें जहाँ महिलाओं के लिए नमाज़ की जगह है",
+  "womenFinderEmpty": "यहाँ अभी किसी मस्जिद ने महिलाओं की नमाज़ की जगह नहीं बताई है।",
+  "womenFinderEmptyHint": "मस्जिद कमेटी इसे मस्जिद के पेज से जोड़ सकती है।"
 }

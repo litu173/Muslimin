@@ -12,6 +12,7 @@ abstract final class Feature {
   static const homeVerses = 'homeVerses';
   static const homeRegisterBanner = 'homeRegisterBanner';
   static const refreshAyah = 'refreshAyah';
+  static const homeWomenSpace = 'homeWomenSpace';
   // masjid page
   static const masjidNotice = 'masjidNotice';
   static const masjidChannel = 'masjidChannel';
@@ -21,6 +22,7 @@ abstract final class Feature {
   static const reportProblem = 'reportProblem';
   static const volunteering = 'volunteering';
   static const timeBoardScan = 'timeBoardScan';
+  static const womenSpace = 'womenSpace';
   // More
   static const achievements = 'achievements';
   static const masjidRegistration = 'masjidRegistration';

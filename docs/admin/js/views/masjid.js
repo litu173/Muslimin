@@ -3,7 +3,7 @@
 // reports – plus status changes, notifications and deletion.
 import {
   db, me, collection, doc, getDoc, getDocs, query, where, orderBy, limit, updateDoc,
-  deleteDoc, writeBatch, serverTimestamp, logAction,
+  deleteDoc, writeBatch, serverTimestamp, logAction, deleteField,
 } from '../fb.js';
 import {
   h, icon, card, statusBadge, badge, input, select, field, dialog, act, go, ago,
@@ -74,6 +74,8 @@ function infoCard(m, reload) {
   const nameBn = input({ value: m.nameBn || '' });
   const address = input({ value: m.address || '' });
   const live = input({ value: m.liveUrl || '', placeholder: 'https://youtube.com/…' });
+  const women = select([['', 'Not set yet'], ['yes', 'Yes – there is a place for women'], ['no', 'No']],
+    m.womenSpace === true ? 'yes' : m.womenSpace === false ? 'no' : '');
   return card('Information',
     field('Name (English)', name),
     h('div.row', { style: { alignItems: 'flex-end', flexWrap: 'nowrap' } },
@@ -86,12 +88,14 @@ function infoCard(m, reload) {
         toast('Suggested – check it, then Save.');
       }) }, '✨ Suggest')),
     field('Address', address),
+    field('Women\'s prayer space', women, 'Shown on the masjid page; “Yes” lists it in the app\'s Women\'s prayer spaces finder.'),
     field('Live stream link', live, 'Shown on the masjid page when set.'),
     h('div.row.end', h('button.btn.btn-primary', { onclick: (e) => act(e.currentTarget, async () => {
       if (name.value.trim().length < 3) throw new Error('Name is too short.');
       await updateDoc(doc(db, 'masjids', m.id), {
         name: name.value.trim(), nameLower: name.value.trim().toLowerCase(), nameBn: nameBn.value.trim(),
         address: address.value.trim(), liveUrl: live.value.trim() || null, updatedAt: serverTimestamp(),
+        womenSpace: women.value ? women.value === 'yes' : deleteField(),
       });
       await logAction('masjid.info', `masjids/${m.id}`, { name: name.value.trim() });
     }, 'Saved.').then(reload) }, 'Save')));

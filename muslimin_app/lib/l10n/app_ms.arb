@@ -802,5 +802,16 @@
   "openNotice": "Buka notis",
   "openMasjid": "Buka masjid",
   "openAbout": "Buka Tentang Aplikasi",
-  "masjidNumber": "Masjid No. {n}"
+  "masjidNumber": "Masjid No. {n}",
+  "womenSpace": "Ruang solat wanita",
+  "womenSpaceYes": "Tersedia",
+  "womenSpaceNo": "Tiada",
+  "womenSpaceUnset": "Belum ditetapkan",
+  "womenSpaceAsk": "Adakah ruang solat untuk wanita di sini?",
+  "yesLabel": "Ya",
+  "noLabel": "Tidak",
+  "womenFinderTitle": "Ruang solat wanita",
+  "womenFinderSub": "Cari masjid berhampiran yang ada ruang solat wanita",
+  "womenFinderEmpty": "Belum ada masjid di sini yang menandakan ruang solat wanita.",
+  "womenFinderEmptyHint": "Jawatankuasa masjid boleh menambahnya di halaman masjid."
 }

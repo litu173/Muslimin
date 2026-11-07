@@ -16,12 +16,13 @@ const FEATURES = [
   ['Home', [
     ['homeDailyQuran', 'Daily Quran card'], ['homeDailyDhikr', 'Daily dhikr card'], ['homeDua', 'Daily dua card'],
     ['homeVerses', 'Verses section'], ['homeRegisterBanner', '“Register your masjid” banner'],
-    ['refreshAyah', 'Ayah while pulling to refresh'],
+    ['refreshAyah', 'Ayah while pulling to refresh'], ['homeWomenSpace', '“Women\'s prayer spaces” card'],
   ]],
   ['Masjid page', [
     ['masjidNotice', 'Notice tab'], ['masjidChannel', 'Channel tab'], ['masjidAbout', 'About tab'],
     ['channelMembers', 'Channel members list'], ['directions', 'Directions'], ['reportProblem', 'Report a problem'],
     ['volunteering', 'Volunteering (update times)'], ['timeBoardScan', 'Scan the time board'],
+    ['womenSpace', 'Women\'s prayer space (masjid page + finder)'],
   ]],
   ['More & masjids', [
     ['achievements', 'Achievements'], ['masjidRegistration', 'Masjid registration'], ['suggestMasjid', 'Suggest a missing masjid'],

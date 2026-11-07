@@ -2722,4 +2722,40 @@ class L10nHi extends L10n {
   String masjidNumber(String n) {
     return 'मस्जिद नं. $n';
   }
+
+  @override
+  String get womenSpace => 'महिलाओं के लिए नमाज़ की जगह';
+
+  @override
+  String get womenSpaceYes => 'उपलब्ध';
+
+  @override
+  String get womenSpaceNo => 'उपलब्ध नहीं';
+
+  @override
+  String get womenSpaceUnset => 'अभी बताया नहीं गया';
+
+  @override
+  String get womenSpaceAsk => 'क्या यहाँ महिलाओं के नमाज़ पढ़ने की जगह है?';
+
+  @override
+  String get yesLabel => 'हाँ';
+
+  @override
+  String get noLabel => 'नहीं';
+
+  @override
+  String get womenFinderTitle => 'महिलाओं के लिए नमाज़ की जगहें';
+
+  @override
+  String get womenFinderSub =>
+      'पास की वे मस्जिदें खोजें जहाँ महिलाओं के लिए नमाज़ की जगह है';
+
+  @override
+  String get womenFinderEmpty =>
+      'यहाँ अभी किसी मस्जिद ने महिलाओं की नमाज़ की जगह नहीं बताई है।';
+
+  @override
+  String get womenFinderEmptyHint =>
+      'मस्जिद कमेटी इसे मस्जिद के पेज से जोड़ सकती है।';
 }

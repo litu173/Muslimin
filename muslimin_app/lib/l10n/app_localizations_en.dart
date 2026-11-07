@@ -2726,4 +2726,40 @@ class L10nEn extends L10n {
   String masjidNumber(String n) {
     return 'Masjid No. $n';
   }
+
+  @override
+  String get womenSpace => 'Women\'s prayer space';
+
+  @override
+  String get womenSpaceYes => 'Available';
+
+  @override
+  String get womenSpaceNo => 'Not available';
+
+  @override
+  String get womenSpaceUnset => 'Not set yet';
+
+  @override
+  String get womenSpaceAsk => 'Is there a place for women to pray here?';
+
+  @override
+  String get yesLabel => 'Yes';
+
+  @override
+  String get noLabel => 'No';
+
+  @override
+  String get womenFinderTitle => 'Women\'s prayer spaces';
+
+  @override
+  String get womenFinderSub =>
+      'Find masjids near you with a place for women to pray';
+
+  @override
+  String get womenFinderEmpty =>
+      'No masjid here has marked a women\'s prayer space yet.';
+
+  @override
+  String get womenFinderEmptyHint =>
+      'Masjid committees can add it on their masjid page.';
 }

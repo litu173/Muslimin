@@ -802,5 +802,16 @@
   "openNotice": "Buka pengumuman",
   "openMasjid": "Buka masjid",
   "openAbout": "Buka Tentang Aplikasi",
-  "masjidNumber": "Masjid No. {n}"
+  "masjidNumber": "Masjid No. {n}",
+  "womenSpace": "Tempat salat wanita",
+  "womenSpaceYes": "Tersedia",
+  "womenSpaceNo": "Tidak tersedia",
+  "womenSpaceUnset": "Belum diatur",
+  "womenSpaceAsk": "Apakah ada tempat salat untuk wanita di sini?",
+  "yesLabel": "Ya",
+  "noLabel": "Tidak",
+  "womenFinderTitle": "Tempat salat wanita",
+  "womenFinderSub": "Temukan masjid terdekat yang punya tempat salat wanita",
+  "womenFinderEmpty": "Belum ada masjid di sini yang menandai tempat salat wanita.",
+  "womenFinderEmptyHint": "Pengurus masjid dapat menambahkannya di halaman masjid."
 }

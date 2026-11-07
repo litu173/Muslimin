@@ -1420,5 +1420,16 @@
         "type": "String"
       }
     }
-  }
+  },
+  "womenSpace": "Women's prayer space",
+  "womenSpaceYes": "Available",
+  "womenSpaceNo": "Not available",
+  "womenSpaceUnset": "Not set yet",
+  "womenSpaceAsk": "Is there a place for women to pray here?",
+  "yesLabel": "Yes",
+  "noLabel": "No",
+  "womenFinderTitle": "Women's prayer spaces",
+  "womenFinderSub": "Find masjids near you with a place for women to pray",
+  "womenFinderEmpty": "No masjid here has marked a women's prayer space yet.",
+  "womenFinderEmptyHint": "Masjid committees can add it on their masjid page."
 }

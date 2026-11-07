@@ -307,6 +307,23 @@ final thanaMasjidsProvider = Provider<AsyncValue<List<Masjid>>>((ref) {
       : ref.watch(_pickedThanaMasjidsProvider(picked));
 });
 
+/// Masjids with a women's prayer space, nearest to the user first.
+final womenSpaceMasjidsProvider = StreamProvider<List<Masjid>>((ref) {
+  final loc = ref.watch(locationProvider).value;
+  return ref.watch(backendProvider).womenSpaceMasjids().map(
+    (list) => loc == null
+        ? list
+        : (list..sort(
+            (a, b) => distanceMeters(
+              loc.lat,
+              loc.lng,
+              a.lat,
+              a.lng,
+            ).compareTo(distanceMeters(loc.lat, loc.lng, b.lat, b.lng)),
+          )),
+  );
+});
+
 /// Masjids I manage in one thana (Manage Masjids).
 final myMasjidsInProvider = StreamProvider.family<List<Masjid>, Thana>((
   ref,

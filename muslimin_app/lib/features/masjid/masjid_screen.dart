@@ -197,6 +197,10 @@ class _MasjidScreenState extends ConsumerState<MasjidScreen>
                                   ref.watch(
                                     featureProvider(Feature.volunteering),
                                   ),
+                              showWomenSpace: ref.watch(
+                                featureProvider(Feature.womenSpace),
+                              ),
+                              canManage: canEdit,
                               canReport:
                                   user != null &&
                                   !isOwner &&

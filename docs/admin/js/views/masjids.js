@@ -16,7 +16,7 @@ import { suggestBangla } from '../ai.js';
 import { pickOnMap } from './map.js';
 
 const PAGE = 50;
-const state = { q: '', status: '', country: 'BD', district: '', thana: '', times: '', view: 'list' };
+const state = { q: '', status: '', country: 'BD', district: '', thana: '', times: '', women: '', view: 'list' };
 
 export async function render(el, district, thana, country) {
   // Opened from Locations: #/masjids/<district>/<thana>[/<country>]
@@ -42,6 +42,7 @@ export async function render(el, district, thana, country) {
   const diSel = select([['', 'All districts'], ...districts.map((d) => [d, d])], state.district);
   const thSel = select([['', 'All thanas']], state.thana);
   const tiSel = select([['', 'Times: any'], ['yes', 'With jamat times'], ['no', 'Without times']], state.times);
+  const woSel = select([['', 'Women\'s space: any'], ['yes', 'Women\'s space: yes'], ['no', 'Women\'s space: no']], state.women);
   const viewSel = select([['list', 'List'], ['map', 'Map']], state.view);
   const fillThanas = () => {
     clear(thSel).append(h('option', { value: '' }, 'All thanas'),
@@ -56,13 +57,13 @@ export async function render(el, district, thana, country) {
     Object.assign(state, {
       q: qIn.value.trim().toLowerCase(), status: stSel.value, country: coSel.value,
       district: coSel.value === 'BD' ? diSel.value : '', thana: coSel.value === 'BD' ? thSel.value : '',
-      times: tiSel.value, view: viewSel.value,
+      times: tiSel.value, women: woSel.value, view: viewSel.value,
     });
     cursor = null; rows = [];
     load();
   };
   qIn.oninput = () => { clearTimeout(timer); timer = setTimeout(apply, 350); };
-  stSel.onchange = apply; tiSel.onchange = apply; thSel.onchange = apply; viewSel.onchange = apply;
+  stSel.onchange = apply; tiSel.onchange = apply; woSel.onchange = apply; thSel.onchange = apply; viewSel.onchange = apply;
   diSel.onchange = () => { state.thana = ''; fillThanas(); apply(); };
   coSel.onchange = () => { bdOnly(); apply(); };
 
@@ -71,7 +72,7 @@ export async function render(el, district, thana, country) {
     h('button.btn.btn-sm', { onclick: () => importTimes(() => { rows = []; load(); }) }, 'Update jamat times from CSV'),
     h('button.btn.btn-sm', { onclick: () => banglaNames(rows, () => { rows = []; load(); }) }, '✨ Bangla names for shown'));
   el.append(card(null,
-    h('div.filters', h('div.search', icon('search'), qIn), stSel, coSel, diSel, thSel, tiSel, viewSel),
+    h('div.filters', h('div.search', icon('search'), qIn), stSel, coSel, diSel, thSel, tiSel, woSel, viewSel),
     tools,
     h('div.muted.small', 'Name search looks at the start of the English name, across all places. Clear it to filter by place.'),
     out));
@@ -91,6 +92,7 @@ export async function render(el, district, thana, country) {
       if (state.district) c.push(where('district', '==', state.district));
       if (state.thana) c.push(where('thana', '==', state.thana));
       if (state.times) c.push(where('hasJamat', '==', state.times === 'yes'));
+      if (state.women) c.push(where('womenSpace', '==', state.women === 'yes'));
     }
     if (more && cursor) c.push(startAfter(cursor));
     if (!more) {
@@ -129,6 +131,7 @@ export async function render(el, district, thana, country) {
         { label: '#', class: 'r', cell: (m) => h('span.muted', rows.indexOf(m) + 1) },
         { label: 'Masjid', cell: (m) => h('div.t-name', h('b', m.name || '(no name)'), h('span', m.nameBn || m.address || '')) },
         { label: 'Area', cell: (m) => (m.country === 'BD' ? `${m.thana || '–'}, ${m.district || '–'}` : `${m.thana || m.district || '–'}, ${countryName(m.country)}`) },
+        { label: 'Women', cell: (m) => (m.womenSpace === true ? badge('yes', 'ok') : m.womenSpace === false ? badge('no', 'mute') : h('span.muted', '–')) },
         { label: 'Jamat', cell: (m) => (m.hasJamat ? badge('times set', 'ok') : badge('no times', 'mute')) },
         { label: 'Status', cell: (m) => statusBadge(m.status) },
         { label: 'Source', cell: (m) => badge({ osm: 'OpenStreetMap', user: 'Suggested', admin: 'Added by admin' }[m.source] || 'Registered', 'gold') },

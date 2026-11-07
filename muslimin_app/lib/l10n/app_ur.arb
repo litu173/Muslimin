@@ -802,5 +802,16 @@
   "openNotice": "نوٹس کھولیں",
   "openMasjid": "مسجد کھولیں",
   "openAbout": "ایپ کے بارے میں کھولیں",
-  "masjidNumber": "مسجد نمبر {n}"
+  "masjidNumber": "مسجد نمبر {n}",
+  "womenSpace": "خواتین کے لیے نماز کی جگہ",
+  "womenSpaceYes": "موجود ہے",
+  "womenSpaceNo": "موجود نہیں",
+  "womenSpaceUnset": "ابھی بتایا نہیں گیا",
+  "womenSpaceAsk": "کیا یہاں خواتین کے نماز پڑھنے کی جگہ ہے؟",
+  "yesLabel": "ہاں",
+  "noLabel": "نہیں",
+  "womenFinderTitle": "خواتین کے لیے نماز کی جگہیں",
+  "womenFinderSub": "قریب کی وہ مساجد تلاش کریں جہاں خواتین کے لیے نماز کی جگہ ہے",
+  "womenFinderEmpty": "یہاں ابھی کسی مسجد نے خواتین کی نماز کی جگہ نہیں بتائی۔",
+  "womenFinderEmptyHint": "مسجد کمیٹی اسے مسجد کے صفحے سے شامل کر سکتی ہے۔"
 }

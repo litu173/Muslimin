@@ -2742,4 +2742,41 @@ class L10nEs extends L10n {
   String masjidNumber(String n) {
     return 'Mezquita n.º $n';
   }
+
+  @override
+  String get womenSpace => 'Espacio de oración para mujeres';
+
+  @override
+  String get womenSpaceYes => 'Disponible';
+
+  @override
+  String get womenSpaceNo => 'No disponible';
+
+  @override
+  String get womenSpaceUnset => 'Aún no indicado';
+
+  @override
+  String get womenSpaceAsk =>
+      '¿Hay un espacio para que las mujeres recen aquí?';
+
+  @override
+  String get yesLabel => 'Sí';
+
+  @override
+  String get noLabel => 'No';
+
+  @override
+  String get womenFinderTitle => 'Espacios de oración para mujeres';
+
+  @override
+  String get womenFinderSub =>
+      'Encuentra mezquitas cercanas con espacio de oración para mujeres';
+
+  @override
+  String get womenFinderEmpty =>
+      'Aún ninguna mezquita de aquí ha indicado un espacio para mujeres.';
+
+  @override
+  String get womenFinderEmptyHint =>
+      'El comité de la mezquita puede añadirlo en su página.';
 }

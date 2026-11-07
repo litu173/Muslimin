@@ -654,6 +654,18 @@ class FirebaseBackend implements Backend {
   Future<void> updateLive(String id, {String? url, required bool isLive}) =>
       _masjids.doc(id).update({'liveUrl': url, 'isLive': isLive});
 
+  @override
+  Future<void> updateWomenSpace(String id, bool available) =>
+      _masjids.doc(id).update({'womenSpace': available});
+
+  @override
+  Stream<List<Masjid>> womenSpaceMasjids() => _masjids
+      .where('status', isEqualTo: MasjidStatus.approved.name)
+      .where('womenSpace', isEqualTo: true)
+      .limit(1000)
+      .snapshots()
+      .map((s) => s.docs.map(_masjid).toList());
+
   // ----------------------------------------------------------------- admin
   @override
   Stream<List<Masjid>> masjidsByStatus(MasjidStatus status) => _masjids

@@ -802,5 +802,16 @@
   "openNotice": "নোটিশ দেখুন",
   "openMasjid": "মসজিদ দেখুন",
   "openAbout": "অ্যাপ সম্পর্কে দেখুন",
-  "masjidNumber": "মসজিদ নং {n}"
+  "masjidNumber": "মসজিদ নং {n}",
+  "womenSpace": "নারীদের নামাজের স্থান",
+  "womenSpaceYes": "আছে",
+  "womenSpaceNo": "নেই",
+  "womenSpaceUnset": "এখনো জানানো হয়নি",
+  "womenSpaceAsk": "এই মসজিদে কি নারীদের নামাজের ব্যবস্থা আছে?",
+  "yesLabel": "হ্যাঁ",
+  "noLabel": "না",
+  "womenFinderTitle": "নারীদের নামাজের স্থান",
+  "womenFinderSub": "কাছের যেসব মসজিদে নারীদের নামাজের ব্যবস্থা আছে, খুঁজে নিন",
+  "womenFinderEmpty": "এখানে এখনো কোনো মসজিদ নারীদের নামাজের স্থান চিহ্নিত করেনি।",
+  "womenFinderEmptyHint": "মসজিদ কমিটি মসজিদের পেজ থেকে এটি যুক্ত করতে পারে।"
 }
