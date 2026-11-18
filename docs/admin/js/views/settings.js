@@ -37,12 +37,12 @@ export async function render(el) {
   const grid = h('div.grid.g2');
   el.append(grid);
   if (!isSuper()) {
-    // ---- Home page order (the app's Home, below the prayer times)
-  grid.before(homeOrderCard(ref, c));
-
-  grid.append(tokenCard());
+    grid.append(tokenCard());
     return;
   }
+
+  // ---- Home page order (the app's Home, below the prayer times)
+  grid.before(homeOrderCard(ref, c));
 
   // ---- features
   const feats = c.features || {};
@@ -124,8 +124,8 @@ function homeOrderCard(ref, c) {
   save.onclick = (e) => act(e.currentTarget, async () => {
     await setDoc(ref, { homeOrder: order, updatedAt: serverTimestamp() }, { merge: true });
     await logAction('config.homeOrder', 'config/app', { order });
-    save.disabled = true;
-  }, 'Saved – phones show the new order when the app opens.');
+    return true;
+  }, 'Saved – phones show the new order when the app opens.').then((ok) => { if (ok) save.disabled = true; });
   draw();
   return card('Home page order',
     h('p.muted.small', 'The sections of the app\'s Home page, top to bottom. Location, the team banner and prayer times always stay on top. Turn a section off under Features.'),
