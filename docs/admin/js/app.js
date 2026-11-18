@@ -125,12 +125,13 @@ function renderNav() {
 export async function refreshCounts() {
   try {
     const n = async (q) => (await getCountFromServer(q)).data().count;
-    const [pm, rp, sg] = await Promise.all([
+    const [pm, rp, sg, cr] = await Promise.all([
       n(query(collection(db, 'masjids'), where('status', '==', 'pending'))),
       n(query(collection(db, 'reports'), where('status', '==', 'open'))),
       n(query(collection(db, 'suggestions'), where('status', '==', 'open'))),
+      n(query(collection(db, 'contentReports'), where('status', '==', 'open'))).catch(() => 0),
     ]);
-    counts.pending = pm + rp + sg;
+    counts.pending = pm + rp + sg + cr;
     renderNav();
   } catch (e) { console.warn(e); }
 }

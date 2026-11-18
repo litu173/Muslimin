@@ -2758,4 +2758,37 @@ class L10nHi extends L10n {
   @override
   String get womenFinderEmptyHint =>
       'मस्जिद कमेटी इसे मस्जिद के पेज से जोड़ सकती है।';
+
+  @override
+  String get reportPost => 'रिपोर्ट करें';
+
+  @override
+  String get reportPostTitle => 'इस पोस्ट की रिपोर्ट करें';
+
+  @override
+  String get reasonOffensive => 'आपत्तिजनक, नफ़रत भरा या अपमानजनक';
+
+  @override
+  String get reasonSpam => 'स्पैम या विज्ञापन';
+
+  @override
+  String get reasonFalse => 'झूठा या भ्रामक';
+
+  @override
+  String get reportPostNote => 'विवरण (वैकल्पिक)';
+
+  @override
+  String get reportPostThanks =>
+      'धन्यवाद – मुस्लिमीन टीम इसकी समीक्षा करेगी और नियम तोड़ने पर इसे हटा देगी।';
+
+  @override
+  String hideAuthor(String name) {
+    return '$name के संदेश छिपाएँ';
+  }
+
+  @override
+  String get authorHidden => 'अब आपको उनके संदेश नहीं दिखेंगे।';
+
+  @override
+  String get showHiddenAuthors => 'छिपाए गए लोगों को फिर दिखाएँ';
 }

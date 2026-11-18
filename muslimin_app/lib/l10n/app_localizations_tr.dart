@@ -2758,4 +2758,37 @@ class L10nTr extends L10n {
   @override
   String get womenFinderEmptyHint =>
       'Cami yönetimi bunu cami sayfasından ekleyebilir.';
+
+  @override
+  String get reportPost => 'Bildir';
+
+  @override
+  String get reportPostTitle => 'Bu gönderiyi bildir';
+
+  @override
+  String get reasonOffensive => 'Saldırgan, nefret içeren veya hakaret';
+
+  @override
+  String get reasonSpam => 'Spam veya reklam';
+
+  @override
+  String get reasonFalse => 'Yanlış veya yanıltıcı';
+
+  @override
+  String get reportPostNote => 'Ayrıntılar (isteğe bağlı)';
+
+  @override
+  String get reportPostThanks =>
+      'Teşekkürler – Muslimin ekibi inceleyecek ve kurallara aykırıysa kaldıracak.';
+
+  @override
+  String hideAuthor(String name) {
+    return '$name adlı kişinin mesajlarını gizle';
+  }
+
+  @override
+  String get authorHidden => 'Artık mesajlarını görmeyeceksin.';
+
+  @override
+  String get showHiddenAuthors => 'Gizlenen kişileri yeniden göster';
 }

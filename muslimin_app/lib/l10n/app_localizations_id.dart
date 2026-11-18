@@ -2764,4 +2764,37 @@ class L10nId extends L10n {
   @override
   String get womenFinderEmptyHint =>
       'Pengurus masjid dapat menambahkannya di halaman masjid.';
+
+  @override
+  String get reportPost => 'Laporkan';
+
+  @override
+  String get reportPostTitle => 'Laporkan postingan ini';
+
+  @override
+  String get reasonOffensive => 'Menyinggung, kebencian atau kasar';
+
+  @override
+  String get reasonSpam => 'Spam atau iklan';
+
+  @override
+  String get reasonFalse => 'Palsu atau menyesatkan';
+
+  @override
+  String get reportPostNote => 'Detail (opsional)';
+
+  @override
+  String get reportPostThanks =>
+      'Terima kasih – tim Muslimin akan meninjaunya dan menghapusnya jika melanggar aturan.';
+
+  @override
+  String hideAuthor(String name) {
+    return 'Sembunyikan pesan dari $name';
+  }
+
+  @override
+  String get authorHidden => 'Anda tidak akan melihat pesannya lagi.';
+
+  @override
+  String get showHiddenAuthors => 'Tampilkan lagi orang yang disembunyikan';
 }

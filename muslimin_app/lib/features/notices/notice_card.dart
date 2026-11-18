@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/nav.dart';
 import '../../core/theme/app_colors.dart';
@@ -12,6 +13,7 @@ import '../../data/models/notice.dart';
 import '../../l10n/app_localizations.dart';
 import '../masjid/follow_badge.dart';
 import '../masjid/masjid_screen.dart';
+import '../report/report_post.dart';
 
 class NoticeIcon extends StatelessWidget {
   const NoticeIcon({super.key});
@@ -192,6 +194,40 @@ Future<void> showNoticeDetails(
                     onDelete();
                   }
                 },
+              ),
+            ],
+            // Anyone else can report it (Google Play: user posts must be
+            // reportable).
+            if (onDelete == null) ...[
+              const SizedBox(height: Gap.s),
+              Consumer(
+                builder: (_, ref, _) => Center(
+                  child: TextButton.icon(
+                    onPressed: () => reportPost(
+                      context,
+                      ref,
+                      ReportablePost(
+                        kind: 'notice',
+                        masjidId: n.masjidId,
+                        masjidName: n.masjidName,
+                        itemId: n.id,
+                        text: [
+                          n.title,
+                          n.details,
+                        ].where((s) => s.isNotEmpty).join('\n'),
+                      ),
+                    ),
+                    icon: Icon(
+                      Icons.flag_outlined,
+                      size: 18,
+                      color: AppColors.muted,
+                    ),
+                    label: Text(
+                      t.reportPostTitle,
+                      style: AppText.caption.copyWith(color: AppColors.muted),
+                    ),
+                  ),
+                ),
               ),
             ],
           ],

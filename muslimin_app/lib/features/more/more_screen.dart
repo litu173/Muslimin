@@ -268,17 +268,7 @@ class _AccountCard extends ConsumerWidget {
             const SizedBox(height: 4),
             Text(t.signInPromptBody, style: AppText.body),
             const SizedBox(height: Gap.l),
-            ButtonPair(
-              secondary: AppButton(
-                t.signIn,
-                style: AppButtonStyle.outlined,
-                onPressed: () => push(context, const SignInScreen()),
-              ),
-              primary: AppButton(
-                t.createAccount,
-                onPressed: () => push(context, const SignUpScreen()),
-              ),
-            ),
+            GoogleSignInButton(onSignedIn: () {}),
           ],
         ),
       );

@@ -2762,4 +2762,37 @@ class L10nUr extends L10n {
   @override
   String get womenFinderEmptyHint =>
       'مسجد کمیٹی اسے مسجد کے صفحے سے شامل کر سکتی ہے۔';
+
+  @override
+  String get reportPost => 'رپورٹ کریں';
+
+  @override
+  String get reportPostTitle => 'اس پوسٹ کی رپورٹ کریں';
+
+  @override
+  String get reasonOffensive => 'توہین آمیز، نفرت انگیز یا بدسلوکی';
+
+  @override
+  String get reasonSpam => 'اسپام یا اشتہار';
+
+  @override
+  String get reasonFalse => 'غلط یا گمراہ کن';
+
+  @override
+  String get reportPostNote => 'تفصیل (اختیاری)';
+
+  @override
+  String get reportPostThanks =>
+      'شکریہ – مسلمین ٹیم اس کا جائزہ لے گی اور قواعد کی خلاف ورزی پر اسے ہٹا دے گی۔';
+
+  @override
+  String hideAuthor(String name) {
+    return '$name کے پیغامات چھپائیں';
+  }
+
+  @override
+  String get authorHidden => 'آپ کو اب ان کے پیغامات نظر نہیں آئیں گے۔';
+
+  @override
+  String get showHiddenAuthors => 'چھپائے گئے لوگوں کو دوبارہ دکھائیں';
 }

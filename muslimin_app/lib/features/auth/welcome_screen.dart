@@ -3,12 +3,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/config.dart';
-import '../../core/nav.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text.dart';
 import '../../core/widgets/brand.dart';
-import '../../core/widgets/buttons.dart';
 import '../../core/widgets/islamic_pattern.dart';
 import '../../core/widgets/language_toggle.dart';
 import '../../core/widgets/surfaces.dart';
@@ -88,20 +86,8 @@ class WelcomeScreen extends ConsumerWidget {
                   ),
                   const Spacer(flex: 3),
                   // The gate rebuilds by itself once signed in.
+                  // Google only. The gate rebuilds by itself once signed in.
                   GoogleSignInButton(dark: true, onSignedIn: () {}),
-                  const SizedBox(height: Gap.m),
-                  AppButton(
-                    t.createAccount,
-                    expand: true,
-                    onPressed: () => push(context, const SignUpScreen()),
-                  ),
-                  const SizedBox(height: Gap.m),
-                  AppButton(
-                    t.signIn,
-                    style: AppButtonStyle.darkOutlined,
-                    expand: true,
-                    onPressed: () => push(context, const SignInScreen()),
-                  ),
                   if (!kRequireAccount) ...[
                     const SizedBox(height: Gap.s),
                     TextButton(

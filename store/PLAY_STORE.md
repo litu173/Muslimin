@@ -108,10 +108,12 @@ Help or suggestions: muslimin.admin@gmail.com
 **Privacy policy:** https://litu173.github.io/Muslimin/privacy.html
 
 **App access:** "All or some functionality is restricted" – sign-in is required.
-Give reviewers a test login: create an email/password account in the app
-yourself (e.g. `playreview.muslimin@gmail.com` + a password), then enter it
-here with the note: "Sign in with this email and password on the Welcome
-screen ('Sign In')."
+Sign-in is **Google only**, so reviewers need a Google account: create a
+fresh Gmail just for them (e.g. `playreview.muslimin@gmail.com`), sign in to
+the app with it once yourself, and turn **off** 2-Step Verification for it
+(otherwise Google asks the reviewer's device for a code and the review
+fails). Enter the email and password here with the note: "Tap 'Continue
+with Google' on the Welcome screen and choose / add this Google account."
 
 **Ads:** No, the app does not contain ads.
 
@@ -143,15 +145,24 @@ ads):
 | Files and docs | Yes (channel attachments) | No | App functionality | Optional |
 | Device or other IDs | Yes (push token) | No | App functionality (notifications) | Required |
 | Audio | No (voice typing uses the phone's speech service; nothing recorded) | – | – | – |
+| App activity – App interactions | Yes (when the app was last opened, app version, Android/iPhone) | No | Analytics, App functionality | Required |
+| App activity – Other user-generated content | Yes (reports of posts: reason and note) | No | App functionality (moderation) | Optional |
 
 Data processed by service providers on our behalf (Google Firebase, Gemini via
 Firebase AI Logic, OpenStreetMap routing) counts as "not shared" under Play's
 definitions.
 
+**User-generated content:** channel messages and notices can be reported
+(⋯ on a message / "Report this post" on a notice) and a sender's messages
+hidden; reports go to admin website → Review → Reported posts, where an admin
+removes the post or keeps it. Check that tab regularly – Play expects
+reported content to be handled promptly.
+
 **Permissions to explain if asked:** location (nearby masjids, prayer times),
 notifications (notices, reminders), exact alarms (jamat reminders at the exact
 time), microphone (hold-to-talk voice typing in channels), camera/photos
-(time-board scan, attachments).
+(time-board scan, attachments – through the system photo picker; the app does
+not ask for access to the whole photo library).
 
 ## 4. Release steps
 
@@ -169,7 +180,10 @@ time), microphone (hold-to-talk voice typing in channels), camera/photos
    console → Project settings → Android app `com.muslimin.muslimin` → Add
    fingerprint (both). Download the new `google-services.json`, replace
    `muslimin_app/android/app/google-services.json`, rebuild and upload a new
-   bundle. Without this, "Continue with Google" fails on Play installs.
+   bundle. Without this, "Continue with Google" fails on Play installs –
+   and since Google is the only sign-in, **nobody (reviewers included) can
+   get into the app**. Do it right after the first upload, before testers
+   or review.
 7. After 14 days with 12+ testers: Dashboard → Apply for production access →
    answer the questions → when approved, create a production release
    (promote the tested bundle) → Send for review (usually 1–7 days).

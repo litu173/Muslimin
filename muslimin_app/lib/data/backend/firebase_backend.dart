@@ -655,6 +655,36 @@ class FirebaseBackend implements Backend {
       _masjids.doc(id).update({'liveUrl': url, 'isLive': isLive});
 
   @override
+  Future<void> reportContent({
+    required String kind,
+    required String masjidId,
+    required String masjidName,
+    required String itemId,
+    required String text,
+    required String authorUid,
+    required String authorName,
+    required String reason,
+    required String note,
+  }) async {
+    final me = _auth.currentUser;
+    if (me == null) throw StateError('sign in to report');
+    await _db.collection('contentReports').add({
+      'kind': kind,
+      'masjidId': masjidId,
+      'masjidName': masjidName,
+      'itemId': itemId,
+      'text': text.length > 1000 ? text.substring(0, 1000) : text,
+      'authorUid': authorUid,
+      'authorName': authorName,
+      'reason': reason,
+      'note': note,
+      'uid': me.uid,
+      'status': 'open',
+      'createdAt': FieldValue.serverTimestamp(),
+    });
+  }
+
+  @override
   Future<void> updateWomenSpace(String id, bool available) =>
       _masjids.doc(id).update({'womenSpace': available});
 

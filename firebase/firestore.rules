@@ -323,6 +323,21 @@ service cloud.firestore {
         && request.resource.data.keys().hasOnly(['contentVersion', 'updatedAt']);
     }
 
+    // Channel messages / notices reported by users (Review → Reported
+    // posts). Anyone signed in may report, as themselves; admins handle them.
+    match /contentReports/{id} {
+      allow create: if signedIn()
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.status == 'open'
+        && request.resource.data.kind in ['message', 'notice']
+        && request.resource.data.keys().hasOnly(['kind', 'masjidId', 'masjidName',
+             'itemId', 'text', 'authorUid', 'authorName', 'reason', 'note', 'uid',
+             'status', 'createdAt'])
+        && request.resource.data.text is string && request.resource.data.text.size() <= 1000
+        && request.resource.data.note is string && request.resource.data.note.size() <= 300;
+      allow read, update, delete: if isAdmin();
+    }
+
     // Content the admins correct (refresh ayat, Home verses, duas, dhikr);
     // the app has the same built in and reads these only when changed.
     match /content/{set} {

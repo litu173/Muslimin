@@ -813,5 +813,15 @@
   "womenFinderTitle": "Tempat salat wanita",
   "womenFinderSub": "Temukan masjid terdekat yang punya tempat salat wanita",
   "womenFinderEmpty": "Belum ada masjid di sini yang menandai tempat salat wanita.",
-  "womenFinderEmptyHint": "Pengurus masjid dapat menambahkannya di halaman masjid."
+  "womenFinderEmptyHint": "Pengurus masjid dapat menambahkannya di halaman masjid.",
+  "reportPost": "Laporkan",
+  "reportPostTitle": "Laporkan postingan ini",
+  "reasonOffensive": "Menyinggung, kebencian atau kasar",
+  "reasonSpam": "Spam atau iklan",
+  "reasonFalse": "Palsu atau menyesatkan",
+  "reportPostNote": "Detail (opsional)",
+  "reportPostThanks": "Terima kasih – tim Muslimin akan meninjaunya dan menghapusnya jika melanggar aturan.",
+  "hideAuthor": "Sembunyikan pesan dari {name}",
+  "authorHidden": "Anda tidak akan melihat pesannya lagi.",
+  "showHiddenAuthors": "Tampilkan lagi orang yang disembunyikan"
 }

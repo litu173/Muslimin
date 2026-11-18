@@ -170,6 +170,20 @@ abstract class Backend {
   // ---- Reports ----
   /// One report per user and masjid; reporting again replaces it.
   Future<void> reportMasjid(Masjid masjid, ReportReason reason, String note);
+
+  /// Reports a channel message or notice to the Muslimin team
+  /// (contentReports; admin website → Review → Reported posts).
+  Future<void> reportContent({
+    required String kind,
+    required String masjidId,
+    required String masjidName,
+    required String itemId,
+    required String text,
+    required String authorUid,
+    required String authorName,
+    required String reason,
+    required String note,
+  });
   Stream<List<MasjidReport>> openReports({int limit = 100});
   Future<void> resolveReport(String id);
 

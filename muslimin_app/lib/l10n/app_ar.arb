@@ -813,5 +813,15 @@
   "womenFinderTitle": "مصليات النساء",
   "womenFinderSub": "ابحث عن مساجد قريبة فيها مصلى للنساء",
   "womenFinderEmpty": "لم يحدد أي مسجد هنا مصلى للنساء بعد.",
-  "womenFinderEmptyHint": "يمكن للجنة المسجد إضافته من صفحة المسجد."
+  "womenFinderEmptyHint": "يمكن للجنة المسجد إضافته من صفحة المسجد.",
+  "reportPost": "إبلاغ",
+  "reportPostTitle": "الإبلاغ عن هذا المنشور",
+  "reasonOffensive": "مسيء أو يحض على الكراهية",
+  "reasonSpam": "رسائل مزعجة أو إعلانات",
+  "reasonFalse": "كاذب أو مضلل",
+  "reportPostNote": "تفاصيل (اختياري)",
+  "reportPostThanks": "شكرًا – سيراجعه فريق مسلمين ويحذفه إن خالف القواعد.",
+  "hideAuthor": "إخفاء رسائل {name}",
+  "authorHidden": "لن ترى رسائله بعد الآن.",
+  "showHiddenAuthors": "إظهار الأشخاص المخفيين مجددًا"
 }

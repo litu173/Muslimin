@@ -2,7 +2,7 @@
 // problem reports – each handled in one click.
 import {
   db, me, collection, doc, query, where, orderBy, limit, getDocs, updateDoc,
-  writeBatch, serverTimestamp, logAction, getCountFromServer,
+  writeBatch, serverTimestamp, logAction, getCountFromServer, deleteDoc,
 } from '../fb.js';
 import {
   h, icon, card, table, statusBadge, badge, input, select, field, dialog, act, go, ago,
@@ -13,20 +13,21 @@ import { masjidOf, setStatus, REASONS, bdThanas, COUNTRIES, geoData, giveNumber 
 import { miniMap, placeOf } from './map.js';
 
 export async function render(el, tab = 'pending') {
-  el.append(pageHead('Review', 'New masjids, suggestions and problem reports'));
+  el.append(pageHead('Review', 'New masjids, suggestions, problem reports and reported posts'));
   const n = async (q) => { try { return (await getCountFromServer(q)).data().count; } catch { return null; } };
-  const [p, s, r] = await Promise.all([
+  const [p, s, r, c] = await Promise.all([
     n(query(collection(db, 'masjids'), where('status', '==', 'pending'))),
     n(query(collection(db, 'suggestions'), where('status', '==', 'open'))),
     n(query(collection(db, 'reports'), where('status', '==', 'open'))),
+    n(query(collection(db, 'contentReports'), where('status', '==', 'open'))),
   ]);
-  el.append(tabs([['pending', 'Masjids to approve', p], ['suggestions', 'Missing masjids', s], ['reports', 'Problem reports', r]],
+  el.append(tabs([['pending', 'Masjids to approve', p], ['suggestions', 'Missing masjids', s], ['reports', 'Problem reports', r], ['posts', 'Reported posts', c]],
     tab, (t) => go(`#/review/${t}`)));
   const body = h('div');
   el.append(body);
   body.append(spinner());
   const done = () => { refreshCounts(); clear(el); render(el, tab); };
-  await ({ pending, suggestions, reports }[tab] || pending)(body, done);
+  await ({ pending, suggestions, reports, posts }[tab] || pending)(body, done);
 }
 
 // ---------------------------------------------------------------- pending
@@ -140,4 +141,34 @@ async function reports(body, done) {
       await logAction('report.resolve', `reports/${d.id}`, { masjid: d.data().masjidName });
     }, 'Resolved.').then(done) }, 'Resolve') },
   ], snap.docs, { emptyText: 'No open problem reports.' })));
+}
+
+// ---------------------------------------------------------------- reported posts
+// Channel messages and notices users reported from the app. Google Play
+// expects reported posts to be looked at promptly: remove the post, or
+// keep it and dismiss the report.
+const POST_REASONS = { offensive: 'Offensive / hateful', spam: 'Spam / advertising', false: 'False / misleading', other: 'Other' };
+async function posts(body, done) {
+  const snap = await getDocs(query(collection(db, 'contentReports'), where('status', '==', 'open'), orderBy('createdAt', 'desc'), limit(100)));
+  const close = async (d, status, removed) => {
+    await updateDoc(d.ref, { status, removed, resolvedBy: me.uid, resolvedAt: serverTimestamp() });
+    await logAction(`post.${status}`, `contentReports/${d.id}`, { masjid: d.data().masjidName, kind: d.data().kind });
+  };
+  clear(body).append(card(null, table([
+    { label: 'Post', cell: (d) => h('div.t-name', h('b', d.data().kind === 'notice' ? 'Notice' : `Message by ${d.data().authorName || 'someone'}`),
+      h('span', { style: { whiteSpace: 'pre-wrap' } }, d.data().text || '(attachment only)')) },
+    { label: 'Masjid', cell: (d) => link(`/masjid/${d.data().masjidId}`, d.data().masjidName || 'Masjid') },
+    { label: 'Reason', cell: (d) => h('div.t-name', h('b', POST_REASONS[d.data().reason] || d.data().reason), h('span', d.data().note || '')) },
+    { label: 'Reported by', cell: (d) => link(`/user/${d.data().uid}`, 'User') },
+    { label: 'When', class: 'nowrap', cell: (d) => ago(d.data().createdAt) },
+    { label: '', class: 'r', cell: (d) => h('div.row', { style: { flexWrap: 'nowrap', justifyContent: 'flex-end' } },
+      h('button.btn.btn-sm.btn-danger', { onclick: (e) => act(e.currentTarget, async () => {
+        const x = d.data();
+        const path = x.kind === 'notice' ? `notices/${x.itemId}` : `masjids/${x.masjidId}/messages/${x.itemId}`;
+        await deleteDoc(doc(db, path));
+        await close(d, 'removed', true);
+      }, 'Post removed.').then(done) }, 'Remove post'),
+      h('button.btn.btn-sm', { onclick: (e) => act(e.currentTarget, () => close(d, 'dismissed', false), 'Kept – report dismissed.').then(done) }, 'Keep'),
+      d.data().authorUid ? link(`/user/${d.data().authorUid}`, 'Author') : null) },
+  ], snap.docs, { emptyText: 'No reported posts.' })));
 }

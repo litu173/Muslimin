@@ -813,5 +813,15 @@
   "womenFinderTitle": "Espacios de oración para mujeres",
   "womenFinderSub": "Encuentra mezquitas cercanas con espacio de oración para mujeres",
   "womenFinderEmpty": "Aún ninguna mezquita de aquí ha indicado un espacio para mujeres.",
-  "womenFinderEmptyHint": "El comité de la mezquita puede añadirlo en su página."
+  "womenFinderEmptyHint": "El comité de la mezquita puede añadirlo en su página.",
+  "reportPost": "Denunciar",
+  "reportPostTitle": "Denunciar esta publicación",
+  "reasonOffensive": "Ofensivo, de odio o abusivo",
+  "reasonSpam": "Spam o publicidad",
+  "reasonFalse": "Falso o engañoso",
+  "reportPostNote": "Detalles (opcional)",
+  "reportPostThanks": "Gracias: el equipo de Muslimin lo revisará y lo eliminará si incumple las normas.",
+  "hideAuthor": "Ocultar mensajes de {name}",
+  "authorHidden": "Ya no verás sus mensajes.",
+  "showHiddenAuthors": "Mostrar de nuevo a las personas ocultas"
 }

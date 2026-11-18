@@ -140,15 +140,8 @@ class DhikrTodayCard extends ConsumerWidget {
                 AppColors.card,
               )
             : AppColors.card,
+        // No outline, like the other Home cards; a finished day is tinted.
         borderRadius: BorderRadius.circular(Radii.card),
-        border: Border.all(
-          color: finished
-              ? AppColors.success.withValues(alpha: 0.5)
-              : started
-              ? Colors.transparent
-              : AppColors.gold.withValues(alpha: 0.55),
-          width: 1.2,
-        ),
       ),
       child: Material(
         type: MaterialType.transparency,

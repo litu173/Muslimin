@@ -17,6 +17,7 @@ import '../../../data/models/masjid.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../state/channel.dart';
 import '../../../state/providers.dart';
+import '../../report/report_post.dart';
 import 'attachment_view.dart';
 import 'channel_invite_card.dart';
 
@@ -125,8 +126,15 @@ class _Messages extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final t = L10n.of(context);
     final uid = ref.watch(authProvider).value?.uid;
+    final hidden = ref.watch(hiddenAuthorsProvider);
     return ref
         .watch(channelMessagesProvider(masjid.id))
+        .whenData(
+          (all) => [
+            for (final m in all)
+              if (!hidden.contains(m.authorUid) || m.authorUid == uid) m,
+          ],
+        )
         .when(
           loading: () => const Loader(),
           error: (e, _) => EmptyState(
@@ -154,9 +162,23 @@ class _Messages extends ConsumerWidget {
                     return _Bubble(
                       message: m,
                       mine: mine,
-                      onDelete: role.canManage || mine
-                          ? () => _delete(context, ref, m)
-                          : null,
+                      // Delete (own / channel admin), report, hide sender.
+                      onActions: () => showPostActions(
+                        context,
+                        ref,
+                        ReportablePost(
+                          kind: 'message',
+                          masjidId: masjid.id,
+                          masjidName: masjid.name,
+                          itemId: m.id,
+                          text: m.text,
+                          authorUid: m.authorUid,
+                          authorName: m.authorName,
+                        ),
+                        onDelete: role.canManage || mine
+                            ? () => _delete(context, ref, m)
+                            : null,
+                      ),
                     );
                   },
                 ),
@@ -165,11 +187,17 @@ class _Messages extends ConsumerWidget {
 }
 
 class _Bubble extends StatelessWidget {
-  const _Bubble({required this.message, required this.mine, this.onDelete});
+  const _Bubble({
+    required this.message,
+    required this.mine,
+    required this.onActions,
+  });
 
   final ChannelMessage message;
   final bool mine;
-  final VoidCallback? onDelete;
+
+  /// Delete / report / hide sender.
+  final VoidCallback onActions;
 
   @override
   Widget build(BuildContext context) {
@@ -181,12 +209,10 @@ class _Bubble extends StatelessWidget {
         now.month == message.createdAt.month &&
         now.day == message.createdAt.day;
     return GestureDetector(
-      onLongPress: onDelete == null
-          ? null
-          : () {
-              HapticFeedback.selectionClick();
-              onDelete!();
-            },
+      onLongPress: () {
+        HapticFeedback.selectionClick();
+        onActions();
+      },
       child: AppCard(
         padding: const EdgeInsets.fromLTRB(Gap.l, Gap.m, Gap.l, Gap.m),
         child: Column(
@@ -215,6 +241,19 @@ class _Bubble extends StatelessWidget {
                   child: Text(
                     roleName(t, message.authorRole),
                     style: AppText.micro.copyWith(color: AppColors.gold),
+                  ),
+                ),
+                const Spacer(),
+                InkWell(
+                  onTap: onActions,
+                  customBorder: const CircleBorder(),
+                  child: Padding(
+                    padding: const EdgeInsets.all(2),
+                    child: Icon(
+                      Icons.more_horiz_rounded,
+                      size: 20,
+                      color: AppColors.muted,
+                    ),
                   ),
                 ),
               ],

@@ -2762,4 +2762,37 @@ class L10nEn extends L10n {
   @override
   String get womenFinderEmptyHint =>
       'Masjid committees can add it on their masjid page.';
+
+  @override
+  String get reportPost => 'Report';
+
+  @override
+  String get reportPostTitle => 'Report this post';
+
+  @override
+  String get reasonOffensive => 'Offensive, hateful or abusive';
+
+  @override
+  String get reasonSpam => 'Spam or advertising';
+
+  @override
+  String get reasonFalse => 'False or misleading';
+
+  @override
+  String get reportPostNote => 'Details (optional)';
+
+  @override
+  String get reportPostThanks =>
+      'Thank you – the Muslimin team will review it and remove it if it breaks the rules.';
+
+  @override
+  String hideAuthor(String name) {
+    return 'Hide messages from $name';
+  }
+
+  @override
+  String get authorHidden => 'You won\'t see their messages any more.';
+
+  @override
+  String get showHiddenAuthors => 'Show hidden people again';
 }

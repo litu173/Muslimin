@@ -2724,4 +2724,37 @@ class L10nAr extends L10n {
 
   @override
   String get womenFinderEmptyHint => 'يمكن للجنة المسجد إضافته من صفحة المسجد.';
+
+  @override
+  String get reportPost => 'إبلاغ';
+
+  @override
+  String get reportPostTitle => 'الإبلاغ عن هذا المنشور';
+
+  @override
+  String get reasonOffensive => 'مسيء أو يحض على الكراهية';
+
+  @override
+  String get reasonSpam => 'رسائل مزعجة أو إعلانات';
+
+  @override
+  String get reasonFalse => 'كاذب أو مضلل';
+
+  @override
+  String get reportPostNote => 'تفاصيل (اختياري)';
+
+  @override
+  String get reportPostThanks =>
+      'شكرًا – سيراجعه فريق مسلمين ويحذفه إن خالف القواعد.';
+
+  @override
+  String hideAuthor(String name) {
+    return 'إخفاء رسائل $name';
+  }
+
+  @override
+  String get authorHidden => 'لن ترى رسائله بعد الآن.';
+
+  @override
+  String get showHiddenAuthors => 'إظهار الأشخاص المخفيين مجددًا';
 }

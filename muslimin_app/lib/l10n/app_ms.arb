@@ -813,5 +813,15 @@
   "womenFinderTitle": "Ruang solat wanita",
   "womenFinderSub": "Cari masjid berhampiran yang ada ruang solat wanita",
   "womenFinderEmpty": "Belum ada masjid di sini yang menandakan ruang solat wanita.",
-  "womenFinderEmptyHint": "Jawatankuasa masjid boleh menambahnya di halaman masjid."
+  "womenFinderEmptyHint": "Jawatankuasa masjid boleh menambahnya di halaman masjid.",
+  "reportPost": "Laporkan",
+  "reportPostTitle": "Laporkan hantaran ini",
+  "reasonOffensive": "Menyinggung, kebencian atau kesat",
+  "reasonSpam": "Spam atau iklan",
+  "reasonFalse": "Palsu atau mengelirukan",
+  "reportPostNote": "Butiran (pilihan)",
+  "reportPostThanks": "Terima kasih – pasukan Muslimin akan menyemaknya dan memadamnya jika melanggar peraturan.",
+  "hideAuthor": "Sembunyikan mesej daripada {name}",
+  "authorHidden": "Anda tidak akan melihat mesejnya lagi.",
+  "showHiddenAuthors": "Tunjukkan semula orang yang disembunyikan"
 }

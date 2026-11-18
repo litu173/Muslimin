@@ -15,9 +15,9 @@ void main() {
 
   testWidgets('on-device board reader', (tester) async {
     if (dir.isEmpty) return;
-    final truth =
-        jsonDecode(File('$dir/truth.json').readAsStringSync())
-            as Map<String, dynamic>;
+    final truth = jsonDecode(
+      File('$dir/truth.json').readAsStringSync(),
+    ) as Map<String, dynamic>;
     final reader = OnDeviceTimeBoardReader();
     var right = 0, total = 0;
     final files =

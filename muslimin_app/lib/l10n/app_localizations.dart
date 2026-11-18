@@ -4994,6 +4994,66 @@ abstract class L10n {
   /// In en, this message translates to:
   /// **'Masjid committees can add it on their masjid page.'**
   String get womenFinderEmptyHint;
+
+  /// No description provided for @reportPost.
+  ///
+  /// In en, this message translates to:
+  /// **'Report'**
+  String get reportPost;
+
+  /// No description provided for @reportPostTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Report this post'**
+  String get reportPostTitle;
+
+  /// No description provided for @reasonOffensive.
+  ///
+  /// In en, this message translates to:
+  /// **'Offensive, hateful or abusive'**
+  String get reasonOffensive;
+
+  /// No description provided for @reasonSpam.
+  ///
+  /// In en, this message translates to:
+  /// **'Spam or advertising'**
+  String get reasonSpam;
+
+  /// No description provided for @reasonFalse.
+  ///
+  /// In en, this message translates to:
+  /// **'False or misleading'**
+  String get reasonFalse;
+
+  /// No description provided for @reportPostNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Details (optional)'**
+  String get reportPostNote;
+
+  /// No description provided for @reportPostThanks.
+  ///
+  /// In en, this message translates to:
+  /// **'Thank you – the Muslimin team will review it and remove it if it breaks the rules.'**
+  String get reportPostThanks;
+
+  /// No description provided for @hideAuthor.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide messages from {name}'**
+  String hideAuthor(String name);
+
+  /// No description provided for @authorHidden.
+  ///
+  /// In en, this message translates to:
+  /// **'You won\'t see their messages any more.'**
+  String get authorHidden;
+
+  /// No description provided for @showHiddenAuthors.
+  ///
+  /// In en, this message translates to:
+  /// **'Show hidden people again'**
+  String get showHiddenAuthors;
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {

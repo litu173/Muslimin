@@ -2738,4 +2738,37 @@ class L10nBn extends L10n {
   @override
   String get womenFinderEmptyHint =>
       'মসজিদ কমিটি মসজিদের পেজ থেকে এটি যুক্ত করতে পারে।';
+
+  @override
+  String get reportPost => 'রিপোর্ট করুন';
+
+  @override
+  String get reportPostTitle => 'এই পোস্টটি রিপোর্ট করুন';
+
+  @override
+  String get reasonOffensive => 'আপত্তিকর, বিদ্বেষমূলক বা গালিগালাজ';
+
+  @override
+  String get reasonSpam => 'স্প্যাম বা বিজ্ঞাপন';
+
+  @override
+  String get reasonFalse => 'মিথ্যা বা বিভ্রান্তিকর';
+
+  @override
+  String get reportPostNote => 'বিস্তারিত (ঐচ্ছিক)';
+
+  @override
+  String get reportPostThanks =>
+      'ধন্যবাদ – মুসলিমীন টিম বিষয়টি দেখবে এবং নিয়ম ভাঙলে সরিয়ে দেবে।';
+
+  @override
+  String hideAuthor(String name) {
+    return '$name-এর বার্তা লুকান';
+  }
+
+  @override
+  String get authorHidden => 'আপনি আর তাঁর বার্তা দেখবেন না।';
+
+  @override
+  String get showHiddenAuthors => 'লুকানো ব্যক্তিদের আবার দেখান';
 }

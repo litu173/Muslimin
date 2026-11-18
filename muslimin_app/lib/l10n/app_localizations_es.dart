@@ -2779,4 +2779,37 @@ class L10nEs extends L10n {
   @override
   String get womenFinderEmptyHint =>
       'El comité de la mezquita puede añadirlo en su página.';
+
+  @override
+  String get reportPost => 'Denunciar';
+
+  @override
+  String get reportPostTitle => 'Denunciar esta publicación';
+
+  @override
+  String get reasonOffensive => 'Ofensivo, de odio o abusivo';
+
+  @override
+  String get reasonSpam => 'Spam o publicidad';
+
+  @override
+  String get reasonFalse => 'Falso o engañoso';
+
+  @override
+  String get reportPostNote => 'Detalles (opcional)';
+
+  @override
+  String get reportPostThanks =>
+      'Gracias: el equipo de Muslimin lo revisará y lo eliminará si incumple las normas.';
+
+  @override
+  String hideAuthor(String name) {
+    return 'Ocultar mensajes de $name';
+  }
+
+  @override
+  String get authorHidden => 'Ya no verás sus mensajes.';
+
+  @override
+  String get showHiddenAuthors => 'Mostrar de nuevo a las personas ocultas';
 }

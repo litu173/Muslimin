@@ -676,15 +676,26 @@ class DemoBackend implements Backend {
   }) async => _patch(id, (m) => m.copyWith(liveUrl: url, isLive: isLive));
 
   @override
+  Future<void> reportContent({
+    required String kind,
+    required String masjidId,
+    required String masjidName,
+    required String itemId,
+    required String text,
+    required String authorUid,
+    required String authorName,
+    required String reason,
+    required String note,
+  }) async {}
+
+  @override
   Future<void> updateWomenSpace(String id, bool available) async =>
       _patch(id, (m) => m.copyWith(womenSpace: available));
 
   @override
   Stream<List<Masjid>> womenSpaceMasjids() => _watch(
     () => _masjids.values
-        .where(
-          (m) => m.status == MasjidStatus.approved && m.womenSpace == true,
-        )
+        .where((m) => m.status == MasjidStatus.approved && m.womenSpace == true)
         .toList(),
   );
 

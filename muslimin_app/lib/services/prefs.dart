@@ -71,6 +71,11 @@ class Prefs {
   List<String> get readIds => _p.getStringList('readIds') ?? const [];
   set readIds(List<String> v) => _p.setStringList('readIds', v);
 
+  /// People whose channel messages this user chose to hide (uids).
+  List<String> get hiddenAuthors =>
+      _p.getStringList('hiddenAuthors') ?? const [];
+  set hiddenAuthors(List<String> v) => _p.setStringList('hiddenAuthors', v);
+
   int get reciter => _p.getInt('reciter') ?? 7;
   set reciter(int v) => _p.setInt('reciter', v);
 

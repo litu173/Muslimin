@@ -813,5 +813,15 @@
   "womenFinderTitle": "Kadınlar için namaz yerleri",
   "womenFinderSub": "Yakınında kadınlar için namaz yeri olan camileri bul",
   "womenFinderEmpty": "Burada henüz kadınlar için namaz yeri belirten cami yok.",
-  "womenFinderEmptyHint": "Cami yönetimi bunu cami sayfasından ekleyebilir."
+  "womenFinderEmptyHint": "Cami yönetimi bunu cami sayfasından ekleyebilir.",
+  "reportPost": "Bildir",
+  "reportPostTitle": "Bu gönderiyi bildir",
+  "reasonOffensive": "Saldırgan, nefret içeren veya hakaret",
+  "reasonSpam": "Spam veya reklam",
+  "reasonFalse": "Yanlış veya yanıltıcı",
+  "reportPostNote": "Ayrıntılar (isteğe bağlı)",
+  "reportPostThanks": "Teşekkürler – Muslimin ekibi inceleyecek ve kurallara aykırıysa kaldıracak.",
+  "hideAuthor": "{name} adlı kişinin mesajlarını gizle",
+  "authorHidden": "Artık mesajlarını görmeyeceksin.",
+  "showHiddenAuthors": "Gizlenen kişileri yeniden göster"
 }

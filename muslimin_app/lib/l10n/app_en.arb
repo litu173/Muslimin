@@ -1431,5 +1431,22 @@
   "womenFinderTitle": "Women's prayer spaces",
   "womenFinderSub": "Find masjids near you with a place for women to pray",
   "womenFinderEmpty": "No masjid here has marked a women's prayer space yet.",
-  "womenFinderEmptyHint": "Masjid committees can add it on their masjid page."
+  "womenFinderEmptyHint": "Masjid committees can add it on their masjid page.",
+  "reportPost": "Report",
+  "reportPostTitle": "Report this post",
+  "reasonOffensive": "Offensive, hateful or abusive",
+  "reasonSpam": "Spam or advertising",
+  "reasonFalse": "False or misleading",
+  "reportPostNote": "Details (optional)",
+  "reportPostThanks": "Thank you – the Muslimin team will review it and remove it if it breaks the rules.",
+  "hideAuthor": "Hide messages from {name}",
+  "authorHidden": "You won't see their messages any more.",
+  "showHiddenAuthors": "Show hidden people again",
+  "@hideAuthor": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  }
 }
