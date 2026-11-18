@@ -4,7 +4,7 @@
 import {
   db, isSuper, doc, getDoc, setDoc, collection, query, where, getDocs, serverTimestamp, logAction,
 } from '../fb.js';
-import { h, card, input, field, act, link, badge, toast, empty } from '../ui.js';
+import { h, card, input, field, act, link, badge, toast, empty, clear } from '../ui.js';
 import { pageHead } from '../app.js';
 import { ghToken, startJobs, roleName, ROLE_KIND } from '../data.js';
 
@@ -37,7 +37,10 @@ export async function render(el) {
   const grid = h('div.grid.g2');
   el.append(grid);
   if (!isSuper()) {
-    grid.append(tokenCard());
+    // ---- Home page order (the app's Home, below the prayer times)
+  grid.before(homeOrderCard(ref, c));
+
+  grid.append(tokenCard());
     return;
   }
 
@@ -90,6 +93,46 @@ export async function render(el) {
   grid.append(card('Admin team', admins.empty ? empty('None.') : h('div.list', admins.docs.map((d) => h('div.list-item', h('span.dot'),
     h('div.grow', link(`/user/${d.id}`, d.data().name || d.data().email), h('div.muted.small', d.data().email)), badge(roleName(d.data().role).toLowerCase(), ROLE_KIND[d.data().role])))),
   h('p.muted.small', { style: { marginTop: '10px' } }, 'To change someone’s role, open their profile under Users → Role. Users → filter by role lists volunteers too.')));
+}
+
+// Same keys as the app's HomeSection (lib/data/models/app_config.dart).
+const HOME = [
+  ['masjids', 'Nearest masjids', null],
+  ['womenSpace', 'Women\'s prayer spaces card', 'homeWomenSpace'],
+  ['dailyQuran', 'Daily Quran card', 'homeDailyQuran'],
+  ['dailyDhikr', 'Daily dhikr card', 'homeDailyDhikr'],
+  ['dua', 'Dua for this time of day', 'homeDua'],
+  ['verses', 'Verses (rotating ayat)', 'homeVerses'],
+];
+
+function homeOrderCard(ref, c) {
+  const saved = (c.homeOrder || []).filter((k) => HOME.some(([x]) => x === k));
+  let order = [...new Set([...saved, ...HOME.map(([k]) => k)])];
+  const off = c.features || {};
+  const list = h('div.list');
+  const save = h('button.btn.btn-primary', { disabled: true }, 'Save order');
+  const draw = () => clear(list).append(order.map((k, i) => {
+    const [, label, feat] = HOME.find(([x]) => x === k);
+    const hidden = feat && off[feat] === false;
+    const mv = (d) => { const j = i + d; if (j < 0 || j >= order.length) return; [order[i], order[j]] = [order[j], order[i]]; save.disabled = false; draw(); };
+    return h('div.list-item', { style: { alignItems: 'center' } },
+      h('b.num-tag', { style: { minWidth: '22px' } }, i + 1),
+      h('div.grow', label, hidden ? h('span.muted.small', ' – switched off in Features') : null),
+      h('button.icon-btn', { title: 'Move up', disabled: i === 0, onclick: () => mv(-1) }, '↑'),
+      h('button.icon-btn', { title: 'Move down', disabled: i === order.length - 1, onclick: () => mv(1) }, '↓'));
+  }));
+  save.onclick = (e) => act(e.currentTarget, async () => {
+    await setDoc(ref, { homeOrder: order, updatedAt: serverTimestamp() }, { merge: true });
+    await logAction('config.homeOrder', 'config/app', { order });
+    save.disabled = true;
+  }, 'Saved – phones show the new order when the app opens.');
+  draw();
+  return card('Home page order',
+    h('p.muted.small', 'The sections of the app\'s Home page, top to bottom. Location, the team banner and prayer times always stay on top. Turn a section off under Features.'),
+    list,
+    h('div.row.end', { style: { marginTop: '10px' } },
+      h('button.btn', { onclick: () => { order = HOME.map(([k]) => k); save.disabled = false; draw(); } }, 'Reset to default'),
+      save));
 }
 
 function tokenCard() {

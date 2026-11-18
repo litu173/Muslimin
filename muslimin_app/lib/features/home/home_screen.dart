@@ -16,7 +16,7 @@ import '../../core/widgets/refresh.dart';
 import '../../core/widgets/surfaces.dart';
 import '../../l10n/app_localizations.dart';
 import '../../state/providers.dart';
-import '../../data/models/app_config.dart' show Feature;
+import '../../data/models/app_config.dart' show Feature, HomeSection;
 import '../../state/update.dart';
 import '../dhikr/dhikr_screen.dart';
 import '../prayers/all_prayers_screen.dart';
@@ -95,6 +95,119 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
         mine.hasValue &&
         mine.value!.isEmpty;
 
+    // The admins choose the order of these sections (App settings → Home
+    // order); the location, team banner and prayer header stay on top.
+    final sections = <String, List<Widget>>{
+      HomeSection.masjids: [
+        // ---- nearest masjids
+        SliverToBoxAdapter(
+          child: _in(
+            3,
+            SectionHeader(
+              title: t.nearestMasjid,
+              subtitle: loc.value?.label ?? t.locating,
+              action: t.viewAll,
+              onAction: () => push(context, const MasjidListScreen()),
+            ),
+          ),
+        ),
+        ...masjids.when(
+          // Placeholders the size of the cards, so the sections below
+          // don't sit up high and then jump down when the list arrives.
+          loading: () => [
+            SliverPadding(
+              padding: const EdgeInsets.symmetric(horizontal: Gap.l),
+              sliver: SliverList.separated(
+                itemCount: kHomeMasjids,
+                separatorBuilder: (_, _) => const SizedBox(height: 10),
+                itemBuilder: (_, i) => _in(4 + i, const _MasjidPlaceholder()),
+              ),
+            ),
+          ],
+          error: (e, _) => [
+            SliverToBoxAdapter(
+              child: EmptyState(
+                inCard: true,
+                message: t.somethingWrong,
+                icon: Icons.wifi_off_rounded,
+                action: AppButton(
+                  t.retry,
+                  onPressed: () => ref.invalidate(nearbyMasjidsProvider),
+                  dense: true,
+                ),
+              ),
+            ),
+          ],
+          data: (list) => list.isEmpty
+              ? [
+                  SliverToBoxAdapter(
+                    child: EmptyState(
+                      inCard: true,
+                      message: t.noMasjidNearby,
+                      hint: t.noMasjidNearbyHint,
+                    ),
+                  ),
+                ]
+              : [
+                  SliverPadding(
+                    padding: const EdgeInsets.symmetric(horizontal: Gap.l),
+                    sliver: SliverList.separated(
+                      itemCount: list.length.clamp(0, kHomeMasjids),
+                      separatorBuilder: (_, _) => const SizedBox(height: 10),
+                      itemBuilder: (_, i) =>
+                          _in(4 + i, MasjidCard(masjid: list[i], index: i)),
+                    ),
+                  ),
+                ],
+        ),
+      ],
+      HomeSection.womenSpace: [
+        // ---- women's prayer spaces: opens the finder
+        if (on(Feature.homeWomenSpace) && on(Feature.womenSpace))
+          SliverToBoxAdapter(
+            child: _in(
+              8,
+              const Padding(
+                padding: EdgeInsets.fromLTRB(Gap.l, Gap.xl, Gap.l, 0),
+                child: _WomenSpaceCard(),
+              ),
+            ),
+          ),
+      ],
+      HomeSection.dailyQuran: [
+        // ---- daily Quran reading: the lantern fills as you read
+        if (on(Feature.homeDailyQuran))
+          SliverToBoxAdapter(
+            child: _in(
+              9,
+              const Padding(
+                padding: EdgeInsets.fromLTRB(Gap.l, Gap.xl, Gap.l, 0),
+                child: QuranEnergyCard(),
+              ),
+            ),
+          ),
+      ],
+      HomeSection.dailyDhikr: [
+        // ---- daily sunnah dhikr, a part after each salah
+        if (on(Feature.homeDailyDhikr))
+          SliverToBoxAdapter(child: _in(9, const DhikrSection())),
+      ],
+      HomeSection.dua: [
+        // ---- duas for this part of the day
+        if (on(Feature.homeDua) && on(Feature.tabDua))
+          SliverToBoxAdapter(child: _in(10, const NowDuaSection())),
+      ],
+      HomeSection.verses: [
+        if (on(Feature.homeVerses)) ...[
+          const SliverToBoxAdapter(child: SizedBox(height: Gap.xl)),
+          SliverToBoxAdapter(child: _in(11, const VerseCarousel())),
+        ],
+      ],
+    };
+    final order = ref.watch(
+      appConfigProvider.select((c) => c.value?.homeOrder ?? HomeSection.all),
+    );
+
     return Scaffold(
       body: SafeArea(
         bottom: false,
@@ -130,106 +243,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                 ),
               ),
 
-            // ---- nearest masjids
-            SliverToBoxAdapter(
-              child: _in(
-                3,
-                SectionHeader(
-                  title: t.nearestMasjid,
-                  subtitle: loc.value?.label ?? t.locating,
-                  action: t.viewAll,
-                  onAction: () => push(context, const MasjidListScreen()),
-                ),
-              ),
-            ),
-            ...masjids.when(
-              // Placeholders the size of the cards, so the sections below
-              // don't sit up high and then jump down when the list arrives.
-              loading: () => [
-                SliverPadding(
-                  padding: const EdgeInsets.symmetric(horizontal: Gap.l),
-                  sliver: SliverList.separated(
-                    itemCount: kHomeMasjids,
-                    separatorBuilder: (_, _) => const SizedBox(height: 10),
-                    itemBuilder: (_, i) =>
-                        _in(4 + i, const _MasjidPlaceholder()),
-                  ),
-                ),
-              ],
-              error: (e, _) => [
-                SliverToBoxAdapter(
-                  child: EmptyState(
-                    inCard: true,
-                    message: t.somethingWrong,
-                    icon: Icons.wifi_off_rounded,
-                    action: AppButton(
-                      t.retry,
-                      onPressed: () => ref.invalidate(nearbyMasjidsProvider),
-                      dense: true,
-                    ),
-                  ),
-                ),
-              ],
-              data: (list) => list.isEmpty
-                  ? [
-                      SliverToBoxAdapter(
-                        child: EmptyState(
-                          inCard: true,
-                          message: t.noMasjidNearby,
-                          hint: t.noMasjidNearbyHint,
-                        ),
-                      ),
-                    ]
-                  : [
-                      SliverPadding(
-                        padding: const EdgeInsets.symmetric(horizontal: Gap.l),
-                        sliver: SliverList.separated(
-                          itemCount: list.length.clamp(0, kHomeMasjids),
-                          separatorBuilder: (_, _) =>
-                              const SizedBox(height: 10),
-                          itemBuilder: (_, i) =>
-                              _in(4 + i, MasjidCard(masjid: list[i], index: i)),
-                        ),
-                      ),
-                    ],
-            ),
-
-            // ---- women's prayer spaces: opens the finder
-            if (on(Feature.homeWomenSpace) && on(Feature.womenSpace))
-              SliverToBoxAdapter(
-                child: _in(
-                  8,
-                  const Padding(
-                    padding: EdgeInsets.fromLTRB(Gap.l, Gap.xl, Gap.l, 0),
-                    child: _WomenSpaceCard(),
-                  ),
-                ),
-              ),
-
-            // ---- daily Quran reading: the lantern fills as you read
-            if (on(Feature.homeDailyQuran))
-              SliverToBoxAdapter(
-                child: _in(
-                  9,
-                  const Padding(
-                    padding: EdgeInsets.fromLTRB(Gap.l, Gap.xl, Gap.l, 0),
-                    child: QuranEnergyCard(),
-                  ),
-                ),
-              ),
-
-            // ---- daily sunnah dhikr, a part after each salah
-            if (on(Feature.homeDailyDhikr))
-              SliverToBoxAdapter(child: _in(9, const DhikrSection())),
-
-            // ---- duas for this part of the day
-            if (on(Feature.homeDua) && on(Feature.tabDua))
-              SliverToBoxAdapter(child: _in(10, const NowDuaSection())),
-
-            if (on(Feature.homeVerses)) ...[
-              const SliverToBoxAdapter(child: SizedBox(height: Gap.xl)),
-              SliverToBoxAdapter(child: _in(11, const VerseCarousel())),
-            ],
+            for (final key in order) ...?sections[key],
 
             const SliverToBoxAdapter(child: SizedBox(height: Gap.xxl)),
           ],

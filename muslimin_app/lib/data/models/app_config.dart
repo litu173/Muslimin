@@ -29,6 +29,28 @@ abstract final class Feature {
   static const suggestMasjid = 'suggestMasjid';
 }
 
+/// Home's sections below the prayer header, in the order the admins set
+/// (admin website → App settings → Home order).
+abstract final class HomeSection {
+  static const masjids = 'masjids';
+  static const womenSpace = 'womenSpace';
+  static const dailyQuran = 'dailyQuran';
+  static const dailyDhikr = 'dailyDhikr';
+  static const dua = 'dua';
+  static const verses = 'verses';
+  static const all = [masjids, womenSpace, dailyQuran, dailyDhikr, dua, verses];
+
+  /// [saved] (known keys only, no repeats), then any missing in the
+  /// default order – a section added later still shows.
+  static List<String> order(List<dynamic>? saved) {
+    final out = <String>[];
+    for (final k in saved ?? const []) {
+      if (all.contains(k) && !out.contains(k)) out.add(k as String);
+    }
+    return [...out, ...all.where((k) => !out.contains(k))];
+  }
+}
+
 /// App-wide switches set in the admin website (config/app): a minimum
 /// version that must be installed, a banner shown on Home, and features
 /// switched off.
@@ -40,7 +62,11 @@ class AppConfig {
     this.bannerBn = '',
     this.off = const {},
     this.contentVersion = const {},
+    this.homeOrder = HomeSection.all,
   });
+
+  /// Home's sections, top to bottom ([HomeSection] keys).
+  final List<String> homeOrder;
 
   /// When each content set was last changed by the admins (millis) – the
   /// app downloads a set when this is newer than its copy.
@@ -64,6 +90,7 @@ class AppConfig {
       bannerOn: (b?['on'] as bool?) ?? false,
       bannerEn: (b?['messageEn'] as String?) ?? '',
       bannerBn: (b?['messageBn'] as String?) ?? '',
+      homeOrder: HomeSection.order(m?['homeOrder'] as List?),
       contentVersion: {
         for (final e in ((m?['contentVersion'] as Map?) ?? const {}).entries)
           if (e.value is num) '${e.key}': (e.value as num).toInt(),
