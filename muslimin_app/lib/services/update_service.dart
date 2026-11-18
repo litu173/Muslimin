@@ -45,7 +45,40 @@ class UpdateService {
       'https://github.com/$repo/releases/latest/download/Muslimin.apk';
   static const installGuideUrl = 'https://litu173.github.io/Muslimin/#install';
 
+  /// Published with every release next to the website. GitHub's API allows
+  /// only 60 requests an hour per network address, and whole mobile
+  /// networks share one – so it is only the fallback.
+  static const versionUrl = 'https://litu173.github.io/Muslimin/version.json';
+
   Future<UpdateInfo> latest() async {
+    try {
+      return await _fromWebsite();
+    } catch (_) {
+      return _fromGitHub();
+    }
+  }
+
+  Future<UpdateInfo> _fromWebsite() async {
+    // A fresh query each time so a cached copy is never minutes old.
+    final res = await http
+        .get(
+          Uri.parse('$versionUrl?t=${DateTime.now().millisecondsSinceEpoch}'),
+        )
+        .timeout(const Duration(seconds: 12));
+    if (res.statusCode != 200) {
+      throw Exception('version.json ${res.statusCode}');
+    }
+    final j = jsonDecode(res.body) as Map<String, dynamic>;
+    final tag = j['tag'] as String;
+    return UpdateInfo(
+      tag: tag,
+      version: (j['version'] as String?) ?? tag.replaceFirst(RegExp(r'^v'), ''),
+      apkUrl: (j['apk'] as String?) ?? latestApkUrl,
+      pageUrl: (j['page'] as String?) ?? 'https://github.com/$repo/releases',
+    );
+  }
+
+  Future<UpdateInfo> _fromGitHub() async {
     final res = await http
         .get(
           Uri.parse('https://api.github.com/repos/$repo/releases/latest'),

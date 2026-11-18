@@ -567,12 +567,18 @@
         (isBn ? "সর্বশেষ ভার্সন " : "Latest version ") + (latestTag || "");
       document.getElementById("footVer").textContent = latestTag || (isBn ? "বেটা" : "Beta");
     };
-    fetch(`https://api.github.com/repos/${REPO}/releases/latest`).then(r => r.ok ? r.json() : null).then(r => {
-      if (r && r.tag_name) {
-        latestTag = r.tag_name; showVersion();
-        document.getElementById("notesLink").href = r.html_url;
-      }
-    }).catch(() => {});
+    // version.json is published with every release (GitHub's API allows
+    // only 60 requests an hour per network – shared by whole mobile networks).
+    fetch(`version.json?t=${Date.now()}`).then(r => r.ok ? r.json() : null)
+      .catch(() => null)
+      .then(v => v && v.tag ? { tag_name: v.tag, html_url: v.page }
+        : fetch(`https://api.github.com/repos/${REPO}/releases/latest`).then(r => r.ok ? r.json() : null))
+      .then(r => {
+        if (r && r.tag_name) {
+          latestTag = r.tag_name; showVersion();
+          document.getElementById("notesLink").href = r.html_url;
+        }
+      }).catch(() => {});
 
     function selectTab(name) {
       document.querySelectorAll(".tabs button").forEach(b => b.classList.toggle("on", b.dataset.tab === name));
