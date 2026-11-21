@@ -200,8 +200,21 @@ class FirebaseBackend implements Backend {
         idToken: account.authentication.idToken,
       );
     } on GoogleSignInException catch (e) {
-      if (e.code == GoogleSignInExceptionCode.canceled) return null;
-      throw BackendException('google-failed', e.description);
+      // Android reports some real failures (e.g. "[16] Account reauth
+      // failed" when this build's signing key isn't registered with Google)
+      // as "canceled" too – only a real cancel by the user stays silent.
+      final why = e.description ?? '';
+      final low = why.toLowerCase();
+      final userCancelled =
+          why.isEmpty || (low.contains('cancel') && low.contains('user'));
+      if (e.code == GoogleSignInExceptionCode.canceled && userCancelled) {
+        return null;
+      }
+      debugPrint('Google sign-in failed: ${e.code} $why');
+      throw BackendException(
+        'google-failed',
+        'Google sign-in failed (${e.code.name}${why.isEmpty ? '' : ': $why'})',
+      );
     }
   }
 
