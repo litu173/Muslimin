@@ -823,5 +823,9 @@
   "reportPostThanks": "Teşekkürler – Muslimin ekibi inceleyecek ve kurallara aykırıysa kaldıracak.",
   "hideAuthor": "{name} adlı kişinin mesajlarını gizle",
   "authorHidden": "Artık mesajlarını görmeyeceksin.",
-  "showHiddenAuthors": "Gizlenen kişileri yeniden göster"
+  "showHiddenAuthors": "Gizlenen kişileri yeniden göster",
+  "permNotNow": "Şimdi değil",
+  "permNotNowHint": "Uygulama yine de çalışır: bölgenizi seçmek için Ana sayfanın üstündeki konumunuza dokunun. Daha sonra Ayarlar'dan izin verebilirsiniz.",
+  "tapToChooseArea": "Bölgenizi seçmek için dokunun",
+  "chooseAreaHint": "Namaz vakitleri ve en yakın camiler bu bölgeye göre gösterilir."
 }

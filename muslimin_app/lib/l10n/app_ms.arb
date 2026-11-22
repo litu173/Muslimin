@@ -823,5 +823,9 @@
   "reportPostThanks": "Terima kasih – pasukan Muslimin akan menyemaknya dan memadamnya jika melanggar peraturan.",
   "hideAuthor": "Sembunyikan mesej daripada {name}",
   "authorHidden": "Anda tidak akan melihat mesejnya lagi.",
-  "showHiddenAuthors": "Tunjukkan semula orang yang disembunyikan"
+  "showHiddenAuthors": "Tunjukkan semula orang yang disembunyikan",
+  "permNotNow": "Bukan sekarang",
+  "permNotNowHint": "Aplikasi tetap berfungsi: ketik lokasi anda di atas Utama untuk memilih kawasan. Anda boleh membenarkannya kemudian dalam Tetapan.",
+  "tapToChooseArea": "Ketik untuk memilih kawasan",
+  "chooseAreaHint": "Waktu solat dan masjid terdekat akan menggunakan kawasan ini."
 }

@@ -5054,6 +5054,30 @@ abstract class L10n {
   /// In en, this message translates to:
   /// **'Show hidden people again'**
   String get showHiddenAuthors;
+
+  /// No description provided for @permNotNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Not now'**
+  String get permNotNow;
+
+  /// No description provided for @permNotNowHint.
+  ///
+  /// In en, this message translates to:
+  /// **'The app still works: tap your location at the top of Home to choose your area. You can allow these later in Settings.'**
+  String get permNotNowHint;
+
+  /// No description provided for @tapToChooseArea.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to choose your area'**
+  String get tapToChooseArea;
+
+  /// No description provided for @chooseAreaHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Prayer times and the nearest masjids will use this area.'**
+  String get chooseAreaHint;
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {

@@ -823,5 +823,9 @@
   "reportPostThanks": "Terima kasih – tim Muslimin akan meninjaunya dan menghapusnya jika melanggar aturan.",
   "hideAuthor": "Sembunyikan pesan dari {name}",
   "authorHidden": "Anda tidak akan melihat pesannya lagi.",
-  "showHiddenAuthors": "Tampilkan lagi orang yang disembunyikan"
+  "showHiddenAuthors": "Tampilkan lagi orang yang disembunyikan",
+  "permNotNow": "Nanti saja",
+  "permNotNowHint": "Aplikasi tetap berjalan: ketuk lokasi Anda di atas Beranda untuk memilih area. Anda bisa mengizinkannya nanti di Pengaturan.",
+  "tapToChooseArea": "Ketuk untuk memilih area",
+  "chooseAreaHint": "Waktu salat dan masjid terdekat akan memakai area ini."
 }

@@ -823,5 +823,9 @@
   "reportPostThanks": "Gracias: el equipo de Muslimin lo revisará y lo eliminará si incumple las normas.",
   "hideAuthor": "Ocultar mensajes de {name}",
   "authorHidden": "Ya no verás sus mensajes.",
-  "showHiddenAuthors": "Mostrar de nuevo a las personas ocultas"
+  "showHiddenAuthors": "Mostrar de nuevo a las personas ocultas",
+  "permNotNow": "Ahora no",
+  "permNotNowHint": "La app sigue funcionando: toca tu ubicación arriba en Inicio para elegir tu zona. Puedes permitirlo más tarde en Ajustes.",
+  "tapToChooseArea": "Toca para elegir tu zona",
+  "chooseAreaHint": "Los horarios de oración y las mezquitas cercanas usarán esta zona."
 }

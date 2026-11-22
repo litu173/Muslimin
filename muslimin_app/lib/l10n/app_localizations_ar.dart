@@ -2757,4 +2757,18 @@ class L10nAr extends L10n {
 
   @override
   String get showHiddenAuthors => 'إظهار الأشخاص المخفيين مجددًا';
+
+  @override
+  String get permNotNow => 'ليس الآن';
+
+  @override
+  String get permNotNowHint =>
+      'سيعمل التطبيق مع ذلك: اضغط على موقعك أعلى الصفحة الرئيسية لاختيار منطقتك. يمكنك السماح بذلك لاحقًا من الإعدادات.';
+
+  @override
+  String get tapToChooseArea => 'اضغط لاختيار منطقتك';
+
+  @override
+  String get chooseAreaHint =>
+      'ستُحسب أوقات الصلاة وأقرب المساجد حسب هذه المنطقة.';
 }

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:geolocator/geolocator.dart';
 
 import '../core/utils/geo.dart';
 import '../data/backend/backend.dart';
@@ -133,16 +134,56 @@ class LocationNotifier extends AsyncNotifier<UserLocation> {
     if (cached != null) {
       // Show cached location instantly, refresh in the background.
       Future.microtask(refresh);
+      final perm = await Geolocator.checkPermission();
       return UserLocation(
         lat: cached.lat,
         lng: cached.lng,
         label: cached.label,
+        // Picked by hand when location isn't allowed.
+        fromMap:
+            perm == LocationPermission.denied ||
+            perm == LocationPermission.deniedForever,
       );
     }
-    return _fetch();
+    try {
+      return await _fetch();
+    } catch (_) {
+      // No location allowed (or GPS off) and nothing picked yet: start in
+      // Dhaka until the user picks their area (tap the location bar).
+      return const UserLocation(
+        lat: 23.8103,
+        lng: 90.4125,
+        label: 'Dhaka',
+        fromMap: true,
+      );
+    }
+  }
+
+  /// Location by hand, for people who didn't allow location: the middle
+  /// of the picked thana.
+  Future<void> setManual(Thana t) async {
+    final c = (await ThanaService.load()).centreOf(t);
+    if (c == null) return;
+    final loc = UserLocation(
+      lat: c.lat,
+      lng: c.lng,
+      label: '${t.name}, ${t.district}',
+      fromMap: true,
+    );
+    ref.read(prefsProvider).lastLocation = (
+      lat: loc.lat,
+      lng: loc.lng,
+      label: loc.label,
+    );
+    state = AsyncData(loc);
   }
 
   Future<UserLocation> _fetch() async {
+    final perm = await Geolocator.checkPermission();
+    if (perm == LocationPermission.denied ||
+        perm == LocationPermission.deniedForever) {
+      throw StateError('location not allowed');
+    }
     final loc = await ref.read(locationServiceProvider).current();
     _fetchedAt = DateTime.now();
     ref.read(prefsProvider).lastLocation = (

@@ -1448,5 +1448,9 @@
         "type": "String"
       }
     }
-  }
+  },
+  "permNotNow": "Not now",
+  "permNotNowHint": "The app still works: tap your location at the top of Home to choose your area. You can allow these later in Settings.",
+  "tapToChooseArea": "Tap to choose your area",
+  "chooseAreaHint": "Prayer times and the nearest masjids will use this area."
 }

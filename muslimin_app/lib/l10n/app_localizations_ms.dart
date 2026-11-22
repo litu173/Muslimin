@@ -2804,4 +2804,18 @@ class L10nMs extends L10n {
 
   @override
   String get showHiddenAuthors => 'Tunjukkan semula orang yang disembunyikan';
+
+  @override
+  String get permNotNow => 'Bukan sekarang';
+
+  @override
+  String get permNotNowHint =>
+      'Aplikasi tetap berfungsi: ketik lokasi anda di atas Utama untuk memilih kawasan. Anda boleh membenarkannya kemudian dalam Tetapan.';
+
+  @override
+  String get tapToChooseArea => 'Ketik untuk memilih kawasan';
+
+  @override
+  String get chooseAreaHint =>
+      'Waktu solat dan masjid terdekat akan menggunakan kawasan ini.';
 }

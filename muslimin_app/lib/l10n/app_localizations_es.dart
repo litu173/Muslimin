@@ -2812,4 +2812,18 @@ class L10nEs extends L10n {
 
   @override
   String get showHiddenAuthors => 'Mostrar de nuevo a las personas ocultas';
+
+  @override
+  String get permNotNow => 'Ahora no';
+
+  @override
+  String get permNotNowHint =>
+      'La app sigue funcionando: toca tu ubicación arriba en Inicio para elegir tu zona. Puedes permitirlo más tarde en Ajustes.';
+
+  @override
+  String get tapToChooseArea => 'Toca para elegir tu zona';
+
+  @override
+  String get chooseAreaHint =>
+      'Los horarios de oración y las mezquitas cercanas usarán esta zona.';
 }

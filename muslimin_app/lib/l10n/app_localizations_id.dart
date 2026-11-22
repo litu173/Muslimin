@@ -2797,4 +2797,18 @@ class L10nId extends L10n {
 
   @override
   String get showHiddenAuthors => 'Tampilkan lagi orang yang disembunyikan';
+
+  @override
+  String get permNotNow => 'Nanti saja';
+
+  @override
+  String get permNotNowHint =>
+      'Aplikasi tetap berjalan: ketuk lokasi Anda di atas Beranda untuk memilih area. Anda bisa mengizinkannya nanti di Pengaturan.';
+
+  @override
+  String get tapToChooseArea => 'Ketuk untuk memilih area';
+
+  @override
+  String get chooseAreaHint =>
+      'Waktu salat dan masjid terdekat akan memakai area ini.';
 }

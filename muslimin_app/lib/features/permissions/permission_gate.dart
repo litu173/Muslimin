@@ -12,9 +12,9 @@ import '../../l10n/app_localizations.dart';
 import '../../state/providers.dart';
 import '../shell/shell.dart';
 
-/// Location AND notifications are mandatory. This gate sits in front of the
-/// app on every launch: if either is missing (or GPS is off) the user sees
-/// this screen; once both are granted it disappears and shows [Shell].
+/// Asks for location and notifications on launch until both are granted or
+/// the user taps "Not now" (Google Play: the app must work without them –
+/// the area is then picked by hand from the location bar).
 class PermissionGate extends ConsumerStatefulWidget {
   const PermissionGate({super.key});
 
@@ -83,7 +83,7 @@ class _PermissionGateState extends ConsumerState<PermissionGate>
   @override
   Widget build(BuildContext context) {
     if (!_checked) return const Scaffold(body: Loader());
-    if (_allGood) return const Shell();
+    if (_allGood || ref.read(prefsProvider).permSkipped) return const Shell();
 
     final t = L10n.of(context);
     final locBlocked = _location?.isPermanentlyDenied == true;
@@ -141,6 +141,24 @@ class _PermissionGateState extends ConsumerState<PermissionGate>
                   style: AppText.caption.copyWith(color: AppColors.danger),
                 ),
               ],
+              const SizedBox(height: Gap.xl),
+              Center(
+                child: TextButton(
+                  onPressed: () {
+                    ref.read(prefsProvider).permSkipped = true;
+                    setState(() {});
+                  },
+                  child: Text(
+                    t.permNotNow,
+                    style: AppText.label.copyWith(color: AppColors.muted),
+                  ),
+                ),
+              ),
+              Text(
+                t.permNotNowHint,
+                style: AppText.caption,
+                textAlign: TextAlign.center,
+              ),
             ],
           ),
         ),

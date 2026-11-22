@@ -2795,4 +2795,18 @@ class L10nUr extends L10n {
 
   @override
   String get showHiddenAuthors => 'چھپائے گئے لوگوں کو دوبارہ دکھائیں';
+
+  @override
+  String get permNotNow => 'ابھی نہیں';
+
+  @override
+  String get permNotNowHint =>
+      'ایپ پھر بھی چلے گی: ہوم کے اوپر اپنے مقام پر ٹیپ کر کے اپنا علاقہ منتخب کریں۔ بعد میں سیٹنگز سے اجازت دے سکتے ہیں۔';
+
+  @override
+  String get tapToChooseArea => 'علاقہ منتخب کرنے کے لیے ٹیپ کریں';
+
+  @override
+  String get chooseAreaHint =>
+      'نماز کے اوقات اور قریب ترین مساجد اسی علاقے کے مطابق ہوں گی۔';
 }

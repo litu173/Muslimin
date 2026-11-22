@@ -2791,4 +2791,18 @@ class L10nTr extends L10n {
 
   @override
   String get showHiddenAuthors => 'Gizlenen kişileri yeniden göster';
+
+  @override
+  String get permNotNow => 'Şimdi değil';
+
+  @override
+  String get permNotNowHint =>
+      'Uygulama yine de çalışır: bölgenizi seçmek için Ana sayfanın üstündeki konumunuza dokunun. Daha sonra Ayarlar\'dan izin verebilirsiniz.';
+
+  @override
+  String get tapToChooseArea => 'Bölgenizi seçmek için dokunun';
+
+  @override
+  String get chooseAreaHint =>
+      'Namaz vakitleri ve en yakın camiler bu bölgeye göre gösterilir.';
 }

@@ -7,6 +7,7 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text.dart';
 import '../../core/utils/format.dart';
+import '../../core/widgets/thana_picker.dart';
 import '../../l10n/app_localizations.dart';
 import '../../state/channel.dart';
 import '../../state/providers.dart';
@@ -45,6 +46,20 @@ class _LocationBarState extends ConsumerState<LocationBar>
   /// finishes its turn and rests.
   Future<void> _refresh() async {
     if (_spin.isAnimating) return;
+    // Location not allowed ("Not now"): pick the area by hand instead.
+    final perm = await Geolocator.checkPermission();
+    if (perm == LocationPermission.denied ||
+        perm == LocationPermission.deniedForever) {
+      if (!mounted) return;
+      final t = await pickThana(
+        context,
+        mine: ref.read(myThanaProvider).value,
+        current: ref.read(myThanaProvider).value,
+        hint: L10n.of(context).chooseAreaHint,
+      );
+      if (t != null) await ref.read(locationProvider.notifier).setManual(t);
+      return;
+    }
     _spin.repeat();
     await Future.wait([
       ref.read(locationProvider.notifier).refresh().catchError((_) {}),
@@ -115,6 +130,18 @@ class _LocationBarState extends ConsumerState<LocationBar>
                             ),
                           ],
                         ),
+                        // Picked by hand (location not allowed): say how
+                        // to change it.
+                        if (loc.value?.fromMap ?? false)
+                          Padding(
+                            padding: const EdgeInsets.only(top: 2),
+                            child: Text(
+                              t.tapToChooseArea,
+                              style: AppText.caption.copyWith(
+                                color: AppColors.gold,
+                              ),
+                            ),
+                          ),
                         // Approximate location is kilometres off: say so.
                         if (loc.value?.approximate ?? false)
                           GestureDetector(

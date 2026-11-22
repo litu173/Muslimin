@@ -65,6 +65,16 @@ class ThanaService {
   late final List<Thana> all = [for (final a in _areas) a.thana]
     ..sort((a, b) => a.name.compareTo(b.name));
 
+  /// The middle of the thana's outline box, or null for an unknown thana.
+  ({double lat, double lng})? centreOf(Thana t) {
+    for (final a in _areas) {
+      if (a.thana != t) continue;
+      final b = a.box;
+      return (lat: (b[1] + b[3]) / 2, lng: (b[0] + b[2]) / 2);
+    }
+    return null;
+  }
+
   /// The thana containing the point, or null (outside Bangladesh).
   Thana? at(double lat, double lng) {
     for (final a in _areas) {

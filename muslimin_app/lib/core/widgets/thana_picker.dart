@@ -23,6 +23,7 @@ Future<Thana?> pickThana(
   Thana? current,
   String? allLabel,
   bool nearest = false,
+  String? hint,
 }) => showModalBottomSheet<Thana>(
   context: context,
   isScrollControlled: true,
@@ -32,6 +33,7 @@ Future<Thana?> pickThana(
     current: current,
     allLabel: allLabel,
     nearest: nearest,
+    hint: hint,
   ),
 );
 
@@ -84,7 +86,11 @@ class _ThanaSheet extends StatefulWidget {
     required this.current,
     required this.allLabel,
     required this.nearest,
+    this.hint,
   });
+
+  /// Replaces the default line under the title.
+  final String? hint;
 
   final Thana? mine;
   final Thana? current;
@@ -146,7 +152,7 @@ class _ThanaSheetState extends State<_ThanaSheet> {
               children: [
                 Text(t.chooseThana, style: AppText.subtitle),
                 Text(
-                  t.chooseThanaHint,
+                  widget.hint ?? t.chooseThanaHint,
                   style: AppText.caption.copyWith(color: AppColors.muted),
                 ),
                 const SizedBox(height: Gap.m),

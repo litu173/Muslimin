@@ -12,6 +12,11 @@ class Prefs {
       Prefs(await SharedPreferences.getInstance());
 
   bool get onboardingDone => _p.getBool('onboardingDone') ?? false;
+
+  /// "Not now" on the permission screen – the app works without location
+  /// (area picked by hand) and without notifications.
+  bool get permSkipped => _p.getBool('permSkipped') ?? false;
+  set permSkipped(bool v) => _p.setBool('permSkipped', v);
   set onboardingDone(bool v) => _p.setBool('onboardingDone', v);
 
   String? get localeCode => _p.getString('locale');

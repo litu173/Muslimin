@@ -2771,4 +2771,18 @@ class L10nBn extends L10n {
 
   @override
   String get showHiddenAuthors => 'লুকানো ব্যক্তিদের আবার দেখান';
+
+  @override
+  String get permNotNow => 'এখন নয়';
+
+  @override
+  String get permNotNowHint =>
+      'অ্যাপ তবুও চলবে: হোমের উপরে আপনার লোকেশনে ট্যাপ করে এলাকা বেছে নিন। পরে সেটিংস থেকে অনুমতি দিতে পারবেন।';
+
+  @override
+  String get tapToChooseArea => 'এলাকা বেছে নিতে ট্যাপ করুন';
+
+  @override
+  String get chooseAreaHint =>
+      'নামাজের সময় ও নিকটতম মসজিদ এই এলাকা অনুযায়ী দেখাবে।';
 }
