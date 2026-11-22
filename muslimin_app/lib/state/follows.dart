@@ -50,12 +50,24 @@ class FollowsNotifier extends Notifier<Map<String, FollowInfo>> {
 
   Future<void> _pullAndMerge() async {
     try {
+      final uid = ref.read(authProvider).value?.uid;
       final remote = _decode(await ref.read(backendProvider).loadFollows());
-      final merged = {...remote, ...state};
+      final prefs = ref.read(prefsProvider);
+      final owner = prefs.followsOwner;
+      // Follows made as a guest join the account. Follows left on the phone
+      // by ANOTHER account must not: this account gets only its own.
+      final mine = owner == null || owner == uid;
+      final merged = mine ? {...remote, ...state} : remote;
+      if (!mine) {
+        for (final id in state.keys.where((id) => !merged.containsKey(id))) {
+          await ref.read(pushProvider).unfollow(id);
+        }
+      }
       for (final id in merged.keys.where((id) => !state.containsKey(id))) {
         await ref.read(pushProvider).follow(id);
       }
       state = merged;
+      prefs.followsOwner = uid;
       _save();
     } catch (_) {
       // Offline – local follows keep working; we sync next time.
@@ -63,8 +75,14 @@ class FollowsNotifier extends Notifier<Map<String, FollowInfo>> {
   }
 
   void _save() {
-    ref.read(prefsProvider).follows = _encoded;
-    if (ref.read(backendProvider).currentUser != null) {
+    final prefs = ref.read(prefsProvider);
+    prefs.follows = _encoded;
+    final user = ref.read(backendProvider).currentUser;
+    // Already signed in before this version: these follows are theirs.
+    if (user != null && prefs.followsOwner == null) {
+      prefs.followsOwner = user.uid;
+    }
+    if (user != null) {
       ref.read(backendProvider).saveFollows(_encoded).ignore();
     }
   }

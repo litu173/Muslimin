@@ -47,6 +47,11 @@ class Prefs {
   set defaultReminder(int v) => _p.setInt('defaultReminder', v);
 
   /// Followed masjids: id -> {name, reminder (minutes, 0 = off)}.
+  /// Whose follows are on this phone (null = followed as a guest).
+  String? get followsOwner => _p.getString('followsOwner');
+  set followsOwner(String? v) =>
+      v == null ? _p.remove('followsOwner') : _p.setString('followsOwner', v);
+
   Map<String, Map<String, dynamic>> get follows {
     final raw = _p.getString('follows');
     if (raw == null) return {};
