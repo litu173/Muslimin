@@ -61,7 +61,10 @@ class _ChannelInviteCardState extends ConsumerState<ChannelInviteCard> {
     // card stays, without the join / open action, and comes back with it.
     final channelOn = ref.watch(featureProvider(Feature.masjidChannel));
 
-    if (role != null && channelOn) {
+    // Already in the channel but the tab is off: nothing to show.
+    if (role != null && !channelOn) return const SizedBox.shrink();
+
+    if (role != null) {
       return FrostedCard(
         onTap: widget.onOpen,
         child: Padding(
