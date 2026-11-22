@@ -7,10 +7,12 @@ import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/app_text.dart';
 import '../../../core/widgets/buttons.dart';
 import '../../../core/widgets/frosted_card.dart';
+import '../../../data/models/app_config.dart';
 import '../../../data/models/masjid.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../state/channel.dart';
 import '../../../state/providers.dart';
+import '../../../state/update.dart';
 
 /// Ibn Majah 224.
 const _hadith = 'طَلَبُ الْعِلْمِ فَرِيضَةٌ عَلَى كُلِّ مُسْلِمٍ';
@@ -55,8 +57,11 @@ class _ChannelInviteCardState extends ConsumerState<ChannelInviteCard> {
     final t = L10n.of(context);
     final role = ref.watch(channelRoleProvider(widget.masjid));
     final signedIn = ref.watch(authProvider).value != null;
+    // Admins can switch the Channel tab off (App settings → Features): the
+    // card stays, without the join / open action, and comes back with it.
+    final channelOn = ref.watch(featureProvider(Feature.masjidChannel));
 
-    if (role != null) {
+    if (role != null && channelOn) {
       return FrostedCard(
         onTap: widget.onOpen,
         child: Padding(
@@ -113,19 +118,20 @@ class _ChannelInviteCardState extends ConsumerState<ChannelInviteCard> {
             ),
             const SizedBox(height: Gap.l),
             Text(t.channelInviteBody, style: AppText.body),
-            const SizedBox(height: Gap.l),
-            signedIn
-                ? AppButton(
-                    t.joinChannel,
-                    icon: Icons.group_add_rounded,
-                    onPressed: _joining ? null : _join,
-                    loading: _joining,
-                    expand: true,
-                  )
-                : Text(
-                    t.signInToJoin,
-                    style: AppText.caption.copyWith(color: AppColors.muted),
-                  ),
+            if (channelOn) const SizedBox(height: Gap.l),
+            if (channelOn)
+              signedIn
+                  ? AppButton(
+                      t.joinChannel,
+                      icon: Icons.group_add_rounded,
+                      onPressed: _joining ? null : _join,
+                      loading: _joining,
+                      expand: true,
+                    )
+                  : Text(
+                      t.signInToJoin,
+                      style: AppText.caption.copyWith(color: AppColors.muted),
+                    ),
           ],
         ),
       ),
