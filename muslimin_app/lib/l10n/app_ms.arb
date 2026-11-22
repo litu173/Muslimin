@@ -827,5 +827,6 @@
   "permNotNow": "Bukan sekarang",
   "permNotNowHint": "Aplikasi tetap berfungsi: ketik lokasi anda di atas Utama untuk memilih kawasan. Anda boleh membenarkannya kemudian dalam Tetapan.",
   "tapToChooseArea": "Ketik untuk memilih kawasan",
-  "chooseAreaHint": "Waktu solat dan masjid terdekat akan menggunakan kawasan ini."
+  "chooseAreaHint": "Waktu solat dan masjid terdekat akan menggunakan kawasan ini.",
+  "volunteerAskCommittee": "Memastikan waktu jemaah dan maklumat masjid betul ialah tugas jawatankuasa masjid, imam atau bilal, bukan jemaah biasa. Mintalah mereka mencipta profil masjid ini dalam Muslimin (Lagi → Daftar Masjid) dan sentiasa mengemas kini waktunya. Sehingga itu, anda boleh membantu di sini."
 }

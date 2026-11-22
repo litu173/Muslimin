@@ -827,5 +827,6 @@
   "permNotNow": "Nanti saja",
   "permNotNowHint": "Aplikasi tetap berjalan: ketuk lokasi Anda di atas Beranda untuk memilih area. Anda bisa mengizinkannya nanti di Pengaturan.",
   "tapToChooseArea": "Ketuk untuk memilih area",
-  "chooseAreaHint": "Waktu salat dan masjid terdekat akan memakai area ini."
+  "chooseAreaHint": "Waktu salat dan masjid terdekat akan memakai area ini.",
+  "volunteerAskCommittee": "Menjaga waktu jamaah dan info masjid tetap benar adalah tugas pengurus masjid, imam atau muazin, bukan jamaah biasa. Mintalah mereka membuat profil masjid ini di Muslimin (Lainnya → Daftarkan Masjid) dan selalu memperbarui waktunya. Sampai saat itu, Anda bisa membantu di sini."
 }

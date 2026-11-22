@@ -2805,4 +2805,8 @@ class L10nTr extends L10n {
   @override
   String get chooseAreaHint =>
       'Namaz vakitleri ve en yakın camiler bu bölgeye göre gösterilir.';
+
+  @override
+  String get volunteerAskCommittee =>
+      'Cemaat vakitlerini ve cami bilgilerini doğru tutmak cemaat yönetiminin, imamın veya müezzinin görevidir, sıradan cemaatin değil. Onlardan Muslimin\'de bu caminin profilini oluşturmalarını (Diğer → Cami Kaydet) ve vakitleri güncel tutmalarını isteyin. O zamana kadar burada yardımcı olabilirsiniz.';
 }

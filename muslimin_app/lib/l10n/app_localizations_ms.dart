@@ -2818,4 +2818,8 @@ class L10nMs extends L10n {
   @override
   String get chooseAreaHint =>
       'Waktu solat dan masjid terdekat akan menggunakan kawasan ini.';
+
+  @override
+  String get volunteerAskCommittee =>
+      'Memastikan waktu jemaah dan maklumat masjid betul ialah tugas jawatankuasa masjid, imam atau bilal, bukan jemaah biasa. Mintalah mereka mencipta profil masjid ini dalam Muslimin (Lagi → Daftar Masjid) dan sentiasa mengemas kini waktunya. Sehingga itu, anda boleh membantu di sini.';
 }

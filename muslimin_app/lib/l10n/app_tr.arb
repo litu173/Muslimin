@@ -827,5 +827,6 @@
   "permNotNow": "Şimdi değil",
   "permNotNowHint": "Uygulama yine de çalışır: bölgenizi seçmek için Ana sayfanın üstündeki konumunuza dokunun. Daha sonra Ayarlar'dan izin verebilirsiniz.",
   "tapToChooseArea": "Bölgenizi seçmek için dokunun",
-  "chooseAreaHint": "Namaz vakitleri ve en yakın camiler bu bölgeye göre gösterilir."
+  "chooseAreaHint": "Namaz vakitleri ve en yakın camiler bu bölgeye göre gösterilir.",
+  "volunteerAskCommittee": "Cemaat vakitlerini ve cami bilgilerini doğru tutmak cemaat yönetiminin, imamın veya müezzinin görevidir, sıradan cemaatin değil. Onlardan Muslimin'de bu caminin profilini oluşturmalarını (Diğer → Cami Kaydet) ve vakitleri güncel tutmalarını isteyin. O zamana kadar burada yardımcı olabilirsiniz."
 }

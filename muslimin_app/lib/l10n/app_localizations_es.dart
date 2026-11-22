@@ -2826,4 +2826,8 @@ class L10nEs extends L10n {
   @override
   String get chooseAreaHint =>
       'Los horarios de oración y las mezquitas cercanas usarán esta zona.';
+
+  @override
+  String get volunteerAskCommittee =>
+      'Mantener correctos los horarios del yamaat y la información de la mezquita es tarea del comité, el imam o el muecín, no de los fieles. Pídeles que creen el perfil de esta mezquita en Muslimin (Más → Registrar una mezquita) y mantengan los horarios al día. Mientras tanto, puedes ayudar aquí.';
 }

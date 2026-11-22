@@ -2809,4 +2809,8 @@ class L10nEn extends L10n {
   @override
   String get chooseAreaHint =>
       'Prayer times and the nearest masjids will use this area.';
+
+  @override
+  String get volunteerAskCommittee =>
+      'Keeping the jamat times and masjid information correct is the job of the masjid committee, imam or muazzin, not of regular worshippers. Please ask them to create this masjid\'s profile in Muslimin (More → Register a Masjid) and keep its times up to date. Until then, you can help here.';
 }

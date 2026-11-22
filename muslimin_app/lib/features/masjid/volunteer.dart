@@ -147,11 +147,24 @@ class _VolunteerSheetState extends ConsumerState<_VolunteerSheet> {
                 ),
               ),
             ],
+            if (_checking) ...[
+              const SizedBox(height: Gap.l),
+              // A precise GPS fix takes a few seconds: show it's working.
+              ClipRRect(
+                borderRadius: BorderRadius.circular(4),
+                child: LinearProgressIndicator(
+                  minHeight: 4,
+                  color: AppColors.gold,
+                  backgroundColor: AppColors.gold.withValues(alpha: 0.15),
+                ),
+              ),
+            ],
             const SizedBox(height: Gap.xl),
             AppButton(
               _checking ? t.volunteerChecking : t.volunteerCheckButton,
               icon: Icons.my_location_rounded,
               expand: true,
+              loading: _checking,
               onPressed: _checking ? null : _check,
             ),
           ],
@@ -319,6 +332,29 @@ class VolunteerCard extends ConsumerWidget {
           Text(
             empty ? t.volunteerBodyEmpty : t.volunteerBody,
             style: AppText.caption,
+          ),
+          const SizedBox(height: Gap.s),
+          // Keeping times right is the masjid's own job: point people to
+          // the committee / imam / muazzin first.
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 2),
+                child: Icon(
+                  Icons.info_outline_rounded,
+                  size: 16,
+                  color: AppColors.muted,
+                ),
+              ),
+              const SizedBox(width: Gap.xs),
+              Expanded(
+                child: Text(
+                  t.volunteerAskCommittee,
+                  style: AppText.caption.copyWith(color: AppColors.muted),
+                ),
+              ),
+            ],
           ),
           const SizedBox(height: Gap.m),
           AppButton(

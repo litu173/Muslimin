@@ -1452,5 +1452,6 @@
   "permNotNow": "Not now",
   "permNotNowHint": "The app still works: tap your location at the top of Home to choose your area. You can allow these later in Settings.",
   "tapToChooseArea": "Tap to choose your area",
-  "chooseAreaHint": "Prayer times and the nearest masjids will use this area."
+  "chooseAreaHint": "Prayer times and the nearest masjids will use this area.",
+  "volunteerAskCommittee": "Keeping the jamat times and masjid information correct is the job of the masjid committee, imam or muazzin, not of regular worshippers. Please ask them to create this masjid's profile in Muslimin (More → Register a Masjid) and keep its times up to date. Until then, you can help here."
 }

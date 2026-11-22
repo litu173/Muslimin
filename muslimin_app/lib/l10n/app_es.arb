@@ -827,5 +827,6 @@
   "permNotNow": "Ahora no",
   "permNotNowHint": "La app sigue funcionando: toca tu ubicación arriba en Inicio para elegir tu zona. Puedes permitirlo más tarde en Ajustes.",
   "tapToChooseArea": "Toca para elegir tu zona",
-  "chooseAreaHint": "Los horarios de oración y las mezquitas cercanas usarán esta zona."
+  "chooseAreaHint": "Los horarios de oración y las mezquitas cercanas usarán esta zona.",
+  "volunteerAskCommittee": "Mantener correctos los horarios del yamaat y la información de la mezquita es tarea del comité, el imam o el muecín, no de los fieles. Pídeles que creen el perfil de esta mezquita en Muslimin (Más → Registrar una mezquita) y mantengan los horarios al día. Mientras tanto, puedes ayudar aquí."
 }

@@ -5078,6 +5078,12 @@ abstract class L10n {
   /// In en, this message translates to:
   /// **'Prayer times and the nearest masjids will use this area.'**
   String get chooseAreaHint;
+
+  /// No description provided for @volunteerAskCommittee.
+  ///
+  /// In en, this message translates to:
+  /// **'Keeping the jamat times and masjid information correct is the job of the masjid committee, imam or muazzin, not of regular worshippers. Please ask them to create this masjid\'s profile in Muslimin (More → Register a Masjid) and keep its times up to date. Until then, you can help here.'**
+  String get volunteerAskCommittee;
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {
