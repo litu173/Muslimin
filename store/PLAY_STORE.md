@@ -126,6 +126,9 @@ rating: Everyone / 3+ (Bangladesh: 3+).
 **Target audience:** 13+ (choose 13–15, 16–17 and 18+). Not designed for
 children; "Does your app appeal to children?" – No.
 
+**Advertising ID:** No (the app does not use the advertising ID; no AD_ID
+permission in the build).
+
 **News app:** No. **COVID-19 tracing:** No. **Government app:** No.
 **Financial features:** None. **Health:** No.
 
@@ -175,15 +178,16 @@ not ask for access to the whole photo library).
    for 14 days in a row before production.)
 5. Send testers the opt-in link; they must accept and install from Play.
 6. **Google sign-in fix (important):** Play re-signs the app with its own
-   key. Play Console → Test and release → App integrity → App signing →
-   copy the **App signing key certificate** SHA-1 and SHA-256. Firebase
-   console → Project settings → Android app `com.muslimin.muslimin` → Add
-   fingerprint (both). Download the new `google-services.json`, replace
-   `muslimin_app/android/app/google-services.json`, rebuild and upload a new
-   bundle. Without this, "Continue with Google" fails on Play installs –
-   and since Google is the only sign-in, **nobody (reviewers included) can
-   get into the app**. Do it right after the first upload, before testers
-   or review.
+   key, and that key must be registered in Firebase or "Continue with
+   Google" does nothing on Play installs (nobody, reviewers included, can
+   get in). **Don't trust the App signing page alone** – on 21 Nov 2026 it
+   showed a classical + "quantum-ready" key, but the APKs Play delivered
+   were signed with a third key. Reliable way: Test and release → App
+   bundle explorer → the version → Downloads → *Signed, universal APK*,
+   then `apksigner verify --print-certs <file>.apk` and add that SHA-1 and
+   SHA-256 in Firebase console → Project settings → Android app → Add
+   fingerprint. No rebuild needed; works within minutes. (Done for
+   com.muslimin.muslimin: SHA-1 2A:0A:9F:6F… plus the console's keys.)
 7. After 14 days with 12+ testers: Dashboard → Apply for production access →
    answer the questions → when approved, create a production release
    (promote the tested bundle) → Send for review (usually 1–7 days).
