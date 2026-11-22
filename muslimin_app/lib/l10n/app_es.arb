@@ -828,5 +828,12 @@
   "permNotNowHint": "La app sigue funcionando: toca tu ubicación arriba en Inicio para elegir tu zona. Puedes permitirlo más tarde en Ajustes.",
   "tapToChooseArea": "Toca para elegir tu zona",
   "chooseAreaHint": "Los horarios de oración y las mezquitas cercanas usarán esta zona.",
-  "volunteerAskCommittee": "Mantener correctos los horarios del yamaat y la información de la mezquita es tarea del comité, el imam o el muecín, no de los fieles. Pídeles que creen el perfil de esta mezquita en Muslimin (Más → Registrar una mezquita) y mantengan los horarios al día. Mientras tanto, puedes ayudar aquí."
+  "volunteerAskCommittee": "Mantener correctos los horarios del yamaat y la información de la mezquita es tarea del comité, el imam o el muecín, no de los fieles. Pídeles que creen el perfil de esta mezquita en Muslimin (Más → Registrar una mezquita) y mantengan los horarios al día. Mientras tanto, puedes ayudar aquí.",
+  "volunteerApprovalNote": "Después, tu solicitud se envía a quien registró esta mezquita – o al equipo de Muslimin – para su aprobación.",
+  "volunteerRequestSent": "Solicitud enviada. Podrás actualizar los horarios cuando se apruebe.",
+  "volunteerPendingTitle": "Solicitud pendiente",
+  "volunteerPendingBody": "Esperando la aprobación del responsable de la mezquita.",
+  "cancelRequest": "Cancelar",
+  "editRequestsTitle": "Solicitudes para actualizar horarios",
+  "editRequestsBody": "Personas cerca de esta mezquita quieren ayudar a mantener sus horarios correctos. Aprueba solo a quien conozcas o confíes."
 }

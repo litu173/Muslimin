@@ -2809,4 +2809,28 @@ class L10nTr extends L10n {
   @override
   String get volunteerAskCommittee =>
       'Cemaat vakitlerini ve cami bilgilerini doğru tutmak cemaat yönetiminin, imamın veya müezzinin görevidir, sıradan cemaatin değil. Onlardan Muslimin\'de bu caminin profilini oluşturmalarını (Diğer → Cami Kaydet) ve vakitleri güncel tutmalarını isteyin. O zamana kadar burada yardımcı olabilirsiniz.';
+
+  @override
+  String get volunteerApprovalNote =>
+      'Ardından isteğiniz onay için bu camiyi kaydeden kişiye – ya da Muslimin ekibine – gider.';
+
+  @override
+  String get volunteerRequestSent =>
+      'İstek gönderildi. Onaylandığında vakitleri güncelleyebilirsiniz.';
+
+  @override
+  String get volunteerPendingTitle => 'İstek beklemede';
+
+  @override
+  String get volunteerPendingBody => 'Cami yöneticisinin onayı bekleniyor.';
+
+  @override
+  String get cancelRequest => 'İsteği iptal et';
+
+  @override
+  String get editRequestsTitle => 'Cemaat vakti güncelleme istekleri';
+
+  @override
+  String get editRequestsBody =>
+      'Bu caminin yakınındaki kişiler vakitlerin doğru kalmasına yardım etmek istiyor. Yalnızca tanıdığınız veya güvendiğiniz kişileri onaylayın.';
 }

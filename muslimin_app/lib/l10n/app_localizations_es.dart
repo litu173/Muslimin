@@ -2830,4 +2830,29 @@ class L10nEs extends L10n {
   @override
   String get volunteerAskCommittee =>
       'Mantener correctos los horarios del yamaat y la información de la mezquita es tarea del comité, el imam o el muecín, no de los fieles. Pídeles que creen el perfil de esta mezquita en Muslimin (Más → Registrar una mezquita) y mantengan los horarios al día. Mientras tanto, puedes ayudar aquí.';
+
+  @override
+  String get volunteerApprovalNote =>
+      'Después, tu solicitud se envía a quien registró esta mezquita – o al equipo de Muslimin – para su aprobación.';
+
+  @override
+  String get volunteerRequestSent =>
+      'Solicitud enviada. Podrás actualizar los horarios cuando se apruebe.';
+
+  @override
+  String get volunteerPendingTitle => 'Solicitud pendiente';
+
+  @override
+  String get volunteerPendingBody =>
+      'Esperando la aprobación del responsable de la mezquita.';
+
+  @override
+  String get cancelRequest => 'Cancelar';
+
+  @override
+  String get editRequestsTitle => 'Solicitudes para actualizar horarios';
+
+  @override
+  String get editRequestsBody =>
+      'Personas cerca de esta mezquita quieren ayudar a mantener sus horarios correctos. Aprueba solo a quien conozcas o confíes.';
 }

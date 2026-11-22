@@ -2809,4 +2809,29 @@ class L10nHi extends L10n {
   @override
   String get volunteerAskCommittee =>
       'जमात के समय और मस्जिद की जानकारी सही रखना मस्जिद कमेटी, इमाम या मुअज़्ज़िन की ज़िम्मेदारी है, आम नमाज़ियों की नहीं। उनसे कहें कि मुस्लिमीन में इस मस्जिद की प्रोफ़ाइल बनाएँ (और → मस्जिद रजिस्टर करें) और समय अपडेट रखें। तब तक आप यहाँ मदद कर सकते हैं।';
+
+  @override
+  String get volunteerApprovalNote =>
+      'फिर आपका अनुरोध मंज़ूरी के लिए उस व्यक्ति के पास जाएगा जिसने यह मस्जिद रजिस्टर की – या मुस्लिमीन टीम के पास।';
+
+  @override
+  String get volunteerRequestSent =>
+      'अनुरोध भेज दिया गया। मंज़ूरी मिलने पर आप समय अपडेट कर पाएँगे।';
+
+  @override
+  String get volunteerPendingTitle => 'अनुरोध लंबित';
+
+  @override
+  String get volunteerPendingBody =>
+      'मस्जिद के प्रबंधक की मंज़ूरी का इंतज़ार है।';
+
+  @override
+  String get cancelRequest => 'अनुरोध रद्द करें';
+
+  @override
+  String get editRequestsTitle => 'जमात का समय अपडेट करने के अनुरोध';
+
+  @override
+  String get editRequestsBody =>
+      'इस मस्जिद के पास के कुछ लोग समय सही रखने में मदद करना चाहते हैं। सिर्फ़ जाने-पहचाने या भरोसेमंद लोगों को मंज़ूरी दें।';
 }

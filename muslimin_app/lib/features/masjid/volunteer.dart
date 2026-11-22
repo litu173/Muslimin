@@ -79,14 +79,17 @@ class _VolunteerSheetState extends ConsumerState<_VolunteerSheet> {
         setState(() => _problem = t.volunteerTooFar(meters(f, d), km));
         return;
       }
-      await ref.read(backendProvider).becomeEditor(m, here.lat, here.lng);
+      final approved = await ref
+          .read(backendProvider)
+          .becomeEditor(m, here.lat, here.lng);
       // They will want to come back to it.
       if (!ref.read(followsProvider).containsKey(m.id)) {
         await ref.read(followsProvider.notifier).follow(m);
       }
       if (!mounted) return;
-      toast(context, t.volunteerWelcome);
-      Navigator.pop(context, true);
+      // Usually the masjid's creator (or the admin) approves it first.
+      toast(context, approved ? t.volunteerWelcome : t.volunteerRequestSent);
+      Navigator.pop(context, approved);
     } on BackendException catch (e) {
       setState(
         () => _problem = e.code == 'too-far'
@@ -132,6 +135,12 @@ class _VolunteerSheetState extends ConsumerState<_VolunteerSheet> {
               t.volunteerCheckBody(km),
               textAlign: TextAlign.center,
               style: AppText.body.copyWith(color: AppColors.muted),
+            ),
+            const SizedBox(height: Gap.s),
+            Text(
+              t.volunteerApprovalNote,
+              textAlign: TextAlign.center,
+              style: AppText.caption.copyWith(color: AppColors.muted),
             ),
             if (_problem != null) ...[
               const SizedBox(height: Gap.l),
@@ -306,6 +315,8 @@ class VolunteerCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final t = L10n.of(context);
     final empty = masjid.jamat.isEmpty;
+    final pending =
+        ref.watch(myEditorStatusProvider(masjid.id)).value == 'pending';
     return Container(
       decoration: BoxDecoration(
         color: empty ? AppColors.gold.withValues(alpha: 0.12) : AppColors.card,
@@ -357,20 +368,23 @@ class VolunteerCard extends ConsumerWidget {
             ],
           ),
           const SizedBox(height: Gap.m),
-          AppButton(
-            t.volunteerButton,
-            icon: Icons.edit_calendar_rounded,
-            pill: true,
-            dense: true,
-            style: empty ? AppButtonStyle.filled : AppButtonStyle.outlined,
-            onPressed: () async {
-              if (ref.read(authProvider).value == null) {
-                toast(context, t.signInFirst);
-                return;
-              }
-              if (await volunteerToEdit(context, ref, masjid)) onEditor();
-            },
-          ),
+          if (pending)
+            _PendingRequest(masjid: masjid)
+          else
+            AppButton(
+              t.volunteerButton,
+              icon: Icons.edit_calendar_rounded,
+              pill: true,
+              dense: true,
+              style: empty ? AppButtonStyle.filled : AppButtonStyle.outlined,
+              onPressed: () async {
+                if (ref.read(authProvider).value == null) {
+                  toast(context, t.signInFirst);
+                  return;
+                }
+                if (await volunteerToEdit(context, ref, masjid)) onEditor();
+              },
+            ),
         ],
       ),
     );
@@ -427,7 +441,10 @@ class EditorsSection extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final t = L10n.of(context);
     final f = Fmt.of(context);
-    final editors = ref.watch(masjidEditorsProvider(masjid.id)).value ?? [];
+    final editors = [
+      for (final e in ref.watch(masjidEditorsProvider(masjid.id)).value ?? [])
+        if (!e.pending) e,
+    ];
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -504,5 +521,149 @@ Future<void> fixMasjidLocation(
     if (context.mounted) toast(context, t.updated);
   } catch (_) {
     if (context.mounted) toast(context, t.somethingWrong);
+  }
+}
+
+/// "Request pending – waiting for approval" with a way to take it back.
+class _PendingRequest extends ConsumerWidget {
+  const _PendingRequest({required this.masjid});
+
+  final Masjid masjid;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final t = L10n.of(context);
+    return Container(
+      padding: const EdgeInsets.all(Gap.m),
+      decoration: BoxDecoration(
+        color: AppColors.gold.withValues(alpha: 0.10),
+        borderRadius: BorderRadius.circular(Radii.button),
+      ),
+      child: Row(
+        children: [
+          Icon(Icons.hourglass_top_rounded, color: AppColors.gold, size: 20),
+          const SizedBox(width: Gap.s),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(t.volunteerPendingTitle, style: AppText.label),
+                Text(t.volunteerPendingBody, style: AppText.caption),
+              ],
+            ),
+          ),
+          TextButton(
+            onPressed: () =>
+                ref.read(backendProvider).leaveEditor(masjid.id).ignore(),
+            child: Text(
+              t.cancelRequest,
+              style: AppText.caption.copyWith(color: AppColors.danger),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Masjid Home tab, for its creator and the admin: people asking to update
+/// the jamat times, each approved or declined here.
+class EditRequestsCard extends ConsumerWidget {
+  const EditRequestsCard({super.key, required this.masjid});
+
+  final Masjid masjid;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final t = L10n.of(context);
+    final f = Fmt.of(context);
+    final pending = [
+      for (final e in ref.watch(masjidEditorsProvider(masjid.id)).value ?? [])
+        if (e.pending) e,
+    ];
+    if (pending.isEmpty) return const SizedBox.shrink();
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: Container(
+        decoration: BoxDecoration(
+          color: AppColors.gold.withValues(alpha: 0.12),
+          borderRadius: BorderRadius.circular(Radii.card),
+          border: Border.all(color: AppColors.gold.withValues(alpha: 0.35)),
+        ),
+        padding: const EdgeInsets.all(Gap.l),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(Icons.how_to_reg_rounded, color: AppColors.gold),
+                const SizedBox(width: Gap.s),
+                Expanded(
+                  child: Text(
+                    '${t.editRequestsTitle} (${f.digits(pending.length)})',
+                    style: AppText.label,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: Gap.xs),
+            Text(t.editRequestsBody, style: AppText.caption),
+            for (final e in pending) ...[
+              const SizedBox(height: Gap.m),
+              Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          e.name.isEmpty ? '—' : e.name,
+                          style: AppText.label,
+                        ),
+                        Text(
+                          t.editorDistance(meters(f, e.distanceM)),
+                          style: AppText.caption,
+                        ),
+                      ],
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () => _act(
+                      context,
+                      () => ref
+                          .read(backendProvider)
+                          .removeEditor(masjid.id, e.uid),
+                    ),
+                    child: Text(
+                      t.reject,
+                      style: AppText.label.copyWith(color: AppColors.danger),
+                    ),
+                  ),
+                  AppButton(
+                    t.approve,
+                    dense: true,
+                    pill: true,
+                    onPressed: () => _act(
+                      context,
+                      () => ref
+                          .read(backendProvider)
+                          .approveEditor(masjid.id, e.uid),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<void> _act(BuildContext context, Future<void> Function() f) async {
+    try {
+      await f();
+    } catch (_) {
+      if (context.mounted) toast(context, L10n.of(context).somethingWrong);
+    }
   }
 }

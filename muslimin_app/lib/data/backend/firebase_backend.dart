@@ -871,14 +871,29 @@ class FirebaseBackend implements Backend {
   Stream<bool> isMasjidEditor(String masjidId) {
     final uid = _auth.currentUser?.uid;
     if (uid == null) return Stream.value(false);
-    return _editors(masjidId).doc(uid).snapshots().map((d) => d.exists);
+    return myEditorStatus(masjidId).map((s) => s == 'approved');
   }
 
   @override
-  Future<void> becomeEditor(Masjid m, double lat, double lng) async {
+  Stream<String?> myEditorStatus(String masjidId) {
+    final uid = _auth.currentUser?.uid;
+    if (uid == null) return Stream.value(null);
+    return _editors(masjidId).doc(uid).snapshots().map(
+      (d) => !d.exists
+          ? null
+          // Editors from before approvals existed have no status.
+          : (d.data()?['status'] as String? ?? 'approved'),
+    );
+  }
+
+  @override
+  Future<bool> becomeEditor(Masjid m, double lat, double lng) async {
     final u = _requireUser();
     final d = distanceMeters(lat, lng, m.lat, m.lng);
-    if (d > kEditorRadiusM) throw BackendException('too-far');
+    if (d > kEditorRadiusM && !u.isTrustedVolunteer) {
+      throw BackendException('too-far');
+    }
+    final approved = u.isTrustedVolunteer;
     await _editors(m.id).doc(u.uid).set({
       'uid': u.uid,
       'name': u.displayName,
@@ -887,9 +902,19 @@ class FirebaseBackend implements Backend {
       'lat': lat,
       'lng': lng,
       'distanceM': d.roundToDouble(),
+      'status': approved ? 'approved' : 'pending',
       'createdAt': FieldValue.serverTimestamp(),
     });
+    return approved;
   }
+
+  @override
+  Future<void> approveEditor(String masjidId, String uid) =>
+      _editors(masjidId).doc(uid).update({
+        'status': 'approved',
+        'approvedBy': _requireUser().uid,
+        'approvedAt': FieldValue.serverTimestamp(),
+      });
 
   @override
   Future<void> leaveEditor(String masjidId) async {

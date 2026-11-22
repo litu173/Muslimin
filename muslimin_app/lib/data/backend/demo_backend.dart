@@ -922,13 +922,34 @@ class DemoBackend implements Backend {
 
   // ------------------------------------------------------------ volunteers
   @override
-  Stream<bool> isMasjidEditor(String masjidId) => _watch(
-    () =>
-        _user != null && (_editors[masjidId]?.containsKey(_user!.uid) ?? false),
-  );
+  Stream<bool> isMasjidEditor(String masjidId) => _watch(() {
+    final e = _user == null ? null : _editors[masjidId]?[_user!.uid];
+    return e != null && !e.pending;
+  });
 
   @override
-  Future<void> becomeEditor(Masjid m, double lat, double lng) async {
+  Stream<String?> myEditorStatus(String masjidId) => _watch(() {
+    final e = _user == null ? null : _editors[masjidId]?[_user!.uid];
+    return e == null ? null : (e.pending ? 'pending' : 'approved');
+  });
+
+  @override
+  Future<void> approveEditor(String masjidId, String uid) async {
+    final e = _editors[masjidId]?[uid];
+    if (e == null) return;
+    _editors[masjidId]![uid] = MasjidEditor(
+      uid: e.uid,
+      name: e.name,
+      masjidId: e.masjidId,
+      masjidName: e.masjidName,
+      distanceM: e.distanceM,
+      createdAt: e.createdAt,
+    );
+    _emit();
+  }
+
+  @override
+  Future<bool> becomeEditor(Masjid m, double lat, double lng) async {
     final u = _user ?? (throw BackendException('not-signed-in'));
     if (_editBlocked.contains(u.uid)) {
       throw BackendException('permission-denied');
@@ -943,8 +964,10 @@ class DemoBackend implements Backend {
       masjidName: m.name,
       distanceM: d.roundToDouble(),
       createdAt: DateTime.now(),
+      pending: !u.isTrustedVolunteer,
     );
     _emit();
+    return u.isTrustedVolunteer;
   }
 
   @override

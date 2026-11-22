@@ -143,12 +143,20 @@ abstract class Backend {
   Stream<List<Masjid>> womenSpaceMasjids();
 
   // ---- Volunteer editors ----
-  /// Whether I am a volunteer editor of [masjidId].
+  /// Whether I am an (approved) volunteer editor of [masjidId].
   Stream<bool> isMasjidEditor(String masjidId);
 
-  /// Become an editor of [masjid], standing at (lat, lng) – which must be
-  /// within [kEditorRadiusM] of it (checked here and by the rules).
-  Future<void> becomeEditor(Masjid masjid, double lat, double lng);
+  /// My request to edit [masjidId]: null (none), 'pending' or 'approved'.
+  Stream<String?> myEditorStatus(String masjidId);
+
+  /// Ask to edit [masjid], standing at (lat, lng) – which must be within
+  /// [kEditorRadiusM] of it (checked here and by the rules). The masjid's
+  /// creator – or the admin, for masjids nobody registered – approves it;
+  /// volunteers (role) are approved at once. Returns true when approved.
+  Future<bool> becomeEditor(Masjid masjid, double lat, double lng);
+
+  /// The masjid's creator or the admin lets a pending editor in.
+  Future<void> approveEditor(String masjidId, String uid);
   Future<void> leaveEditor(String masjidId);
 
   /// The masjid's editors – its owner and the admin.

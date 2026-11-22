@@ -3,6 +3,7 @@
 import {
   db, me, collection, doc, query, where, orderBy, limit, getDocs, updateDoc,
   writeBatch, serverTimestamp, logAction, getCountFromServer, deleteDoc,
+  collectionGroup, getDoc,
 } from '../fb.js';
 import {
   h, icon, card, table, statusBadge, badge, input, select, field, dialog, act, go, ago,
@@ -13,21 +14,22 @@ import { masjidOf, setStatus, REASONS, bdThanas, COUNTRIES, geoData, giveNumber 
 import { miniMap, placeOf } from './map.js';
 
 export async function render(el, tab = 'pending') {
-  el.append(pageHead('Review', 'New masjids, suggestions, problem reports and reported posts'));
+  el.append(pageHead('Review', 'New masjids, suggestions, problem reports, requests to edit times and reported posts'));
   const n = async (q) => { try { return (await getCountFromServer(q)).data().count; } catch { return null; } };
-  const [p, s, r, c] = await Promise.all([
+  const [p, s, r, c, e] = await Promise.all([
     n(query(collection(db, 'masjids'), where('status', '==', 'pending'))),
     n(query(collection(db, 'suggestions'), where('status', '==', 'open'))),
     n(query(collection(db, 'reports'), where('status', '==', 'open'))),
     n(query(collection(db, 'contentReports'), where('status', '==', 'open'))),
+    n(query(collectionGroup(db, 'editors'), where('status', '==', 'pending'))),
   ]);
-  el.append(tabs([['pending', 'Masjids to approve', p], ['suggestions', 'Missing masjids', s], ['reports', 'Problem reports', r], ['posts', 'Reported posts', c]],
+  el.append(tabs([['pending', 'Masjids to approve', p], ['suggestions', 'Missing masjids', s], ['reports', 'Problem reports', r], ['editors', 'Edit requests', e], ['posts', 'Reported posts', c]],
     tab, (t) => go(`#/review/${t}`)));
   const body = h('div');
   el.append(body);
   body.append(spinner());
   const done = () => { refreshCounts(); clear(el); render(el, tab); };
-  await ({ pending, suggestions, reports, posts }[tab] || pending)(body, done);
+  await ({ pending, suggestions, reports, editors, posts }[tab] || pending)(body, done);
 }
 
 // ---------------------------------------------------------------- pending
@@ -171,4 +173,34 @@ async function posts(body, done) {
       h('button.btn.btn-sm', { onclick: (e) => act(e.currentTarget, () => close(d, 'dismissed', false), 'Kept – report dismissed.').then(done) }, 'Keep'),
       d.data().authorUid ? link(`/user/${d.data().authorUid}`, 'Author') : null) },
   ], snap.docs, { emptyText: 'No reported posts.' })));
+}
+
+// ---------------------------------------------------------------- edit requests
+// People near a masjid asking to keep its jamat times. A masjid's creator
+// approves requests in the app; masjids nobody registered (admin-added or
+// from OpenStreetMap) are approved here. Admins may decide either kind.
+async function editors(body, done) {
+  const snap = await getDocs(query(collectionGroup(db, 'editors'), where('status', '==', 'pending'), limit(100)));
+  const rows = await Promise.all(snap.docs.map(async (d) => {
+    const m = await getDoc(doc(db, 'masjids', d.data().masjidId)).catch(() => null);
+    return { d, owner: m?.exists() ? (m.data().ownerUid || null) : null };
+  }));
+  rows.sort((a, b) => (b.d.data().createdAt?.toMillis?.() || 0) - (a.d.data().createdAt?.toMillis?.() || 0));
+  const decide = (x, approve) => act(null, async () => {
+    if (approve) await updateDoc(x.d.ref, { status: 'approved', approvedBy: me.uid, approvedAt: serverTimestamp() });
+    else await deleteDoc(x.d.ref);
+    await logAction(approve ? 'editor.approve' : 'editor.decline', x.d.ref.path, { masjid: x.d.data().masjidName, user: x.d.data().name });
+  }, approve ? 'Approved – they can now update the times.' : 'Declined.').then(done);
+  clear(body).append(card(null,
+    h('p.muted.small', { style: { margin: '0 0 10px' } }, 'Masjids registered by a user are normally approved by that user in the app; the rest need you.'),
+    table([
+      { label: 'Person', cell: (x) => link(`/user/${x.d.data().uid}`, x.d.data().name || 'User') },
+      { label: 'Masjid', cell: (x) => link(`/masjid/${x.d.data().masjidId}`, x.d.data().masjidName || 'Masjid') },
+      { label: 'Distance', class: 'nowrap', cell: (x) => { const m = x.d.data().distanceM || 0; return m < 1000 ? `${Math.round(m)} m` : `${(m / 1000).toFixed(1)} km`; } },
+      { label: 'Approver', cell: (x) => x.owner ? h('span', 'Masjid creator ', link(`/user/${x.owner}`, '(view)')) : badge('you (admin)', 'warn') },
+      { label: 'When', class: 'nowrap', cell: (x) => ago(x.d.data().createdAt) },
+      { label: '', class: 'r nowrap', cell: (x) => h('div.row.end',
+        h('button.btn.btn-sm.btn-ok', { onclick: (e) => { e.stopPropagation(); decide(x, true); } }, 'Approve'),
+        h('button.btn.btn-sm', { onclick: (e) => { e.stopPropagation(); decide(x, false); } }, 'Decline')) },
+    ], rows, { emptyText: 'No requests to edit jamat times.' })));
 }

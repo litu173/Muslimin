@@ -13,6 +13,15 @@ final isEditorProvider = StreamProvider.family<bool, String>((ref, masjidId) {
   return ref.watch(backendProvider).isMasjidEditor(masjidId);
 }, retry: _noRetry);
 
+/// My request to edit a masjid: null, 'pending' or 'approved'.
+final myEditorStatusProvider = StreamProvider.family<String?, String>((
+  ref,
+  masjidId,
+) {
+  ref.watch(authProvider);
+  return ref.watch(backendProvider).myEditorStatus(masjidId);
+}, retry: _noRetry);
+
 /// Who may change [masjid]'s jamat times, maktab and staff: its owner,
 /// admins and editors (roles), and its volunteer editors.
 final canEditTimesProvider = Provider.family<bool, Masjid>((ref, masjid) {

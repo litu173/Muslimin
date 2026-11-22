@@ -142,8 +142,12 @@ service cloud.firestore {
           && request.resource.data.get('country', 'BD') != 'BD';
       }
 
+      // An approved volunteer editor. Requests wait ('pending') until the
+      // masjid's creator or the admin approves; older editors have no status.
       function isEditor() {
-        return signedIn() && exists(/databases/$(database)/documents/masjids/$(masjidId)/editors/$(request.auth.uid));
+        return signedIn()
+          && exists(/databases/$(database)/documents/masjids/$(masjidId)/editors/$(request.auth.uid))
+          && get(/databases/$(database)/documents/masjids/$(masjidId)/editors/$(request.auth.uid)).data.get('status', 'approved') == 'approved';
       }
       function editBlocked() {
         return exists(/databases/$(database)/documents/users/$(request.auth.uid))
@@ -162,7 +166,10 @@ service cloud.firestore {
           && masjidDoc().status == 'approved'
           && !editBlocked()
           && request.resource.data.keys().hasOnly(
-               ['uid', 'name', 'masjidId', 'masjidName', 'lat', 'lng', 'distanceM', 'createdAt'])
+               ['uid', 'name', 'masjidId', 'masjidName', 'lat', 'lng', 'distanceM', 'status', 'createdAt'])
+          // Asks first; only volunteers (role) are let in at once.
+          && (request.resource.data.get('status', '') == 'pending'
+            || (isTrustedVolunteer() && request.resource.data.get('status', '') == 'approved'))
           && request.resource.data.uid == uid
           && request.resource.data.masjidId == masjidId
           && request.resource.data.lat is number
@@ -171,6 +178,14 @@ service cloud.firestore {
           && (isTrustedVolunteer()
             || (math.abs(request.resource.data.lat - masjidDoc().geo.geopoint.latitude()) < 0.025
               && math.abs(request.resource.data.lng - masjidDoc().geo.geopoint.longitude()) < 0.025));
+        // The masjid's creator (or the admin) approves a request.
+        allow update: if signedIn()
+          && (masjidDoc().ownerUid == request.auth.uid || isAdmin())
+          && resource.data.get('status', 'approved') == 'pending'
+          && request.resource.data.diff(resource.data).affectedKeys()
+               .hasOnly(['status', 'approvedBy', 'approvedAt'])
+          && request.resource.data.status == 'approved'
+          && request.resource.data.approvedBy == request.auth.uid;
         allow delete: if signedIn() && (request.auth.uid == uid
           || masjidDoc().ownerUid == request.auth.uid || isAdmin());
       }

@@ -828,5 +828,12 @@
   "permNotNowHint": "Aplikasi tetap berjalan: ketuk lokasi Anda di atas Beranda untuk memilih area. Anda bisa mengizinkannya nanti di Pengaturan.",
   "tapToChooseArea": "Ketuk untuk memilih area",
   "chooseAreaHint": "Waktu salat dan masjid terdekat akan memakai area ini.",
-  "volunteerAskCommittee": "Menjaga waktu jamaah dan info masjid tetap benar adalah tugas pengurus masjid, imam atau muazin, bukan jamaah biasa. Mintalah mereka membuat profil masjid ini di Muslimin (Lainnya → Daftarkan Masjid) dan selalu memperbarui waktunya. Sampai saat itu, Anda bisa membantu di sini."
+  "volunteerAskCommittee": "Menjaga waktu jamaah dan info masjid tetap benar adalah tugas pengurus masjid, imam atau muazin, bukan jamaah biasa. Mintalah mereka membuat profil masjid ini di Muslimin (Lainnya → Daftarkan Masjid) dan selalu memperbarui waktunya. Sampai saat itu, Anda bisa membantu di sini.",
+  "volunteerApprovalNote": "Lalu permintaan Anda dikirim ke pendaftar masjid ini – atau ke tim Muslimin – untuk disetujui.",
+  "volunteerRequestSent": "Permintaan terkirim. Anda bisa memperbarui waktu setelah disetujui.",
+  "volunteerPendingTitle": "Permintaan menunggu",
+  "volunteerPendingBody": "Menunggu persetujuan pengelola masjid.",
+  "cancelRequest": "Batalkan",
+  "editRequestsTitle": "Permintaan memperbarui waktu jamaah",
+  "editRequestsBody": "Orang di dekat masjid ini ingin membantu menjaga waktunya tetap benar. Setujui hanya orang yang Anda kenal atau percaya."
 }

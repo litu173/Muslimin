@@ -97,6 +97,7 @@ class _MasjidHomeTabState extends ConsumerState<MasjidHomeTab> {
               ),
             ),
           ),
+        if (widget.canManage) EditRequestsCard(masjid: widget.masjid),
         if (widget.canVolunteer) ...[
           VolunteerCard(
             masjid: widget.masjid,

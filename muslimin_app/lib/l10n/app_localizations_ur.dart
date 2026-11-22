@@ -2813,4 +2813,28 @@ class L10nUr extends L10n {
   @override
   String get volunteerAskCommittee =>
       'جماعت کے اوقات اور مسجد کی معلومات درست رکھنا مسجد کمیٹی، امام یا مؤذن کی ذمہ داری ہے، عام نمازیوں کی نہیں۔ ان سے درخواست کریں کہ مسلمین میں اس مسجد کا پروفائل بنائیں (مزید ← مسجد رجسٹر کریں) اور اوقات اپ ڈیٹ رکھیں۔ تب تک آپ یہاں مدد کر سکتے ہیں۔';
+
+  @override
+  String get volunteerApprovalNote =>
+      'پھر آپ کی درخواست منظوری کے لیے اس مسجد کو رجسٹر کرنے والے کے پاس – یا مسلمین ٹیم کے پاس – جائے گی۔';
+
+  @override
+  String get volunteerRequestSent =>
+      'درخواست بھیج دی گئی۔ منظوری کے بعد آپ اوقات اپ ڈیٹ کر سکیں گے۔';
+
+  @override
+  String get volunteerPendingTitle => 'درخواست زیرِ غور';
+
+  @override
+  String get volunteerPendingBody => 'مسجد کے منتظم کی منظوری کا انتظار ہے۔';
+
+  @override
+  String get cancelRequest => 'درخواست منسوخ';
+
+  @override
+  String get editRequestsTitle => 'جماعت کے اوقات اپ ڈیٹ کرنے کی درخواستیں';
+
+  @override
+  String get editRequestsBody =>
+      'اس مسجد کے قریب کچھ لوگ اوقات درست رکھنے میں مدد کرنا چاہتے ہیں۔ صرف جانے پہچانے یا قابلِ اعتماد افراد کو منظور کریں۔';
 }

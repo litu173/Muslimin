@@ -5084,6 +5084,48 @@ abstract class L10n {
   /// In en, this message translates to:
   /// **'Keeping the jamat times and masjid information correct is the job of the masjid committee, imam or muazzin, not of regular worshippers. Please ask them to create this masjid\'s profile in Muslimin (More → Register a Masjid) and keep its times up to date. Until then, you can help here.'**
   String get volunteerAskCommittee;
+
+  /// No description provided for @volunteerApprovalNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Then your request goes to whoever registered this masjid – or to the Muslimin team – for approval.'**
+  String get volunteerApprovalNote;
+
+  /// No description provided for @volunteerRequestSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Request sent. You can update the times once it\'s approved.'**
+  String get volunteerRequestSent;
+
+  /// No description provided for @volunteerPendingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Request pending'**
+  String get volunteerPendingTitle;
+
+  /// No description provided for @volunteerPendingBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for the masjid\'s manager to approve your request.'**
+  String get volunteerPendingBody;
+
+  /// No description provided for @cancelRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel request'**
+  String get cancelRequest;
+
+  /// No description provided for @editRequestsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Requests to update jamat times'**
+  String get editRequestsTitle;
+
+  /// No description provided for @editRequestsBody.
+  ///
+  /// In en, this message translates to:
+  /// **'People near this masjid want to help keep its times correct. Approve only people you know or trust.'**
+  String get editRequestsBody;
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {

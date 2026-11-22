@@ -828,5 +828,12 @@
   "permNotNowHint": "Uygulama yine de çalışır: bölgenizi seçmek için Ana sayfanın üstündeki konumunuza dokunun. Daha sonra Ayarlar'dan izin verebilirsiniz.",
   "tapToChooseArea": "Bölgenizi seçmek için dokunun",
   "chooseAreaHint": "Namaz vakitleri ve en yakın camiler bu bölgeye göre gösterilir.",
-  "volunteerAskCommittee": "Cemaat vakitlerini ve cami bilgilerini doğru tutmak cemaat yönetiminin, imamın veya müezzinin görevidir, sıradan cemaatin değil. Onlardan Muslimin'de bu caminin profilini oluşturmalarını (Diğer → Cami Kaydet) ve vakitleri güncel tutmalarını isteyin. O zamana kadar burada yardımcı olabilirsiniz."
+  "volunteerAskCommittee": "Cemaat vakitlerini ve cami bilgilerini doğru tutmak cemaat yönetiminin, imamın veya müezzinin görevidir, sıradan cemaatin değil. Onlardan Muslimin'de bu caminin profilini oluşturmalarını (Diğer → Cami Kaydet) ve vakitleri güncel tutmalarını isteyin. O zamana kadar burada yardımcı olabilirsiniz.",
+  "volunteerApprovalNote": "Ardından isteğiniz onay için bu camiyi kaydeden kişiye – ya da Muslimin ekibine – gider.",
+  "volunteerRequestSent": "İstek gönderildi. Onaylandığında vakitleri güncelleyebilirsiniz.",
+  "volunteerPendingTitle": "İstek beklemede",
+  "volunteerPendingBody": "Cami yöneticisinin onayı bekleniyor.",
+  "cancelRequest": "İsteği iptal et",
+  "editRequestsTitle": "Cemaat vakti güncelleme istekleri",
+  "editRequestsBody": "Bu caminin yakınındaki kişiler vakitlerin doğru kalmasına yardım etmek istiyor. Yalnızca tanıdığınız veya güvendiğiniz kişileri onaylayın."
 }

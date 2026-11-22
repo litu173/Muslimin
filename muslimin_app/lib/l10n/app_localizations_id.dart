@@ -2815,4 +2815,28 @@ class L10nId extends L10n {
   @override
   String get volunteerAskCommittee =>
       'Menjaga waktu jamaah dan info masjid tetap benar adalah tugas pengurus masjid, imam atau muazin, bukan jamaah biasa. Mintalah mereka membuat profil masjid ini di Muslimin (Lainnya → Daftarkan Masjid) dan selalu memperbarui waktunya. Sampai saat itu, Anda bisa membantu di sini.';
+
+  @override
+  String get volunteerApprovalNote =>
+      'Lalu permintaan Anda dikirim ke pendaftar masjid ini – atau ke tim Muslimin – untuk disetujui.';
+
+  @override
+  String get volunteerRequestSent =>
+      'Permintaan terkirim. Anda bisa memperbarui waktu setelah disetujui.';
+
+  @override
+  String get volunteerPendingTitle => 'Permintaan menunggu';
+
+  @override
+  String get volunteerPendingBody => 'Menunggu persetujuan pengelola masjid.';
+
+  @override
+  String get cancelRequest => 'Batalkan';
+
+  @override
+  String get editRequestsTitle => 'Permintaan memperbarui waktu jamaah';
+
+  @override
+  String get editRequestsBody =>
+      'Orang di dekat masjid ini ingin membantu menjaga waktunya tetap benar. Setujui hanya orang yang Anda kenal atau percaya.';
 }

@@ -2789,4 +2789,29 @@ class L10nBn extends L10n {
   @override
   String get volunteerAskCommittee =>
       'জামাতের সময় ও মসজিদের তথ্য সঠিক রাখা মসজিদ কমিটি, ইমাম বা মুয়াজ্জিনের দায়িত্ব — সাধারণ মুসল্লিদের নয়। তাঁদের অনুরোধ করুন মুসলিমিন অ্যাপে এই মসজিদের প্রোফাইল তৈরি করতে (আরও → মসজিদ নিবন্ধন করুন) এবং নিয়মিত সময় আপডেট রাখতে। ততদিন আপনি এখানে সাহায্য করতে পারেন।';
+
+  @override
+  String get volunteerApprovalNote =>
+      'এরপর আপনার অনুরোধ অনুমোদনের জন্য যিনি মসজিদটি নিবন্ধন করেছেন তাঁর কাছে – অথবা মুসলিমিন টিমের কাছে – যাবে।';
+
+  @override
+  String get volunteerRequestSent =>
+      'অনুরোধ পাঠানো হয়েছে। অনুমোদন পেলে আপনি সময় আপডেট করতে পারবেন।';
+
+  @override
+  String get volunteerPendingTitle => 'অনুরোধ অপেক্ষমাণ';
+
+  @override
+  String get volunteerPendingBody =>
+      'মসজিদের দায়িত্বপ্রাপ্ত ব্যক্তির অনুমোদনের অপেক্ষায়।';
+
+  @override
+  String get cancelRequest => 'অনুরোধ বাতিল';
+
+  @override
+  String get editRequestsTitle => 'জামাতের সময় আপডেটের অনুরোধ';
+
+  @override
+  String get editRequestsBody =>
+      'এই মসজিদের কাছের কিছু মানুষ সময় সঠিক রাখতে সাহায্য করতে চান। শুধু পরিচিত বা বিশ্বস্ত ব্যক্তিকে অনুমোদন দিন।';
 }

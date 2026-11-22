@@ -15,7 +15,11 @@ class MasjidEditor {
     required this.masjidName,
     required this.distanceM,
     this.createdAt,
+    this.pending = false,
   });
+
+  /// Asked to edit; waits for the masjid's creator (or the admin) to approve.
+  final bool pending;
 
   final String uid;
   final String name;
@@ -34,6 +38,7 @@ class MasjidEditor {
         masjidName: (m['masjidName'] ?? '') as String,
         distanceM: ((m['distanceM'] ?? 0) as num).toDouble(),
         createdAt: createdAt,
+        pending: m['status'] == 'pending',
       );
 }
 

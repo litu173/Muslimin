@@ -2,7 +2,7 @@
 import {
   auth, db, emu, me, isSuper, onAuthStateChanged, signInWithEmailAndPassword, signInWithGoogle,
   signOut, sendPasswordResetEmail, doc, getDoc, collection, query, where,
-  getCountFromServer,
+  getCountFromServer, collectionGroup,
 } from './fb.js';
 import { h, icon, clear, toast, friendlyError, input, spinner } from './ui.js';
 import { loadPlaces } from './data.js';
@@ -125,13 +125,15 @@ function renderNav() {
 export async function refreshCounts() {
   try {
     const n = async (q) => (await getCountFromServer(q)).data().count;
-    const [pm, rp, sg, cr] = await Promise.all([
+    const [pm, rp, sg, cr, er] = await Promise.all([
       n(query(collection(db, 'masjids'), where('status', '==', 'pending'))),
       n(query(collection(db, 'reports'), where('status', '==', 'open'))),
       n(query(collection(db, 'suggestions'), where('status', '==', 'open'))),
       n(query(collection(db, 'contentReports'), where('status', '==', 'open'))).catch(() => 0),
+      // Requests to update jamat times (masjids nobody registered).
+      n(query(collectionGroup(db, 'editors'), where('status', '==', 'pending'))).catch(() => 0),
     ]);
-    counts.pending = pm + rp + sg + cr;
+    counts.pending = pm + rp + sg + cr + er;
     renderNav();
   } catch (e) { console.warn(e); }
 }

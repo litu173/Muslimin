@@ -828,5 +828,12 @@
   "permNotNowHint": "Aplikasi tetap berfungsi: ketik lokasi anda di atas Utama untuk memilih kawasan. Anda boleh membenarkannya kemudian dalam Tetapan.",
   "tapToChooseArea": "Ketik untuk memilih kawasan",
   "chooseAreaHint": "Waktu solat dan masjid terdekat akan menggunakan kawasan ini.",
-  "volunteerAskCommittee": "Memastikan waktu jemaah dan maklumat masjid betul ialah tugas jawatankuasa masjid, imam atau bilal, bukan jemaah biasa. Mintalah mereka mencipta profil masjid ini dalam Muslimin (Lagi → Daftar Masjid) dan sentiasa mengemas kini waktunya. Sehingga itu, anda boleh membantu di sini."
+  "volunteerAskCommittee": "Memastikan waktu jemaah dan maklumat masjid betul ialah tugas jawatankuasa masjid, imam atau bilal, bukan jemaah biasa. Mintalah mereka mencipta profil masjid ini dalam Muslimin (Lagi → Daftar Masjid) dan sentiasa mengemas kini waktunya. Sehingga itu, anda boleh membantu di sini.",
+  "volunteerApprovalNote": "Kemudian permintaan anda dihantar kepada pendaftar masjid ini – atau pasukan Muslimin – untuk kelulusan.",
+  "volunteerRequestSent": "Permintaan dihantar. Anda boleh mengemas kini waktu selepas diluluskan.",
+  "volunteerPendingTitle": "Permintaan menunggu",
+  "volunteerPendingBody": "Menunggu kelulusan pengurus masjid.",
+  "cancelRequest": "Batalkan",
+  "editRequestsTitle": "Permintaan mengemas kini waktu jemaah",
+  "editRequestsBody": "Orang berhampiran masjid ini ingin membantu memastikan waktunya betul. Luluskan hanya orang yang anda kenal atau percayai."
 }

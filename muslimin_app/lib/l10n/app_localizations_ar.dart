@@ -2775,4 +2775,29 @@ class L10nAr extends L10n {
   @override
   String get volunteerAskCommittee =>
       'الحفاظ على صحة أوقات الجماعة ومعلومات المسجد مسؤولية لجنة المسجد أو الإمام أو المؤذن، وليس المصلين. اطلب منهم إنشاء صفحة هذا المسجد في تطبيق مسلمين (المزيد ← تسجيل مسجد) وتحديث أوقاته باستمرار. وحتى ذلك الحين يمكنك المساعدة هنا.';
+
+  @override
+  String get volunteerApprovalNote =>
+      'ثم يُرسل طلبك للموافقة إلى من سجّل هذا المسجد – أو إلى فريق مسلمين.';
+
+  @override
+  String get volunteerRequestSent =>
+      'تم إرسال الطلب. يمكنك تحديث الأوقات بعد الموافقة عليه.';
+
+  @override
+  String get volunteerPendingTitle => 'الطلب قيد الانتظار';
+
+  @override
+  String get volunteerPendingBody =>
+      'بانتظار موافقة المسؤول عن المسجد على طلبك.';
+
+  @override
+  String get cancelRequest => 'إلغاء الطلب';
+
+  @override
+  String get editRequestsTitle => 'طلبات تحديث أوقات الجماعة';
+
+  @override
+  String get editRequestsBody =>
+      'أشخاص قرب هذا المسجد يريدون المساعدة في ضبط أوقاته. وافق فقط على من تعرفه أو تثق به.';
 }

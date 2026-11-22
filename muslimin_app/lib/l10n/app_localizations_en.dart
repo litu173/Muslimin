@@ -2813,4 +2813,29 @@ class L10nEn extends L10n {
   @override
   String get volunteerAskCommittee =>
       'Keeping the jamat times and masjid information correct is the job of the masjid committee, imam or muazzin, not of regular worshippers. Please ask them to create this masjid\'s profile in Muslimin (More → Register a Masjid) and keep its times up to date. Until then, you can help here.';
+
+  @override
+  String get volunteerApprovalNote =>
+      'Then your request goes to whoever registered this masjid – or to the Muslimin team – for approval.';
+
+  @override
+  String get volunteerRequestSent =>
+      'Request sent. You can update the times once it\'s approved.';
+
+  @override
+  String get volunteerPendingTitle => 'Request pending';
+
+  @override
+  String get volunteerPendingBody =>
+      'Waiting for the masjid\'s manager to approve your request.';
+
+  @override
+  String get cancelRequest => 'Cancel request';
+
+  @override
+  String get editRequestsTitle => 'Requests to update jamat times';
+
+  @override
+  String get editRequestsBody =>
+      'People near this masjid want to help keep its times correct. Approve only people you know or trust.';
 }
